@@ -8,7 +8,7 @@ html, body, container, p {
   padding: 0;
 }
 container {
-  width: 980px;
+  width: 1000px;
 }
 @media (max-width : 500px) {
   container {
@@ -20,19 +20,97 @@ spacer10 {
   color: transparent;
   display: block;
 }
-/*title {
+/*heading {
   background: rgba(255, 255, 255, 0.30);
 }
 subtitle {
   background: rgba(255, 255, 255, 0.20);
 }*/
+titlebar {
+  display: flex;
+  height: auto;
+  background-color: #003f87;
+  justify-content: center;
+}
+titlebar heading {
+  display: block;
+  max-width: inherit;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 24px;
+  color: white;
+  background-color: #003f87;
+  padding: 16px 10px;
+}
+topnav {
+  display: flex;
+  height: auto;
+  background-color: #003f87;
+  justify-content: center;
+  position: sticky;
+  top: 0px;
+  align-self: flex-start;
+}
+/*from w3schools (modified)*/
+topnav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+topnav li {
+  float: left;
+}
+topnav li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 14px;
+  text-decoration: none;
+  font-family: 'IBM Plex Sans SemiBold', sans-serif;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+topnav li a:hover {
+  background-color: rgba(255,255,255,0.10);
+}
+topnav li a:active {
+  background-color: rgba(255,255,255,0.20);
+}
+topnav li a:target {
+  border-bottom: 2px solid white;
+}
+topnav li.dropdown {
+  display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+.dropdown-content a:hover {
+  background-color: #f1f1f1
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+/*----------*/
 banner-1, banner-2, banner-3 {
   display: flex;
   height: auto;
   background-color: #134885;
   justify-content: center
 }
-banner-1 title {
+banner-1 heading {
   display: block;
   max-width: inherit;
   font-family: 'IBM Plex Sans', sans-serif;
@@ -40,7 +118,7 @@ banner-1 title {
   color: white;
   padding: 40px 10px 40px 10px;
 }
-banner-2 title, banner-3 title {
+banner-2 heading, banner-3 heading {
   display: block;
   max-width: inherit;
   font-family: 'IBM Plex Sans', sans-serif;
@@ -57,7 +135,8 @@ banner-2 subtitle {
   color: white;
   padding: 0px 10px 40px 10px;
 }
-content-strip-1:last-child container buttonrow, content-strip-2:last-child container buttonrow {
+content-strip-1:last-child container buttonrow, content-strip-2:last-child container buttonrow,
+banner-3 buttonrow {
   padding-bottom: 40px;
 }
 buttonrow {
@@ -103,7 +182,7 @@ content-strip-2 {
   background-color: transparent;
   justify-content: center
 }
-content-strip-2 title {
+content-strip-2 heading {
   display: block;
   max-width: inherit;
   font-family: 'IBM Plex Sans Medium', sans-serif;
