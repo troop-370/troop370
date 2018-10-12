@@ -49,6 +49,7 @@ topnav {
   position: sticky;
   top: 0px;
   align-self: flex-start;
+  z-index: 99;
 }
 /*from w3schools (modified)*/
 topnav ul {
@@ -135,7 +136,7 @@ banner-2 subtitle {
   color: white;
   padding: 0px 10px 40px 10px;
 }
-banner-2 p {
+banner-2 p, banner-3 p {
   display: block;
   max-width: inherit;
   font-family: 'Roboto', sans-serif;
