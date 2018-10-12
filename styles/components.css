@@ -135,6 +135,15 @@ banner-2 subtitle {
   color: white;
   padding: 0px 10px 40px 10px;
 }
+banner-2 p {
+  display: block;
+  max-width: inherit;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.5;
+  color: white;
+  padding: 0px 10px 40px 10px;
+}
 content-strip-1:last-child container buttonrow, content-strip-2:last-child container buttonrow,
 banner-3 buttonrow {
   padding-bottom: 40px;
@@ -143,6 +152,9 @@ buttonrow {
   display: block;
   max-width: inherit;
   padding: 0px 10px 0px 10px;
+}
+a {
+  color: inherit;
 }
 a[type="button"] {
   display: inline-block;
@@ -176,21 +188,32 @@ a[type="button"][varient="dark"]:hover {
   box-shadow: inset 0px 0px 100px rgba(0,0,0,0.20);
   border-color: 1px solid #134885;
 }
-content-strip-2 {
+content-strip-1, content-strip-2, content-strip-3, content-strip-4 {
   display: flex;
   height: auto;
   background-color: transparent;
   justify-content: center
 }
-content-strip-2 heading {
+content-strip-1 heading, content-strip-2 heading, content-strip-3 heading, content-strip-4 heading {
   display: block;
   max-width: inherit;
   font-family: 'IBM Plex Sans Medium', sans-serif;
-  font-size: 32px;
   color: black;
   padding: 40px 10px 10px 10px;
 }
-content-strip-2 p {
+content-strip-3 heading {
+  padding:20px 10px;
+}
+content-strip-1 heading {
+  font-size: 40px;
+}
+content-strip-2 heading {
+  font-size: 32px;
+}
+content-strip-3 heading, content-strip-4 heading {
+  font-size: 24px;
+}
+content-strip-1 p, content-strip-2 p, content-strip-4 p {
   display: block;
   max-width: inherit;
   font-family: 'Roboto', sans-serif;
