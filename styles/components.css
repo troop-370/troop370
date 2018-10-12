@@ -1,0 +1,122 @@
+/*IBM Plex Sans Medium*/
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:500');
+/*IBM Plex Sans SemiBold*/
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:600');
+/*design*/
+html, body, container, p {
+  margin: 0;
+  padding: 0;
+}
+container {
+  width: 980px;
+}
+@media (max-width : 500px) {
+  container {
+    width: 100vw;
+  }
+}
+spacer10 {
+  height: 20px;
+  color: transparent;
+  display: block;
+}
+/*title {
+  background: rgba(255, 255, 255, 0.30);
+}
+subtitle {
+  background: rgba(255, 255, 255, 0.20);
+}*/
+banner-1, banner-2, banner-3 {
+  display: flex;
+  height: auto;
+  background-color: #134885;
+  justify-content: center
+}
+banner-1 title {
+  display: block;
+  max-width: inherit;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 40px;
+  color: white;
+  padding: 40px 10px 40px 10px;
+}
+banner-2 title, banner-3 title {
+  display: block;
+  max-width: inherit;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 40px;
+  color: white;
+  padding: 40px 10px 10px 10px;
+}
+banner-2 subtitle {
+  display: block;
+  max-width: inherit;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.15;
+  color: white;
+  padding: 0px 10px 40px 10px;
+}
+content-strip-1:last-child container buttonrow, content-strip-2:last-child container buttonrow {
+  padding-bottom: 40px;
+}
+buttonrow {
+  display: block;
+  max-width: inherit;
+  padding: 0px 10px 0px 10px;
+}
+a[type="button"] {
+  display: inline-block;
+  font-family: 'IBM Plex Sans SemiBold', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid;
+  border-radius: 2px;
+  padding: 6.5px 16px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  transition: box-shadow 0.2s;
+}
+a[type="button"][varient="light"] {
+  color: white;
+  background: transparent;
+  border-color: 1px solid white;
+}
+a[type="button"][varient="light"]:hover {
+  box-shadow: inset 0px 0px 100px rgba(255,255,255,0.20);
+}
+a[type="button"][varient="dark"] {
+  color: #134885;
+  background: transparent;
+  border-color: 1px solid #636161;
+}
+a[type="button"][varient="dark"]:hover {
+  box-shadow: inset 0px 0px 100px rgba(0,0,0,0.20);
+  border-color: 1px solid #134885;
+}
+content-strip-2 {
+  display: flex;
+  height: auto;
+  background-color: transparent;
+  justify-content: center
+}
+content-strip-2 title {
+  display: block;
+  max-width: inherit;
+  font-family: 'IBM Plex Sans Medium', sans-serif;
+  font-size: 32px;
+  color: black;
+  padding: 40px 10px 10px 10px;
+}
+content-strip-2 p {
+  display: block;
+  max-width: inherit;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.5;
+  color: black;
+  padding: 10px 10px 28px 10px;
+}
