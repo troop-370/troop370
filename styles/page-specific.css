@@ -13,6 +13,18 @@ carousel {
   background-color: #2d2d2d;
   justify-content: center
 }
+.flickity-page-dots {
+  bottom: 15px !important;
+}
+.flickity-page-dots .dot {
+  background: #dddddd !important;
+}
+.flickity-button {
+  background: none !important;
+}
+.flickity-button-icon {
+  fill: #dddddd !important;
+}
 .carousel-cell {
   width: 100%; /* full width */
   height: 380px; /* height of carousel */
