@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:500');
 /*IBM Plex Sans SemiBold*/
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:600');
+/*@import url('https://fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2');*/
 /*design*/
 html, body, container, p {
   margin: 0;
@@ -62,7 +63,7 @@ topnav li {
   float: left;
 }
 topnav li a {
-  display: inline-block;
+  display: block;
   color: white;
   text-align: center;
   padding: 14px 14px;
@@ -70,6 +71,7 @@ topnav li a {
   font-family: 'IBM Plex Sans SemiBold', sans-serif;
   text-transform: uppercase;
   font-weight: 600;
+  text-align: left;
 }
 topnav li a:hover {
   background-color: rgba(255,255,255,0.10);
@@ -78,7 +80,7 @@ topnav li a:active {
   background-color: rgba(255,255,255,0.20);
 }
 topnav li a:target {
-  border-bottom: 2px solid white;
+  box-shadow: inset 0px -2px 0px 0px rgba(255,255,255,1);
 }
 topnav li.dropdown {
   display: inline-block;
@@ -102,7 +104,83 @@ topnav li.dropdown {
   background-color: #f1f1f1
 }
 .dropdown:hover .dropdown-content {
+  display: block;
+}
+#dropdownarrow {
+  fill: #fff;
+  padding: 11px
+}
+.dropdownarrow-content {
+   right: 0;
+}
+#dropdownarrow, #drop-photos, #drop-contact, #drop-payments, #drop-pinestraw {
+  display: none;
+}
+@media (max-width: 996px) and (min-width: 600px) {
+  #pinestraw {
+    display: none;
+  }
+  #dropdownarrow, #drop-pinestraw {
     display: block;
+  }
+  @media (max-width: 920px) {
+    #payments {
+      display: none;
+    }
+    #drop-payments {
+      display: block;
+    }
+    @media (max-width: 810px) {
+      #contact {
+        display: none;
+      }
+      #drop-contact {
+        display: block;
+      }
+      @media (max-width: 700px) {
+        #photos {
+          display: none;
+        }
+        #drop-photos {
+          display: block;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 600px) {
+  topnav li {
+    float: none;
+  }
+  topnav li a:target {
+    box-shadow: none;
+  }
+  topnav li.dropdown {
+    display: block;
+  }
+  topnav ul {
+    width: 280px;
+    background: #044;
+  }
+  .dropdown-content {
+    display: none;
+    position: inherit;
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .dropdown:hover .dropdown-content {
+    display: none;
+  }
+  .dropdown-content a {
+    color: white;
+    margin-left: 20px;
+  }
+  .dropdown-content a:hover {
+    background-color: rgba(255,255,255,0.10);
+  }
+  .dropdown-content a:active {
+    background-color: rgba(255,255,255,0.20);
+  }
 }
 /*----------*/
 banner-1, banner-2, banner-3 {
