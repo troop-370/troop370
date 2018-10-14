@@ -73,6 +73,9 @@ carousel {
 #card4 {
   background-image: url("../src/banner images/bert adams lake.jpg")
 }
+#card5 {
+  background-image: url("../src/banner images/pineneedles_l.jpg")
+}
 @media (max-width: 680px) {
   .carousel-text-card {
     width: 100%;
