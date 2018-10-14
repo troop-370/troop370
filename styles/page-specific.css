@@ -92,3 +92,13 @@ banner-3.extra-padding-y {
 a[type="button"].bigger {
   padding: 10px 20px;
 }
+/*eagle-scout-honor-roll*/
+.project-map {
+  width: calc(100% - 20px);
+  margin-left: 10px;
+  height: 600px;
+}
+#eagle-list {
+  width: calc(100% - 20px);
+  margin-left: 10px;
+}
