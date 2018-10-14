@@ -1,7 +1,10 @@
-.google-visualization-table-table {
+body, td, div, span, p {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
 }
-.google-visualization-table-table * {
-  height: 40px;
+.google-visualization-table-tr-head {
+  background: red;
+}
+.google-visualization-table-tr-even, .google-visualization-table-tr-odd {
+    height: 40px;
 }
