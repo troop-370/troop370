@@ -1,0 +1,7 @@
+.google-visualization-table-table {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+.google-visualization-table-table * {
+  height: 40px;
+}
