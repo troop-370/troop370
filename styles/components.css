@@ -57,6 +57,9 @@
   --banner-elements-padding-between: 5px;
   --banner-background-color: #134885;
   --banner-text-color: #eeeeee;
+  --background-red: #ce1126;
+  --background-white: #ffffff;
+  --banner-text-color-light: #134885;
 }
 :root {
   --content-strip-padding-y: 35px;
@@ -105,6 +108,16 @@ banner h3-8, banner subtitle, banner p {
   max-width: inherit;
   color: var(--banner-text-color);
   padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}
+banner.red {
+  background-color: var(--background-red);
+}
+banner.white, banner.white subtitle, banner.white p {
+  background-color: var(--background-white);
+  color: var(--banner-text-color-white) !important;
+}
+banner.white h3-8 {
+  color: var(--banner-text-color-light) !important;
 }
 banner h3-8 {
   font-family: var(--heading-font-family);
