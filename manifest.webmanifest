@@ -1,0 +1,9 @@
+{
+  "name": "Troop 370 Atlanta",
+  "short_name": "Troop 370",
+  "theme_color": "#134885",
+  "background_color": "#134885",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/"
+}
