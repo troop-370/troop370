@@ -2,7 +2,10 @@
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:500');
 /*IBM Plex Sans SemiBold*/
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:600');
+/*roboto 400, 400i, 500, 500i*/
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i');
 /*@import url('https://fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2');*/
+@import "../resources/materialize/0.97.8/css/materialize.css";
 /*design*/
 html, body, container, p {
   margin: 0;
@@ -38,9 +41,18 @@ titlebar heading {
   max-width: inherit;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 24px;
+  line-height: 24px;
   color: white;
   background-color: #003f87;
-  padding: 16px 10px;
+  padding: 20px 10px;
+}
+.menu-icon:hover {
+  background-color: rgba(255,255,255,0.10);
+  border-radius: 24px;
+}
+.menu-icon:active {
+  background-color: rgba(255,255,255,0.20);
+  border-radius: 24px;
 }
 topnav {
   display: flex;
@@ -82,6 +94,13 @@ topnav li a:active {
 topnav li a:target {
   box-shadow: inset 0px -2px 0px 0px rgba(255,255,255,1);
 }
+.ham-menu-expand-icon {
+  fill: #000000;
+  display: inline-block;
+  padding: 16px;
+  margin-bottom: -21px;
+  float: right;
+}
 topnav li.dropdown {
   display: inline-block;
 }
@@ -107,7 +126,7 @@ topnav li.dropdown {
   display: block;
 }
 #dropdownarrow {
-  fill: #fff;
+  fill: #ffffff;
   padding: 11px
 }
 .dropdownarrow-content {
@@ -148,38 +167,39 @@ topnav li.dropdown {
     }
   }
 }
+.menu-icon2 {
+  fill: white;
+}
+.button-collapse {
+  position: absolute;
+  padding: 12px;
+  margin: 8px 12px 8px 12px;
+  height: 24px;
+  width: 24px;
+  display: none;
+
+}
+.menu-icon, .ham-menu-expand-icon {
+  display: none;
+}
+#background-fade {
+    height: calc(100vh - 64px);
+    background: rgba(254, 0, 0, 0.69);
+    position: fixed;
+    width: 100vw;
+    z-index: 10;
+    display: none;
+}
 @media (max-width: 600px) {
-  topnav li {
-    float: none;
+  titlebar heading {
+    margin-left: 80px;
+    font-size: 20px;
   }
-  topnav li a:target {
-    box-shadow: none;
-  }
-  topnav li.dropdown {
-    display: block;
+  .button-collapse, .ham-menu-expand-icon {
+    display: inline-block;
   }
   topnav ul {
-    width: 280px;
-    background: #044;
-  }
-  .dropdown-content {
     display: none;
-    position: inherit;
-    background-color: transparent;
-    box-shadow: none;
-  }
-  .dropdown:hover .dropdown-content {
-    display: none;
-  }
-  .dropdown-content a {
-    color: white;
-    margin-left: 20px;
-  }
-  .dropdown-content a:hover {
-    background-color: rgba(255,255,255,0.10);
-  }
-  .dropdown-content a:active {
-    background-color: rgba(255,255,255,0.20);
   }
 }
 /*----------*/
