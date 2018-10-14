@@ -205,19 +205,21 @@ a[type="button"] {
 a[type="button"].bigger {
   padding: 8.5px 20px;
 }
-a[type="button"][varient="light"] {
+a[type="button"][varient="light"], a[type="button"][variant="light"] {
   color: var(--button-text-color-light);
   background: transparent;
   border-color: var(--button-border-color-light);
 }
-a[type="button"][varient="light"]:hover {
+a[type="button"][varient="light"]:hover, a[type="button"][variant="light"]:hover {
   box-shadow: inset 0px 0px 100px var(--button-background-color-light-hover);
 }
-a[type="button"][varient="dark"] {
+a[type="button"][varient="dark"],
+a[type="button"][variant="dark"] {
   color: var(--button-text-color-dark);
   background: transparent;
   border-color: var(--button-border-color-dark);
 }
-a[type="button"][varient="dark"]:hover {
+a[type="button"][varient="dark"]:hover,
+a[type="button"][variant="dark"]:hover {
   box-shadow: inset 0px 0px 100px var(--button-background-color-dark-hover);
 }
