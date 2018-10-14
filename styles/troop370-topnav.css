@@ -171,3 +171,6 @@ topnav li.dropdown {
     display: none;
   }
 }
+.side-nav a {
+  text-decoration: none;
+}
