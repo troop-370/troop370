@@ -34,8 +34,8 @@
   --h1-font-size: 96px;
   --h2-font-size: 60px;
   --h3-font-size: 48px;
-  --h3-8-font-size: 40px;
-  --h4-font-size: 32px;
+  --h3-8-font-size: 34px;
+  --h4-font-size: 28px;
   --h5-font-size: 24px;
   --h6-font-size: 20px;
   --subtitle-1-font-size: 16px;
@@ -45,6 +45,13 @@
   --button-font-size: 14px;
   --caption-font-size: 12px;
   --overline-font-size: 10px;
+}
+@media (max-width: 600px) {
+  :root {
+    --h3-8-font-size: 28px;
+    --h4-font-size: 24px;
+    --h5-font-size: 20px;
+  }
 }
 :root {
   --content-max-width: 1000px;
