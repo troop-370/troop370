@@ -30,6 +30,10 @@ carousel {
   height: 380px; /* height of carousel */
   margin-right: 10px;
   background-color: #444444;
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+
 }
 .carousel-title {
   font-family: 'IBM Plex Sans', sans-serif;
@@ -44,7 +48,7 @@ carousel {
 }
 .carousel-text-card {
   display: block;
-  background: #111111;
+  background-color: #111111;
   height: 100%;
   width: 33.3%;
   margin: 0px 0 0 auto;
@@ -56,6 +60,27 @@ carousel {
   position: relative;
   top: 50%;
   transform: perspective(1px) translateY(-50%);
+}
+#card1 {
+  background-image: url("../src/banner images/scout shadow on top of mountain with sunset.jpg");
+}
+#card2 {
+  background-image: url("../src/banner images/siler bald view.jpg")
+}
+#card3 {
+  background-image: url("../src/banner images/ookpik - skiing in a flat feild.jpg")
+}
+#card4 {
+  background-image: url("../src/banner images/bert adams lake.jpg")
+}
+@media (max-width: 680px) {
+  .carousel-text-card {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+  }
+  .carousel-cell {
+    background-size: cover;
+  }
 }
 banner-3.extra-padding-y {
   padding-top: 30px;
