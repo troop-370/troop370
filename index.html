@@ -1,62 +1,11 @@
-<html>
-
+<html lang="en">
 <head>
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
   <title>Home</title>
   <link rel='stylesheet' href='styles/components.css'>
   <link rel='stylesheet' href='styles/page-specific.css'>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-  <script type='text/javascript' src='scripts/insert-header-footer.js'></script>
   <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css" media="screen">
 </head>
-<titlebar>
-  <container>
-    <heading>Boy Scout Troop 370</heading>
-  </container>
-</titlebar>
-<topnav>
-  <container>
-    <ul>
-      <li><a href='index.html#home' id='home'>Home</a></li>
-      <li class='dropdown'> <a href='javascript:void(0)' id='about'>About</a>
-        <dropdown class='dropdown-content'>
-          <a href='about.html#about'>General Information</a>
-          <a href='leaders.html#about'>Leaders</a>
-          <a href='eagle-scout-honor-role.html#about'>Eagle Scout Honor Role</a>
-        </dropdown></li>
-      <li class='dropdown'> <a href='javascript:void(0)' id='information'>Information</a>
-        <dropdown class='dropdown-content'>
-          <a href='participation.html#information'>Scout/Parent Participation</a>
-          <a href='forms-documents.html#information'>Forms &amp; Documents</a>
-          <a href='advancement.html#information'>Advancement</a> <a href='helpful-links.html#information'>Helpful Links</a>
-          <a href='pine-straw-info.html#information'>Pine Straw Sales</a>
-        </dropdown></li>
-      <li class='dropdown'> <a href='javascript:void(0)' id='scouts'>Scouts</a>
-        <dropdown class='dropdown-content'>
-          <a href='leadership-training.html#scouts'>Leadership Training</a>
-          <a href='faqs.html#scouts'>Frequently Asked Questions</a>
-          <a href='finding-mb.html#scouts'>​Finding a Merit Badge Class or Counselor</a>
-          <a href='new-scouts.html#scouts'>Letter to New Scouts</a>
-        </dropdown></li>
-      <li class='dropdown'> <a href='javascript:void(0)' id='tevents'>Troop Events</a>
-        <dropdown class='dropdown-content'>
-          <a href='camps-adventure.html#tevents'>Camps/High Adventure</a>
-          <a href='campout-schedule-local-events.html#tevents'>Campout Schedule &amp; Local Events</a>
-        </dropdown></li>
-      <li><a href='photos.html#photos' id='photos'>Photos</a></li>
-      <li><a href='contact.html#contact' id='contact'>Contact</a></li>
-      <li><a href='payments.html#payments' id='payments'>Payments</a></li>
-      <li><a href='pinestraw.html#pinestraw' id='pinestraw'>Pine Straw</a></li>
-      <li class='dropdown'><a href='javascript:void(0)' id='dropdownarrow'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg></a>
-      <dropdown class='dropdown-content dropdownarrow-content'>
-        <a href='photos.html#photos' id='drop-photos'>Photos</a>
-        <a href='contact.html#contact' id='drop-contact'>Contact</a>
-        <a href='payments.html#payments' id='drop-payments'>Payments</a>
-        <a href='pinestraw.html#pinestraw' id='drop-pinestraw'>Pine Straw</a>
-      </dropdown></li>
-    </ul>
-  </container>
-</topnav>
 
 <body>
   <carousel>
@@ -103,7 +52,13 @@
     </container>
   </banner-3>
 
-</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type='text/javascript' src='scripts/insert-header-footer.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.js"></script>
 <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
-
+<script type="text/javascript">
+	$(".button-collapse").sideNav();
+</script><div class="drag-target" data-sidenav="slide-out" style="left: 0px; touch-action: pan-y;"></div>
+<div class="hiddendiv common"></div>
+</body>
 </html>
