@@ -56,7 +56,7 @@
   --banner-padding-x-increased: calc(var(--banner-padding-y) + 0px);
   --banner-elements-padding-between: 5px;
   --banner-background-color: #134885;
-  --banner-text-color: #e0e0e0;
+  --banner-text-color: #eeeeee;
 }
 :root {
   --content-strip-padding-y: 35px;
