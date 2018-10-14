@@ -1,0 +1,173 @@
+/*troop 370 top nav*/
+titlebar {
+  display: flex;
+  height: auto;
+  background-color: #003f87;
+  justify-content: center;
+}
+titlebar heading {
+  display: block;
+  max-width: inherit;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+  color: white;
+  background-color: #003f87;
+  padding: 20px 10px;
+}
+.menu-icon:hover {
+  background-color: rgba(255,255,255,0.10);
+  border-radius: 24px;
+}
+.menu-icon:active {
+  background-color: rgba(255,255,255,0.20);
+  border-radius: 24px;
+}
+topnav {
+  display: flex;
+  height: auto;
+  background-color: #003f87;
+  justify-content: center;
+  position: sticky;
+  top: 0px;
+  align-self: flex-start;
+  z-index: 99;
+}
+/*from w3schools (modified)*/
+topnav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+topnav li {
+  float: left;
+}
+topnav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 14px;
+  text-decoration: none;
+  font-family: 'IBM Plex Sans SemiBold', sans-serif;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: left;
+}
+topnav li a:hover {
+  background-color: rgba(255,255,255,0.10);
+}
+topnav li a:active {
+  background-color: rgba(255,255,255,0.20);
+}
+topnav li a:target {
+  box-shadow: inset 0px -2px 0px 0px rgba(255,255,255,1);
+}
+.ham-menu-expand-icon {
+  fill: #000000;
+  display: inline-block;
+  padding: 16px;
+  margin-bottom: -21px;
+  float: right;
+}
+topnav li.dropdown {
+  display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+.dropdown-content a:hover {
+  background-color: #f1f1f1
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+#dropdownarrow {
+  fill: #ffffff;
+  padding: 11px
+}
+.dropdownarrow-content {
+   right: 0;
+}
+#dropdownarrow, #drop-photos, #drop-contact, #drop-payments, #drop-pinestraw {
+  display: none;
+}
+@media (max-width: 996px) and (min-width: 600px) {
+  #pinestraw {
+    display: none;
+  }
+  #dropdownarrow, #drop-pinestraw {
+    display: block;
+  }
+  @media (max-width: 920px) {
+    #payments {
+      display: none;
+    }
+    #drop-payments {
+      display: block;
+    }
+    @media (max-width: 810px) {
+      #contact {
+        display: none;
+      }
+      #drop-contact {
+        display: block;
+      }
+      @media (max-width: 700px) {
+        #photos {
+          display: none;
+        }
+        #drop-photos {
+          display: block;
+        }
+      }
+    }
+  }
+}
+.menu-icon2 {
+  fill: white;
+}
+.button-collapse {
+  position: absolute;
+  padding: 12px;
+  margin: 8px 12px 8px 12px;
+  height: 24px;
+  width: 24px;
+  display: none;
+
+}
+.menu-icon, .ham-menu-expand-icon {
+  display: none;
+}
+#background-fade {
+    height: calc(100vh - 64px);
+    background: rgba(254, 0, 0, 0.69);
+    position: fixed;
+    width: 100vw;
+    z-index: 10;
+    display: none;
+}
+@media (max-width: 600px) {
+  titlebar heading {
+    margin-left: 80px;
+    font-size: 20px;
+  }
+  .button-collapse, .ham-menu-expand-icon {
+    display: inline-block;
+  }
+  topnav ul {
+    display: none;
+  }
+}
