@@ -2553,7 +2553,7 @@ ul:not(.browser-default) li {
 
 a {
   color: #039be5;
-  text-decoration: none;
+  /*text-decoration: none;*/
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -4239,9 +4239,9 @@ nav .input-field label.active {
   font-weight: 700;
 }*/
 
-a {
+/*a {
   text-decoration: none;
-}
+}*/
 
 html {
   line-height: 1.5;
