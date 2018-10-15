@@ -78,7 +78,8 @@
   --content-strip-padding-y: 35px;
   --content-strip-padding-x: 10px;
   --content-strip-padding-y-increased: calc(var(--content-strip-padding-y) + 40px);
-  --content-strip-padding-x-increased: calc(var(--content-strip-padding-y) + 0px);
+  --content-strip-padding-x-increased: calc(var(--content-strip-padding-x) + 0px);
+  --content-strip-padding-ol-x: calc(var(--content-strip-padding-x) + 20px);
   --content-strip-elements-padding-between: 5px;
   --content-strip-background-color: transparent;
   --content-strip-text-color: #1f1f1f;
@@ -93,7 +94,7 @@
   --button-background-color-light-hover: rgba(255,255,255,0.20);
   --button-background-color-dark-hover: rgba(0,0,0,0.20);
 }
-html, body, container, p, h1, h2, h3, h4, h5, h6 {
+html, body, container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
   padding: 0;
 }
@@ -188,10 +189,13 @@ content-strip subtitle {
   font-size: var(--subtitle-1-font-size);
   letter-spacing: var(--subtitle-1-sp);
 }
-content-strip p {
+content-strip p, content-strip li {
   font-family: var(--text-font-family);
   font-size: var(--body-1-font-size);
   letter-spacing: var(--body-1-sp);
+}
+content-strip ol {
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-padding-ol-x);
 }
 content-strip p + buttonrow, content-strip subtitle + buttonrow {
   padding-top: 30px;
