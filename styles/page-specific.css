@@ -266,3 +266,8 @@ textarea.materialize-textarea {
     width: 100%;
   }
 }
+/*campout schedule and local events*/
+.plist p {
+  padding-top: 0;
+  padding-bottom: 0;
+}
