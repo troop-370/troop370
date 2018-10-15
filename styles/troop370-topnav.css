@@ -159,6 +159,9 @@ topnav li.dropdown {
     z-index: 10;
     display: none;
 }
+#titlebar2 {
+  display: none;
+}
 @media (max-width: 600px) {
   titlebar heading {
     margin-left: 80px;
@@ -169,6 +172,12 @@ topnav li.dropdown {
   }
   topnav ul {
     display: none;
+  }
+  #titlebar1 {
+    display: none;
+  }
+  #titlebar2 {
+    display: block;
   }
 }
 .side-nav a {
