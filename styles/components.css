@@ -70,6 +70,7 @@
   --banner-elements-padding-between: 5px;
   --banner-background-color: #134885;
   --banner-text-color: #eeeeee;
+  --background-blue: #134885;
   --background-red: #bc1b2d;
   --background-white: #ffffff;
   --banner-text-color-light: #134885;
@@ -83,6 +84,7 @@
   --content-strip-elements-padding-between: 5px;
   --content-strip-background-color: transparent;
   --content-strip-text-color: #1f1f1f;
+  --content-strip-text-color-light: #e0e0e0;
 }
 :root {
   --button-border-radius: 2px;
@@ -93,6 +95,10 @@
   --button-border-color-dark: #636161;
   --button-background-color-light-hover: rgba(255,255,255,0.20);
   --button-background-color-dark-hover: rgba(0,0,0,0.20);
+}
+content-strip.blue, content-strip.blue subtitle, content-strip.blue h4, content-strip.blue p {
+  background-color: var(--background-blue);
+  color: var(--content-strip-text-color-light) !important;
 }
 html, body, container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
