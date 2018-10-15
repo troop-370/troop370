@@ -212,7 +212,7 @@ a[type="button"].bigger {
   margin-left: 10px;
 }
 
-
+/*files and advancement*/
 .split50 {
   width: 50%;
   float: left;
@@ -231,5 +231,38 @@ a[type="button"].bigger {
     padding-bottom: 36px;
     border-bottom: 1px solid #ccc;
     margin-bottom: 24px;
+  }
+}
+
+/*contact*/
+.btn, .btn-large, .btn:focus, .btn-large:focus, .btn-floating:focus {
+  background-color: #003f87;
+}
+.btn:hover, .btn-large:hover {
+  background-color: #0352ad;
+}
+.input-field input[type=text]:focus + label, .input-field input[type=email]:focus + label, textarea.materialize-textarea:focus + label {
+  color: #003f87 !important;
+}
+.input-field input[type=text]:focus, .input-field input[type=email]:focus, textarea.materialize-textarea:focus {
+  border-bottom: 1px solid #003f87 !important;
+  box-shadow: 0 1px 0 0 #003f87 !important;
+}
+.row {
+  margin-bottom: 0;
+}
+.col.s12 {
+  padding: 0;
+}
+textarea.materialize-textarea {
+  margin: 0 10px 20px 10px;
+  width: calc(100% - 20px);
+}
+.contact-submit-button {
+  margin-left: 10px;
+}
+@media (max-width: 600px) {
+  .row .col.s6-spread {
+    width: 100%;
   }
 }
