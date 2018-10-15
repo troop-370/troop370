@@ -211,3 +211,25 @@ a[type="button"].bigger {
   width: calc(100% - 20px);
   margin-left: 10px;
 }
+
+
+.split50 {
+  width: 50%;
+  float: left;
+}
+.split50 p {
+  padding: 10px;
+}
+.split50 p:last-of-type {
+  padding-bottom: 60px;
+}
+@media (max-width: 600px) {
+  .split50 {
+    width: 100%;
+  }
+  .split50 p:last-of-type {
+    padding-bottom: 36px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 24px;
+  }
+}

@@ -10,6 +10,9 @@
 @import "../styles/troop370-topnav.css";
 
 /**/
+* {
+  box-sizing: border-box;
+}
 :root {
   --heading-font-family: 'IBM Plex Sans', sans-serif;
   --button-font-family: 'IBM Plex Sans SemiBold', sans-serif;
@@ -52,6 +55,9 @@
     --h4-font-size: 24px;
     --h5-font-size: 20px;
   }
+  .hide-mobile {
+    display: none;
+  }
 }
 :root {
   --content-max-width: 1000px;
@@ -90,6 +96,9 @@
 html, body, container, p, h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
+}
+.center {
+  text-align: center;
 }
 container {
   width: var(--content-max-width);
