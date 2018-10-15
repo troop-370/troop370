@@ -53,6 +53,7 @@ topnav li a {
   text-transform: uppercase;
   font-weight: 600;
   text-align: left;
+  font-size: 15.5px;
 }
 topnav li a:hover {
   background-color: rgba(255,255,255,0.10);
