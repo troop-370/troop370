@@ -3,6 +3,8 @@ $(document).ready(function(){
 
 	$("head").append("<meta name='theme-color' content='#00336e'>");
 
+	$("head").append("<link rel='manifest' href='manifest.json'>");
+
 	$(".button-collapse").sideNav();
 
 	$(window).scroll(function() {
