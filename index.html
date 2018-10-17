@@ -6,7 +6,6 @@
   <link rel='stylesheet' href='styles/page-specific.css'>
   <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css" media="screen">
   <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
-  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -116,17 +115,16 @@
     </container>
   </banner>
 <script>
-  // Register the service worker
-  if ('serviceWorker' in navigator) {
-  	navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-      // Registration was successful
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-  }).catch(function(err) {
-      // registration failed :(
-      	console.log('ServiceWorker registration failed: ', err);
-      });
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.register('/service-worker.js', {scope: '/'})
   }
 </script>
+<!--<script>
+  // register ServiceWorker, remember to use absolute path!
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.register('troop370/service-worker.js', {scope: '/troop370/'})
+  }
+</script>-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type='text/javascript' src='scripts/insert-header-footer.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.js"></script>

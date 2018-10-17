@@ -30,6 +30,14 @@ carousel {
 .flickity-button-icon {
   fill: #dddddd !important;
 }
+.main-carousel {
+  height: 380px;
+  overflow: hidden;
+}
+.img-carousel {
+  height: 600px;
+  overflow: hidden;
+}
 .main-carousel .carousel-cell {
   width: 100%; /* full width */
   height: 380px; /* height of carousel */
