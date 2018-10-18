@@ -7,7 +7,7 @@
   "scope": "/",
   "start_url": "./index.html#home?utm_source=homescreen",
   "icons": [{
-    "src": "/troop370/src/troop370-logo/bugle-logo-512x512.png",
+    "src": "/src/troop370-logo/bugle-logo-512x512.png",
     "sizes": "512x512",
     "type": "image/png"
   }]
