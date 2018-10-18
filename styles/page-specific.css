@@ -288,3 +288,7 @@ textarea.materialize-textarea {
   padding-top: 0;
   padding-bottom: 0;
 }
+/*camps-adventure*/
+content-strip.last-before-banner {
+  padding: var(--content-strip-padding-y) 0 var(--content-strip-padding-y) 0;
+}
