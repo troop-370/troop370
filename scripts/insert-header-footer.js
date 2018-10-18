@@ -5,6 +5,8 @@ $(document).ready(function(){
 
 	$("head").append("<link rel='manifest' href='manifest.json'>");
 
+	$("head").append("<link rel='shortcut icon' type='image/x-icon' href='src/troop370-logo/favicon.ico'>");
+
 	$(".button-collapse").sideNav();
 
 	$(window).scroll(function() {
