@@ -292,3 +292,16 @@ textarea.materialize-textarea {
 content-strip.last-before-banner {
   padding: var(--content-strip-padding-y) 0 var(--content-strip-padding-y) 0;
 }
+/*pinestraw*/
+#pinestraw-embed {
+  overflow-y:hidden;
+}
+#pinestraw-embed iframe {
+  border:0px #ffffff none;
+  height:calc(100vh - 114.5px);
+}
+@media (max-width: 680px) {
+  #pinestraw-embed iframe {
+    height:calc(100vh - 64px);
+  }
+}
