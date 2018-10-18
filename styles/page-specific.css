@@ -227,6 +227,10 @@ a[type="button"].bigger {
   width: 50%;
   float: left;
 }
+.split50-2 {
+  width: 50%;
+  float: left;
+}
 .split50 p {
   padding: 10px;
 }
@@ -235,6 +239,9 @@ a[type="button"].bigger {
 }
 @media (max-width: 600px) {
   .split50 {
+    width: 100%;
+  }
+  .split50-2 {
     width: 100%;
   }
   .split50 p:last-of-type {

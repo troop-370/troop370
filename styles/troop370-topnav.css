@@ -47,13 +47,13 @@ topnav li a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 14px;
+  padding: 14px 11.2px;
   text-decoration: none;
   font-family: 'IBM Plex Sans SemiBold', sans-serif;
   text-transform: uppercase;
   font-weight: 600;
   text-align: left;
-  font-size: 15.5px;
+  font-size: 15px;
 }
 topnav li a:hover {
   background-color: rgba(255,255,255,0.10);
@@ -97,41 +97,54 @@ topnav li.dropdown {
 }
 #dropdownarrow {
   fill: #ffffff;
-  padding: 11px
+  padding: 11px;
+}
+#dropdownarrow svg {
+  height: 20px;
+  width: 20px;
+  margin-top: 3px;
 }
 .dropdownarrow-content {
    right: 0;
 }
-#dropdownarrow, #drop-photos, #drop-contact, #drop-payments, #drop-pinestraw {
+#dropdownarrow, #drop-photos, #drop-contact, #drop-payments, #drop-pinestraw, #drop-members {
   display: none;
 }
-@media (max-width: 996px) and (min-width: 600px) {
+@media (max-width: 1015px) and (min-width: 600px) {
   #pinestraw {
     display: none;
   }
   #dropdownarrow, #drop-pinestraw {
     display: block;
   }
-  @media (max-width: 920px) {
+  @media (max-width: 945px) {
     #payments {
       display: none;
     }
     #drop-payments {
       display: block;
     }
-    @media (max-width: 810px) {
+    @media (max-width: 845px) {
       #contact {
         display: none;
       }
       #drop-contact {
         display: block;
       }
-      @media (max-width: 700px) {
+      @media (max-width: 745px) {
         #photos {
           display: none;
         }
         #drop-photos {
           display: block;
+        }
+        @media (max-width: 660px) {
+          #members {
+            display: none;
+          }
+          #drop-members {
+            display: block;
+          }
         }
       }
     }

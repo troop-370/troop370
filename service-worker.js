@@ -39,6 +39,11 @@ var URLS = [
   '/troop370/pine-straw-info.html',
   '/troop370/pinestraw.html',
   '/troop370/submission-received.html',
+  '/troop370/calendar_encrypted.html',
+  '/troop370/email-newsletters_encrypted.html',
+  '/troop370/mb-counselors_encrypted.html',
+  '/troop370/troop-roster_encrypted.html',
+  '/troop370/what-can-i-do_encrypted.html',
   '/troop370/'
 ]
 
