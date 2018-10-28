@@ -200,3 +200,14 @@ topnav li.dropdown {
 .nav-shadow {
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
 }
+#pinestraw::after {
+    background-image: url(https://material.io/tools/icons/static/icons/baseline-launch-24px.svg);
+    width: 18px;
+    height: 18px;
+    content: '';
+    display: inline-block;
+    background-size: contain;
+    line-height: 12px;
+    margin: 0 0 -4px 6px;
+    filter: invert(100%);
+}
