@@ -305,3 +305,7 @@ content-strip.last-before-banner {
     height:calc(100vh - 64px);
   }
 }
+/*encrypted*/
+staticrypt-title {
+  font-family: "IBM Plex Sans Medium", sans-serif; !important;
+}

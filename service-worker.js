@@ -1,8 +1,8 @@
 var APP_PREFIX = 'troop370_'
-var VERSION = 'version_05' // update the version every time the website is updated (or the content will not update on PWAs)
+var VERSION = 'version_06' // update the version every time the website is updated (or the content will not update on PWAs)
 var CACHE_NAME = APP_PREFIX + VERSION
 var URLS = [
-  '/styles/components.css',
+  '/styles/components.css'6
   '/styles/page-specific.css',
   '/styles/troop370-topnav.css',
   '/resources/materialize/0.97.8/css/materialize.css',
