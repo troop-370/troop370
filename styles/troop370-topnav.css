@@ -47,13 +47,14 @@ topnav li a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 15.2px;
+  padding: 14px 15.3px;
   text-decoration: none;
   font-family: 'IBM Plex Sans Bold', sans-serif;
   text-transform: uppercase;
   font-weight: 700;
   text-align: left;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 22px;
 }
 topnav li a:hover {
   background-color: rgba(255,255,255,0.10);
