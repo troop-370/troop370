@@ -47,7 +47,7 @@ topnav li a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 10.2px;
+  padding: 14px 15.2px;
   text-decoration: none;
   font-family: 'IBM Plex Sans Bold', sans-serif;
   text-transform: uppercase;
@@ -110,35 +110,35 @@ topnav li.dropdown {
 #dropdownarrow, #drop-photos, #drop-contact, #drop-payments, #drop-pinestraw, #drop-members {
   display: none;
 }
-@media (max-width: 1015px) and (min-width: 600px) {
+@media (max-width: 1120px) and (min-width: 600px) {
   #pinestraw {
     display: none;
   }
   #dropdownarrow, #drop-pinestraw {
     display: block;
   }
-  @media (max-width: 945px) {
+  @media (max-width: 1020px) {
     #payments {
       display: none;
     }
     #drop-payments {
       display: block;
     }
-    @media (max-width: 845px) {
+    @media (max-width: 920px) {
       #contact {
         display: none;
       }
       #drop-contact {
         display: block;
       }
-      @media (max-width: 745px) {
+      @media (max-width: 810px) {
         #photos {
           display: none;
         }
         #drop-photos {
           display: block;
         }
-        @media (max-width: 660px) {
+        @media (max-width: 710px) {
           #members {
             display: none;
           }
