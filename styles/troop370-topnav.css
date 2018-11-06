@@ -8,7 +8,7 @@ titlebar {
 titlebar heading {
   display: block;
   max-width: inherit;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'IBM Plex Sans Medium', sans-serif;
   font-size: 24px;
   line-height: 24px;
   color: white;
@@ -47,11 +47,11 @@ topnav li a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 11.2px;
+  padding: 14px 10.2px;
   text-decoration: none;
-  font-family: 'IBM Plex Sans SemiBold', sans-serif;
+  font-family: 'IBM Plex Sans Bold', sans-serif;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
   text-align: left;
   font-size: 15px;
 }
@@ -200,7 +200,7 @@ topnav li.dropdown {
 .nav-shadow {
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
 }
-#pinestraw::after {
+/*#pinestraw::after {
     background-image: url(https://material.io/tools/icons/static/icons/baseline-launch-24px.svg);
     width: 18px;
     height: 18px;
@@ -210,4 +210,4 @@ topnav li.dropdown {
     line-height: 12px;
     margin: 0 0 -4px 6px;
     filter: invert(100%);
-}
+}*/
