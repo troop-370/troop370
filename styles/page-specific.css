@@ -195,7 +195,7 @@ carousel {
 #imgcard32 {
   background-image: url("../src/photos-index-slideshow/32.jpg");
 }
-@media (max-width: 680px) {
+@media (max-width: 810px) {
   .main-carousel .carousel-text-card {
     width: 100%;
     background: rgba(0,0,0,0.5);
