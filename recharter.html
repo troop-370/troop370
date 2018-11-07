@@ -4,6 +4,7 @@
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
     <title>Annual Recharter</title>
     <link rel='stylesheet' href='styles/components.css'>
+    <link rel='stylesheet' href='styles/page-specific.css'>
   </head>
   <body>
     <banner>
@@ -18,10 +19,10 @@
     <content-strip>
       <container>
         <h4>Venmo (Preferred)</h4>
-        <p>This year, the Troop is offering the option of making your payment using Venmo. Troop 370 prefers Venmo because merchant fees are waived for payments that don't use a credit card. You must make payments via the Venmo app. When paying, enter the Scout’s name and “Recharter” (e.g. John Doe / Recharter) with your payment in the 'What's it for?' section.<br>You may use only your last name if your family has more than one member renewing their registration.<br><br>Click below to sign up and add Troop-ThreeSeventy as a Venmo friend. Alternatively, you can search for us @Troop-ThreeSeventy</p>
+        <p>This year, the Troop is offering the option of making your payment using Venmo. Troop 370 prefers Venmo because merchant fees are waived for payments that don't use a credit card. You must make payments via the Venmo app. When paying, enter the Scout’s name and “Recharter” (e.g. John Doe / Recharter) with your payment in the 'What's it for?' section.<br>You may use only your last name if your family has more than one member renewing their registration.<br><br>To pay, download the app and add Troop-ThreeSeventy as a Venmo friend. Alternatively, you can click the button below to go to the Troop 370 Venmo page.</p>
         <buttonrow>
-          <a href='https://venmo.com/troop-threeseventy' type='button' varient='dark'>Troop 370 on Venmo</a>
-          <a href='http://onelink.to/zryeqw' type='button' varient='dark'>Get Venmo</a>
+          <a href='https://venmo.com/troop-threeseventy' id='venmo' type='button' varient='dark'>Pay on Venmo</a>
+          <a href='http://onelink.to/zryeqw' type='button' varient='dark'>Get app</a>
         </buttonrow>
       </container>
     </content-strip>
@@ -33,7 +34,7 @@
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_s-xclick">
             <input type="hidden" name="hosted_button_id" value="SXVTG8VBCPUNJ">
-            <input type="image" src="https://static.wixstatic.com/media/697593_f7205aa820e245d9ba1bc3845ec6b8cd~mv2.png/v1/fill/w_184,h_34,al_c/697593_f7205aa820e245d9ba1bc3845ec6b8cd~mv2.png" name="submit" alt="PayPal - The safer, easier way to pay online!" border="0">
+            <input id="paypal-button" type="image" src="https://raw.githubusercontent.com/troop-370/troop370/master/src/icons/pay-using-paypal-button.png" name="submit" alt="PayPal - The safer, easier way to pay online!" border="0" style="height: 36px;">
             <img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" border="0">
           </form>
         </buttonrow>

@@ -309,3 +309,28 @@ content-strip.last-before-banner {
 staticrypt-title {
   font-family: "IBM Plex Sans Medium", sans-serif; !important;
 }
+/*button icons*/
+#paypal::before {
+  content: '';
+  background-image: url(../src/icons/paypal.svg);
+  background-size: contain;
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin: 2px 8px 0 -4px;
+}
+#venmo::before {
+  content: '';
+  background-image: url(../src/icons/venmo.svg);
+  background-size: contain;
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin: 2px 8px 0 -4px;
+}
+#paypal-button {
+  transition: filter 0.2s
+}
+#paypal-button:hover {
+  filter: brightness(83%);
+}
