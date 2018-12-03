@@ -25,7 +25,7 @@ titlebar heading {
 }
 topnav {
   display: flex;
-  height: auto;
+  height: 50px;
   background-color: #003f87;
   justify-content: center;
   position: sticky;
@@ -62,7 +62,7 @@ topnav li a:hover {
 topnav li a:active {
   background-color: rgba(255,255,255,0.20);
 }
-topnav li a:target {
+topnav li a.current-page, topnav li.current-dropdown {
   box-shadow: inset 0px -2px 0px 0px rgba(255,255,255,1);
 }
 .ham-menu-expand-icon {
