@@ -163,7 +163,7 @@
   --button-background-color-light-hover: rgba(255,255,255,0.20);
   --button-background-color-dark-hover: rgba(0,0,0,0.20);
 }
-content-strip.blue, content-strip.blue subtitle, content-strip.blue h4, content-strip.blue p {
+div.content-strip.blue, div.content-strip.blue subtitle, div.content-strip.blue h4, div.content-strip.blue p {
   background-color: var(--background-blue);
   color: var(--content-strip-text-color-light) !important;
 }
@@ -221,51 +221,51 @@ div.banner p {
 div.banner p + buttonrow, subtitle p + buttonrow {
   padding-top: 30px;
 }
-content-strip {
+div.content-strip {
   display: flex;
   height: auto;
   background-color: var(--content-strip-background-color);
   justify-content: center;
   padding: var(--content-strip-padding-y) 0 0 0;
 }
-content-strip:last-of-type {
+div.content-strip:last-of-type, div.content-strip.last-in-section {
   padding: var(--content-strip-padding-y) 0 var(--content-strip-padding-y) 0;
 }
-content-strip h3-8, content-strip h4, content-strip h5, content-strip h6, content-strip subtitle, content-strip p {
+div.content-strip h3-8, div.content-strip h4, div.content-strip h5, div.content-strip h6, div.content-strip subtitle, div.content-strip p {
   display: block;
   max-width: inherit;
   color: var(--content-strip-text-color);
   padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
 }
-content-strip h3-8 + p, content-strip h4 + p, content-strip h5 + p, content-strip h6 + p {
+div.content-strip h3-8 + p, div.content-strip h4 + p, div.content-strip h5 + p, div.content-strip h6 + p {
   padding-top: 20px;
 }
-content-strip h3-8 {
+div.content-strip h3-8 {
   font-family: var(--heading-font-family);
   font-size: var(--h3-8-font-size);
 }
-content-strip h4 {
+div.content-strip h4 {
   font-family: var(--heading-font-family);
   font-size: var(--h4-font-size);
 }
-content-strip h5 {
+div.content-strip h5 {
   font-family: var(--heading-font-family);
   font-size: var(--h5-font-size);
 }
-content-strip subtitle {
+div.content-strip subtitle {
   font-family: var(--text-font-family);
   font-size: var(--subtitle-1-font-size);
   letter-spacing: var(--subtitle-1-sp);
 }
-content-strip p, content-strip li {
+div.content-strip p, div.content-strip li {
   font-family: var(--text-font-family);
   font-size: var(--body-1-font-size);
   letter-spacing: var(--body-1-sp);
 }
-content-strip ol {
+div.content-strip ol {
   padding: var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-padding-ol-x);
 }
-content-strip p + buttonrow, content-strip subtitle + buttonrow {
+div.content-strip p + buttonrow, div.content-strip subtitle + buttonrow {
   padding-top: 30px;
 }
 buttonrow {
