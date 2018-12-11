@@ -6,6 +6,8 @@
 
 @import "../styles/troop370-topnav.css";
 
+@import "../styles/legacy_components.css";
+
 /*IBM Plex Sans Regular*/
   /* latin-ext */
   @font-face {
@@ -172,7 +174,7 @@ html, body, container, p, h1, h2, h3, h4, h5, h6, ol {
 .center {
   text-align: center;
 }
-container {
+div.container {
   width: var(--content-max-width);
   padding: 0 var(--content-padding-x);
 }
