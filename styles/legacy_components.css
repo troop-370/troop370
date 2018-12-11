@@ -92,3 +92,8 @@ content-strip ol {
 content-strip p + buttonrow, content-strip subtitle + buttonrow {
   padding-top: 30px;
 }
+buttonrow {
+  display: block;
+  max-width: inherit;
+  padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}

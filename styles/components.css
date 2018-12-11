@@ -218,7 +218,7 @@ div.banner p {
   font-size: var(--body-1-font-size);
   letter-spacing: var(--body-1-sp);
 }
-div.banner p + buttonrow, subtitle p + buttonrow {
+div.banner p + div.buttonrow, subtitle p + div.buttonrow {
   padding-top: 30px;
 }
 div.content-strip {
@@ -265,10 +265,10 @@ div.content-strip p, div.content-strip li {
 div.content-strip ol {
   padding: var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-padding-ol-x);
 }
-div.content-strip p + buttonrow, div.content-strip subtitle + buttonrow {
+div.content-strip p + div.buttonrow, div.content-strip subtitle + div.buttonrow {
   padding-top: 30px;
 }
-buttonrow {
+div.buttonrow {
   display: block;
   max-width: inherit;
   padding: var(--banner-elements-padding-between) var(--banner-padding-x);
