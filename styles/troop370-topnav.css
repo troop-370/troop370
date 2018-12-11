@@ -185,7 +185,7 @@ topnav li.dropdown {
   .button-collapse, .ham-menu-expand-icon {
     display: inline-block;
   }
-  topnav ul {
+  topnav {
     display: none;
   }
   #titlebar1 {
