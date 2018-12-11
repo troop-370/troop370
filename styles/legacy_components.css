@@ -1,6 +1,7 @@
 container {
   width: var(--content-max-width);
   padding: 0 var(--content-padding-x);
+  margin: 0
 }
 banner {
   display: flex;

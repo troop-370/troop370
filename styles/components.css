@@ -123,7 +123,7 @@
     --h5-font-size: 20px;
   }
   .hide-mobile {
-    display: none;
+    display: none !important;
   }
 }
 :root {
@@ -167,7 +167,7 @@ div.content-strip.blue, div.content-strip.blue subtitle, div.content-strip.blue 
   background-color: var(--background-blue);
   color: var(--content-strip-text-color-light) !important;
 }
-html, body, container, p, h1, h2, h3, h4, h5, h6, ol {
+html, body, div.container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
   padding: 0;
 }
@@ -188,7 +188,7 @@ div.banner {
 div.banner.extra-padding-y {
   padding: var(--banner-padding-y-increased) var(--banner-padding-x);
 }
-div.banner h3-8, div.banner subtitle, div.banner p {
+div.banner h3.size8, div.banner subtitle, div.banner p {
   display: block;
   max-width: inherit;
   color: var(--banner-text-color);
@@ -201,10 +201,10 @@ div.banner.white, div.banner.white subtitle, div.banner.white p {
   background-color: var(--background-white);
   color: var(--banner-text-color-white) !important;
 }
-div.banner.white h3-8 {
+div.banner.white h3.size8 {
   color: var(--banner-text-color-light) !important;
 }
-div.banner h3-8 {
+div.banner h3.size8 {
   font-family: var(--heading-font-family);
   font-size: var(--h3-8-font-size);
 }
@@ -231,16 +231,16 @@ div.content-strip {
 div.content-strip:last-of-type, div.content-strip.last-in-section {
   padding: var(--content-strip-padding-y) 0 var(--content-strip-padding-y) 0;
 }
-div.content-strip h3-8, div.content-strip h4, div.content-strip h5, div.content-strip h6, div.content-strip subtitle, div.content-strip p {
+div.content-strip h3.size8, div.content-strip h4, div.content-strip h5, div.content-strip h6, div.content-strip subtitle, div.content-strip p {
   display: block;
   max-width: inherit;
   color: var(--content-strip-text-color);
   padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
 }
-div.content-strip h3-8 + p, div.content-strip h4 + p, div.content-strip h5 + p, div.content-strip h6 + p {
+div.content-strip h3.size8 + p, div.content-strip h4 + p, div.content-strip h5 + p, div.content-strip h6 + p {
   padding-top: 20px;
 }
-div.content-strip h3-8 {
+div.content-strip h3.size8 {
   font-family: var(--heading-font-family);
   font-size: var(--h3-8-font-size);
 }
