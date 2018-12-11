@@ -178,11 +178,6 @@ div.container {
   width: var(--content-max-width);
   padding: 0 var(--content-padding-x);
 }
-spacer10 {
-  height: 20px;
-  color: transparent;
-  display: block;
-}
 banner {
   display: flex;
   height: auto;
