@@ -1,0 +1,100 @@
+container {
+  width: var(--content-max-width);
+  padding: 0 var(--content-padding-x);
+  margin: 0
+}
+banner {
+  display: flex;
+  height: auto;
+  background-color: var(--banner-background-color);
+  justify-content: center;
+  padding: var(--banner-padding-y) 0;
+}
+banner.extra-padding-y {
+  padding: var(--banner-padding-y-increased) var(--banner-padding-x);
+}
+banner h3-8, banner subtitle, banner p {
+  display: block;
+  max-width: inherit;
+  color: var(--banner-text-color);
+  padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}
+banner.red {
+  background-color: var(--background-red);
+}
+banner.white, banner.white subtitle, banner.white p {
+  background-color: var(--background-white);
+  color: var(--banner-text-color-white) !important;
+}
+banner.white h3-8 {
+  color: var(--banner-text-color-light) !important;
+}
+banner h3-8 {
+  font-family: var(--heading-font-family);
+  font-size: var(--h3-8-font-size);
+}
+banner subtitle {
+  font-family: var(--text-font-family);
+  font-size: var(--subtitle-1-font-size);
+  letter-spacing: var(--subtitle-1-sp);
+}
+banner p {
+  font-family: var(--text-font-family);
+  font-size: var(--body-1-font-size);
+  letter-spacing: var(--body-1-sp);
+}
+banner p + buttonrow, subtitle p + buttonrow {
+  padding-top: 30px;
+}
+content-strip {
+  display: flex;
+  height: auto;
+  background-color: var(--content-strip-background-color);
+  justify-content: center;
+  padding: var(--content-strip-padding-y) 0 0 0;
+}
+content-strip:last-of-type {
+  padding: var(--content-strip-padding-y) 0 var(--content-strip-padding-y) 0;
+}
+content-strip h3-8, content-strip h4, content-strip h5, content-strip h6, content-strip subtitle, content-strip p {
+  display: block;
+  max-width: inherit;
+  color: var(--content-strip-text-color);
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
+}
+content-strip h3-8 + p, content-strip h4 + p, content-strip h5 + p, content-strip h6 + p {
+  padding-top: 20px;
+}
+content-strip h3-8 {
+  font-family: var(--heading-font-family);
+  font-size: var(--h3-8-font-size);
+}
+content-strip h4 {
+  font-family: var(--heading-font-family);
+  font-size: var(--h4-font-size);
+}
+content-strip h5 {
+  font-family: var(--heading-font-family);
+  font-size: var(--h5-font-size);
+}
+content-strip subtitle {
+  font-family: var(--text-font-family);
+  font-size: var(--subtitle-1-font-size);
+  letter-spacing: var(--subtitle-1-sp);
+}
+content-strip p, content-strip li {
+  font-family: var(--text-font-family);
+  font-size: var(--body-1-font-size);
+  letter-spacing: var(--body-1-sp);
+}
+content-strip ol {
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-padding-ol-x);
+}
+content-strip p + buttonrow, content-strip subtitle + buttonrow {
+  padding-top: 30px;
+}
+buttonrow {
+  display: block;
+  max-width: inherit;
+  padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}
