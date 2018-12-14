@@ -20,11 +20,21 @@ $t-border-radius-standard: 2px;
 @import "@material/list/mdc-list";
 
 //buttons
+@mixin button-light-ripple {
+  @include mdc-states(#ffffff);
+  @include mdc-states-hover-opacity(.06);
+  @include mdc-states-focus-opacity(.08);
+  @include mdc-states-press-opacity(.16);
+}
 .mdc-button {
   user-select: none;
   user-drag: none;
   -webkit-user-drag: none;
   @include mdc-button-shape-radius($t-border-radius-standard);
+  &.light {
+    @include mdc-button-ink-color(#ffffff);
+    @include button-light-ripple;
+  }
 }
 .buttonrow > .mdc-button {
   margin-right: 12px;
@@ -50,10 +60,7 @@ $t-border-radius-standard: 2px;
   @include mdc-button-ink-color($t-border-color-light-standard);
   @include mdc-button-outline-color($t-border-color-light-standard);
   @include mdc-button-outline-width($t-border-outline-width-standard);
-  @include mdc-states(#ffffff);
-  @include mdc-states-hover-opacity(.06);
-  @include mdc-states-focus-opacity(.08);
-  @include mdc-states-press-opacity(.16);
+  @include button-light-ripple;
 }
 
 //bounded ripple for any element
