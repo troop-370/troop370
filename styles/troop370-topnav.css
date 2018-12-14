@@ -12,8 +12,7 @@ titlebar heading {
   font-size: 24px;
   line-height: 24px;
   color: white;
-  background-color: #003f87;
-  padding: 20px 10px;
+  padding: 18px 16px;
 }
 .menu-icon:hover {
   background-color: rgba(255,255,255,0.10);
@@ -156,8 +155,7 @@ topnav li.dropdown {
 }
 .button-collapse {
   position: absolute;
-  padding: 12px;
-  margin: 8px 12px 8px 12px;
+  margin: 18px;
   height: 24px;
   width: 24px;
   display: none;
@@ -179,7 +177,7 @@ topnav li.dropdown {
 }
 @media (max-width: 600px) {
   titlebar heading {
-    margin-left: 80px;
+    margin-left: 50px;
     font-size: 20px;
   }
   .button-collapse, .ham-menu-expand-icon {
@@ -193,6 +191,7 @@ topnav li.dropdown {
   }
   #titlebar2 {
     display: block;
+    height: 58px;
   }
 }
 .side-nav a {
