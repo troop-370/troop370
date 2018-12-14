@@ -64,9 +64,22 @@ $t-border-radius-standard: 2px;
 }
 
 //bounded ripple for any element
-.ripple {
+.ripple-light-bg {
   @include mdc-ripple-surface;
   @include mdc-ripple-radius-bounded;
   @include mdc-states;
   overflow: hidden;
+}
+.ripple-dark-bg {
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states(#ffffff);
+  @include mdc-states-hover-opacity(.03);
+  @include mdc-states-focus-opacity(.05);
+  @include mdc-states-press-opacity(.1);
+  overflow: hidden;
+}
+.ripple-mobile {
+  @include mdc-states-hover-opacity(0);
+  @include mdc-states-focus-opacity(0);
 }

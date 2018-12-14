@@ -7,7 +7,13 @@ for (i = 0; i < x.length; i++) {
     MDCRipple.attachTo(x[i]);
 }
 
-var x = document.getElementsByClassName('ripple');
+var x = document.getElementsByClassName('ripple-light-bg');
+var i;
+for (i = 0; i < x.length; i++) {
+    MDCRipple.attachTo(x[i]);
+}
+
+var x = document.getElementsByClassName('ripple-dark-bg');
 var i;
 for (i = 0; i < x.length; i++) {
     MDCRipple.attachTo(x[i]);
