@@ -1,0 +1,94 @@
+//override primary colors
+$mdc-theme-primary: #003f87;
+$mdc-theme-secondary: #bc1b2d;
+$mdc-theme-background: #ffffff;
+
+//override button style
+$mdc-typography-styles-button: (
+  font-family: "IBM Plex Sans Bold",
+  font-size: 14px,
+);
+
+//troop 370 variables
+$t-border-color-dark-standard: #636161;
+$t-border-color-light-standard: #e0e0e0;
+$t-border-outline-width-standard: 1px;
+$t-border-radius-standard: 2px;
+
+//import material
+@import "@material/button/mdc-button";
+@import "@material/list/mdc-list";
+@import "@material/textfield/mdc-text-field";
+@import "@material/floating-label/mdc-floating-label";
+@import "@material/line-ripple/mdc-line-ripple";
+@import "@material/notched-outline/mdc-notched-outline";
+
+.member-pass {
+  @include mdc-text-field-focused-outline-color($mdc-theme-primary);
+  @include mdc-text-field-outline-shape-radius(2px)
+}
+
+//buttons
+@mixin button-light-ripple {
+  @include mdc-states(#ffffff);
+  @include mdc-states-hover-opacity(.06);
+  @include mdc-states-focus-opacity(.08);
+  @include mdc-states-press-opacity(.16);
+}
+.mdc-button {
+  user-select: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+  @include mdc-button-shape-radius($t-border-radius-standard);
+  &.light {
+    @include mdc-button-ink-color(#ffffff);
+    @include button-light-ripple;
+  }
+}
+.buttonrow > .mdc-button {
+  margin-right: 12px;
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+.standard-dark-button, .standard-light-button {
+  @include mdc-button-filled-accessible($mdc-theme-primary);
+}
+.standard-dark-button.mdc-button--outlined {
+  @include mdc-button-container-fill-color($mdc-theme-background);
+  @include mdc-button-ink-color($mdc-theme-primary);
+  @include mdc-button-outline-color($t-border-color-dark-standard);
+  @include mdc-button-outline-width($t-border-outline-width-standard);
+  @include mdc-states(#000000);
+  @include mdc-states-hover-opacity(.08);
+  @include mdc-states-focus-opacity(.12);
+  @include mdc-states-press-opacity(.20);
+}
+.standard-light-button.mdc-button--outlined {
+  @include mdc-button-container-fill-color(transparent);
+  @include mdc-button-ink-color($t-border-color-light-standard);
+  @include mdc-button-outline-color($t-border-color-light-standard);
+  @include mdc-button-outline-width($t-border-outline-width-standard);
+  @include button-light-ripple;
+}
+
+//bounded ripple for any element
+.ripple-light-bg {
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states;
+  overflow: hidden;
+}
+.ripple-dark-bg {
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states(#ffffff);
+  @include mdc-states-hover-opacity(.03);
+  @include mdc-states-focus-opacity(.05);
+  @include mdc-states-press-opacity(.1);
+  overflow: hidden;
+}
+.ripple-mobile {
+  @include mdc-states-hover-opacity(0);
+  @include mdc-states-focus-opacity(0);
+}

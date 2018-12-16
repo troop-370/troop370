@@ -5,7 +5,9 @@
     <title>Annual Recharter</title>
     <link rel='stylesheet' href='styles/components.css'>
     <link rel='stylesheet' href='styles/page-specific.css'>
-  </head>
+    <link rel="stylesheet" href="styles/bundle.css">
+    <script src="scripts/bundle.js" async></script>
+</head>
   <body>
     <div class="banner">
       <div class="container">
@@ -21,8 +23,13 @@
         <h4>Venmo (Preferred)</h4>
         <p>This year, the Troop is offering the option of making your payment using Venmo. Troop 370 prefers Venmo because merchant fees are waived for payments that don't use a credit card. You must make payments via the Venmo app. When paying, enter the Scout’s name and “Recharter” (e.g. John Doe / Recharter) with your payment in the 'What's it for?' section.<br>You may use only your last name if your family has more than one member renewing their registration.<br><br>To pay, download the app and add Troop-ThreeSeventy as a Venmo friend. Alternatively, you can click the button below to go to the Troop 370 Venmo page.</p>
         <div class="buttonrow">
-          <a href='https://venmo.com/troop-threeseventy' id='venmo' type='button' varient='dark'>Pay on Venmo</a>
-          <a href='http://onelink.to/zryeqw' type='button' varient='dark'>Get app</a>
+          <a href="https://venmo.com/troop-threeseventy" class="mdc-button standard-dark-button mdc-button--outlined">
+            <svg class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="height:24px;">
+            <path d="M19.5,3C20.14,4.08 20.44,5.19 20.44,6.6C20.44,11.08 16.61,16.91 13.5,21H6.41L3.56,4L9.77,3.39L11.28,15.5C12.69,13.21 14.42,9.61 14.42,7.16C14.42,5.81 14.19,4.9 13.83,4.15L19.5,3Z"/>
+            </svg>
+            Pay on Venmo
+          </a>
+          <a href="http://onelink.to/zryeqw" class="mdc-button standard-dark-button mdc-button--outlined">Get app</a>
         </div>
       </div>
     </div>

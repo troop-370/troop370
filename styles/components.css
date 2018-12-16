@@ -311,3 +311,14 @@ a[type="button"][varient="dark"]:hover,
 a[type="button"][variant="dark"]:hover {
   box-shadow: inset 0px 0px 100px var(--button-background-color-dark-hover);
 }
+
+@media (max-width: 600px) {
+  html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}

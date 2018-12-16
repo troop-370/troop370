@@ -39,6 +39,7 @@ carousel {
 .img-carousel {
   height: 600px;
   overflow: hidden;
+  transition: height 0.1s;
 }
 .main-carousel .carousel-cell {
   width: 100%; /* full width */
@@ -57,6 +58,12 @@ carousel {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  transition: height 0.1s;
+}
+@media (max-width: 600px) {
+  .img-carousel, .img-carousel .carousel-cell {
+    height: 300px;
+  }
 }
 .main-carousel .carousel-title {
   font-family: 'IBM Plex Sans Medium', sans-serif;
@@ -75,6 +82,7 @@ carousel {
   height: 100%;
   width: 33.3%;
   margin: 0px 0 0 auto;
+  transition: 0.1s;
 }
 .main-carousel .carousel-text-card>div {
   text-align: center;
