@@ -18,6 +18,15 @@ $t-border-radius-standard: 2px;
 //import material
 @import "@material/button/mdc-button";
 @import "@material/list/mdc-list";
+@import "@material/textfield/mdc-text-field";
+@import "@material/floating-label/mdc-floating-label";
+@import "@material/line-ripple/mdc-line-ripple";
+@import "@material/notched-outline/mdc-notched-outline";
+
+.member-pass {
+  @include mdc-text-field-focused-outline-color($mdc-theme-primary);
+  @include mdc-text-field-outline-shape-radius(2px)
+}
 
 //buttons
 @mixin button-light-ripple {

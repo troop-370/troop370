@@ -4,7 +4,11 @@
   "description": "",
   "main": "service-worker.js",
   "dependencies": {
-    "@material/list": "^0.42.0"
+    "@material/floating-label": "^0.42.0",
+    "@material/line-ripple": "^0.41.0",
+    "@material/list": "^0.42.0",
+    "@material/notched-outline": "^0.42.0",
+    "@material/textfield": "^0.42.0"
   },
   "devDependencies": {
     "@material/button": "^0.42.0",
