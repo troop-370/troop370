@@ -92,6 +92,9 @@ topnav li.dropdown {
 .dropdown-content a:hover {
   background-color: #f1f1f1
 }
+.dropdown > a {
+  cursor: default;
+}
 .dropdown:hover .dropdown-content {
   display: block;
 }
