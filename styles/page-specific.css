@@ -20,7 +20,7 @@ carousel {
 }
 .flickity-page-dots {
   bottom: 15px !important;
-  overflow: auto;
+  overflow: hidden;
   height: 14px;
 }
 .flickity-page-dots .dot {
