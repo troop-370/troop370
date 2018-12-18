@@ -15,7 +15,6 @@ var URLS = [
   '/index.html',
   '/about.html',
   '/advancement.html',
-  '/campout-schedule-local-events.html',
   '/manifest.json',
   '/src/icons/meeting icon.png',
   'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.js',
