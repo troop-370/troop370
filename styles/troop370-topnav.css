@@ -179,6 +179,11 @@ topnav li.dropdown {
   display: none;
 }
 @media (max-width: 600px) {
+  .top {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+  }
   titlebar heading {
     margin-left: 50px;
     font-size: 20px;
