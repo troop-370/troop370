@@ -184,6 +184,9 @@ topnav li.dropdown {
     height: 100vh;
     width: 100%;
   }
+  #main_content {
+    padding-top: 58px;
+  }
   titlebar heading {
     margin-left: 50px;
     font-size: 20px;
