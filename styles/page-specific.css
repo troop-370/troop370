@@ -245,7 +245,7 @@ a[type="button"].bigger {
 .split50 p {
   padding: 10px;
 }
-.split50 p:last-of-type {
+.split50 p:last-of-type, .split50-2 div.buttonrow:last-of-type {
   padding-bottom: 60px;
 }
 @media (max-width: 600px) {
@@ -255,10 +255,13 @@ a[type="button"].bigger {
   .split50-2 {
     width: 100%;
   }
-  .split50 p:last-of-type {
+  .split50 p:last-of-type, .split50-2 div.buttonrow:last-of-type {
     padding-bottom: 36px;
     border-bottom: 1px solid #ccc;
     margin-bottom: 24px;
+  }
+  .no-bottom-line-mobile {
+    border-bottom: 0px !important;
   }
 }
 
