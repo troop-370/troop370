@@ -222,7 +222,7 @@ titlebar heading {
   --topnav-dropdown-a-padding-x: 16px;
   --topnav-dropdown-a-padding-y: 12px;
   --topnav-dropdown-bg-color: #f7f7f7;
-  --content-max-width: 1400px !important;
+  --content-max-width: 1400px;
 }
 /*mobile view*/
 @media (max-width: 600px) {
