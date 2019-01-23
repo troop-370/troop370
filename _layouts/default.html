@@ -1,6 +1,3 @@
----
-layout: default
----
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
@@ -121,7 +118,7 @@ layout: default
   		<li><a class='ripple-light-bg' href='contact-webmaster.html'>Contact Webmaster for password</a></li>
   	</ul>
 
-    <div class='top colorful'>
+    <div class='top {% if page.theme == 'dark' %} dark {% elsif page.theme == 'colorful' %} colorful {% else %} light {% endif %} {% if page.mobile-theme == 'dark' %} mobile-dark {% elsif page.mobile-theme == 'colorful' %} mobile-colorful {% else %} mobile-light {% endif %}'>
     	<topnav>
     		<div class='container'>
           <titlebar id='titlebar1'>
