@@ -53,11 +53,8 @@ div.banner h3.size8 {
 }
 @media (max-width: 600px) {
   div.banner.img {
-    padding-top: 0px;
+    padding-top: 10px;
     padding-bottom: 126px;
-  }
-  .top-container {
-    padding-top: 30px;
   }
   :root {
     --banner-padding-x: 6px;
