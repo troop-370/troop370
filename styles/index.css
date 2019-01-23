@@ -1,0 +1,185 @@
+#mcard1 {
+  background-image: url("/src/banner images/scout shadow on top of mountain with sunset.jpg");
+}
+#mcard2 {
+  background-image: url("/src/banner images/pineneedles_l.jpg")
+}
+#mcard3 {
+  background-image: url("/src/banner images/ookpik - skiing in a flat feild.jpg")
+}
+#mcard4 {
+  background-image: url("/src/banner images/wsr-sign-far.jpg")
+}
+#mcard5 {
+  background-image: url("/src/banner images/summit-sign.webp")
+}
+#mcard6 {
+  background-image: url("/src/banner images/merit-badges.jpg")
+}
+:root {
+  --content-max-width: 1600px;
+  --banner-padding-x: 20px;
+}
+.top, .top.light, .top topnav div.container {
+  --topnav-bg-color: transparent;
+  --content-max-width: 1600px !important;
+}
+.nav-shadow.top.light {
+  --topnav-bg-color: #f7f7f7
+}
+.top-container {
+  background-image: url("../src/index/370-mountains-light.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: -60px;
+  padding-top: 60px;
+}
+div.banner.img {
+  padding-top: 150px;
+  padding-bottom: 250px;
+  text-align: center;
+  background-color: transparent;
+}
+div.banner#time-banner {
+  background-color: #ffffff;
+  text-align: center;
+}
+div.banner p {
+  color: #222222;
+}
+div.banner h3.size8 {
+  color: #003f87;
+}
+@media (max-width: 600px) {
+  div.banner.img {
+    padding-top: 10px;
+    padding-bottom: 126px;
+  }
+  :root {
+    --banner-padding-x: 6px;
+  }
+}
+carousel {
+  display: flex;
+  height: auto;
+  background-color: #212121;
+  justify-content: center
+}
+.flickity-page-dots {
+  bottom: 15px !important;
+  overflow: hidden;
+  height: 14px;
+}
+.flickity-page-dots .dot {
+  background: #dddddd !important;
+}
+.flickity-button {
+  background: none !important;
+}
+.flickity-button-icon {
+  fill: #dddddd !important;
+}
+carousel#main {
+  background: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
+}
+.main-carousel {
+  margin-top: -80px;
+  height: 300px;
+}
+.main-carousel .carousel-title {
+  font-family: 'IBM Plex Sans Medium', sans-serif;
+  font-size: 34px;
+  margin: 0;
+}
+.main-carousel .carousel-info {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+.main-carousel .carousel-text-card {
+  display: block;
+  width: 100%;
+  background: rgba(0,0,0,0.5);
+  height: 100%;
+  margin: 0px 0 0 auto;
+  border-radius: 3px;
+  transition: 0.1s;
+}
+.main-carousel .carousel-text-card>div {
+  text-align: center;
+  color: white;
+  margin: auto 0 auto 0;
+  position: relative;
+  top: 50%;
+  transform: perspective(1px) translateY(-50%);
+}
+.main-carousel .flickity-slider {
+  margin: 0 var(--banner-padding-x);
+}
+.main-carousel .carousel-cell {
+  width: calc(33% - (2/3)*var(--banner-padding-x));
+  height: 300px;
+  margin-right: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 3px;
+}
+@media (max-width: 1400px) {
+  .main-carousel .carousel-cell {
+    width: calc(50% - var(--banner-padding-x));
+    height: 300px;
+  }
+}
+@media (max-width: 900px) {
+  .main-carousel .carousel-cell {
+    width: calc(100% - 2*var(--banner-padding-x));
+    height: 300px;
+  }
+}
+@media (max-width: 500px) {
+  .main-carousel .carousel-cell {
+    width: calc(86% - var(--banner-padding-x));
+    height: 200px;
+  }
+  .main-carousel {
+    height: 200px;
+  }
+  .main-carousel .carousel-title {
+    font-size: 28px;
+  }
+}
+carousel#img {
+  background: #ffffff;
+}
+.img-carousel {
+  overflow: hidden;
+  transition: height 0.1s;
+}
+.img-carousel .carousel-cell {
+  margin-right: 10px;
+  border-radius: 3px;
+  background-color: #212121;
+  transition: height 0.1s;
+}
+.img-carousel .flickity-slider {
+  margin: 0 var(--banner-padding-x);
+}
+.img-carousel .carousel-cell .carousel-image {
+  display: block;
+  min-width: 200px;
+  height: 600px;
+}
+@media (max-width: 800px) /*standard width of images */{
+  .img-carousel {
+  }
+  .img-carousel .carousel-cell {
+    width: 100%;
+  }
+  .img-carousel .carousel-cell .carousel-image {
+    height: 300px;
+    margin: auto;
+  }
+}
