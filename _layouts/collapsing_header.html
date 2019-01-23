@@ -122,7 +122,7 @@
     	<topnav>
     		<div class='container'>
           <titlebar id='titlebar1'>
-        		<a href='#' id='title1'><heading>{% if page.title == 'Home' %} BSA Troop 370 {% else %} {{page.title}} {% endif %}</heading></a>
+        		<a href='#' id='title1' class="scrollme animateme" data-when="view" data-from="0.6" data-to="0" data-easing="linear" data-translatex="58" data-translatey="96" data-scale="1.466"><heading>{% if page.title == 'Home' %} BSA Troop 370 {% else %} {{page.title}} {% endif %}</heading></a>
             <a href='#' data-activates='slide-out' class='button-collapse ripple-light-bg' style='line-height: 0;color: transparent;'>Menu
       				<svg xmlns='http://www.w3.org/2000/svg' class='menu-icon2' width='24' height='24' viewBox='0 0 24 24'>
       					<path d='M0 0h24v24H0z' fill='none' />
@@ -199,6 +199,11 @@
     		</div>
     	</topnav>
     </div>
+    <div class="banner hide-mobile">
+      <div class="container">
+        <h3 class="size8">&nbsp;</h3>
+      </div>
+    </div>
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
@@ -238,8 +243,9 @@
     </script>-->
 
     <!-- various libraries and additional scripts -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type='text/javascript' src='scripts/insert-header-footer.js'></script>
+    <script src="resources/scrollme/jquery.scrollme.js"></script>
 
     <!-- sidenav menu for mobile -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.js"></script>
