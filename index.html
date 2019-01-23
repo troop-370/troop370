@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Home
-theme: colorful
-mobile-theme: colorful
+theme: light
+mobile-theme: light
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -12,14 +12,27 @@ mobile-theme: colorful
   <meta name="Description" content="Troop 370 - Atlanta, GA | Scouts BSA Troop in Buckhead/Brookhaven/Sandy Springs area | Sponsored by St. James United Methodist Church">
   <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css" media="screen">
   <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
+  <link rel="stylesheet" href="styles/index.css" media="screen">
 </head>
 
 <body>
-  <carousel>
+  <div class="top-container">
+    <div class="banner img">
+      <div class="container">
+        <h3 class="size8">Welcome to Troop 370</h3>
+        <p>Troop 370 is proud to have completed over 40 years of consecutive service to the Buckhead\Brookhaven community. Sponsored by St. James United Methodist Church, Troop 370 has a long history of developing boys into young men following the aims and ideals of the Boy Scouts of America movement.</p>
+        <div class="buttonrow">
+          <a href="about.html" class="mdc-button standard-dark-button mdc-button--outlined" style="background-color: transparent;">About page</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <carousel id="main">
     <div class="container">
-      <div class="main-carousel" data-flickity='{ "cellAlign": "left", "contain": true, "wrapAround": true, "autoPlay": 4000 }'>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="card6">
-          <div class="carousel-text-card">
+      <div class="main-carousel" data-flickity='{ "cellAlign": "left", "contain": true, "autoPlay": 4000, "pageDots": false }'>
+        <div class="carousel-cell" id="mcard6">
+          <div class="carousel-text-card ripple-dark-bg ripple-mobile" onclick="location.href='https://www.eventbrite.com/e/boy-scout-troop-370-merit-badge-clinic-feb-2019-tickets-53531615503'">
             <div>
               <h2 class="carousel-title">Merit Badge Clinic</h2>
               <p class="carousel-info">February 9; 8:30 AM - 3:00 PM</p>
@@ -27,8 +40,8 @@ mobile-theme: colorful
             </div>
           </div>
         </div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="card4">
-          <div class="carousel-text-card">
+        <div class="carousel-cell" id="mcard4">
+          <div class="carousel-text-card ripple-dark-bg ripple-mobile" onclick="location.href='woodruff-sc-sign-up_encrypted.html'">
             <div>
               <h2 class="carousel-title">Woodruff Summer Camp</h2>
               <p class="carousel-info">June 9-15</p>
@@ -36,8 +49,8 @@ mobile-theme: colorful
             </div>
           </div>
         </div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="card5">
-          <div class="carousel-text-card">
+        <div class="carousel-cell" id="mcard5">
+          <div class="carousel-text-card ripple-dark-bg ripple-mobile" onclick="location.href='summit-sc-sign-up_encrypted.html'">
             <div>
               <h2 class="carousel-title">Summit Summer Camp</h2>
               <p class="carousel-info">June 23-29</p>
@@ -45,71 +58,70 @@ mobile-theme: colorful
             </div>
           </div>
         </div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="card1">
-          <div class="carousel-text-card">
+        <div class="carousel-cell" id="mcard1">
+          <div class="carousel-text-card ripple-dark-bg ripple-mobile" onclick="location.href='camps-adventure.html'">
             <div>
               <h2 class="carousel-title">High Adventure</h2>
               <p class="carousel-info">2019</p>
-              <a href="camps-adventure.html#tevents" class="mdc-button standard-light-button mdc-button--outlined">View list</a>
+              <a href="camps-adventure.html" class="mdc-button standard-light-button mdc-button--outlined">View list</a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </carousel>
-  <div class="banner extra-padding-y">
+
+  <div class="banner extra-padding-y" id="time-banner">
     <div class="container">
-      <h3 class="size8">Welcome to Troop 370</h3>
-      <p>Boy Scout Troop 370 is proud to have completed over 40 years of consecutive service to the Buckhead\Brookhaven community. Sponsored by St. James United Methodist Church, Troop 370 has a long history of developing boys into young men following the aims and ideals of the Boy Scouts of America movement.</p>
-      <div class="buttonrow">
-        <a href="about.html" class="mdc-button standard-light-button mdc-button--outlined">About page</a>
-      </div>
-    </div>
-  </div>
-  <carousel>
-    <div class="container">
-      <div class="img-carousel" data-flickity='{ "cellAlign": "left", "contain": true, "wrapAround": true, "autoPlay": 4000 }'>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard1"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard2"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard3"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard4"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard5"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard6"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard7"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard8"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard9"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard10"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard11"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard12"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard13"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard14"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard15"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard16"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard17"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard18"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard19"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard20"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard21"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard22"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard23"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard24"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard25"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard26"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard27"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard28"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard29"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard30"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard31"></div>
-        <div class="carousel-cell ripple-dark-bg ripple-mobile" id="imgcard32"></div>
-      </div>
-    </div>
-  </carousel>
-  <div class="banner extra-padding-y red" id="time-banner">
-    <div class="container">
-      <img id="meeting-icon" alt="meeting-icon" src="src/icons/meeting icon.png">
       <h3 class="size8">Weekly Meetings</h3>
       <p>Wednesday Nights<br>7:30 PM - 9:00 PM<br>4400 Peachtree Dunwoody Rd, Atlanta, GA 30342<br>Activities Building (Loridans Drive Entrance)</p>
     </div>
   </div>
+
+  <carousel id="img">
+    <div class="container">
+      <div class="img-carousel" data-flickity='{ "cellAlign": "left", "contain": true, "autoPlay": 4000, "lazyLoad": 3, "imagesLoaded": true }'>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/1.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/2.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/3.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/4.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/5.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/6.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/7.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/8.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/9.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/10.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/11.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/12.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/13.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/14.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/15.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/16.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/17.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/18.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/19.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/20.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/21.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/22.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/23.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/24.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/25.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/26.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/27.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/28.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/29.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/30.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/31.jpg" /></div>
+        <div class="carousel-cell "><img class="carousel-image" data-flickity-lazyload="src/photos-index-slideshow/32.jpg" /></div>
+      </div>
+    </div>
+  </carousel>
+  <div class="content-strip">
+    <div class="container" style="text-align:left">
+      <p>© 2019 Troop 370</p>
+      <p>Contact Webmaster for passwords</p>
+    </div>
+  </div>
+
 </body>
 </html>
