@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="styles/bundle.css">
     <script src="scripts/bundle.js" async></script>
     <link rel="stylesheet" href="styles/troop370-topnav-v2.css">
+    <link rel="stylesheet" href="resources/materialize/0.97.8/css/materialize-sidenav.css"
   </head>
 
   <body>
@@ -136,18 +137,24 @@
     	<topnav>
     		<div class='container'>
           <titlebar id='titlebar1'>
-        		<a href='index.html'><heading>BSA Troop 370</heading></a>
+        		<a href='index.html' id="title1"><heading>{% if page.title == 'Home' %} BSA Troop 370 {% else %} {{page.title}} {% endif %}</heading></a>
+            <a href='#' data-activates='slide-out' class='button-collapse' style="line-height: 0;color: transparent;">Menu
+      				<svg xmlns='http://www.w3.org/2000/svg' class='menu-icon2' width='24' height='24' viewBox='0 0 24 24'>
+      					<path d='M0 0h24v24H0z' fill='none' />
+      					<path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
+      				</svg>
+      			</a>
         	</titlebar>
-    			<ul id='main-nav'>
+    			<ul class='main-nav'>
     				<li><a href='index.html' id='home'>Home</a></li>
-    				<li class='dropdown'><a href='javascript:void(0)'>About</a>
+    				<li class='dropdown' id='about'><a href='javascript:void(0)'>About</a>
     					<dropdown class='dropdown-content'>
                 <a href='about.html'>General Information</a>
                 <a href='leaders.html'>Leaders</a>
                 <a href='eagle-scout-honor-roll.html'>Eagle Scout Honor Roll</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Information</a>
+    				<li class='dropdown' id='info'><a href='javascript:void(0)'>Information</a>
     					<dropdown class='dropdown-content'>
                 <a href='participation.html'>Scout/Parent Participation</a>
                 <a href='forms-documents.html'>Forms &amp; Documents</a>
@@ -155,7 +162,7 @@
                 <a href='helpful-links.html'>Helpful Links</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Scouts</a>
+    				<li class='dropdown' id='scouts'><a href='javascript:void(0)'>Scouts</a>
     					<dropdown class='dropdown-content'>
                 <a href='leadership-training.html'>Leadership Training</a>
                 <a href='faqs.html'>Frequently Asked Questions</a>
@@ -163,13 +170,13 @@
                 <a href='new-scouts.html'>Letter to New Scouts</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Troop Events</a>
+    				<li class='dropdown' id='tevents'><a href='javascript:void(0)'>Troop Events</a>
     					<dropdown class='dropdown-content'>
                 <a href='camps-adventure.html'>Camps/High Adventure</a>
                 <a href='campout-schedule-local-events.html'>Campout Schedule &amp; Local Events</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Members</a>
+    				<li class='dropdown' id='members'><a href='javascript:void(0)'>Members</a>
     					<dropdown class='dropdown-content'>
                 <a href='email-newsletters_encrypted.html'>Weekly Newsletters</a>
                 <a href='calendar_encrypted.html'>Calendar</a>

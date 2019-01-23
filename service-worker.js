@@ -33,7 +33,7 @@ var URLS = [
   './recharter.html',
   './resources/flickity/flickity.css',
   './resources/flickity/flickity.pkgd.js',
-  './resources/materialize/0.97.8/css/materialize.css',
+  './resources/materialize/0.97.8/css/materialize-sidenav.css',
   './scripts/bundle.js',
   './scripts/insert-header-footer.js',
   './src/fonts/IBM_Plex_Sans_Bold.woff',
