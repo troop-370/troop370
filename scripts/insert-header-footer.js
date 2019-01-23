@@ -17,14 +17,6 @@ $(document).ready(function(){
     $(this).children('.dropdown-content').toggle();
  	});
 
-	//set titlebar title in mobile mode
-  var title = $(document).prop('title');
-	$(".mobile-appbar-title").text(title);
-	//set page title in tab title (and search engines) to have suffix
-  $(document).prop('title', title+' | Boy Scout Troop 370');
-
-});
-
 //underline current page in navigation
 $(function(){
 	$('a').each(function(){
