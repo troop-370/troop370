@@ -203,6 +203,7 @@
     <div class="banner hide-mobile">
       <div class="container">
         <h3 class="size8">&nbsp;</h3>
+        {% if page.subtitle == '' %} {% else %} <p>{{ page.subtitle }}</p> {% endif %}
       </div>
     </div>
 
