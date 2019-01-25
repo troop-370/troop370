@@ -241,6 +241,7 @@ titlebar heading {
     --titlebar-heading-width: calc(100vw - 67px);
     --titlebar-heading-font-size: 20px;
     --titlebar-margin-left: 50px;
+    --titlebar-site-margin-top: -44px;
     --menu-icon-display: block;
     --main-nav-display: none;
   }
