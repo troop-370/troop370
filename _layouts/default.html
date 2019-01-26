@@ -14,6 +14,53 @@
   </head>
 
   <body>
+    <!-- cookie consent -->
+    <div class="snackbar">
+      <p> By using this site, you consent to using cookies </p>
+      <a href="cookies.html" class="snackbar-button"> Learn More </a>
+      <p onclick="acceptedCookie()" class="snackbar-button"> Accept </p>
+    </div>
+    <style>
+      .snackbar {
+        position: fixed;
+        left: 10px;
+        bottom: 10px;
+        background-color: #212121;
+        color: #e0e0e0;
+        font-size: 16px;
+        padding: 6px 8px;
+        border-radius: 3px;
+      }
+      .snackbar p {
+        margin-left: 8px;
+        display: inline-block;
+      }
+      .snackbar a {
+        margin-left: 20px;
+        text-decoration: none;
+      }
+      .snackbar-button {
+        padding: 6px 8px;
+        text-transform: uppercase;
+      }
+      .snackbar-button:last-of-type {
+        margin-left: 8px;
+      }
+      .snackbar-button:hover {
+        box-shadow: inset 0 0 100px #ffffff33;
+      }
+      .snackbar-button:active {
+        box-shadow: inset 0 0 100px #ffffff55;
+      }
+      @media (max-width: 600px) {
+        .snackbar-button {
+          bottom: 0;
+          left: 0;
+          border-radius: 0;
+          width: 100%;
+        }
+      }
+    </style>
     <!-- HEADER -->
   	<ul id='slide-out' class='side-nav'>
       <div class='header'>
