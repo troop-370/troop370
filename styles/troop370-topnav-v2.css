@@ -5,6 +5,7 @@
   --titlebar-heading-padding-x: 16px;
   --titlebar-heading-padding-y: 18px;
   --titlebar-margin-left: 0;
+  --titlebar-site-margin-top: 0;
   --menu-icon-display: none;
   --main-nav-height: 60px;
   --main-nav-display: inline-flex;
@@ -88,9 +89,14 @@ topnav {
 titlebar {
   display: inline-flex;
 }
-#title1 {
-    text-decoration: none;
-  }
+#title1, #title1-site {
+  text-decoration: none;
+}
+#title1-site {
+  position: absolute;
+  margin-top: var(--titlebar-site-margin-top);
+  transition: margin-top 0.2s;
+}
 #titlebar2, #slide-out2 {
   display: none;
 }
@@ -214,6 +220,7 @@ titlebar heading {
   --top-height: 50px;
   --titlebar-heading-font-size: 20px;
   --titlebar-heading-padding-y: 13px;
+  --titlebar-site-margin-top: -44px;
   --main-nav-height: 50px;
   --topnav-bg-color: #f7f7f7;
   --topnav-a-padding-y: 14px;
@@ -234,6 +241,7 @@ titlebar heading {
     --titlebar-heading-width: calc(100vw - 67px);
     --titlebar-heading-font-size: 20px;
     --titlebar-margin-left: 50px;
+    --titlebar-site-margin-top: -44px;
     --menu-icon-display: block;
     --main-nav-display: none;
   }
