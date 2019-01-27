@@ -1,5 +1,5 @@
 body {
-  --cookie-snackbar: -100px;
+  --cookie-snackbar: -160px;
 }
 .snackbar {
   position: fixed;

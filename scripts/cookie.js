@@ -31,7 +31,7 @@ function recallCookie() {
 //cookiePrompt=show changes
 function acceptedCookie() {
 	//alert("accepted");
-  document.body.style.setProperty("--cookie-snackbar", "-100px");
+  document.body.style.setProperty("--cookie-snackbar", "-160px");
 	document.cookie="cprompt=hide; max-age=31536000;";
 
 }
