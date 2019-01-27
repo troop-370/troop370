@@ -10,10 +10,30 @@
     <link rel="stylesheet" href="styles/bundle.css">
     <script src="scripts/bundle.js" async></script>
     <link rel="stylesheet" href="styles/troop370-topnav-v2.css">
-    <link rel="stylesheet" href="resources/materialize/0.97.8/css/materialize-sidenav.css"
+    <link rel="stylesheet" href="resources/materialize/0.97.8/css/materialize-sidenav.css">
+    <script src='scripts/cookie.js' async></script>
+    <link rel='stylesheet' href='styles/snackbar.css'>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-44420589-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-44420589-2');
+    </script>
   </head>
 
-  <body>
+  <body onLoad="recallCookie()">
+    <!-- cookie consent -->
+    <div class="snackbar">
+      <p>Troop 370 uses cookies to improve your experience. By using this site, you consent to the use of these cookies </p>
+      <div class="snackbar-button-container">
+        <a href="cookies.html" class="snackbar-button"> Learn More </a>
+        <p onclick="acceptedCookie()" class="snackbar-button"> Accept </p>
+      </div>
+    </div>
+
     <!-- HEADER -->
   	<ul id='slide-out' class='side-nav'>
       <div class='header'>
@@ -218,18 +238,6 @@
     <div id="footer_wrap" class="outer">
 
     </div>
-
-    <!-- SCRIPTS -->
-    {% if site.google_analytics %}
-      <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', '{{ site.google_analytics }}', 'auto');
-        ga('send', 'pageview');
-      </script>
-    {% endif %}
 
     <!-- initialize serviceworker -->
     <script>
