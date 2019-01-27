@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="styles/bundle.css">
     <script src="scripts/bundle.js" async></script>
     <link rel="stylesheet" href="styles/troop370-topnav-v2.css">
-    <link rel="stylesheet" href="resources/materialize/0.97.8/css/materialize-sidenav.css"
-   
+    <link rel="stylesheet" href="resources/materialize/0.97.8/css/materialize-sidenav.css">
+    <script src='scripts/cookie.js' async></script>
+    <link rel='stylesheet' href='styles/snackbar.css'>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-44420589-2"></script>
     <script>
@@ -20,12 +21,19 @@
       gtag('js', new Date());
 
       gtag('config', 'UA-44420589-2');
-  </script>
-
-    
+    </script>
   </head>
 
-  <body>
+  <body onLoad="recallCookie()">
+    <!-- cookie consent -->
+    <div class="snackbar">
+      <p>Troop 370 uses cookies to improve your experience. By using this site, you consent to the use of these cookies </p>
+      <div class="snackbar-button-container">
+        <a href="cookies.html" class="snackbar-button"> Learn More </a>
+        <p onclick="acceptedCookie()" class="snackbar-button"> Accept </p>
+      </div>
+    </div>
+
     <!-- HEADER -->
   	<ul id='slide-out' class='side-nav'>
       <div class='header'>
