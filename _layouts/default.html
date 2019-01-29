@@ -3,6 +3,13 @@
   <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
     <meta name='theme-color' content='#003f87'>
+    {% if page.title == 'Home' %}
+    <meta name="Description" content="Troop 370 - Atlanta, GA | Scouts BSA Troop in Buckhead/Brookhaven/Sandy Springs area | Sponsored by St. James United Methodist Church">
+    <meta name="msvalidate.01" content="0E12A7A6688D1B7250808B7C0C0BC3F5" />
+    <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css" media="screen">
+    <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
+    <link rel="stylesheet" href="styles/index.css" media="screen">
+    {% else %} {% endif %}
     <link rel='manifest' href='manifest.json'>
     <link rel='shortcut icon' type='image/x-icon' href='src/troop370-logo/favicon.ico'>
     <link rel='stylesheet' href='styles/components.css'>
