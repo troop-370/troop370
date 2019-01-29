@@ -119,9 +119,6 @@ titlebar heading {
 #title1.animateme {
   width: var(--titlebar-heading-width);
 }
-#title1.animateme heading {
-  width: 100vw;
-}
 .nav-shadow #title1.animateme heading {
   width: var(--titlebar-heading-width);
 }
