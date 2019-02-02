@@ -114,7 +114,7 @@ titlebar heading {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: padding 0.2s, font-size 0.2s, margin 0.2s;
+  transition: padding 0.2s, font-size 0.2s, margin 0.2s, overflow 0.2s;
 }
 #title1.animateme {
   width: var(--titlebar-heading-width);
@@ -227,6 +227,14 @@ titlebar heading {
   --topnav-dropdown-a-padding-y: 12px;
   --topnav-dropdown-bg-color: #f7f7f7;
   --content-max-width: 1400px;
+}
+titlebar .scrollme heading {
+  overflow: visible;
+  text-overflow: clip;
+}
+.nav-shadow titlebar .scrollme heading {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /*mobile view*/
 @media (max-width: 600px) {
