@@ -18,7 +18,9 @@ for (i = 0; i < x.length; i++) {
 }
 
 import {MDCTextField} from '@material/textfield';
-const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
+const textField = [].map.call(document.querySelectorAll('.mdc-text-field'), function(el) {
+  return new MDCTextField(el);
+});
 
 import {MDCList} from '@material/list';
 const list = new MDCList(document.querySelector('.mdc-list'));
