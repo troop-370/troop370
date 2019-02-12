@@ -329,25 +329,25 @@ titlebar .scrollme heading {
 #dropdownarrow, #drop-photos, #drop-contact, #drop-payments, #drop-pinestraw, #drop-members {
   display: none;
 }
-@media (max-width: 1400px) and (min-width: 600px) {
+@media (max-width: 1260px) and (min-width: 600px) {
   .main-nav li a {
     --topnav-a-padding-x: 12px;
   }
-  @media (max-width: 1330px) {
+  @media (max-width: 1190px) {
     #pinestraw {
       display: none;
     }
     #dropdownarrow, #drop-pinestraw {
       display: block;
     }
-    @media (max-width: 1260px) {
+    @media (max-width: 1120px) {
       #payments {
         display: none;
       }
       #drop-payments {
         display: block;
       }
-      @media (max-width: 1150px) {
+      @media (max-width: 1010px) {
         #contact {
           display: none;
         }
@@ -357,21 +357,21 @@ titlebar .scrollme heading {
         #members .dropdown-content{
           right: 0;
         }
-        @media (max-width: 1050px) {
+        @media (max-width: 910px) {
           #photos {
             display: none;
           }
           #drop-photos {
             display: block;
           }
-          #tevents .dropdown-content{
+          #tevents .dropdown-content {
             right: 0;
           }
-          @media (max-width: 960px) {
+          @media (max-width: 820px) {
             .main-nav li a {
               --topnav-a-padding-x: 7px;
             }
-            @media (max-width: 900px) {
+            @media (max-width: 770px) {
               #members {
                 display: none;
               }
@@ -381,20 +381,12 @@ titlebar .scrollme heading {
               #drop-contact {
                 width: 260px;
               }
-              #scouts .dropdown-content{
+              #info .dropdown-content {
                 right: 0;
               }
-              @media (max-width: 810px) {
+              @media (max-width: 680px) {
                 titlebar {
                   --titlebar-heading-width: 200px;
-                }
-              }
-              @media (max-width: 730px) {
-                #tevents {
-                  display: none;
-                }
-                #drop-tevents {
-                  display: block;
                 }
               }
             }
