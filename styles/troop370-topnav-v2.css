@@ -84,7 +84,7 @@ topnav {
   justify-content: center;
 }
 .top topnav div.container {
-  --content-max-width: 1400px;
+  --content-max-width: 1262px;
 }
 titlebar {
   display: inline-flex;
