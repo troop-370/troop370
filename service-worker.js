@@ -1,5 +1,5 @@
 var APP_PREFIX = 'troop370_'
-var VERSION = 'version_58' // update the version every time the website is updated (or the content will not update on PWAs)
+var VERSION = 'version_59' // update the version every time the website is updated (or the content will not update on PWAs)
 var CACHE_NAME = APP_PREFIX + VERSION
 var URLS = [
   './index.html?utm_source=homescreen',
@@ -25,7 +25,6 @@ var URLS = [
   './leadership-training.html',
   './manifest.json',
   './mb-counselors_encrypted.html',
-  './new-scouts.html',
   './participation.html',
   './payments.html',
   './photos.html',
