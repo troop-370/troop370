@@ -1,19 +1,27 @@
+//troop 370 variables
+$t-border-color-dark-standard: #636161;
+$t-border-color-light-standard: #e0e0e0;
+$t-border-outline-width-standard: 1px;
+$t-border-radius-standard: 2px;
+
 //override primary colors
 $mdc-theme-primary: #003f87;
+$mdc-theme-primary-light: #4969b7;
+$mdc-theme-primary-lightest: #8096cd;
+$mdc-theme-primary-dark: #001a59;
 $mdc-theme-secondary: #bc1b2d;
+$mdc-theme-secondary-light: #f55656;
+$mdc-theme-secondary-dark: #840005;
 $mdc-theme-background: #ffffff;
+$mdc-snackbar-action-ink-color: $mdc-theme-primary-lightest;
+$mdc-snackbar-shape-radius: $t-border-radius-standard;
+$mdc-snackbar-fill-color: #222222;
 
 //override button style
 $mdc-typography-styles-button: (
   font-family: "IBM Plex Sans Bold",
   font-size: 14px,
 );
-
-//troop 370 variables
-$t-border-color-dark-standard: #636161;
-$t-border-color-light-standard: #e0e0e0;
-$t-border-outline-width-standard: 1px;
-$t-border-radius-standard: 2px;
 
 //import material
 @import "@material/button/mdc-button";
@@ -22,6 +30,8 @@ $t-border-radius-standard: 2px;
 @import "@material/floating-label/mdc-floating-label";
 @import "@material/line-ripple/mdc-line-ripple";
 @import "@material/notched-outline/mdc-notched-outline";
+@import "@material/snackbar/mdc-snackbar";
+@import "@material/icon-button/mdc-icon-button";
 
 .member-pass {
   @include mdc-text-field-focused-outline-color($mdc-theme-primary);

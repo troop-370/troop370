@@ -32,11 +32,13 @@
 
   <body onLoad="recallCookie()">
     <!-- cookie consent -->
-    <div class="snackbar">
-      <p>Troop 370 uses cookies to improve your experience. By using this site, you consent to the use of these cookies </p>
-      <div class="snackbar-button-container">
-        <a href="cookies.html" class="snackbar-button">Cookie Policy</a>
-        <p onclick="acceptedCookie()" class="snackbar-button">Accept</p>
+    <div id="cookieSnackbar" class="cookie-snackbar mdc-snackbar mdc-snackbar--stacked">
+      <div class="mdc-snackbar__surface">
+        <div class="mdc-snackbar__label" role="status" aria-live="polite">By using this site, you consent to the use of cookies to improve your experience.</div>
+        <div class="mdc-snackbar__actions">
+          <a class="mdc-button mdc-snackbar__action" href="cookies.html">Cookie Policy</a>
+          <button type="button" class="mdc-button mdc-snackbar__action" onclick="acceptedCookie()">Accept</button>
+        </div>
       </div>
     </div>
 

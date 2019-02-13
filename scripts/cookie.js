@@ -31,14 +31,15 @@ function recallCookie() {
 //cookiePrompt=show changes
 function acceptedCookie() {
 	//alert("accepted");
-  document.body.style.setProperty("--cookie-snackbar", "-160px");
 	document.cookie="cprompt=hide; max-age=31536000;";
-
+	var element = document.getElementById("cookieSnackbar");
+  element.classList.remove("mdc-snackbar--open");
 }
 //
 function ignoredCookie() {
 	//alert("ignored");
-  document.body.style.setProperty("--cookie-snackbar", "0");
 	document.cookie="cprompt=show";
 	document.cookie="cprompt=hide; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+	var element = document.getElementById("cookieSnackbar");
+  element.classList.add("mdc-snackbar--open");
 }

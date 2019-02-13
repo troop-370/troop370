@@ -22,6 +22,11 @@ const textField = [].map.call(document.querySelectorAll('.mdc-text-field'), func
   return new MDCTextField(el);
 });
 
+import {MDCSnackbar} from '@material/snackbar';
+const snackbar = [].map.call(document.querySelectorAll('.mdc-snackbar'), function(el) {
+  return new MDCTextField(el);
+});
+
 import {MDCList} from '@material/list';
 const list = new MDCList(document.querySelector('.mdc-list'));
 const listItemRipples = list.listElements.map((listItemEl) => new MDCRipple(listItemEl));

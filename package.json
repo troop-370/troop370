@@ -8,6 +8,7 @@
     "@material/line-ripple": "^0.41.0",
     "@material/list": "^0.42.0",
     "@material/notched-outline": "^0.42.0",
+    "@material/snackbar": "^0.44.0",
     "@material/textfield": "^0.42.0"
   },
   "devDependencies": {
