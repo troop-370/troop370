@@ -97,11 +97,6 @@ h1, h2, h3, h4, h5, h6 {
     display: none !important;
   }
 }
-
-div.content-strip.blue, div.content-strip.blue subtitle, div.content-strip.blue h4, div.content-strip.blue p {
-  background-color: var(--background-blue);
-  color: var(--content-strip-text-color-light) !important;
-}
 html, body, div.container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
   padding: 0;
