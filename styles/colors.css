@@ -1,0 +1,15 @@
+:root {
+  --theme-primary: #003f87;
+  --theme-primary-lighter: #134885;
+  --theme-primary-light: #4969b7;
+  --theme-primary-lightest: #8096cd;
+  --theme-primary-dark: #001a59;
+  --theme-secondary: #bc1b2d;
+  --theme-secondary-light: #f55656;
+  --theme-secondary-dark: #840005;
+  --theme-background: #ffffff;
+  --theme-text-on-background: #1f1f1f;
+  --theme-primary_accent_text-on-background: var(--theme-primary-lighter);
+  --theme-text-on-primary: #e0e0e0;
+  --theme-text-on-secondary: #e0e0e0;
+}
