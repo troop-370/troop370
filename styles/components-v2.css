@@ -1,6 +1,5 @@
 @import "../styles/fonts.css";
 @import "../styles/colors.css";
-@import "../styles/legacy_components.css";
 html {
     line-height: 1.5;
     font-family: "Roboto", sans-serif;
