@@ -86,16 +86,6 @@ h1, h2, h3, h4, h5, h6 {
   --button-border-color-light: #e0e0e0;
   --button-border-color-dark: #636161;
 }
-@media (max-width: 600px) {
-  :root {
-    --h3-8-font-size: 28px;
-    --h4-font-size: 24px;
-    --h5-font-size: 20px;
-  }
-  .hide-mobile {
-    display: none !important;
-  }
-}
 html, body, div.container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
   padding: 0;
@@ -214,6 +204,11 @@ a {
   color: inherit;
 }
 @media (max-width: 600px) {
+  :root {
+    --h3-8-font-size: 28px;
+    --h4-font-size: 24px;
+    --h5-font-size: 20px;
+  }
   html {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -221,5 +216,8 @@ a {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+  .hide-mobile {
+    display: none !important;
   }
 }
