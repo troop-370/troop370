@@ -214,43 +214,6 @@ div.buttonrow {
 a {
   color: inherit;
 }
-a[type="button"] {
-  display: inline-block;
-  font-family: var(--button-font-family);
-  font-weight: var(--button-font-weight);
-  font-size: var(--button-font-size);
-  font-weight: 600;
-  letter-spacing: var(--button-sp);
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid;
-  border-radius: var(--button-border-radius);
-  padding: 6.5px 16px;
-  margin: 0px var(--button-margin) var(--button-margin) 0;
-  transition: box-shadow 0.2s;
-}
-a[type="button"].bigger {
-  padding: 8.5px 20px;
-}
-a[type="button"][varient="light"], a[type="button"][variant="light"] {
-  color: var(--button-text-color-light);
-  background: transparent;
-  border-color: var(--button-border-color-light);
-}
-a[type="button"][varient="light"]:hover, a[type="button"][variant="light"]:hover {
-  box-shadow: inset 0px 0px 100px var(--button-background-color-light-hover);
-}
-a[type="button"][varient="dark"],
-a[type="button"][variant="dark"] {
-  color: var(--button-text-color-dark);
-  background: transparent;
-  border-color: var(--button-border-color-dark);
-}
-a[type="button"][varient="dark"]:hover,
-a[type="button"][variant="dark"]:hover {
-  box-shadow: inset 0px 0px 100px var(--button-background-color-dark-hover);
-}
-
 @media (max-width: 600px) {
   html {
     -webkit-touch-callout: none;
