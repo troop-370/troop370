@@ -88,12 +88,14 @@ carousel#main {
   height: 300px;
 }
 .main-carousel .carousel-title {
-  font-family: 'IBM Plex Sans Medium', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
   font-size: 34px;
   margin: 0;
 }
 .main-carousel .carousel-info {
   font-family: 'Roboto', sans-serif;
+  font-weight: 400;
   font-size: 16px;
   padding-bottom: 20px;
   padding-top: 10px;

@@ -103,7 +103,8 @@ titlebar {
 titlebar heading {
   display: block;
   width: var(--titlebar-heading-width);
-  font-family: 'IBM Plex Sans Medium', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
   font-size: var(--titlebar-heading-font-size);
   line-height: 24px;
   color: white;
@@ -151,7 +152,7 @@ titlebar heading {
   color: var(--topnav-text-color);
   padding: var(--topnav-a-padding-y) var(--topnav-a-padding-x);
   text-decoration: none;
-  font-family: 'IBM Plex Sans Bold', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
   text-transform: uppercase;
   font-weight: 700;
   text-align: left;
@@ -282,7 +283,8 @@ titlebar .scrollme heading {
   color: var(--side-nav-header-bugler-color)
 }
 .side-nav .site-title, .side-nav .location {
-  font-family: 'IBM Plex Sans Medium', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
   line-height: 24px;
   color: var(--side-nav-header-text-color);
   margin-left: 80px;

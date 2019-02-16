@@ -13,9 +13,12 @@ h1, h2, h3, h4, h5, h6 {
   box-sizing: border-box;
 }
 :root {
-  --heading-font-family: 'IBM Plex Sans Medium', sans-serif;
-  --button-font-family: 'IBM Plex Sans Bold', sans-serif;
+  --heading-font-family: 'IBM Plex Sans', sans-serif;
+  --heading-font-weight: 500;
+  --button-font-family: 'IBM Plex Sans', sans-serif;
+  --button-font-weight: 700;
   --text-font-family: 'Roboto', sans-serif;
+  --text-font-weight: 400;
 }
 :root {
   --h1-sp: -1.5px;
@@ -138,15 +141,18 @@ div.banner.white h3.size8 {
 }
 div.banner h3.size8 {
   font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
   font-size: var(--h3-8-font-size);
 }
 div.banner subtitle {
   font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
   font-size: var(--subtitle-1-font-size);
   letter-spacing: var(--subtitle-1-sp);
 }
 div.banner p {
   font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
   font-size: var(--body-1-font-size);
   letter-spacing: var(--body-1-sp);
 }
@@ -174,23 +180,28 @@ div.content-strip h3.size8 + p, div.content-strip h4 + p, div.content-strip h5 +
 }
 div.content-strip h3.size8 {
   font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
   font-size: var(--h3-8-font-size);
 }
 div.content-strip h4 {
   font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
   font-size: var(--h4-font-size);
 }
 div.content-strip h5 {
   font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
   font-size: var(--h5-font-size);
 }
 div.content-strip subtitle {
   font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
   font-size: var(--subtitle-1-font-size);
   letter-spacing: var(--subtitle-1-sp);
 }
 div.content-strip p, div.content-strip li {
   font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
   font-size: var(--body-1-font-size);
   letter-spacing: var(--body-1-sp);
 }
@@ -211,6 +222,7 @@ a {
 a[type="button"] {
   display: inline-block;
   font-family: var(--button-font-family);
+  font-weight: var(--button-font-weight);
   font-size: var(--button-font-size);
   font-weight: 600;
   letter-spacing: var(--button-sp);

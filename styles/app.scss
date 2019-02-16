@@ -19,7 +19,8 @@ $mdc-snackbar-fill-color: #222222;
 
 //override button style
 $mdc-typography-styles-button: (
-  font-family: "IBM Plex Sans Bold",
+  font-family: "IBM Plex Sans",
+  font-weight: 700,
   font-size: 14px,
 );
 
