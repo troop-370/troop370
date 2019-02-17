@@ -33,38 +33,6 @@
   --index-main-carousel-gradient: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
   --index-img-carousel-brightness: none;
 }
-html.dark {
-  --mdc-theme-background: #242424;
-  --mdc-theme-text-on-background: #e0e0e0;
-  --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-primary-lightest-most);
-  --mdc-theme-error: #e94948;
-  --banner-primary: var(--mdc-theme-primary-darker);
-  --banner-secondary: var(--mdc-theme-secondary-darker);
-  --button-text-on-background: var(--mdc-theme-primary-lightest-most);
-  --button-ripple-color-on-background: #8096cd;
-  --button-ripple-color-hover-opacity-on-background: 0.06;
-  --button-ripple-color-focus-opacity-on-background: 0.08;
-  --button-ripple-color-active-opacity-on-background: 0.16;
-  --snackbar-background: #303030;
-  --field-unfocused-text-color-on-background: rgba(255,255,255,0.45);
-  --field-outline-color-on-background: rgba(255,255,255,0.44);
-  --field-outline-color-hover-on-background: rgba(255,255,255,0.67);
-  --field-outline-color-focus-on-background: var(--mdc-theme-primary-lightest);
-  --index-welcome-background-image: url("../src/index/370-mountains-dark.jpg");
-  --index-main-carousel-gradient: linear-gradient(180deg, #373737 0%, #292929 51%, #242424 82%);
-  --index-img-carousel-brightness: brightness(80%);
-}
-html.dark .top.light, html.dark .top.mobile-light {
-  --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
-  --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
-  --topnav-bg-color: var(--mdc-theme-background);
-  --topnav-text-color: var(--mdc-theme-text-on-background);
-  --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
-  --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
-  --topnav-dropdown-bg-color: var(--snackbar-background);
-  --topnav-ripple-color: #ffffff;
-  --topnav-dropdown-ripple-color: #ffffff;
-}
 .top {
   --top-height: 60px;
   --titlebar-heading-width: 286px;
@@ -97,18 +65,18 @@ html.dark .top.light, html.dark .top.mobile-light {
   --topnav-bg-color: var(--banner-primary);
 }
 .top.dark {
-  --topnav-bg-color: #212121;
+  --topnav-bg-color: #242424;
 }
 .top.light {
-  --titlebar-heading-color: #003f87;
-  --menu-icon-fill: #003f87;
-  --topnav-bg-color: #ffffff;
-  --topnav-text-color: #222222;
-  --topnav-dropdown-text-color: #222222;
-  --topnav-currentpage-color: #003f87;
-  --topnav-dropdown-bg-color: #f7f7f7;
-  --topnav-ripple-color: #003f87;
-  --topnav-dropdown-ripple-color: #003f87;
+  --titlebar-heading-color: var(--mdc-theme-primary);
+  --menu-icon-fill: var(--mdc-theme-primary);
+  --topnav-bg-color: var(--mdc-theme-background);
+  --topnav-text-color: var(--mdc-theme-text-on-background);
+  --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
+  --topnav-currentpage-color: var(--mdc-theme-primary);
+  --topnav-dropdown-bg-color: var(--snackbar-background);
+  --topnav-ripple-color: #ffffff;
+  --topnav-dropdown-ripple-color: #ffffff;
 }
 @media (max-width: 600px) { /*duplicated from above*/
   .top.mobile-colorful, .top.mobile-dark {
@@ -128,14 +96,49 @@ html.dark .top.light, html.dark .top.mobile-light {
     --topnav-bg-color: #212121;
   }
   .top.mobile-light {
-    --titlebar-heading-color: #003f87;
-    --menu-icon-fill: #003f87;
-    --topnav-bg-color: #ffffff;
-    --topnav-text-color: #222222;
-    --topnav-dropdown-text-color: #222222;
-    --topnav-currentpage-color: #003f87;
-    --topnav-dropdown-bg-color: #f7f7f7;
-    --topnav-ripple-color: #003f87;
-    --topnav-dropdown-ripple-color: #003f87;
+    --titlebar-heading-color: var(--mdc-theme-primary);
+    --menu-icon-fill: var(--mdc-theme-primary);
+    --topnav-bg-color: var(--mdc-theme-background);
+    --topnav-text-color: var(--mdc-theme-text-on-background);
+    --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
+    --topnav-currentpage-color: var(--mdc-theme-primary);
+    --topnav-dropdown-bg-color: var(--snackbar-background);
+    --topnav-ripple-color: #ffffff;
+    --topnav-dropdown-ripple-color: #ffffff;
   }
 }
+/*@media (prefers-color-scheme: dark) {*/
+  html.dark {
+    --mdc-theme-background: #242424;
+    --mdc-theme-text-on-background: #e0e0e0;
+    --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-primary-lightest-most);
+    --mdc-theme-error: #e94948;
+    --banner-primary: var(--mdc-theme-primary-darker);
+    --banner-secondary: var(--mdc-theme-secondary-darker);
+    --button-text-on-background: var(--mdc-theme-primary-lightest-most);
+    --button-ripple-color-on-background: #8096cd;
+    --button-ripple-color-hover-opacity-on-background: 0.06;
+    --button-ripple-color-focus-opacity-on-background: 0.08;
+    --button-ripple-color-active-opacity-on-background: 0.16;
+    --snackbar-background: #303030;
+    --field-unfocused-text-color-on-background: rgba(255,255,255,0.45);
+    --field-outline-color-on-background: rgba(255,255,255,0.44);
+    --field-outline-color-hover-on-background: rgba(255,255,255,0.67);
+    --field-outline-color-focus-on-background: var(--mdc-theme-primary-lightest);
+    --index-welcome-background-image: url("../src/index/370-mountains-dark.jpg");
+    --index-main-carousel-gradient: linear-gradient(180deg, #373737 0%, #292929 51%, #242424 82%);
+    --index-img-carousel-brightness: brightness(80%);
+  }
+  html.dark .top.light {
+    --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
+    --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
+    --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
+  }
+  @media (max-width: 600px) {
+    html.dark .top.mobile-light {
+      --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
+      --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
+      --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
+    }
+  }
+/*}*/
