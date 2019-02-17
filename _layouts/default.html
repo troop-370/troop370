@@ -214,12 +214,11 @@
     		</div>
     	</topnav>
     </div>
-    <div class="banner" style="{% if page.collapsible-header == true %} {% else %} display:none; {% endif %}">
+    <div {% if page.subtitle %}{% else %}id="pageBanner"{% endif %} class="banner" style="{% if page.collapsible-header == true %} {% else %} display:none; {% endif %}">{% if page.subtitle %}
       <div class="container">
         <h3 class="size8 hide-mobile">&nbsp;</h3>
-        {% if page.subtitle == '' %} {% else %} <p>{{ page.subtitle }}</p> {% endif %}
-      </div>
-    </div>
+        <p>{{ page.subtitle }}</p>
+      </div>{% else %}{% endif %}</div>
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">

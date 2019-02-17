@@ -104,6 +104,9 @@ div.banner {
   justify-content: center;
   padding: var(--banner-padding-y) 0;
 }
+div#pageBanner {
+  padding: 70.5px;
+}
 div.banner.extra-padding-y {
   padding: var(--banner-padding-y-increased) var(--banner-padding-x);
 }
@@ -219,5 +222,8 @@ a {
   }
   .hide-mobile {
     display: none !important;
+  }
+  div#pageBanner {
+    padding: 0;
   }
 }
