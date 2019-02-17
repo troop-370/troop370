@@ -28,7 +28,7 @@
   --topnav-bg-color: #f7f7f7
 }
 .top-container {
-  background-image: url("../src/index/370-mountains-light.jpg");
+  background-image: var(--index-welcome-background-image);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -42,14 +42,14 @@ div.banner.img {
   background-color: transparent;
 }
 div.banner#time-banner {
-  background-color: #ffffff;
+  background-color: var(--mdc-theme-background);
   text-align: center;
 }
 div.banner p {
-  color: #222222;
+  color: var(--mdc-theme-text-on-background);
 }
 div.banner h3.size8 {
-  color: #003f87;
+  color: var(--mdc-theme-primary_accent_text-on-background);
 }
 @media (max-width: 600px) {
   div.banner.img {
@@ -63,7 +63,7 @@ div.banner h3.size8 {
 carousel {
   display: flex;
   height: auto;
-  background-color: #212121;
+  background-color: var(--mdc-theme-background);
   justify-content: center
 }
 .flickity-page-dots {
@@ -81,7 +81,7 @@ carousel {
   fill: #dddddd !important;
 }
 carousel#main {
-  background: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
+  background: var(--index-main-carousel-gradient);
 }
 .main-carousel {
   margin-top: -80px;
@@ -154,7 +154,7 @@ carousel#main {
   }
 }
 carousel#img {
-  background: #ffffff;
+  background: var(--mdc-theme-background);
 }
 .img-carousel {
   overflow: hidden;
