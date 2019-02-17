@@ -100,7 +100,7 @@ div.container {
 div.banner {
   display: flex;
   height: auto;
-  background-color: var(--mdc-theme-primary-lighter);
+  background-color: var(--banner-primary);
   justify-content: center;
   padding: var(--banner-padding-y) 0;
 }
@@ -114,7 +114,7 @@ div.banner h3.size8, div.banner subtitle, div.banner p {
   padding: var(--banner-elements-padding-between) var(--banner-padding-x);
 }
 div.banner.red {
-  background-color: var(--mdc-theme-secondary);
+  background-color: var(--banner-secondary);
 }
 div.banner.white, div.banner.white subtitle, div.banner.white p {
   background-color: var(--mdc-theme-background);
