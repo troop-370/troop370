@@ -257,5 +257,55 @@
     <!-- mdc budle script (support for mdc buttons, ripples, etc.) -->
     <script src="scripts/bundle.js" async></script>
 
+    <!-- app bar shadow -->
+    {% if page.collapsible-header == true %}
+      {% if page.subtitle %}
+      <script>
+        $(document).ready(function(){
+          //shadow for flaoting navbar on mobile
+          $(window).scroll(function() {
+            var scroll = $(window).scrollTop();
+            if (window.matchMedia('(max-width: 600px)').matches && scroll >= 1) {
+              $(".top").addClass("nav-shadow");
+            } else if (scroll >= 90) {
+              $(".top").addClass("nav-shadow");
+            } else {
+              $(".top").removeClass("nav-shadow");
+            }
+          });
+        });
+      </script>
+      {% else %}
+      <script>
+        $(document).ready(function(){
+          //shadow for flaoting navbar on mobile
+          $(window).scroll(function() {
+            var scroll = $(window).scrollTop();
+            if (window.matchMedia('(max-width: 600px)').matches && scroll >= 1) {
+              $(".top").addClass("nav-shadow");
+            } else if (scroll >= 141) {
+              $(".top").addClass("nav-shadow");
+            } else {
+              $(".top").removeClass("nav-shadow");
+            }
+          });
+        });
+      </script>
+      {% endif %}
+    {% else %}
+    <script>
+      $(document).ready(function(){
+        //shadow for flaoting navbar on mobile
+        $(window).scroll(function() {
+          var scroll = $(window).scrollTop();
+          if (scroll >= 1) {
+            $(".top").addClass("nav-shadow");
+          } else {
+            $(".top").removeClass("nav-shadow");
+          }
+        });
+      });
+    </script>
+    {% endif %}
   </body>
 </html>

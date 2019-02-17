@@ -1,16 +1,6 @@
 $(document).ready(function(){
 	$(".button-collapse").sideNav();
 
-	//shadow for flaoting navbar on mobile
-	$(window).scroll(function() {
-    var scroll = $(window).scrollTop();
-    if (scroll >= 1) {
-	    $(".top").addClass("nav-shadow");
-  	} else {
-      $(".top").removeClass("nav-shadow");
-    }
-	});
-
 	//show dropdown content for top navbar
 	$(".dropdown").click(function (e) {
     e.stopPropagation();
