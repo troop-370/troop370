@@ -20,12 +20,8 @@
   --content-max-width: 1600px;
   --banner-padding-x: 20px;
 }
-.top, .top.light, .top topnav div.container {
-  --topnav-bg-color: transparent;
+.top, .top topnav div.container {
   --content-max-width: 1600px !important;
-}
-.nav-shadow.top.light {
-  --topnav-bg-color: #f7f7f7
 }
 .top-container {
   background-image: var(--index-welcome-background-image);
