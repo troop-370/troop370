@@ -27,7 +27,7 @@
   --topnav-dropdown-ripple-color: #003f87;
 }
 .top.colorful {
-  --topnav-bg-color: #003f87;
+  --topnav-bg-color: var(--banner-primary);
 }
 .top.dark {
   --topnav-bg-color: #212121;
@@ -55,7 +55,7 @@
     --topnav-dropdown-ripple-color: #003f87;
   }
   .top.mobile-colorful {
-    --topnav-bg-color: #003f87;
+    --topnav-bg-color: var(--banner-primary);
   }
   .top.mobile-dark {
     --topnav-bg-color: #212121;
