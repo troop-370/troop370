@@ -168,6 +168,9 @@ titlebar heading {
     box-shadow: inset 0px -3px 0px 0px var(--topnav-currentpage-color);
     color: var(--topnav-currentpage-color);
   }
+.main-nav > li.current-dropdown > a {
+  color: inherit;
+}
 /*dropdowns*/
 .main-nav .dropdown {
   display: inline-block;
