@@ -1,17 +1,4 @@
 :root {
-  --theme-primary: #003f87;
-  --theme-primary-lighter: #134885;
-  --theme-primary-light: #4969b7;
-  --theme-primary-lightest: #8096cd;
-  --theme-primary-dark: #001a59;
-  --theme-secondary: #bc1b2d;
-  --theme-secondary-light: #f55656;
-  --theme-secondary-dark: #840005;
-  --theme-background: #ffffff;
-  --theme-text-on-background: #1f1f1f;
-  --theme-primary_accent_text-on-background: var(--theme-primary-lighter);
-  --theme-text-on-primary: #e0e0e0;
-  --theme-text-on-secondary: #e0e0e0;
   --mdc-theme-primary: #003f87;
   --mdc-theme-primary-lighter: #134885;
   --mdc-theme-primary-light: #4969b7;
@@ -27,4 +14,42 @@
   --mdc-theme-text-on-primary: #e0e0e0;
   --mdc-theme-text-on-secondary: #e0e0e0;
   --mdc-theme-error: #b00020;
+  --button-text-on-background: var(--mdc-theme-primary);
+  --button-ripple-color-on-background: #000000;
+  --button-ripple-color-hover-opacity-on-background: 0.08;
+  --button-ripple-color-focus-opacity-on-background: 0.12;
+  --button-ripple-color-active-opacity-on-background: 0.2;
+  --snackbar-background: #222222;
+  --field-text-color-on-background: var(--mdc-theme-text-on-background);
+  --field-unfocused-text-color-on-background: rgba(0,0,0,0.65);
+  --field-outline-color-on-background: rgba(0,0,0,0.24);
+  --field-outline-color-hover-on-background: rgba(0,0,0,0.87);
+  --field-outline-color-focus-on-background: var(--mdc-theme-primary);
+}
+html.dark {
+  --mdc-theme-background: #242424;
+  --mdc-theme-text-on-background: #e0e0e0;
+  --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-text-on-background);
+  --mdc-theme-error: #e94948;
+  --button-text-on-background: var(--mdc-theme-primary-lightest);
+  --button-ripple-color-on-background: #8096cd;
+  --button-ripple-color-hover-opacity-on-background: 0.06;
+  --button-ripple-color-focus-opacity-on-background: 0.08;
+  --button-ripple-color-active-opacity-on-background: 0.16;
+  --snackbar-background: #303030;
+  --field-unfocused-text-color-on-background: rgba(255,255,255,0.45);
+  --field-outline-color-on-background: rgba(255,255,255,0.44);
+  --field-outline-color-hover-on-background: rgba(255,255,255,0.67);
+  --field-outline-color-focus-on-background: var(--mdc-theme-primary-lightest);
+}
+html.dark .top.light {
+  --titlebar-heading-color: var(--mdc-theme-text-on-background);
+  --menu-icon-fill: var(--mdc-theme-text-on-background);
+  --topnav-bg-color: var(--mdc-theme-background);
+  --topnav-text-color: var(--mdc-theme-text-on-background);
+  --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
+  --topnav-currentpage-color: var(--mdc-theme-text-on-background);
+  --topnav-dropdown-bg-color: var(--snackbar-background);
+  --topnav-ripple-color: #ffffff;
+  --topnav-dropdown-ripple-color: #ffffff;
 }
