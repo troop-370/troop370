@@ -206,6 +206,9 @@ div.buttonrow {
 a {
   color: inherit;
 }
+p, ol, ul {
+  color: var(--mdc-theme-text-on-background)
+}
 @media (max-width: 600px) {
   :root {
     --h3-8-font-size: 28px;
