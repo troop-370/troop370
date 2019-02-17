@@ -24,6 +24,7 @@
   --topnav-currentpage-color: #e0e0e0;
   --topnav-dropdown-bg-color: #f7f7f7;
   --topnav-ripple-color: #ffffff;
+  --topnav-dropdown-ripple-color: #003f87;
 }
 .top.colorful {
   --topnav-bg-color: #003f87;
@@ -51,6 +52,7 @@
     --topnav-currentpage-color: #e0e0e0;
     --topnav-dropdown-bg-color: #f7f7f7;
     --topnav-ripple-color: #ffffff;
+    --topnav-dropdown-ripple-color: #003f87;
   }
   .top.mobile-colorful {
     --topnav-bg-color: #003f87;
