@@ -173,6 +173,7 @@ carousel#img {
   display: block;
   min-width: 200px;
   height: 600px;
+  filter: var(--index-img-carousel-brightness);
 }
 @media (max-width: 800px) /*standard width of images */{
   .img-carousel {

@@ -28,6 +28,7 @@
   --field-outline-color-focus-on-background: var(--mdc-theme-primary);
   --index-welcome-background-image: url("../src/index/370-mountains-light.jpg");
   --index-main-carousel-gradient: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
+  --index-img-carousel-brightness: none;
 }
 html.dark {
   --mdc-theme-background: #242424;
@@ -46,6 +47,7 @@ html.dark {
   --field-outline-color-focus-on-background: var(--mdc-theme-primary-lightest);
   --index-welcome-background-image: url("../src/index/370-mountains-dark.jpg");
   --index-main-carousel-gradient: linear-gradient(180deg, #373737 0%, #292929 51%, #242424 82%);
+  --index-img-carousel-brightness: brightness(80%);
 }
 html.dark .top.light {
   --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
