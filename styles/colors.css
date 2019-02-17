@@ -3,6 +3,7 @@
   --mdc-theme-primary-lighter: #134885;
   --mdc-theme-primary-light: #4969b7;
   --mdc-theme-primary-lightest: #8096cd;
+  --mdc-theme-primary-lightest-most: #aac0eb;
   --mdc-theme-primary-dark: #001a59;
   --mdc-theme-secondary: #bc1b2d;
   --mdc-theme-secondary-light: #f55656;
@@ -29,9 +30,9 @@
 html.dark {
   --mdc-theme-background: #242424;
   --mdc-theme-text-on-background: #e0e0e0;
-  --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-text-on-background);
+  --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-primary-lightest-most);
   --mdc-theme-error: #e94948;
-  --button-text-on-background: var(--mdc-theme-primary-lightest);
+  --button-text-on-background: var(--mdc-theme-primary-lightest-most);
   --button-ripple-color-on-background: #8096cd;
   --button-ripple-color-hover-opacity-on-background: 0.06;
   --button-ripple-color-focus-opacity-on-background: 0.08;
@@ -43,12 +44,12 @@ html.dark {
   --field-outline-color-focus-on-background: var(--mdc-theme-primary-lightest);
 }
 html.dark .top.light {
-  --titlebar-heading-color: var(--mdc-theme-text-on-background);
+  --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
   --menu-icon-fill: var(--mdc-theme-text-on-background);
   --topnav-bg-color: var(--mdc-theme-background);
   --topnav-text-color: var(--mdc-theme-text-on-background);
   --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
-  --topnav-currentpage-color: var(--mdc-theme-text-on-background);
+  --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
   --topnav-dropdown-bg-color: var(--snackbar-background);
   --topnav-ripple-color: #ffffff;
   --topnav-dropdown-ripple-color: #ffffff;
