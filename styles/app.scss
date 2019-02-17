@@ -8,12 +8,13 @@ $t-border-radius-standard: 2px;
 $mdc-theme-primary: #003f87;
 $mdc-theme-primary-light: #4969b7;
 $mdc-theme-primary-lightest: #8096cd;
+$mdc-theme-primary-lightest-most: #aac0eb;
 $mdc-theme-primary-dark: #001a59;
 $mdc-theme-secondary: #bc1b2d;
 $mdc-theme-secondary-light: #f55656;
 $mdc-theme-secondary-dark: #840005;
 $mdc-theme-background: #ffffff;
-$mdc-snackbar-action-ink-color: $mdc-theme-primary-lightest;
+$mdc-snackbar-action-ink-color: $mdc-theme-primary-lightest-most;
 $mdc-snackbar-shape-radius: $t-border-radius-standard;
 $mdc-snackbar-fill-color: var(--snackbar-background);
 
