@@ -5,7 +5,7 @@ html {
     font-family: "Roboto", sans-serif;
     font-weight: normal;
     color: rgba(0, 0, 0, 0.87);
-    background-color: var(--theme-background);
+    background-color: var(--mdc-theme-background);
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
@@ -100,7 +100,7 @@ div.container {
 div.banner {
   display: flex;
   height: auto;
-  background-color: var(--theme-primary-lighter);
+  background-color: var(--mdc-theme-primary-lighter);
   justify-content: center;
   padding: var(--banner-padding-y) 0;
 }
@@ -110,18 +110,18 @@ div.banner.extra-padding-y {
 div.banner h3.size8, div.banner subtitle, div.banner p {
   display: block;
   max-width: inherit;
-  color: var(--theme-text-on-primary);
+  color: var(--mdc-theme-text-on-primary);
   padding: var(--banner-elements-padding-between) var(--banner-padding-x);
 }
 div.banner.red {
-  background-color: var(--theme-secondary);
+  background-color: var(--mdc-theme-secondary);
 }
 div.banner.white, div.banner.white subtitle, div.banner.white p {
-  background-color: var(--theme-background);
-  color: var(--theme-text-on-background) !important;
+  background-color: var(--mdc-theme-background);
+  color: var(--mdc-theme-text-on-background) !important;
 }
 div.banner.white h3.size8 {
-  color: var(--theme-primary_accent_text-on-background) !important;
+  color: var(--mdc-theme-primary_accent_text-on-background) !important;
 }
 div.banner h3.size8 {
   font-family: var(--heading-font-family);
@@ -146,7 +146,7 @@ div.banner p + div.buttonrow, subtitle p + div.buttonrow {
 div.content-strip {
   display: flex;
   height: auto;
-  background-color: var(--theme-background);
+  background-color: var(--mdc-theme-background);
   justify-content: center;
   padding: var(--content-strip-padding-y) 0 0 0;
 }
@@ -156,7 +156,7 @@ div.content-strip:last-of-type, div.content-strip.last-in-section {
 div.content-strip h3.size8, div.content-strip h4, div.content-strip h5, div.content-strip h6, div.content-strip subtitle, div.content-strip p {
   display: block;
   max-width: inherit;
-  color: var(--theme-text-on-background);
+  color: var(--mdc-theme-text-on-background);
   padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
 }
 div.content-strip h3.size8 + p, div.content-strip h4 + p, div.content-strip h5 + p, div.content-strip h6 + p {
