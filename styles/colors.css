@@ -51,7 +51,7 @@ html.dark {
 }
 html.dark .top.light, html.dark .top.mobile-light {
   --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
-  --menu-icon-fill: var(--mdc-theme-text-on-background);
+  --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
   --topnav-bg-color: var(--mdc-theme-background);
   --topnav-text-color: var(--mdc-theme-text-on-background);
   --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
