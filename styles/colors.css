@@ -49,7 +49,7 @@ html.dark {
   --index-main-carousel-gradient: linear-gradient(180deg, #373737 0%, #292929 51%, #242424 82%);
   --index-img-carousel-brightness: brightness(80%);
 }
-html.dark .top.light {
+html.dark .top.light, html.dark .top.mobile-light {
   --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
   --menu-icon-fill: var(--mdc-theme-text-on-background);
   --topnav-bg-color: var(--mdc-theme-background);
