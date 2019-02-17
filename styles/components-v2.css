@@ -14,7 +14,7 @@ h1, h2, h3, h4, h5, h6 {
   box-sizing: border-box;
 }
 :root {
-  --content-max-width: 1388px;
+  --content-max-width: 1262px;
 }
 :root /*font family*/ {
   --heading-font-family: 'IBM Plex Sans', sans-serif;
