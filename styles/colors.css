@@ -32,6 +32,14 @@
   --index-welcome-background-image: url("../src/index/370-mountains-light.jpg");
   --index-main-carousel-gradient: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
   --index-img-carousel-brightness: none;
+  --side-nav-drawer-item-ripple-color: var(--side-nav-header-text-color);
+  --side-nav-drawer-item-active-dropdown-bg: #003f700c;
+  --side-nav-header-bg-color: #ffffff;
+  --side-nav-header-text-color: #003f87;
+  --side-nav-header-bugler-color: var(--side-nav-header-text-color);
+  --side-nav-header-social-icons-color: var(--side-nav-header-text-color);
+  --side-nav-header-social-icons-ripple-color: var(--side-nav-header-text-color);
+  --side-nav-header-border-bottom-color: #e0e0e0;
 }
 .top {
   --top-height: 60px;

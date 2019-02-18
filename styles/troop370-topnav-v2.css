@@ -186,17 +186,6 @@ titlebar .scrollme heading {
     transform: none !important;
   }
 }
-/*sidenav drawer variables*/
-.side-nav {
-  --side-nav-header-bg-color: #ffffff;
-  --side-nav-header-text-color: #003f87;
-  --side-nav-header-bugler-color: var(--side-nav-header-text-color);
-  --side-nav-header-social-icons-color: var(--side-nav-header-text-color);
-  --side-nav-header-social-icons-ripple-color: var(--side-nav-header-text-color);
-  --side-nav-header-border-bottom-color: #e0e0e0;
-  --side-nav-drawer-item-ripple-color: var(--side-nav-header-text-color);
-  --side-nav-drawer-item-active-dropdown-bg: #003f700c;
-}
 /*sidenav drawer header*/
 .side-nav .header {
   height: 120px;
