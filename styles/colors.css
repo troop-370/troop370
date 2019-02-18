@@ -12,6 +12,7 @@
   --mdc-theme-secondary-dark: #840005;
   --mdc-theme-background: #ffffff;
   --mdc-theme-text-on-background: #1f1f1f;
+  --mdc-theme-disabled-text-on-background: #0000008a;
   --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-primary-lighter);
   --mdc-theme-text-on-primary: #e0e0e0;
   --mdc-theme-text-on-secondary: #e0e0e0;
@@ -32,10 +33,13 @@
   --index-welcome-background-image: url("../src/index/370-mountains-light.jpg");
   --index-main-carousel-gradient: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
   --index-img-carousel-brightness: none;
+  --side-nav-drawer-background: var(--mdc-theme-background);
+  --side-nav-drawer-text-on-background: var(--mdc-theme-text-on-background);
+  --side-nav-drawer-inactive-text-on-background: var(--mdc-theme-disabled-text-on-background);
   --side-nav-drawer-item-ripple-color: var(--side-nav-header-text-color);
-  --side-nav-drawer-item-active-dropdown-bg: #003f700c;
-  --side-nav-header-bg-color: #ffffff;
-  --side-nav-header-text-color: #003f87;
+  --side-nav-drawer-item-active-dropdown-bg: #003f870c;
+  --side-nav-header-bg-color: var(--side-nav-background);
+  --side-nav-header-text-color: var(--mdc-theme-primary);
   --side-nav-header-bugler-color: var(--side-nav-header-text-color);
   --side-nav-header-social-icons-color: var(--side-nav-header-text-color);
   --side-nav-header-social-icons-ripple-color: var(--side-nav-header-text-color);
@@ -119,6 +123,7 @@
   html.dark {
     --mdc-theme-background: #242424;
     --mdc-theme-text-on-background: #e0e0e0;
+    --mdc-theme-disabled-text-on-background: #e0e0e08a;
     --mdc-theme-primary_accent_text-on-background: var(--mdc-theme-primary-lightest-most);
     --mdc-theme-error: #e94948;
     --banner-primary: var(--mdc-theme-primary-darker);
@@ -136,6 +141,9 @@
     --index-welcome-background-image: url("../src/index/370-mountains-dark.jpg");
     --index-main-carousel-gradient: linear-gradient(180deg, #373737 0%, #292929 51%, #242424 82%);
     --index-img-carousel-brightness: brightness(80%);
+    --side-nav-drawer-item-active-dropdown-bg: #aac0eb0c;
+    --side-nav-header-text-color: var(--mdc-theme-primary-lightest-most);
+    --side-nav-header-border-bottom-color: #333333;
   }
   html.dark .top.light {
     --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
