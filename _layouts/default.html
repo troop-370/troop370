@@ -1,6 +1,3 @@
----
-layout: default
----
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
@@ -11,201 +8,217 @@ layout: default
     <link rel='stylesheet' href='styles/components.css'>
     <link rel='stylesheet' href='styles/page-specific.css'>
     <link rel="stylesheet" href="styles/bundle.css">
-    <script src="scripts/bundle.js" async></script>
+    <link rel="stylesheet" href="styles/troop370-topnav-v2.css">
+    <link rel="stylesheet" href="resources/materialize/0.97.8/css/materialize-sidenav.css">
+    <script src='scripts/cookie.js' async></script>
+    <link rel='stylesheet' href='styles/snackbar.css'>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-44420589-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-44420589-2');
+    </script>
+    {% if page.title == 'Home' %}
+    <meta name="Description" content="Troop 370 - Atlanta, GA | Scouts BSA Troop in Buckhead/Brookhaven/Sandy Springs area | Sponsored by St. James United Methodist Church">
+    <meta name="msvalidate.01" content="0E12A7A6688D1B7250808B7C0C0BC3F5" />
+    <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css" media="screen">
+    <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
+    <link rel="stylesheet" href="styles/index.css" media="screen">
+    {% else %} {% endif %}
   </head>
 
-  <body>
-    <!-- HEADER -->
-    <div class='top'>
-    	<ul id='slide-out' class='side-nav'>
-        <div style="height: 120px;background-color: #003f87;">
-          <img src="src/icons/troop370bugler_inverted.png" style="height: 160px;width:100px;display: block;line-height: 48px;position: absolute;padding: 20px;">
-          <p style="font-family: 'IBM Plex Sans Medium', sans-serif;font-size: 20px;line-height: 24px;color: white;padding: 18px 16px;margin-left: 80px;">BSA Troop 370</p>
-          <p style="font-family: 'IBM Plex Sans Medium', sans-serif;font-size: 16px;line-height: 24px;color: white;padding: 0px 16px;margin-left: 80px;margin-top:-20px">Atlanta, GA</p>
-          <a href="https://www.facebook.com/groups/126169727423188/" class="mdc-button standard-light-button mdc-button--outlined" style="height:50px;min-width:50px;max-width:50px;border-radius:50px;padding:0;border:none;margin:0px -4px 0 84px;display:inline-block;">
-            <svg class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="height:32px;width:32px;margin:9px!important;">
-            <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M18,5H15.5A3.5,3.5 0 0,0 12,8.5V11H10V14H12V21H15V14H18V11H15V9A1,1 0 0,1 16,8H18V5Z" />
-            </svg>
-          </a>
-          <a href="https://www.instagram.com/bsatroop370/" class="mdc-button standard-light-button mdc-button--outlined" style="height:50px;min-width:50px;max-width:50px;border-radius:50px;padding:0;border:none;margin-top:0px;display:inline-block;">
-            <svg class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="height:32px;width:32px;margin:9px!important;">
-            <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
-            </svg>
-          </a>
-          <a href="https://troop370.smugmug.com/" class="mdc-button standard-light-button mdc-button--outlined" style="height:50px;min-width:50px;max-width:50px;border-radius:50px;padding:0;border:none;margin-top:0px;display:inline-block;">
-            <svg class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="height:32px;width:32px;margin:9px!important;">
-            <path d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" />
-            </svg>
-          </a>
+  <body onLoad="recallCookie()">
+    <!-- cookie consent -->
+    <div id="cookieSnackbar" class="cookie-snackbar mdc-snackbar mdc-snackbar--stacked">
+      <div class="mdc-snackbar__surface">
+        <div class="mdc-snackbar__label" role="status" aria-live="polite">By using this site, you consent to the use of cookies to improve your experience.</div>
+        <div class="mdc-snackbar__actions">
+          <a class="mdc-button mdc-snackbar__action" href="cookies.html">Cookie Policy</a>
+          <button type="button" class="mdc-button mdc-snackbar__action" onclick="acceptedCookie()">Accept</button>
         </div>
-    		<li><a class='waves-effect' href='index.html'>Home</a></li>
-    		<li>
-    			<ul class='collapsible collapsible-accordion'>
-    				<li><a class='collapsible-header waves-effect'>About</a>
-    					<div class='collapsible-body'>
-    						<ul>
-    							<li><a class='waves-effect' href='about.html'>General Information</a></li>
-    							<li><a class='waves-effect' href='leaders.html'>Leaders</a></li>
-    							<li><a class='waves-effect' href='eagle-scout-honor-roll.html'>Eagle Scout Honor Roll</a></li>
-    						</ul>
-    					</div>
-    				</li>
-    			</ul>
-    		</li>
-    		<li>
-    			<ul class='collapsible collapsible-accordion'>
-    				<li><a class='collapsible-header waves-effect'>Information</a>
-    					<div class='collapsible-body'>
-    						<ul>
-    							<li><a class='waves-effect' href='participation.html'>Scout/Parent Participation</a></li>
-    							<li><a class='waves-effect' href='forms-documents.html'>Forms &amp; Documents</a></li>
-    							<li><a class='waves-effect' href='advancement.html'>Advancement</a></li>
-    							<li><a class='waves-effect' href='helpful-links.html'>Helpful Links</a></li>
-    						</ul>
-    					</div>
-    				</li>
-    			</ul>
-    		</li>
-    		<li>
-    			<ul class='collapsible collapsible-accordion'>
-    				<li> <a class='collapsible-header waves-effect'>Scouts</a>
-    					<div class='collapsible-body'>
-    						<ul>
-    							<li><a class='waves-effect' href='leadership-training.html'>Leadership Training</a></li>
-    							<li><a class='waves-effect' href='faqs.html'>Frequently Asked Questions</a></li>
-    							<li><a class='waves-effect' href='finding-mb.html'>​Find Merit Badge Class or Counselor</a></li>
-    							<li><a class='waves-effect' href='new-scouts.html'>Letter to New Scouts</a></li>
-    						</ul>
-    					</div>
-    				</li>
-    			</ul>
-    		</li>
-    		<li>
-    			<ul class='collapsible collapsible-accordion'>
-    				<li> <a class='collapsible-header waves-effect'>Troop Events</a>
-    					<div class='collapsible-body'>
-    						<ul>
-    							<li><a class='waves-effect' href='camps-adventure.html'>Camps/High Adventure</a></li>
-    							<li><a class='waves-effect' href='campout-schedule-local-events.html'>Campout Schedule &amp; Local Events</a></li>
-    						</ul>
-    					</div>
-    				</li>
-    			</ul>
-    		</li>
-    		<li>
-    			<ul class='collapsible collapsible-accordion'>
-    				<li> <a class='collapsible-header waves-effect'>Members</a>
-    					<div class='collapsible-body'>
-    						<ul>
-    							<li><a class='waves-effect' href='communication_encrypted.html'>Communication</a></li>
-    							<li><a class='waves-effect' href='calendar_encrypted.html'>Calendar</a></li>
-    							<li><a class='waves-effect' href='mb-counselors_encrypted.html'>Merit Badge Counselors</a></li>
-    							<li><a class='waves-effect' href='troop-roster_encrypted.html'>Troop Roster</a></li>
-    							<li><a class='waves-effect' href='what-can-i-do_encrypted.html'>What Can I Do?</a></li>
-    						</ul>
-    					</div>
-    				</li>
-    			</ul>
-    		</li>
-    		<li><a class='waves-effect' href='photos.html'>Photos</a></li>
-    		<li><a class='waves-effect' href='contact.html'>Contact</a></li>
-    		<li><a class='waves-effect' href='payments.html'>Payments</a></li>
-    		<li><a class='waves-effect' href='http://store.troop370atlanta.org' target='blank'>Troop Store</a></li>
-    		<li>
-    			<div class='divider'></div>
-    		</li>
-    		<li><a class='subheader'>© 2019 Troop 370</a></li>
-    		<li><a class='waves-effect' href='contact-webmaster.html'>Contact Webmaster for password</a></li>
-    	</ul>
+      </div>
+    </div>
 
-    	<titlebar id='titlebar1'>
-    		<div class='container'>
-    			<heading>BSA Troop 370</heading>
-    		</div>
-    	</titlebar>
+    <!-- HEADER -->
+  	<ul id='slide-out' class='side-nav'>
+      <li class='header'>
+        <svg class='bugler' xmlns="http://www.w3.org/2000/svg" width="100" height="159" viewBox="0 0 215.4 370.4" style='fill:currentColor;'>
+          <path d='M32.9 370l-.5-1.4-.8-2.9c-.4-1-.6-2.2-.6-2.6l-.6-2.6c-.3-1-.4-2-.3-2.4 0-.3 0-.9-.2-1.2-.4-.8-1-5.4-1.3-10.6l-.6-7.8a123.6 123.6 0 0 1 .7-25c.4-1 .9-1.6 3.4-4.1 1.3-1.4 1.5-2.7 1-6.4 0-1 0-1.7.3-2.4 2-5 2-5.2 2.5-11.4a16 16 0 0 0-.8-7.6c-.8-2.1-.9-3.4-.3-4.5.4-.7.4-1 0-2.3l-1-3.6a15 15 0 0 1-.9-4.5c-.2-3.5-.5-4.8-2-7.8-.8-1.8-1.3-3.2-1.4-4.2a41.2 41.2 0 0 1-1-13c0-5.1-.2-10.5-.3-12-.2-2.6-.3-2.7-1-3.4l-1.3-.6a2 2 0 0 1-1-.4c-.2-.2-.8-.4-1.3-.5-.8-.2-4.5-3.1-5.5-4.4-.7-.8-.5-2 2.1-9.8.3-.7.6-2 .7-3 .2-1.7.7-4.2 1.6-8.7l.2-4v-2.6l-2.2-2.5a30.2 30.2 0 0 1-5.8-9.8 13 13 0 0 0-1.7-3.2 49 49 0 0 1-1.6-7.9c0-.4-.4-2-1-3.6-.6-1.9-.9-3.4-.9-4.3 0-.8-.2-2-.4-2.6a777.7 777.7 0 0 0-1.3-12.6 131 131 0 0 1-.4-9.4c0-3.4-.1-5.6-.4-6.9l-.4-3.2c0-1.5 1-7 1.4-8.2l.5-3c.1-1.4.4-2.8.6-3.2.2-.4.4-1.2.4-1.8 0-1.6 1-4.9 1.7-6 .8-1.2.8-1.4.3-3-.7-2-.3-3.7 2-7.3a61.2 61.2 0 0 0 3.9-8.5l.8-2 1.3-2.7 1.7-2.9a14 14 0 0 1 1.8-2.5l1.6-2.2 1.1-1.9c.4-.4 1.8-2 3-3.6 2.2-2.6 2.3-2.8 2.1-3.7-.5-3.1-.4-3.4 1.1-3.6 1.1-.2 1.2-.3 1.2-1.8 0-1.7-.7-2.8-2.2-3.8a21.8 21.8 0 0 1-5.6-4.8C24 48.2 24 48 23 48.3c-.5 0-1 .3-1.3.5-.6.5-4.8 2.6-7.2 3.5l-2.8 1.3c-.8.7-6.4 2-8.8 2-1.1.1-1 .1-2.6-1.8-.4-.4-.4-.9-.1-.9l.7-1.4c.3-.7.8-1.7 1.2-2.1a40 40 0 0 1 8.6-6.3l2.8-2c3-2 2.7-1.7 2.7-4a24.3 24.3 0 0 0-.8-5.9c0-.6-.3-1.7-.5-2.3-.3-.9-.4-1.7-.3-3.4.1-1.3.3-2.5.5-2.6l.2-1c0-.5.3-1.3.6-2l.5-1.2c0-.4 1.7-3 2.4-3.8a70.8 70.8 0 0 1 11-11.8l1.3-.5c1-.6 1.4-.6 7.1-.6a25.6 25.6 0 0 1 10.4 1.3c1 .3 2.1.8 2.7 1.2.5.5 1.2.8 1.5.8a8 8 0 0 1 2.4 1 31.3 31.3 0 0 1 9 8.3c1.5 2.4 2 2.7 3.6 1.9l1.6-.8c.3-.2 1-.4 1.3-.4.7 0 4.7-1.2 5.1-1.6a22 22 0 0 1 6.5-1.5c1.5-.2 3.1-.5 3.6-.7 1.3-.6 2.2-.5 3.1.3.7.6.8.9.8 2 0 1.6-1 3.9-2 4.6a24.3 24.3 0 0 1-5.6 3.2c-.8.2-2 .7-2.6 1a19 19 0 0 1-4.5 1.7l-1.2.4-1.8.7c-2.4.8-2.7 1.4-1.7 4 .6 1.6 1.3 2.4 2.3 2.9.4.1 1 .7 1.5 1.3.4.6 1.3 1.4 2 1.8 2.1 1.3 4.5 3.4 4.5 4.1 0 .4-.6 1.2-1.6 2-2.6 2.5-2.5 2.6 4 2.5h5.6l1-.8c1.5-1.2 1.6-1.2 3.6-1.4 5.7-.6 7.2-1 8-2l.8-.4c.5 0 1.2-.7 2.1-2.2.4-.5 1.2-1.3 1.8-1.7l1.7-1.1c1.7-1.1 3.9-1.2 20.5-.8 1 0 4.5-.6 5.1-.9l2.7-.7 2.7-.7a4 4 0 0 1 1.4-.4c.5 0 1-.1 1.4-.3a4 4 0 0 1 1.7-.4c.5 0 1-.2 1.2-.4.2-.2.8-.4 1.3-.5.6 0 1.4-.3 1.8-.4a58 58 0 0 1 4-1l4-1c1.3-.5 3.6-1.1 5.5-1.5l2.4-.6 1.8-.4 1.8-.5c1.1-.5 3.4-1.1 4-1.1l1.6-.4 2-.6c.7 0 1.7-.5 2.3-.8.6-.4 1.3-.8 1.7-.8 1.3-.1 2.3-.4 2.9-1 .3-.2 1-.4 1.5-.4.7 0 1-.2 1.7-1a4 4 0 0 1 1.7-1c.4-.1 1.2-.5 1.7-1 .4-.4 1.1-.8 1.5-.9.4 0 1-.3 1.2-.5l1.5-.8c.6-.2 1.1-.6 1.1-.7 0-.1.4-.5 1-.8.5-.3 1-.8 1.1-1.2a27 27 0 0 0 7.1-7c1.3-2.4 1.4-2.6 2-3 .2 0 .5-.4.5-.6 0-.2.3-.3.7-.3.6 0 .8.1.8.4 0 .2.5.9 1 1.4l.9 1.2 1 2c.7 1 1.3 2.3 1.4 2.7.2 1 1 3.2 1.8 4.8 1.4 3.2 1.5 3.3 2 9.3.1 1 .3 1.7.4 1.7.2 0 .3 1.6.3 3.6 0 3.5 0 3.6-.7 4.4-1 1-1.4 1-2.2.1-.4-.3-.8-.6-1-.6-.3 0-1-.6-1.6-1.4-.8-.9-1.5-1.4-2.2-1.6-.6-.1-1.4-.5-1.8-.9-.4-.3-1-.6-1.3-.6-.3 0-.8-.2-1.1-.5-.6-.4-1.2-.4-4-.4-7.4.1-10.7.5-11.6 1.3l-1 .4c-.6.3-.5.6.8 1.5l2 2c.7 1.2 2 4 2.2 5.3.2 1-.2 3.6-.8 5.4-1.5 4.1-3.2 6.3-5.5 6.9l-1.3.5c-.1.2-.5.3-.9.3s-1.5.3-2.6.7c-2.3.8-5.4 1.6-11.5 2.8A43 43 0 0 0 164 54c-.6.2-1.4.4-1.9.4-.8 0-1.6.2-4.3 1l-2.2.4c-.5 0-1.3.2-1.7.4-2.3.8-3.6 1.1-4.4 1.1-.4 0-1.2.2-1.5.4l-2.7.7a56.2 56.2 0 0 0-8.2 1.8l-2.7.8c-.3.2-1.4.4-2.4.5-2 .1-3.4.8-3.4 1.6 0 .6-.2 1.2-.5 2.2-.2.5-.4 2-.6 3.4a10 10 0 0 1-.5 2.7c-.1.2-.3 1-.3 1.7 0 1.4 0 1.7-1.9 5.6l-.7 1.1c-.1 0-1 .9-1.9 2a9 9 0 0 1-2 2c-.2 0-1.2.7-2.3 1.5-2.8 2.3-8 5-12.7 6.4l-2.7 1c-.4.2-1.8.5-3.2.6a12 12 0 0 0-3.7.8c-1.3.6-4 1.4-6.2 1.9-.8.2-1.7.6-2.4 1.3-1 .9-1.1 1-1 2 0 .7.5 2.3 1.3 4a70 70 0 0 1 4.1 9.3l.4.7.4.6c.3.5 1.2 2.9 1.7 4.7.2.5.4 5 .6 9.8.1 6.3.3 9 .6 9.5 1 2 1 2.7 1 4.9a163.6 163.6 0 0 0 1 23.7c0 .6.2 1.6.5 2.4.3.8.7 2.3.8 3.3.2 1 .7 2.9 1.2 4.2.6 1.5 1 3.2 1.3 5a91 91 0 0 0 1.6 9.3c.2.6.5 2.3.5 3.8.2 3 .7 6.1 1 6.8.3.6 1 4.2 1 5.2 0 .5.2 1.3.4 1.8.3.5.4 1.2.4 1.5 0 .2.2.8.5 1.3.3.6.5 2 .6 5.4.3 5.4.1 6-2 7.8a20.5 20.5 0 0 1-5 3.4c-.4 0-2.3 1.5-3.1 2.5a55 55 0 0 0-2.7 9.8c-.5 2.8-.7 3.2-1.5 4.5-.5.6-.8 1.3-.8 1.5l-.4.9a30.1 30.1 0 0 0-2 8.6c-.1.9-.4 2-.9 2.9l-.7 2c0 .3-.2.9-.5 1.4-.3.5-.5 1.1-.5 1.4 0 .4-.2 1-.4 1.3-.2.3-.4 1-.4 1.3l-.4 1.3a16 16 0 0 0-1.5 4c-.1.8-.5 1.8-.7 2.3-.2.5-.3 1.3-.3 1.8l-.3 1.6c-.4 1-1 5-1.3 8.9-.4 5.3-1.1 7.8-3 10.4l-.9 2.1c-.6 2-1.6 3.3-4.5 6.5-.8.8-1.4 1.6-1.4 1.8 0 .2-.3.5-.7.7-1.3.7-3 2.4-3.6 3.7-.6 1-.6 1.4-.4 2 .6 1.8.4 3.2-.7 5-.9 1.4-1 1.7-1 3.4 0 1-.1 2.3-.3 2.8-.2.6-.5 2.1-.6 3.4a9.1 9.1 0 0 1-.6 3c-.3.5-.6 1.2-.7 1.8a6 6 0 0 1-.8 1.8c-1.1 1.8-1.2 2.4-1.1 9.8 0 5.8 0 7-.3 7.6-.4.6-.4 2.2-.5 8.5v10.3H46.7c-12.8 0-13.6 0-13.9-.5zm36-303.5l2.3-.9c1.4-.7 5.5-.8 6.2-.1.5.5 1.8 1 3 1 .6 0 1.4 0 1.7.2.7.3.8.2 1.6-.5.7-.7 1-.8 2.1-.8.7 0 1.5-.2 1.9-.5.3-.2 1.6-.5 2.8-.7a7 7 0 0 0 3-1.1c.8-.6 1.2-.7 2-.6.9.1 1.4 0 3-.8 1.8-1 2.8-2 2.8-3 0-.4-.2-.5-3.2-.6-4.3-.1-6.4-.6-9.4-2.2-2.1-1-2.7-1.5-4.1-3.2-1.6-1.9-1.7-1.9-3-1.9-1 0-1.3.1-1.7.6-.7.8-.7 1.6.1 3.1.9 1.7.9 3.1 0 4.5-.3.6-.9 1.2-1.1 1.3a12.6 12.6 0 0 1-5.7 2l-5 .1h-3.6l-.7 1.1c-1 1.5-.9 2.2.2 2.9 1 .7 2.8.7 4.8.1zm64-10.6l3.5-.9a52.3 52.3 0 0 0 5.7-1.3c2.3-.5 4.5-1.1 5.7-1.5a24 24 0 0 1 3.3-.6c1.8-.2 3.4-.7 4.1-1.1l1.5-.4c1.4-.2 3.6-.9 4.3-1.3a4 4 0 0 1 1.7-.4c1.6 0 4-.4 5.4-1a6 6 0 0 1 1.8-.3l.9-.2c0-.2.7-.4 1.4-.5a6 6 0 0 0 1.7-.5c.3-.2 1.7-.5 3-.6a12 12 0 0 0 3.3-.9l2.2-1.2c1-.6 1.4-1 1.8-2 .9-2.2.4-5-1-6.6-1.7-1.7-4.5-1.9-8.7-.4l-3.3.6c-1.4.2-3 .6-3.5.8-.8.3-2.4.7-5 1.2a83.6 83.6 0 0 1-9.7 2.1l-3.4.8c-2.3.7-5.3 1.4-7.3 1.8a95.6 95.6 0 0 0-10 2.5c-1.4.3-3 .7-3.5 1l-.9.4-.2 2.5c-.2 1.7-.1 3 0 4l.4 2.2c0 .4.2 1 .7 1.5 1 1 2 1 4.2.3zM101.5 54c.4-.4.4-.8.2-3.5-.1-1.6-.2-3.4 0-3.8 0-1.1-.2-1.3-2.1-1.2-1 0-1.6.2-2 .5a3 3 0 0 1-1.5.7c-2.5.3-3.3.5-4.2 1-.5.3-1.6.6-2.4.7-1.4.1-1.4.2-1.5 1-.1 1 .7 2.2 1.6 2.2.2 0 .8.4 1.2.8.6.7 1 .9 2 1a4 4 0 0 1 1.9.6c.6.6 2 .7 4.5.6 1.2-.1 2-.3 2.3-.6z'/>
+        </svg>
+        <p class='site-title'>BSA Troop 370</p>
+        <p class='location'>Atlanta, GA</p>
+        <a href='https://www.facebook.com/groups/126169727423188/' class='social mdc-button standard-dark-button mdc-button--outlined ripple-mobile'>
+          <svg class='mdc-button__icon' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+          <path d='M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M18,5H15.5A3.5,3.5 0 0,0 12,8.5V11H10V14H12V21H15V14H18V11H15V9A1,1 0 0,1 16,8H18V5Z' />
+          </svg>
+        Facebook</a>
+        <a href='https://www.instagram.com/bsatroop370/' class='social mdc-button standard-dark-button mdc-button--outlined'>
+          <svg class='mdc-button__icon' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+          <path d='M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z'>
+          </svg>
+        Instagram</a>
+        <a href='https://troop370.smugmug.com/' class='social mdc-button standard-dark-button mdc-button--outlined'>
+          <svg class='mdc-button__icon' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+          <path d='M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z' />
+          </svg>
+        SmugMug</a>
+      </li>
+  		<li><a class='ripple-light-bg' href='index.html'>Home</a></li>
+  		<li>
+  			<ul class='collapsible collapsible-accordion'>
+  				<li><a class='collapsible-header ripple-light-bg'>About</a>
+  					<div class='collapsible-body'>
+  						<ul>
+  							<li><a class='ripple-light-bg' href='about.html'>General Information</a></li>
+  							<li><a class='ripple-light-bg' href='leaders.html'>Leaders</a></li>
+  							<li><a class='ripple-light-bg' href='eagle-scout-honor-roll.html'>Eagle Scout Honor Roll</a></li>
+  						</ul>
+  					</div>
+  				</li>
+  			</ul>
+  		</li>
+  		<li>
+  			<ul class='collapsible collapsible-accordion'>
+  				<li><a class='collapsible-header ripple-light-bg'>Information</a>
+  					<div class='collapsible-body'>
+  						<ul>
+  							<li><a class='ripple-light-bg' href='forms-documents.html'>Forms &amp; Documents</a></li>
+  							<li><a class='ripple-light-bg' href='advancement.html'>Advancement</a></li>
+                <li><a class='ripple-light-bg' href='participation.html'>Participation</a></li>
+                <li><a class='ripple-light-bg' href='leadership-training.html'>Leadership Training</a></li>
+  							<li><a class='ripple-light-bg' href='faqs.html'>Frequently Asked Questions</a></li>
+  							<li><a class='ripple-light-bg' href='finding-mb.html'>Merit Badges</a></li>
+                <li><a class='ripple-light-bg' href='helpful-links.html'>Helpful Links</a></li>
+                <li><a class='ripple-light-bg' href='https://start-stop-continue.com/survey/3c0b8802f414bd9d1938'>Start Stop Continue</a></li>
+  						</ul>
+  					</div>
+  				</li>
+  			</ul>
+  		</li>
+  		<li>
+  			<ul class='collapsible collapsible-accordion'>
+  				<li> <a class='collapsible-header ripple-light-bg'>Events</a>
+  					<div class='collapsible-body'>
+  						<ul>
+  							<li><a class='ripple-light-bg' href='camps-adventure.html'>Camps/High Adventure</a></li>
+  							<li><a class='ripple-light-bg' href='campout-schedule-local-events.html'>Campout Schedule &amp; Local Events</a></li>
+  						</ul>
+  					</div>
+  				</li>
+  			</ul>
+  		</li>
+  		<li>
+  			<ul class='collapsible collapsible-accordion'>
+  				<li> <a class='collapsible-header ripple-light-bg'>Members</a>
+  					<div class='collapsible-body'>
+  						<ul>
+  							<li><a class='ripple-light-bg' href='email-newsletters_encrypted.html'>Weekly Newsletters</a></li>
+  							<li><a class='ripple-light-bg' href='calendar_encrypted.html'>Calendar</a></li>
+  							<li><a class='ripple-light-bg' href='mb-counselors_encrypted.html'>Merit Badge Counselors</a></li>
+  							<li><a class='ripple-light-bg' href='troop-roster_encrypted.html'>Troop Roster</a></li>
+  							<li><a class='ripple-light-bg' href='what-can-i-do_encrypted.html'>What Can I Do?</a></li>
+  						</ul>
+  					</div>
+  				</li>
+  			</ul>
+  		</li>
+  		<li><a class='ripple-light-bg' href='photos.html'>Photos</a></li>
+  		<li><a class='ripple-light-bg' href='contact.html'>Contact</a></li>
+  		<li><a class='ripple-light-bg' href='payments.html'>Payments</a></li>
+  		<li><a class='ripple-light-bg' href='http://store.troop370atlanta.org' target='blank'>Pine Straw</a></li>
+  		<li>
+  			<div class='divider'></div>
+  		</li>
+  		<li><a class='subheader'>© 2019 Troop 370</a></li>
+  		<li><a class='ripple-light-bg' href='contact-webmaster.html'>Contact Webmaster for password</a></li>
+  	</ul>
 
-    	<titlebar id='titlebar2' style='position:sticky;top:0px;z-index:100;transition:box-shadow 0.25s;'>
-    		<div class='container' style='width:100%;'>
-    			<a href='#' data-activates='slide-out' class='button-collapse' style="line-height: 0;color: transparent;">Menu
-    				<svg xmlns='http://www.w3.org/2000/svg' class='menu-icon2' width='24' height='24' viewBox='0 0 24 24'>
-    					<path d='M0 0h24v24H0z' fill='none' />
-    					<path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
-    				</svg>
-    			</a>
-    			<heading class='mobile-appbar-title'>BSA Troop 370</heading>
-    		</div>
-    	</titlebar>
-
+    <div class='top {% if page.theme == 'dark' %} dark {% elsif page.theme == 'colorful' %} colorful {% else %} light {% endif %} {% if page.mobile-theme == 'dark' %} mobile-dark {% elsif page.mobile-theme == 'colorful' %} mobile-colorful {% else %} mobile-light {% endif %}'>
     	<topnav>
     		<div class='container'>
-    			<ul id='main-nav'>
-    				<li><a href='index.html' id='home'>Home</a></li>
-    				<li class='dropdown'><a href='javascript:void(0)'>About</a>
+          <titlebar id='titlebar1'>
+        		<a href='#' id='title1' class="{% if page.collapsible-header == true %} scrollme animateme {% else %} {% endif %}" data-when="view" data-from="0.6" data-to="0" data-easing="linear" data-translatex="58" data-translatey="96" data-scale="1.466"><heading>{% if page.title == 'Home' %} BSA Troop 370 {% else %} {{page.title}} {% endif %}</heading></a>
+            <a id='title1-site' class='hide-mobile' style='{% if page.collapsible-header == 'true' %} {% else %} display:none; {% endif %}'><heading>{{ site.title }}</heading></a>
+            <a href='#' data-activates='slide-out' class='button-collapse ripple-light-bg' style='line-height: 0;color: transparent;'>Menu
+      				<svg xmlns='http://www.w3.org/2000/svg' class='menu-icon2' width='24' height='24' viewBox='0 0 24 24'>
+      					<path d='M0 0h24v24H0z' fill='none' />
+      					<path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
+      				</svg>
+      			</a>
+        	</titlebar>
+    			<ul class='main-nav'>
+    				<li><a href='index.html' id='home' class='ripple-light-bg'>Home</a></li>
+    				<li class='dropdown' id='about'><a href='javascript:void(0)' class='ripple-light-bg'>About</a>
     					<dropdown class='dropdown-content'>
-                <a href='about.html'>General Information</a>
-                <a href='leaders.html'>Leaders</a>
-                <a href='eagle-scout-honor-roll.html'>Eagle Scout Honor Roll</a>
+                <a href='about.html' class='ripple-light-bg'>General Information</a>
+                <a href='leaders.html' class='ripple-light-bg'>Leaders</a>
+                <a href='eagle-scout-honor-roll.html' class='ripple-light-bg'>Eagle Scout Honor Roll</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Information</a>
+    				<li class='dropdown' id='info'><a href='javascript:void(0)' class='ripple-light-bg'>Information</a>
     					<dropdown class='dropdown-content'>
-                <a href='participation.html'>Scout/Parent Participation</a>
-                <a href='forms-documents.html'>Forms &amp; Documents</a>
-                <a href='advancement.html'>Advancement</a>
-                <a href='helpful-links.html'>Helpful Links</a>
+                <a href='forms-documents.html' class='ripple-light-bg'>Forms &amp; Documents</a>
+                <a href='advancement.html' class='ripple-light-bg'>Advancement</a>
+                <a href='participation.html' class='ripple-light-bg'>Participation</a>
+                <a href='leadership-training.html' class='ripple-light-bg'>Leadership Training</a>
+                <a href='faqs.html' class='ripple-light-bg'>Frequently Asked Questions</a>
+                <a href='finding-mb.html' class='ripple-light-bg'>Merit Badges</a>
+                <a href='helpful-links.html' class='ripple-light-bg'>Helpful Links</a>
+                <a href='https://start-stop-continue.com/survey/3c0b8802f414bd9d1938' class='ripple-light-bg'>Start Stop Continue</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Scouts</a>
+    				<li class='dropdown' id='tevents'><a href='javascript:void(0)' class='ripple-light-bg'>Events</a>
     					<dropdown class='dropdown-content'>
-                <a href='leadership-training.html'>Leadership Training</a>
-                <a href='faqs.html'>Frequently Asked Questions</a>
-                <a href='finding-mb.html'>​Find Merit Badge Class or Counselor</a>
-                <a href='new-scouts.html'>Letter to New Scouts</a>
+                <a href='camps-adventure.html' class='ripple-light-bg'>Camps/High Adventure</a>
+                <a href='campout-schedule-local-events.html' class='ripple-light-bg'>Campout Schedule &amp; Local Events</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Troop Events</a>
+    				<li class='dropdown' id='members'><a href='javascript:void(0)' class='ripple-light-bg'>Members</a>
     					<dropdown class='dropdown-content'>
-                <a href='camps-adventure.html'>Camps/High Adventure</a>
-                <a href='campout-schedule-local-events.html'>Campout Schedule &amp; Local Events</a>
+                <a href='email-newsletters_encrypted.html' class='ripple-light-bg'>Weekly Newsletters</a>
+                <a href='calendar_encrypted.html' class='ripple-light-bg'>Calendar</a>
+                <a href='mb-counselors_encrypted.html' class='ripple-light-bg'>Merit Badge Counselors</a>
+                <a href='troop-roster_encrypted.html' class='ripple-light-bg'>Troop Roster</a>
+                <a href='what-can-i-do_encrypted.html' class='ripple-light-bg'>What Can I Do?</a>
     					</dropdown>
     				</li>
-    				<li class='dropdown'><a href='javascript:void(0)'>Members</a>
-    					<dropdown class='dropdown-content'>
-                <a href='communication_encrypted.html'>Communication</a>
-                <a href='calendar_encrypted.html'>Calendar</a>
-                <a href='mb-counselors_encrypted.html'>Merit Badge Counselors</a>
-                <a href='troop-roster_encrypted.html'>Troop Roster</a>
-                <a href='what-can-i-do_encrypted.html'>What Can I Do?</a>
-    					</dropdown>
-    				</li>
-    				<li><a href='photos.html' id='photos'>Photos</a></li>
-    				<li><a href='contact.html' id='contact'>Contact</a></li>
-    				<li><a href='payments.html' id='payments'>Payments</a></li>
-    				<li><a href='http://store.troop370atlanta.org' target='blank' id='pinestraw'>Troop Store</a></li>
+    				<li><a href='photos.html' id='photos' class='ripple-light-bg'>Photos</a></li>
+    				<li><a href='contact.html' id='contact' class='ripple-light-bg'>Contact</a></li>
+    				<li><a href='payments.html' id='payments' class='ripple-light-bg'>Payments</a></li>
+    				<li><a href='http://store.troop370atlanta.org' target='blank' id='pinestraw' class='ripple-light-bg'>Pine Straw</a></li>
     				<li class='dropdown' style='box-shadow: none;'>
-    					<a href='javascript:void(0)' id='dropdownarrow'>
+    					<a href='javascript:void(0)' id='dropdownarrow' class='ripple-light-bg'>
     						<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
     							<path d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z' />
     							<path d='M0 0h24v24H0z' fill='none' />
     						</svg>
     					</a>
     					<dropdown class='dropdown-content dropdownarrow-content'>
-                <a href='photos.html' id='drop-photos'>Photos</a>
-                <a href='contact.html' id='drop-contact'>Contact</a>
-                <a href='payments.html' id='drop-payments'>Payments</a>
-                <a href='http://store.troop370atlanta.org' target='blank' id='drop-pinestraw'>Troop Store</a>
+                <a href='photos.html' id='drop-photos' class='ripple-light-bg'>Photos</a>
+                <a href='contact.html' id='drop-contact' class='ripple-light-bg'>Contact</a>
+                <a href='payments.html' id='drop-payments' class='ripple-light-bg'>Payments</a>
+                <a href='http://store.troop370atlanta.org' target='blank' id='drop-pinestraw' class='ripple-light-bg'>Pine Straw</a>
     						<dropdown class='dropdown-content' id='drop-members'>
-                  <a href='communication_encrypted.html'>Communication</a>
-                  <a href='calendar_encrypted.html'>Calendar</a>
-                  <a href='mb-counselors_encrypted.html'>Merit Badge Counselors</a>
-                  <a href='troop-roster_encrypted.html'>Troop Roster</a>
-                  <a href='what-can-i-do_encrypted.html'>What Can I Do?</a>
+                  <a href='email-newsletters_encrypted.html' class='ripple-light-bg'>Weekly Newsletters</a>
+                  <a href='calendar_encrypted.html' class='ripple-light-bg'>Calendar</a>
+                  <a href='mb-counselors_encrypted.html' class='ripple-light-bg'>Merit Badge Counselors</a>
+                  <a href='troop-roster_encrypted.html' class='ripple-light-bg'>Troop Roster</a>
+                  <a href='what-can-i-do_encrypted.html' class='ripple-light-bg'>What Can I Do?</a>
     						</dropdown>
     					</dropdown>
     				</li>
     			</ul>
     		</div>
     	</topnav>
+    </div>
+    <div class="banner" style="{% if page.collapsible-header == true %} {% else %} display:none; {% endif %}">
+      <div class="container">
+        <h3 class="size8 hide-mobile">&nbsp;</h3>
+        {% if page.subtitle == '' %} {% else %} <p>{{ page.subtitle }}</p> {% endif %}
+      </div>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -219,18 +232,6 @@ layout: default
     <div id="footer_wrap" class="outer">
 
     </div>
-
-    <!-- SCRIPTS -->
-    {% if site.google_analytics %}
-      <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', '{{ site.google_analytics }}', 'auto');
-        ga('send', 'pageview');
-      </script>
-    {% endif %}
 
     <!-- initialize serviceworker -->
     <script>
@@ -248,10 +249,13 @@ layout: default
     <!-- various libraries and additional scripts -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type='text/javascript' src='scripts/insert-header-footer.js'></script>
+    <script src="resources/scrollme/jquery.scrollme.js"></script>
 
     <!-- sidenav menu for mobile -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.js"></script>
 
+    <!-- mdc budle script (support for mdc buttons, ripples, etc.) -->
+    <script src="scripts/bundle.js" async></script>
 
   </body>
 </html>
