@@ -24,6 +24,12 @@
   --button-ripple-color-hover-opacity-on-background: 0.08;
   --button-ripple-color-focus-opacity-on-background: 0.12;
   --button-ripple-color-active-opacity-on-background: 0.2;
+  --button--raised-fill-color: var(--mdc-theme-primary);
+  --button--raised-text-color: var(--mdc-theme-text-on-primary);
+  --button--raised-ripple-color: #ffffff;
+  --button--raised-ripple-color-hover-opacity: 0.06;
+  --button--raised-ripple-color-focus-opacity: 0.08;
+  --button--raised-ripple-color-active-opacity: 0.16;
   --snackbar-background: #222222;
   --field-text-color-on-background: var(--mdc-theme-text-on-background);
   --field-unfocused-text-color-on-background: rgba(0,0,0,0.65);
@@ -44,6 +50,10 @@
   --side-nav-header-social-icons-color: var(--side-nav-header-text-color);
   --side-nav-header-social-icons-ripple-color: var(--side-nav-header-text-color);
   --side-nav-header-border-bottom-color: #e0e0e0;
+  --signin-accent-color: var(--mdc-theme-primary);
+  --signin-background: #eeeeee;
+  --signin-text-color: var(--mdc-theme-text-on-background);
+  --signin-light-text-color: #333333;
 }
 .top {
   --top-height: 60px;
@@ -133,6 +143,9 @@
     --button-ripple-color-hover-opacity-on-background: 0.06;
     --button-ripple-color-focus-opacity-on-background: 0.08;
     --button-ripple-color-active-opacity-on-background: 0.16;
+    --button--raised-fill-color: var(--mdc-theme-primary-lightest);
+    --button--raised-text-color: #000000;
+    --button--raised-ripple-color: #000000;
     --snackbar-background: #303030;
     --field-unfocused-text-color-on-background: rgba(255,255,255,0.45);
     --field-outline-color-on-background: rgba(255,255,255,0.44);
@@ -144,6 +157,9 @@
     --side-nav-drawer-item-active-dropdown-bg: #aac0eb0c;
     --side-nav-header-text-color: var(--mdc-theme-primary-lightest-most);
     --side-nav-header-border-bottom-color: #333333;
+    --signin-accent-color: var(--mdc-theme-primary-lightest);
+    --signin-background: #202020;
+    --signin-light-text-color: #e0e0e08a;
   }
   html.dark .top.light {
     --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);

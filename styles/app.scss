@@ -98,6 +98,26 @@ $mdc-typography-styles-button: (
     --mdc-ripple-fg-opacity: var(--button-ripple-color-active-opacity-on-background);
   }
 }
+.standard-dark-button.mdc-button--raised {
+  @include mdc-button-container-fill-color(var(--button--raised-fill-color));
+  @include mdc-button-ink-color(var(--button--raised-text-color));
+  @include mdc-states(#000000);
+  @include mdc-states-hover-opacity(.06);
+  @include mdc-states-focus-opacity(.08);
+  @include mdc-states-press-opacity(.16);
+  &::before, &::after {
+    background-color: var(--button--raised-ripple-color);
+  }
+  &:hover::before {
+    opacity: var(--button--raised-ripple-color-hover-opacity);
+  }
+  &.mdc-ripple-upgraded--background-focused::before, &:not(.mdc-ripple-upgraded):focus::before {
+    opacity: var(--button--raised-ripple-color-focus-opacity);
+  }
+  &.mdc-ripple-upgraded--foreground-activation {
+    --mdc-ripple-fg-opacity: var(--button--raised-ripple-color-active-opacity);
+  }
+}
 .standard-light-button.mdc-button--outlined {
   @include mdc-button-container-fill-color(transparent);
   @include mdc-button-ink-color($t-border-color-light-standard);
