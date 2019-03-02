@@ -1,7 +1,7 @@
-var APP_PREFIX = "troop370_"
-var DATE = "02mar2019_" // update the date and time every time the website is updated (or the content will not update on PWAs)
-var TIME = "1816"
-var CACHE_NAME = APP_PREFIX + DATE + TIME
+var APP_PREFIX = "troop370_";
+var DATE = "02mar2019_"; // update the date and time every time the website is updated (or the content will not update on PWAs)
+var TIME = "1816";
+var CACHE_NAME = APP_PREFIX + DATE + TIME;
 var URLS = [
   "./index.html?utm_source=homescreen",
   "./index.html",
@@ -50,7 +50,7 @@ var URLS = [
   "./troop-roster_encrypted.html",
   "./what-can-i-do_encrypted.html",
   "./"
-]
+];
 
 
 // Respond with cached resources
