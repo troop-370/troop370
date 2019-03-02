@@ -260,8 +260,8 @@ a[type="button"].bigger {
     border-bottom: 1px solid #ccc;
     margin-bottom: 24px;
   }
-  .no-bottom-line-mobile {
-    border-bottom: 0px !important;
+  .split50 p:last-of-type.no-bottom-line-mobile, .split50-2 div.buttonrow:last-of-type.no-bottom-line-mobile {
+    border-bottom: 0px;
   }
 }
 
