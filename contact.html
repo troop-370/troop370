@@ -1,18 +1,13 @@
 ---
 layout: default
+title: Contact
+theme: colorful
+mobile-theme: light
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
-    <title>Contact</title>
-    
-    
-    
-    
-    
-    
-    
+    <title>{{page.title}} | {{site.title}}</title>
   </head>
   <body>
     <div class="banner">
@@ -24,44 +19,100 @@ layout: default
     <div class="content-strip">
       <div class="container">
         <h3 class="size8">General Contact</h3>
-        <div class="row">
-          <form class="col s12" name="contact-general" method="POST" action="https://formspree.io/jackebuehner@gmail.com">
-            <div class="row">
-              <div class="input-field col s6">
-                <input id="first_name" type="text" class="validate" name="First_Name" required>
-                <label for="first_name">First Name</label>
-              </div>
-              <div class="input-field col s6">
-                <input id="last_name" type="text" class="validate" name="Last_Name" required>
-                <label for="last_name">Last Name</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s6 s6-spread">
-                <input id="email" type="email" class="validate" name="_replyto" required>
-                <label for="email">Email</label>
-              </div>
-              <div class="input-field col s6 s6-spread">
-                <input id="subject" type="text" class="validate" name="Phone">
-                <label for="subject">Phone</label>
-              </div>
-              <div class="input-field col s12">
-                <input id="subject" type="text" class="validate" name="_subject">
-                <label for="subject">Subject</label>
+        <form name="contact-general" method="POST" action="https://formspree.io/jackebuehner@gmail.com">
+          <div class="text-field-row text-field-row-fullwidth">
+            <div class="text-field-container">
+              <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
+                <textarea id="text-field-fullwidth-textarea-helper" rows="1" class="mdc-text-field__input" name="First_Name" required></textarea>
+                <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch" style="">
+                    <label class="mdc-floating-label" for="text-field-fullwidth-textarea-helper" style="">First Name</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <textarea id="textarea1" class="materialize-textarea validate" name="message" required></textarea>
-                <label for="textarea1">Message</label>
+          </div>
+          <div class="text-field-row text-field-row-fullwidth">
+            <div class="text-field-container">
+              <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
+                <textarea id="text-field-fullwidth-textarea-helper" rows="1" class="mdc-text-field__input" name="Last_Name" required></textarea>
+                <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch" style="">
+                    <label class="mdc-floating-label" for="text-field-fullwidth-textarea-helper" style="">Last Name</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
               </div>
             </div>
-            <button class="btn waves-effect waves-light contact-submit-button" type="submit" name="action">Submit</button>
-            <input type="hidden" name="_next" value="submission-received.html#contact" />
+          </div>
+          <div class="text-field-row text-field-row-fullwidth">
+            <div class="text-field-container">
+              <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
+                <textarea id="text-field-fullwidth-textarea-helper" rows="1" class="mdc-text-field__input" name="_replyto" required></textarea>
+                <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch" style="">
+                    <label class="mdc-floating-label" for="text-field-fullwidth-textarea-helper" style="">Email</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-field-row text-field-row-fullwidth">
+            <div class="text-field-container">
+              <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
+                <textarea id="text-field-fullwidth-textarea-helper" rows="1" class="mdc-text-field__input" name="Phone"></textarea>
+                <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch" style="">
+                    <label class="mdc-floating-label" for="text-field-fullwidth-textarea-helper" style="">Phone</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-field-row text-field-row-fullwidth">
+            <div class="text-field-container">
+              <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
+                <textarea id="text-field-fullwidth-textarea-helper" rows="1" class="mdc-text-field__input" name="_subject"></textarea>
+                <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch" style="">
+                    <label class="mdc-floating-label" for="text-field-fullwidth-textarea-helper" style="">Subject</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-field-row text-field-row-fullwidth">
+            <div class="text-field-container">
+              <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
+                <textarea id="text-field-fullwidth-textarea-helper" rows="6" class="mdc-text-field__input" name="message" required></textarea>
+                <div class="mdc-notched-outline mdc-notched-outline--upgraded">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch" style="">
+                    <label class="mdc-floating-label" for="text-field-fullwidth-textarea-helper" style="">Message</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-field-row text-field-row-fullwidth">
+            <button class="mdc-button standard-dark-button mdc-button--outlined" type="submit" name="action">
+              <span class="mdc-button__label">Submit</span>
+            </button>
+            <input type="hidden" name="_next" value="submission-received.html" />
             <input type="hidden" name="_format" value="plain" />
             <input type="hidden" name="_cc" value="hgevans@bellsouth.net,iconherder@gmail.com" />
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </body>
