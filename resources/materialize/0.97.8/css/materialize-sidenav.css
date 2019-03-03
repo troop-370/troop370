@@ -9,7 +9,7 @@
   height: 100%;
   padding-bottom: 60px;
   padding-left: 0;
-  background-color: #fff;
+  background-color: var(--side-nav-drawer-background);
   z-index: 999;
   overflow-y: auto;
   will-change: transform;
@@ -49,7 +49,7 @@
 }
 
 .side-nav a {
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--side-nav-drawer-text-on-background);
   display: block;
   font-size: 14px;
   font-weight: 500;
@@ -97,13 +97,13 @@
   margin: 8px 0 0 0;
   height: 1px;
   overflow: hidden;
-  background-color: #e0e0e0;
+  background-color: var(--side-nav-header-border-bottom-color);
 }
 
 .side-nav .subheader {
   cursor: initial;
   pointer-events: none;
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--side-nav-drawer-inactive-text-on-background);
   font-size: 14px;
   font-weight: 500;
   line-height: 48px;

@@ -1,0 +1,232 @@
+@import "../styles/fonts.css";
+@import "../styles/colors.css";
+html {
+    line-height: 1.5;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.87);
+    background-color: var(--mdc-theme-background);
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+* {
+  box-sizing: border-box;
+}
+:root {
+  --content-max-width: 1262px;
+}
+:root /*font family*/ {
+  --heading-font-family: 'IBM Plex Sans', sans-serif;
+  --button-font-family: 'IBM Plex Sans', sans-serif;
+  --text-font-family: 'Roboto', sans-serif;
+}
+:root /*font weight*/ {
+  --heading-font-weight: 500;
+  --button-font-weight: 700;
+  --text-font-weight: 400;
+}
+:root /*text spacing*/ {
+  --h1-sp: -1.5px;
+  --h2-sp: -0.5px;
+  --h3-sp: 0px;
+  --h4-sp: 0.25px;
+  --h5-sp: 0px;
+  --h6-sp: 0.15px;
+  --subtitle-1-sp: 0.15px;
+  --subtitle-2-sp: 0.1px;
+  --body-1-sp: 0.5px;
+  --body-2-sp: 0.25px;
+  --button-sp: 0.75px;
+  --caption-sp: 0.4px;
+  --overline-sp: 01.5px;
+}
+:root /*font size*/ {
+  --h1-font-size: 96px;
+  --h2-font-size: 60px;
+  --h3-font-size: 48px;
+  --h3-8-font-size: 34px;
+  --h4-font-size: 28px;
+  --h5-font-size: 24px;
+  --h6-font-size: 20px;
+  --subtitle-1-font-size: 16px;
+  --subtitle-2-font-size: 14px;
+  --body-1-font-size: 16px;
+  --body-2-font-size: 14px;
+  --button-font-size: 14px;
+  --caption-font-size: 12px;
+  --overline-font-size: 10px;
+}
+:root /*text color*/ {
+  --button-text-color-light: #e0e0e0;
+  --button-text-color-dark: #134885;
+}
+:root /*background*/ {
+  --button-background-color-light-hover: rgba(255,255,255,0.20);
+  --button-background-color-dark-hover: rgba(0,0,0,0.20);
+}
+:root /*padding*/ {
+  --banner-padding-y: 35px;
+  --banner-padding-x: 10px;
+  --banner-padding-y-increased: calc(var(--banner-padding-y) + 40px);
+  --banner-padding-x-increased: calc(var(--banner-padding-y) + 0px);
+  --banner-elements-padding-between: 5px;
+  --content-strip-padding-y: 35px;
+  --content-strip-padding-x: 10px;
+  --content-strip-padding-y-increased: calc(var(--content-strip-padding-y) + 40px);
+  --content-strip-padding-x-increased: calc(var(--content-strip-padding-x) + 0px);
+  --content-strip-padding-ol-x: calc(var(--content-strip-padding-x) + 20px);
+  --content-strip-elements-padding-between: 5px;
+}
+:root /*margin*/ {
+  --button-margin: 6px;
+}
+:root /*border*/ {
+  --button-border-radius: 2px;
+  --button-border-color-light: #e0e0e0;
+  --button-border-color-dark: #636161;
+}
+html, body, div.container, p, h1, h2, h3, h4, h5, h6, ol {
+  margin: 0;
+  padding: 0;
+}
+.center {
+  text-align: center;
+}
+div.container {
+  width: var(--content-max-width);
+  padding: 0 var(--content-padding-x);
+}
+div.banner {
+  display: flex;
+  height: auto;
+  background-color: var(--banner-primary);
+  justify-content: center;
+  padding: var(--banner-padding-y) 0;
+}
+div#pageBanner {
+  padding: 70.5px;
+}
+div.banner.extra-padding-y {
+  padding: var(--banner-padding-y-increased) var(--banner-padding-x);
+}
+div.banner h3.size8, div.banner subtitle, div.banner p {
+  display: block;
+  max-width: inherit;
+  color: var(--mdc-theme-text-on-primary);
+  padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}
+div.banner.red {
+  background-color: var(--banner-secondary);
+}
+div.banner.white, div.banner.white subtitle, div.banner.white p {
+  background-color: var(--mdc-theme-background);
+  color: var(--mdc-theme-text-on-background) !important;
+}
+div.banner.white h3.size8 {
+  color: var(--mdc-theme-primary_accent_text-on-background) !important;
+}
+div.banner h3.size8 {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--h3-8-font-size);
+}
+div.banner subtitle {
+  font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
+  font-size: var(--subtitle-1-font-size);
+  letter-spacing: var(--subtitle-1-sp);
+}
+div.banner p {
+  font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
+  font-size: var(--body-1-font-size);
+  letter-spacing: var(--body-1-sp);
+}
+div.banner p + div.buttonrow, subtitle p + div.buttonrow {
+  padding-top: 30px;
+}
+div.content-strip {
+  display: flex;
+  height: auto;
+  background-color: var(--mdc-theme-background);
+  justify-content: center;
+  padding: var(--content-strip-padding-y) 0 0 0;
+}
+div.content-strip:last-of-type, div.content-strip.last-in-section {
+  padding: var(--content-strip-padding-y) 0 var(--content-strip-padding-y) 0;
+}
+div.content-strip h3.size8, div.content-strip h4, div.content-strip h5, div.content-strip h6, div.content-strip subtitle, div.content-strip p {
+  display: block;
+  max-width: inherit;
+  color: var(--mdc-theme-text-on-background);
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
+}
+div.content-strip h3.size8 + p, div.content-strip h4 + p, div.content-strip h5 + p, div.content-strip h6 + p {
+  padding-top: 20px;
+}
+div.content-strip h3.size8 {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--h3-8-font-size);
+}
+div.content-strip h4 {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--h4-font-size);
+}
+div.content-strip h5 {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--h5-font-size);
+}
+div.content-strip subtitle {
+  font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
+  font-size: var(--subtitle-1-font-size);
+  letter-spacing: var(--subtitle-1-sp);
+}
+div.content-strip p, div.content-strip li {
+  font-family: var(--text-font-family);
+  font-weight: var(--text-font-weight);
+  font-size: var(--body-1-font-size);
+  letter-spacing: var(--body-1-sp);
+}
+div.content-strip ol {
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-elements-padding-between) var(--content-strip-padding-ol-x);
+}
+div.content-strip p + div.buttonrow, div.content-strip subtitle + div.buttonrow {
+  padding-top: 30px;
+}
+div.buttonrow {
+  display: block;
+  max-width: inherit;
+  padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}
+a {
+  color: inherit;
+}
+p, ol, ul {
+  color: var(--mdc-theme-text-on-background)
+}
+@media (max-width: 600px) {
+  :root {
+    --h3-8-font-size: 28px;
+    --h4-font-size: 24px;
+    --h5-font-size: 20px;
+  }
+  html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .hide-mobile {
+    display: none !important;
+  }
+  div#pageBanner {
+    padding: 0;
+  }
+}

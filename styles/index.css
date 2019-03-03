@@ -20,15 +20,11 @@
   --content-max-width: 1600px;
   --banner-padding-x: 20px;
 }
-.top, .top.light, .top topnav div.container {
-  --topnav-bg-color: transparent;
+.top, .top topnav div.container {
   --content-max-width: 1600px !important;
 }
-.nav-shadow.top.light {
-  --topnav-bg-color: #f7f7f7
-}
 .top-container {
-  background-image: url("../src/index/370-mountains-light.jpg");
+  background-image: var(--index-welcome-background-image);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -42,14 +38,14 @@ div.banner.img {
   background-color: transparent;
 }
 div.banner#time-banner {
-  background-color: #ffffff;
+  background-color: var(--mdc-theme-background);
   text-align: center;
 }
 div.banner p {
-  color: #222222;
+  color: var(--mdc-theme-text-on-background);
 }
 div.banner h3.size8 {
-  color: #003f87;
+  color: var(--mdc-theme-primary_accent_text-on-background);
 }
 @media (max-width: 600px) {
   div.banner.img {
@@ -63,7 +59,7 @@ div.banner h3.size8 {
 carousel {
   display: flex;
   height: auto;
-  background-color: #212121;
+  background-color: var(--mdc-theme-background);
   justify-content: center
 }
 .flickity-page-dots {
@@ -81,19 +77,21 @@ carousel {
   fill: #dddddd !important;
 }
 carousel#main {
-  background: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
+  background: var(--index-main-carousel-gradient);
 }
 .main-carousel {
   margin-top: -80px;
   height: 300px;
 }
 .main-carousel .carousel-title {
-  font-family: 'IBM Plex Sans Medium', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
   font-size: 34px;
   margin: 0;
 }
 .main-carousel .carousel-info {
   font-family: 'Roboto', sans-serif;
+  font-weight: 400;
   font-size: 16px;
   padding-bottom: 20px;
   padding-top: 10px;
@@ -152,7 +150,7 @@ carousel#main {
   }
 }
 carousel#img {
-  background: #ffffff;
+  background: var(--mdc-theme-background);
 }
 .img-carousel {
   overflow: hidden;
@@ -171,6 +169,7 @@ carousel#img {
   display: block;
   min-width: 200px;
   height: 600px;
+  filter: var(--index-img-carousel-brightness);
 }
 @media (max-width: 800px) /*standard width of images */{
   .img-carousel {

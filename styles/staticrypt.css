@@ -1,55 +1,9 @@
-/*roboto 400, 400i, 500, 500i*/
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i');
-
-/*IBM Plex Sans Regular*/
-  /* latin-ext */
-  @font-face {
-    font-family: 'IBM Plex Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://fonts.gstatic.com/s/ibmplexsans/v3/zYXgKVElMYYaJe8bpLHnCwDKhd_eFb5N.woff2) format('woff2');
-    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-  }
-  /* latin */
-  @font-face {
-    font-family: 'IBM Plex Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://fonts.gstatic.com/s/ibmplexsans/v3/zYXgKVElMYYaJe8bpLHnCwDKhdHeFQ.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-/*IBM Plex Sans SemiBold*/
-  /* latin-ext */
-  @font-face {
-    font-family: 'IBM Plex Sans';
-    font-style: normal;
-    font-weight: 600;
-    src: url(https://fonts.gstatic.com/s/ibmplexsans/v3/zYX9KVElMYYaJe8bpLHnCwDKjQ76AI9sdO_q.woff2) format('woff2');
-    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-  }
-  /* latin */
-  @font-face {
-    font-family: 'IBM Plex Sans';
-    font-style: normal;
-    font-weight: 600;
-    src: url(https://fonts.gstatic.com/s/ibmplexsans/v3/zYX9KVElMYYaJe8bpLHnCwDKjQ76AIFsdA.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-/*IBM Plex Sans Bold*/
-  @font-face {
-    font-family: 'IBM Plex Sans';
-    font-style: normal;
-    font-weight: 700;
-    src: url(../src/fonts/IBM_Plex_Sans_Bold.woff) format('woff');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-/**/
-:root {
-  --scout-blue: #003f87;
-}
+@import "../styles/fonts.css";
+@import "../styles/colors.css";
 html  {
-  background: #eeeeee;
+  background: var(--signin-background);
   height: 100%;
+  color: var(--signin-text-color);
 }
 body {
   margin: 0;
@@ -62,7 +16,7 @@ body {
   max-width: 360px;
   max-height: 380px;
   min-height: 380px;
-  background: #ffffff;
+  background: var(--mdc-theme-background);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
   padding: 45px;
   margin: auto;
@@ -78,7 +32,7 @@ p.logo {
   font-weight: 600;
   font-size: 1.5em;
   line-height: 1em;
-  color: var(--scout-blue);
+  color: var(--signin-accent-color);
   margin: 0;
   text-align: center;
 }
@@ -111,10 +65,14 @@ a.contact {
   font-family: "IBM Plex Sans", sans-serif !important;
   font-weight: 700 !important;
   margin: -8px 0 0 -8px;
+  color: var(--signin-accent-color) !important;
+}
+a.contact::before, a.contact::after {
+  background-color: var(--signin-accent-color);
 }
 .password-question {
   font-family: "Roboto", sans-serif;
-  color: #333;
+  color: var(--signin-light-text-color);
   font-size: 14px;
   line-height: 1.4286;
   margin-top: 20px;

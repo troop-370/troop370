@@ -105,7 +105,8 @@ content-strip.last-before-banner {
 }
 /*encrypted*/
 staticrypt-title {
-  font-family: "IBM Plex Sans Medium", sans-serif; !important;
+  font-family: "IBM Plex Sans", sans-serif; !important;
+  font-weight: 500;
 }
 /*button icons*/
 #paypal::before {

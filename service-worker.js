@@ -1,6 +1,6 @@
 var APP_PREFIX = "troop370_";
-var DATE = "02mar2019_"; // update the date and time every time the website is updated (or the content will not update on PWAs)
-var TIME = "1816";
+var DATE = "03mar2019_"; // update the date and time every time the website is updated (or the content will not update on PWAs)
+var TIME = "1817";
 var CACHE_NAME = APP_PREFIX + DATE + TIME;
 var URLS = [
   "./index.html?utm_source=homescreen",
@@ -41,10 +41,11 @@ var URLS = [
   "./src/icons/meeting icon.png",
   "./src/troop370-logo/bugle-logo-512x512.png",
   "./src/troop370-logo/favicon.ico",
-  "./styles/components.css",
-  "./styles/legacy_components.css",
+  "./styles/colors.css",
+  "./styles/components-v2.css",
+  "./styles/fonts.css",
   "./styles/page-specific.css",
-  "./styles/troop370-topnav.css",
+  "./styles/troop370-topnav-v2.css",
   "./styles/bundle.css",
   "./submission-received.html",
   "./troop-roster_encrypted.html",
