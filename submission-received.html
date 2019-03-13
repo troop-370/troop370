@@ -1,34 +1,23 @@
 ---
 layout: default
+title: Submission Sent
+theme: light
+mobile-theme: light
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    
-    <title>Submission Sent</title>
-    
-    
-    
-    
-    
-    
-    
+    <title>{{page.title}} | {{site.title}}</title>
+    <link rel='stylesheet' href='styles/checkmark.css'>
   </head>
-  <body style="background-color: var(--banner-background-color);">
-    <div class="banner">
-      <container class="center" style="height:calc(100vh - 185px);padding-top:0;padding-bottom:0;">
+  <body>
+    <div class="banner white">
+      <container class="center">
+        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
         <h3 class="size8">Submission Sent</h3>
-        <div class="buttonrow">
-          <a href="contact.html#contact" class="mdc-button standard-light-button mdc-button--outlined">Return</a>
-        </div>
       </div>
+    <div style="position:absolute;bottom:30px;text-align:center;width:100%;">
+      <a href="contact.html#contact" class="mdc-button mdc-button--raised standard-dark-button" style="padding:0 24px">Return</a>
     </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script type='text/javascript' src='scripts/insert-header-footer.js'></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.js"></script>
-  <script type="text/javascript">
-  	$(".button-collapse").sideNav();
-  </script><div class="drag-target" data-sidenav="slide-out" style="left: 0px; touch-action: pan-y;"></div>
-  <div class="hiddendiv common"></div>
   </body>
 </html>
