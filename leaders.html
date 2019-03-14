@@ -9,6 +9,7 @@ collapsible-header: true
 <html lang="en">
   <head>
     <title>{{page.title}} | {{site.title}}</title>
+    <link rel='stylesheet' href='styles/profile-card.css'>
   </head>
   <body>
     <div class="content-strip">
@@ -24,6 +25,9 @@ collapsible-header: true
         <p>Cheif Instructor: Eric S</p>
         <p>Cheif Librarian: Matthew B</p>
         <p>Scribe: Santi N</p>
+        <div class="profile-box">
+          {% include profile-card.html name="" position="" border-color="" image="" %}
+        </div>
         <div class="buttonrow">
           <a class="mdc-button standard-dark-button mdc-button--outlined">More Positions & Contact Information</a>
         </div>
