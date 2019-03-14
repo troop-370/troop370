@@ -73,13 +73,13 @@
   --topnav-dropdown-a-padding-x: 16px;
   --topnav-dropdown-a-padding-y: 12px;
   --topnav-dropdown-bg-color: #f7f7f7;
+  --topnav-dropdown-text-color: #222222;
   --topnav-dropdown-ripple-color: #003f87;
 }
 .top.colorful, .top.dark {
   --titlebar-heading-color: #e0e0e0;
   --menu-icon-fill: #e0e0e0;
   --topnav-text-color: #e0e0e0;
-  --topnav-dropdown-text-color: #222222;
   --topnav-currentpage-color: #e0e0e0;
   --topnav-ripple-color: #ffffff;
 }
@@ -94,7 +94,6 @@
   --menu-icon-fill: var(--mdc-theme-primary);
   --topnav-bg-color: var(--mdc-theme-background);
   --topnav-text-color: var(--mdc-theme-text-on-background);
-  --topnav-dropdown-text-color: #222222;
   --topnav-currentpage-color: var(--mdc-theme-primary);
   --topnav-ripple-color: #003f87;
 }
@@ -164,10 +163,11 @@
     --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
     --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
     --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
+    --topnav-ripple-color: #ffffff;
   }
   .top {
-    --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
     --topnav-dropdown-bg-color: #303030;
+    --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
     --topnav-dropdown-ripple-color: #ffffff;
   }
   @media (max-width: 600px) {
