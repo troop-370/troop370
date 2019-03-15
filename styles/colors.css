@@ -171,7 +171,7 @@
     --topnav-dropdown-ripple-color: #ffffff;
   }
   @media (max-width: 600px) {
-    top.mobile-light {
+    .top.mobile-light {
       --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
       --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
       --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
