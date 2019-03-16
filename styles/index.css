@@ -95,6 +95,7 @@ carousel#main {
   font-size: 16px;
   padding-bottom: 20px;
   padding-top: 10px;
+  color: var(--mdc-theme-text-on-primary);
 }
 .main-carousel .carousel-text-card {
   display: block;
