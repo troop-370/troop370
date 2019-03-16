@@ -7,6 +7,11 @@ html {
     color: rgba(0, 0, 0, 0.87);
     background-color: var(--mdc-theme-background);
 }
+@media (prefers-color-scheme: dark) {
+    html {
+      scrollbar-color: #737373 #3c3c3d;
+    }
+}
 h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
