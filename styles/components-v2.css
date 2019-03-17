@@ -20,6 +20,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 :root {
   --content-max-width: 1262px;
+  --container-justify-content: center;
 }
 :root /*font family*/ {
   --heading-font-family: 'IBM Plex Sans', sans-serif;
@@ -91,6 +92,10 @@ h1, h2, h3, h4, h5, h6 {
   --button-border-color-light: #e0e0e0;
   --button-border-color-dark: #636161;
 }
+:root /*tables*/ {
+  --table-row-height: 40px;
+  --table-heading_row-height: 70px;
+}
 html, body, div.container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
   padding: 0;
@@ -106,7 +111,7 @@ div.banner {
   display: flex;
   height: auto;
   background-color: var(--banner-primary);
-  justify-content: center;
+  justify-content: var(--container-justify-content);
   padding: var(--banner-padding-y) 0;
 }
 div#pageBanner {
@@ -155,7 +160,7 @@ div.content-strip {
   display: flex;
   height: auto;
   background-color: var(--mdc-theme-background);
-  justify-content: center;
+  justify-content: var(--container-justify-content);
   padding: var(--content-strip-padding-y) 0 0 0;
 }
 div.content-strip:last-of-type, div.content-strip.last-in-section {
@@ -208,6 +213,33 @@ div.buttonrow {
   max-width: inherit;
   padding: var(--banner-elements-padding-between) var(--banner-padding-x);
 }
+table {
+  width: 100%;
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
+}
+th {
+  color: var(--table-heading_row-color);
+  background-color: var(--table-heading_row-background-color);
+  height: var(--table-heading_row-height);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+tr {
+  height: var(--table-row-height);
+}
+tr:hover {
+  box-shadow: inset 100px 100px var(--table-row-hover-color);
+}
+tr:nth-child(even) {
+  background-color: var(--table-row-even-background);
+}
+tr:nth-child(odd) {
+  background-color: var(--table--row-odd-background);
+}
+th, td {
+  border: none;
+  padding: 3px 5px;
+}
 a {
   color: inherit;
 }
@@ -219,6 +251,7 @@ p, ol, ul {
     --h3-8-font-size: 28px;
     --h4-font-size: 24px;
     --h5-font-size: 20px;
+    --container-justify-content: left;
   }
   html {
     -webkit-touch-callout: none;
