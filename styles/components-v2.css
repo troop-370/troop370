@@ -91,6 +91,10 @@ h1, h2, h3, h4, h5, h6 {
   --button-border-color-light: #e0e0e0;
   --button-border-color-dark: #636161;
 }
+:root /*tables*/ {
+  --table-row-height: 40px;
+  --table-heading_row-height: 70px;
+}
 html, body, div.container, p, h1, h2, h3, h4, h5, h6, ol {
   margin: 0;
   padding: 0;
@@ -207,6 +211,33 @@ div.buttonrow {
   display: block;
   max-width: inherit;
   padding: var(--banner-elements-padding-between) var(--banner-padding-x);
+}
+table {
+  width: 100%;
+  padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
+}
+th {
+  color: var(--table-heading_row-color);
+  background-color: var(--table-heading_row-background-color);
+  height: var(--table-heading_row-height);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+tr {
+  height: var(--table-row-height);
+}
+tr:hover {
+  box-shadow: inset 100px 100px var(--table-row-hover-color);
+}
+tr:nth-child(even) {
+  background-color: var(--table-row-even-background);
+}
+tr:nth-child(odd) {
+  background-color: var(--table--row-odd-background);
+}
+th, td {
+  border: none;
+  padding: 3px 5px;
 }
 a {
   color: inherit;
