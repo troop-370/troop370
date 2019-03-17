@@ -20,6 +20,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 :root {
   --content-max-width: 1262px;
+  --container-justify-content: center;
 }
 :root /*font family*/ {
   --heading-font-family: 'IBM Plex Sans', sans-serif;
@@ -110,7 +111,7 @@ div.banner {
   display: flex;
   height: auto;
   background-color: var(--banner-primary);
-  justify-content: center;
+  justify-content: var(--container-justify-content);
   padding: var(--banner-padding-y) 0;
 }
 div#pageBanner {
@@ -159,7 +160,7 @@ div.content-strip {
   display: flex;
   height: auto;
   background-color: var(--mdc-theme-background);
-  justify-content: center;
+  justify-content: var(--container-justify-content);
   padding: var(--content-strip-padding-y) 0 0 0;
 }
 div.content-strip:last-of-type, div.content-strip.last-in-section {
@@ -250,6 +251,7 @@ p, ol, ul {
     --h3-8-font-size: 28px;
     --h4-font-size: 24px;
     --h5-font-size: 20px;
+    --container-justify-content: left;
   }
   html {
     -webkit-touch-callout: none;
