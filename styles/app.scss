@@ -34,8 +34,11 @@ $mdc-typography-styles-button: (
 @import "@material/notched-outline/mdc-notched-outline";
 @import "@material/snackbar/mdc-snackbar";
 @import "@material/icon-button/mdc-icon-button";
+@import "@material/form-field/mdc-form-field";
+@import "@material/checkbox/mdc-checkbox";
+@import "@material/radio/mdc-radio";
 
-.member-pass, .mdc-text-field--textarea {
+.member-pass, .mdc-text-field--textarea, .mdc-text-field--outlined {
   @include mdc-text-field-outline-color(var(--field-outline-color-on-background));
   @include mdc-text-field-hover-outline-color(var(--field-outline-color-hover-on-background));
   @include mdc-text-field-focused-outline-color(var(--field-outline-color-focus-on-background));
@@ -145,4 +148,19 @@ $mdc-typography-styles-button: (
 .ripple-mobile {
   @include mdc-states-hover-opacity(0);
   @include mdc-states-focus-opacity(0);
+}
+
+//form elements
+.mdc-radio {
+  @include mdc-radio-unchecked-stroke-color(var(--field-outline-color-on-background));
+  @include mdc-radio-checked-stroke-color(var(--field-outline-color-focus-on-background));
+  @include mdc-radio-ink-color(var(--field-outline-color-focus-on-background));
+  @include mdc-radio-focus-indicator-color(var(--field-outline-color-focus-on-background));
+}
+label {
+  color: var(--mdc-theme-text-on-background);
+}
+.mdc-checkbox {
+  @include mdc-checkbox-focus-indicator-color(var(--field-outline-color-focus-on-background))
+  @include mdc-checkbox-container-colors(var(--field-outline-color-on-background), var(--mdc-theme-background), var(--field-outline-color-focus-on-background), var(--field-outline-color-focus-on-background))
 }

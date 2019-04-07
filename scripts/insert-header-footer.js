@@ -16,4 +16,17 @@ $(document).ready(function(){
 	  });
 	});
 
+	//show sections of announcment submission form when checked
+	$('#weekly_email').on('change', function() {
+			console.log('changed');
+			$('#weekly_email_section').toggle();
+	});
+	$('#remind_text').on('change', function() {
+			console.log('changed');
+			$('#remind_section').toggle();
+	});
+	$('#website').on('change', function() {
+			console.log('changed');
+			$('#website_section').toggle();
+	});
 });

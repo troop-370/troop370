@@ -4,10 +4,13 @@
   "description": "",
   "main": "service-worker.js",
   "dependencies": {
+    "@material/checkbox": "^1.0.1",
     "@material/floating-label": "^0.42.0",
+    "@material/form-field": "^1.0.1",
     "@material/line-ripple": "^0.41.0",
     "@material/list": "^0.42.0",
     "@material/notched-outline": "^0.42.0",
+    "@material/radio": "^1.0.1",
     "@material/snackbar": "^0.44.0",
     "@material/textfield": "^0.42.0"
   },

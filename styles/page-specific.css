@@ -133,8 +133,8 @@ staticrypt-title {
 #paypal-button:hover {
   filter: brightness(83%);
 }
-.text-field-row {
-  padding: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
+.text-field-row, .mdc-text-field--outlined {
+  margin: var(--content-strip-elements-padding-between) var(--content-strip-padding-x);
 }
 textarea#text-field-fullwidth-textarea-helper {
   padding: 6px 16px 10px 16px;
