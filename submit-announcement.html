@@ -1,0 +1,153 @@
+---
+layout: default
+title: Submit Announcement
+theme: light
+mobile-theme: light
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{page.title}} | {{site.title}}</title>
+  </head>
+  <body>
+    <div class="content-strip">
+      <div class="container">
+        <div class="row">
+          <form name="contact-webmaster" action="https://mailthis.to/la67m024@robot.zapier.com" method="POST" encType="multipart/form-data">
+            <style>
+              p.question {
+                margin-top: 20px;
+              }
+              #weekly_email_section, #remind_section, #website_section {
+                border-top: 1px solid var(--mdc-theme-primary-lightest);
+                margin-top: 20px;
+              }
+            </style>
+            <p class="question">1. What is your name?</p>
+              {% include text-field-row.html
+                  variant="field-input"
+                  type="text"
+                  required="yes"
+                  width="100%"
+                  name="First_name"
+                  label="First name"
+              %}
+              {% include text-field-row.html
+                  variant="field-input"
+                  type="text"
+                  required="yes"
+                  width="100%"
+                  name="Last_name"
+                  label="Last name"
+              %}
+            <p class="question">2. What is your email?</p>
+              {% include text-field-row.html
+                  variant="field-input"
+                  type="email"
+                  required="yes"
+                  width="100%"
+                  name="_replyto"
+                  label="Email"
+              %}
+            <p class="question">3. Where do you want your announcement to appear?</p>
+              {% include text-field-row.html
+                  variant="checkbox-input"
+                  type="checkbox"
+                  name="weekly_email"
+                  label="A. Weekly Emails"
+              %}
+              {% include text-field-row.html
+                  variant="checkbox-input"
+                  type="checkbox"
+                  name="remind_text"
+                  label="B. Remind Text Messages"
+              %}
+              {% include text-field-row.html
+                  variant="checkbox-input"
+                  type="checkbox"
+                  name="website"
+                  label="C. Troop 370 Website"
+              %}
+            <div id="weekly_email_section" style="display:none;">
+              <p class="question">You indicated that you want your announcement to appear on the weekly emails.</p>
+              <p>A1. What is your announcement?</p>
+                {% include text-field-row.html
+                    variant="field-input"
+                    type="text"
+                    width="100%"
+                    name="weekly_email_announcement_title"
+                    label="Weekly Email Announcement Title"
+                %}
+                {% include text-field-row.html
+                    variant="textarea"
+                    rows="6"
+                    name="weekly_email_announcement"
+                    label="Weekly Email Announcement"
+                %}
+              <p class="question">A2. Do you have any images or documents related to your announcement? If so, attach them here. (optional)
+                <p>Attachment 1: <input type="file" name="file_1"></p>
+                <p>Attachment 2: <input type="file" name="file_2"></p>
+                <p>Attachment 3: <input type="file" name="file_3"></p>
+              <p class="question">A3. When should we send your announcment?</p>
+                {% include text-field-row.html
+                    variant="field-input"
+                    type="text"
+                    width="100%"
+                    name="email_date"
+                    label="Date range"
+                %}
+            </div>
+            <div id="remind_section" style="display:none;">
+              <p class="question">You indicated that you want your announcement to appear on a Remind text message.</p>
+              <p>B1. What is your announcement? (130 character limit)</p>
+                {% include text-field-row.html
+                    variant="textarea"
+                    rows="2"
+                    maxlength="130"
+                    name="remind_text_announcement"
+                    label="Remind Announcement"
+                %}
+            </div>
+            <div id="website_section" style="display:none;">
+              <p class="question">You indicated that you want your announcement to appear on the Troop website.</p>
+              <p>C1. The home page for the website utilises banner cards that direct users to important pages or announcements. Each card has a short title, a short subtitle (usually a date range), and a background image. Please provide that information for your announcement below.</p>
+                {% include text-field-row.html
+                    variant="field-input"
+                    type="text"
+                    width="100%"
+                    name="card_title"
+                    label="Short Announcement Title"
+                %}
+                {% include text-field-row.html
+                    variant="field-input"
+                    type="text"
+                    width="100%"
+                    name="card_subtitle"
+                    label="Short Announcement Subtitle"
+                %}
+                <p>Background image: <input type="file" name="card_background_image"></p>
+              <p class="question">C2. Clicking on the card will display your full announcement. What is your announcement?</p>
+                {% include text-field-row.html
+                    variant="textarea"
+                    rows="6"
+                    name="website_announcement"
+                    label="Website Announcement"
+                %}
+              <p class="question">C3. When should we send your announcment?</p>
+                {% include text-field-row.html
+                    variant="field-input"
+                    type="text"
+                    width="100%"
+                    name="website_announcement_date"
+                    label="Date range"
+                %}
+            </div>
+            <input type="hidden" name="_subject" value="Announcement form submitted">
+            <input type="hidden" name="_after" value="https://troop370atlanta.org/submission-received.html">
+            <input type="hidden" name="_honeypot" value="">
+            <input type="submit" value="Send" class="mdc-button mdc-button--raised standard-dark-button" style="padding:0 24px;margin: calc(var(--content-strip-elements-padding-between) + 20px) var(--content-strip-padding-x) var(--content-strip-elements-padding-between) var(--content-strip-padding-x);">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
