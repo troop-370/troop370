@@ -48,6 +48,11 @@ content-strip-3 heading {
     border-bottom: 0px;
   }
 }
+@media (max-width: 950px) {
+  .split50.files {
+    width: 100%;
+  }
+}
 
 /*contact*/
 .btn, .btn-large, .btn:focus, .btn-large:focus, .btn-floating:focus {

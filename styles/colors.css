@@ -59,6 +59,7 @@
   --table-row-hover-color: #003f871a;
   --table-heading_row-color: var(--mdc-theme-text-on-primary);
   --table-heading_row-background-color: var(--mdc-theme-primary);
+  --tmd-table-color_rgb: 0,0,0;
 }
 .top {
   --top-height: 60px;
@@ -167,6 +168,7 @@
     --table--row-odd-background: #303030;
     --table-row-hover-color: #8096cd1a;
     --table-heading_row-background-color: var(--mdc-theme-primary-darker);
+    --tmd-table-color_rgb: 255,255,255;
   }
   .top.light {
     --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);

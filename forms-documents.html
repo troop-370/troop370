@@ -15,63 +15,308 @@ mobile-theme: light
         <h3 class="size8">Forms &amp; Documents</h3>
       </div>
     </div>
-    <div class="content-strip">
+    <div class="content-strip" style="padding:0">
       <div class="container">
-        <div class="split50">
-          <div>
-            <h4>General Applications</h4>
-            <p><a href="src/documents/Merit Badge Counselor Application.pdf">Merit Badge Counselor Application</a></p>
-            <p><a href="https://www.scouting.org/resources/info-center/forms/">BSA Membership Forms</a></p>
-            <p><a href="src/documents/Youth Application Instructions.pdf">Youth Application Instructions</a></p>
-            <p><a href="src/documents/Adult Application Instructions.pdf">Adult Application Instructions</a></p>
+        <div class="split50 files" style="margin-bottom:-20px;">
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">General Applications</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Merit Badge Counselor Application.pdf"
+                  name="Merit Badge Counselor Application"
+                  date="14 Oct 2015"
+                  type="pdf"
+                  size="425 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="https://www.scouting.org/resources/info-center/forms/"
+                  name="BSA Membership Forms"
+                  date="—"
+                  type="url"
+                  size="—"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Youth Application Instructions.pdf"
+                  name="Youth Application Instructions"
+                  date="29 Sep 2016"
+                  type="pdf"
+                  size="18 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Adult Application Instructions.pdf"
+                  name="Adult Application Instructions"
+                  date="29 Sep 2016"
+                  type="pdf"
+                  size="19 KB"
+              %}
+            </table>
           </div>
-          <div>
-            <h4>Leadership Applications/Agreements</h4>
-            <p><a href="src/documents/leadership-applications/Troop 370 Senior Patrol Leader.docx">Senior Patrol Leader</a></p>
-            <p><a href="src/documents/leadership-applications/Troop 370 Assistant Senior Patrol Leader.docx">Assistant Senior Patrol Leader</a></p>
-            <p><a href="src/documents/leadership-applications/Troop 370 Patrol Leader.docx">Patrol Leader</a></p>
-            <p><a href="src/documents/leadership-applications/Troop 370 Quartermaster.docx">Quartermaster</a></p>
-            <p><a href="src/documents/leadership-applications/Troop 370 Instructor.docx">Instructor</a></p>
-            <p><a href="src/documents/leadership-applications/Troop 370 Outdoor Ethics Guide.docx">Outdoor Ethics Guide</a></p>
-            <p><a href="src/documents/leadership-applications/Troop 370 Webmaster.docx">Webmaster</a></p>
-            <p><a href="src/documents/Guidelines for Positions of Leadership.pdf">Guidelines for Positions of Leadership</a></p>
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">Leadership Applications/Agreements</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Senior Patrol Leader.docx"
+                  name="Senior Patrol Leader"
+                  date="13 Sep 2018"
+                  type="docx"
+                  size="46 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Assistant Senior Patrol Leader.docx"
+                  name="Assistant Senior Patrol Leader"
+                  date="13 Sep 2018"
+                  type="docx"
+                  size="46 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Patrol Leader.docx"
+                  name="Patrol Leader"
+                  date="13 Sep 2018"
+                  type="docx"
+                  size="43 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Quartermaster.docx"
+                  name="Quartermaster"
+                  date="13 Sep 2018"
+                  type="docx"
+                  size="101 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Instructor.docx"
+                  name="Instructor"
+                  date="26 Sep 2018"
+                  type="docx"
+                  size="15 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Outdoor Ethics Guide.docx"
+                  name="Outdoor Ethics Guide"
+                  date="13 Sep 2018"
+                  type="docx"
+                  size="8.3 MB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/leadership-applications/Troop 370 Webmaster.docx"
+                  name="Webmaster"
+                  date="13 Sep 2018"
+                  type="docx"
+                  size="7.2 MB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Guidelines for Positions of Leadership.pdf"
+                  name="Guidelines for Positions of Leadership"
+                  date="7 Nov 2017"
+                  type="pdf"
+                  size="91 KB"
+              %}
+            </table>
           </div>
-          <div>
-            <h4>Health & Medical Forms</h4>
-            <p><a href="src/documents/Parts A, B, and C.pdf">Parts A, B, and C</a></p>
-            <p><a href="src/documents/Part D.pdf">Part D (Only for High Adventure)</a></p>
-            <p><a href="https://www.scouting.org/health-and-safety/ahmr/">BSA Health & Safety Page</a></p>
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">Health &amp; Medical Forms</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Parts A, B, and C.pdf"
+                  name="Parts A, B, and C"
+                  date="3 May 2018"
+                  type="pdf"
+                  size="1.4 MB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Part D.pdf"
+                  name="Part D (Only for High Adventure)"
+                  date="26 Jan 2018"
+                  type="pdf"
+                  size="364 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="https://www.scouting.org/health-and-safety/ahmr/"
+                  name="BSA Health & Safety Page"
+                  date="—"
+                  type="url"
+                  size="—"
+              %}
+            </table>
           </div>
         </div>
-        <div class="split50">
-          <div>
-            <h4>Packing Lists</h4>
-            <p><a href="src/documents/Harry's Packing List.pdf">Harry's Packing List</a></p>
-            <p><a href="src/documents/Harry's Packing List for FallSpring Backpacking.pdf">Harry's Packing List for Fall/Spring Backpacking</a></p>
-            <p><a href="http://www.atlantabsa.org/get-ready/what-to-bring/57797">Woodruff Summer Camp Packing List</a></p>
+        <div class="split50 files">
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">Packing Lists</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Harry's Packing List.pdf"
+                  name="Harry's Packing List"
+                  date="∞"
+                  type="pdf"
+                  size="461 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Harry's Packing List for FallSpring Backpacking.pdf"
+                  name="Harry's Packing List for Fall/Spring Backpacking"
+                  date="29 Jan 2016"
+                  type="pdf"
+                  size="12 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="http://www.atlantabsa.org/get-ready/what-to-bring/57797"
+                  name="Woodruff Summer Camp Packing List"
+                  date="—"
+                  type="url"
+                  size="—"
+              %}
+            </table>
           </div>
-          <div>
-            <h4>Campout Planning Forms</h4>
-            <p><a href="src/documents/Cooking Patrol Roster Sheet (Yellow Sheet).docx">Cooking Patrol Roster Sheet (Yellow Sheet)</a></p>
-            <p><a href="src/documents/Campout Planning Form.pdf">Campout Planning Form</a></p>
-            <p><a href="src/documents/Meal Planning Guidebook.pdf">Meal Planning Guidebook</a></p>
-            <p><a href="src/documents/Campout Agenda Outline.docx">Campout Agenda Outline</a></p>
-            <p><a href="src/documents/Campfie Program Planner.pdf">Campfire Program Planner</a></p>
-            <p><a href="src/documents/Patrol Shopper Reimbursement.pdf">Patrol Shopper Reimbursement</a></p>
-            <p><a href="src/documents/Outdoor Ethics Guide 2017.pdf">Outdoor Ethics Guide 2017</a></p>
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">Campout Planning Forms</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Cooking Patrol Roster Sheet (Yellow Sheet).docx"
+                  name="Cooking Patrol Roster Sheet (Yellow Sheet)"
+                  date="18 Sep 2013"
+                  type="docx"
+                  size="49 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Campout Planning Form.pdf"
+                  name="Campout Planning Form"
+                  date="30 Oct 2017"
+                  type="pdf"
+                  size="467 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Meal Planning Guidebook.pdf"
+                  name="Meal Planning Guidebook"
+                  date="∞"
+                  type="pdf"
+                  size="620 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Campout Agenda Outline.docx"
+                  name="Campout Agenda Outline"
+                  date="18 Sep 2013"
+                  type="docx"
+                  size="8.9 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Campfire Program Planner.pdf"
+                  name="Campfie Program Planner"
+                  date="01 Jan 1993"
+                  type="pdf"
+                  size="11 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Patrol Shopper Reimbursement.pdf"
+                  name="Patrol Shopper Reimbursement"
+                  date="29 Sep 2016"
+                  type="pdf"
+                  size="188 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/Outdoor Ethics Guide 2017.pdf"
+                  name="Outdoor Ethics Guide Handbook"
+                  date="01 Jan 2017"
+                  type="pdf"
+                  size="512 KB"
+              %}
+            </table>
           </div>
-          <div>
-            <h4>Patrol Uniform Inspection</h4>
-            <p><a href="src/documents/[Blank]Patrol.docx">Patrol Uniform Inspection Form</a></p>
-            <p><a href="src/documents/[Example]Patrol.docx">Example Form</a></p>
-            <p><a href="src/documents/How Scores Are Calculated.docx">How Scores Are Calculated</a></p>
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">Patrol Uniform Inspection</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/[Blank]Patrol.docx"
+                  name="Patrol Uniform Inspection Form"
+                  date="08 Aug 2018"
+                  type="docx"
+                  size="39 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/[Example]Patrol.docx"
+                  name="Example Form"
+                  date="02 Nov 2016"
+                  type="docx"
+                  size="44 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/How Scores Are Calculated.docx"
+                  name="How Scores Are Calculated"
+                  date="11 Apr 2018"
+                  type="docx"
+                  size="16 KB"
+              %}
+            </table>
           </div>
-          <div>
-            <h4>Additional Documents</h4>
-            <p><a href="src/documents/Troop Resource Survey.pdf">Troop Resource Survey</a></p>
-            <p><a href="src/documents/New Parent Handbook.pdf">New Parent Handbook</a></p>
-            <p><a href="src/documents/MSR Whisperlite International Instructions.pdf">MSR Whisperlite International Instructions</a></p>
-            <p><a href="src/documents/MSR Whisperlite Universal Instructions.pdf">MSR Whisperlite Universal Instructions</a></p>
+          <div class="tmd-table-wrapper">
+            <h4 class="tmd-table-header">Additional Documents</h4>
+            <table class="tmd-table">
+              {% include docs-table.html part="header" %}
+              {% include docs-table.html
+                  part="row"
+                  link="Troop Resource Survey.pdf"
+                  name="Troop Resource Survey"
+                  date="01 Jan 1994"
+                  type="pdf"
+                  size="26 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/New Parent Handbook.pdf"
+                  name="New Parent Handbook"
+                  date="∞"
+                  type="pdf"
+                  size="288 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/MSR Whisperlite International Instructions.pdf"
+                  name="MSR Whisperlite International Instructions"
+                  date="19 May 2018"
+                  type="pdf"
+                  size="922 KB"
+              %}
+              {% include docs-table.html
+                  part="row"
+                  link="src/documents/MSR Whisperlite Universal Instructions.pdf"
+                  name="MSR Whisperlite Universal Instructions"
+                  date="19 May 2018"
+                  type="pdf"
+                  size="2.6 MB"
+              %}
+            </table>
           </div>
         </div>
       </div>
