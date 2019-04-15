@@ -2,3 +2,5 @@ title: BSA Troop 370
 plugins:
   - jekyll-sitemap
   - jekyll-redirect-from
+sass:
+    sass_dir: _sass
