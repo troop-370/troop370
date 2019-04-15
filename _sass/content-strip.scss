@@ -1,0 +1,30 @@
+.flex-container {
+  display: flex;
+  justify-content: center;
+}
+.content-strip {
+  background-color: $mdc-theme-background;
+  color: $mdc-theme-text-on-background;
+  .flex-item {
+    width: $content-width;
+    padding: $content-strip-padding-y $content-strip-padding-x;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    & + p {
+      margin: $content-strip-item-margin-y $content-strip-item-margin-x;
+    }
+  }
+  &--primary {
+    background-color: $mdc-theme-primary;
+    color: $mdc-theme-text-on-primary;
+  }
+  &--secondary {
+    background-color: $mdc-theme-secondary;
+    color: $mdc-theme-text-on-secondary;
+  }
+  &--extra-padding {
+    .flex-item {
+      padding: $content-strip-padding-y-extra $content-strip-padding-x;
+    }
+  }
+}

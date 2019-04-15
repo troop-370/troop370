@@ -1,0 +1,40 @@
+$heading-font: "IBM Plex Sans", "Roboto", sans-serif;
+$body-font: "Roboto", sans-serif;
+$content-width: 1200px;
+$mdc-theme-primary: #003f87;
+$mdc-theme-primary-lighter: #134885;
+$mdc-theme-primary-light: #4969b7;
+$mdc-theme-primary-lightest: #8096cd;
+$mdc-theme-primary-lightest-most: #aac0eb;
+$mdc-theme-primary-darker: #0f3663;
+$mdc-theme-primary-dark: #001a59;
+$mdc-theme-secondary: #bc1b2d;
+$mdc-theme-secondary-light: #f55656;
+$mdc-theme-secondary-darker: #911321;
+$mdc-theme-secondary-dark: #840005;
+$mdc-theme-background: #ffffff;
+$mdc-theme-text-on-background: #1f1f1f;
+$mdc-theme-disabled-text-on-background: #0000008a;
+$mdc-theme-primary_accent_text-on-background: $mdc-theme-primary-lighter;
+$mdc-theme-text-on-primary: #e0e0e0;
+$mdc-theme-text-on-secondary: #e0e0e0;
+$mdc-theme-error: #b00020;
+$content-strip-padding-y: 35px;
+$content-strip-padding-y-extra: 80px;
+$content-strip-padding-x: 10px;
+$content-strip-item-margin-y: 5px;
+$content-strip-item-margin-x: 0;
+
+html, body, h1, h2, h3, h4, h5, h6, p {
+  padding: 0;
+  margin: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading-font;
+  font-weight: 500;
+}
+p {
+  font-family: $body-font;
+  font-weight: 400;
+  line-height: 1.5;
+}
