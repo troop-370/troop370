@@ -1,0 +1,51 @@
+$mdc-typography-font-family: Roboto, sans-serif;
+$mdc-typography-headline-font-family: "IBM Plex Sans", Roboto, sans-serif;
+$mdc-typography-styles-headline1: (
+  font-family: $mdc-typography-headline-font-family,
+  font-weight: 500
+);
+$mdc-typography-styles-headline2: (
+  font-family: $mdc-typography-headline-font-family,
+  font-weight: 500
+);
+$mdc-typography-styles-headline3: (
+  font-family: $mdc-typography-headline-font-family,
+  font-weight: 500
+);
+$mdc-typography-styles-headline4: (
+  font-family: $mdc-typography-headline-font-family,
+  font-weight: 500
+);
+$mdc-typography-styles-headline5: (
+  font-family: $mdc-typography-headline-font-family,
+  font-weight: 500
+);
+$mdc-typography-styles-headline6: (
+  font-family: $mdc-typography-headline-font-family,
+  font-weight: 500
+);
+$content-width: 1200px;
+
+$mdc-theme-primary: #003f87;
+$mdc-theme-on-primary: if(mdc-theme-contrast-tone($mdc-theme-primary) == "dark", #000, #fff) !default;
+$mdc-theme-secondary: #bc1b2d;
+$mdc-theme-on-secondary: if(mdc-theme-contrast-tone($mdc-theme-secondary) == "dark", #000, #fff) !default;
+$mdc-theme-background: #ffffff;
+$mdc-theme-surface: #fff !default;
+$mdc-theme-on-surface: if(mdc-theme-contrast-tone($mdc-theme-surface) == "dark", #000, #fff) !default;
+$mdc-theme-error: #b00020 !default;
+$mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #000, #fff) !default;
+
+$content-strip-heading-headline-size: (
+  h1: headline4,
+  h2: headline5,
+  h3: headline6,
+  h4: headline6,
+  h5: headline6,
+  h6: headline6
+);
+$content-strip-padding-y: 35px;
+$content-strip-padding-y-extra: 80px;
+$content-strip-padding-x: 10px;
+$content-strip-item-margin-y: 5px;
+$content-strip-item-margin-x: 0;
