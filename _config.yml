@@ -1,4 +1,11 @@
 title: BSA Troop 370
 plugins:
+  - jekyll-github-metadata
   - jekyll-sitemap
   - jekyll-redirect-from
+  - jekyll-relative-links
+sass:
+  load_paths:
+    - _scss
+    - node_modules
+exclude: [vendor]
