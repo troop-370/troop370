@@ -1,0 +1,19 @@
+---
+---
+@import "mixins";
+@import "theme";
+@import "@material/typography/mdc-typography";
+@import "@material/button/mdc-button";
+//@import "fonts";
+@import "content-strip";
+
+html, body, h1, h2, h3, h4, h5, h6, p {
+  padding: 0;
+  margin: 0;
+}
+p {
+  @include mdc-typography(body1);
+}
+.mdc-button {
+  @include mdc-button-shape-radius(0px);
+}
