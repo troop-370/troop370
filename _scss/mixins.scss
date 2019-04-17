@@ -1,0 +1,5 @@
+@mixin button-color($color) {
+  @include mdc-button-ink-color($color);
+  @include mdc-button-outline-color($color);
+  @include mdc-states($color);
+}
