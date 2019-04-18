@@ -1,0 +1,125 @@
+.topnav {
+  display: flex;
+  justify-content: center;
+  background: #f7f7f7;
+  border-bottom: 1px solid lightgray;
+  padding: 0 $content-strip-padding-x;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  .flex-item {
+    width: $content-width;
+  }
+  #topnav-title {
+    font-family: $mdc-typography-headline-font-family;
+    color: $mdc-theme-primary;
+    font-size: 20px;
+    font-weight: 500;
+    width: 286px;
+  }
+  #main-nav {
+    list-style-type: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    height: 56px;
+    li {
+      display: inline-flex;
+      a {
+        font-family: $mdc-typography-headline-font-family;
+        color: $mdc-theme-on-background;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 16px;
+        padding: 14px 15.3px;
+        @include mdc-ripple-surface;
+        @include mdc-ripple-radius-bounded;
+        @include mdc-states($mdc-theme-primary);
+        overflow:hidden;
+      }
+    }
+    .dropdown {
+      > ul {
+        display: none;
+        position: absolute;
+        padding-inline-start: 0;
+        margin-top: 54px;
+        background: $mdc-theme-background;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        > li {
+          display: flex;
+          > a {
+            width: 100%;
+          }
+        }
+      }
+      &:hover ul {
+        display: block;
+      }
+    }
+  }
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: [title] 300px [navigation] auto;
+  grid-template-rows: 56px;
+}
+.grid-item-title {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+}
+.grid-item-navigation {
+  justify-self: end;
+}
+@media (max-width: 1160px) and (min-width: 600px) {
+  .topnav #main-nav li a {
+    padding: 14px 12px;
+  }
+  @media (max-width: 1110px) {
+    .topnav #main-nav li a {
+      padding: 14px 8px;
+    }
+    @media (max-width: 1040px) {
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: [title] 56px [navigation] 56px;
+      }
+      .grid-item-navigation {
+        justify-self: start;
+      }
+      .topnav #main-nav {
+        margin-left: -8px;
+      }
+      @media (max-width: 740px) {
+        .topnav #main-nav li a {
+          font-size: 15px;
+        }
+        .hide-small {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.menu-icon {
+  display: none;
+  margin-left: -6px;
+  margin-right: 8px;
+  fill: $mdc-theme-primary;
+}
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+  .grid-item-navigation {
+    display: none;
+  }
+  .menu-icon {
+    display: inline-block;
+  }
+}
