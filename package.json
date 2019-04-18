@@ -13,6 +13,9 @@
     "url": "https://github.com/troop-370/troop370/issues"
   },
   "homepage": "https://github.com/troop-370/troop370#readme",
+  "scripts": {
+    "build-js": "webpack -p"
+  },
   "dependencies": {
     "@material/button": "^1.1.1",
     "@material/card": "^1.1.1",
@@ -27,5 +30,12 @@
     "@material/textfield": "^1.1.1",
     "@material/theme": "^1.1.0",
     "@material/typography": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.5"
   }
 }
