@@ -8,4 +8,8 @@ sass:
   load_paths:
     - _scss
     - node_modules
-exclude: [vendor]
+exclude:
+  - vendor
+  - node_modules
+include:
+  - node_modules/@material
