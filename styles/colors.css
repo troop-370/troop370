@@ -54,6 +54,12 @@
   --signin-background: #eeeeee;
   --signin-text-color: var(--mdc-theme-text-on-background);
   --signin-light-text-color: #333333;
+  --table-row-even-background: #e9e9e9;
+  --table--row-odd-background: #f7f7f7;
+  --table-row-hover-color: #003f871a;
+  --table-heading_row-color: var(--mdc-theme-text-on-primary);
+  --table-heading_row-background-color: var(--mdc-theme-primary);
+  --tmd-table-color_rgb: 0,0,0;
 }
 .top {
   --top-height: 60px;
@@ -73,13 +79,13 @@
   --topnav-dropdown-a-padding-x: 16px;
   --topnav-dropdown-a-padding-y: 12px;
   --topnav-dropdown-bg-color: #f7f7f7;
+  --topnav-dropdown-text-color: #222222;
   --topnav-dropdown-ripple-color: #003f87;
 }
 .top.colorful, .top.dark {
   --titlebar-heading-color: #e0e0e0;
   --menu-icon-fill: #e0e0e0;
   --topnav-text-color: #e0e0e0;
-  --topnav-dropdown-text-color: #222222;
   --topnav-currentpage-color: #e0e0e0;
   --topnav-ripple-color: #ffffff;
 }
@@ -94,7 +100,6 @@
   --menu-icon-fill: var(--mdc-theme-primary);
   --topnav-bg-color: var(--mdc-theme-background);
   --topnav-text-color: var(--mdc-theme-text-on-background);
-  --topnav-dropdown-text-color: #222222;
   --topnav-currentpage-color: var(--mdc-theme-primary);
   --topnav-ripple-color: #003f87;
 }
@@ -127,8 +132,9 @@
     --topnav-dropdown-ripple-color: #ffffff;
   }
 }
-/*@media (prefers-color-scheme: dark) {*/
-  html.dark {
+
+@media (prefers-color-scheme: dark) {
+  :root {
     --mdc-theme-background: #242424;
     --mdc-theme-text-on-background: #e0e0e0;
     --mdc-theme-disabled-text-on-background: #e0e0e08a;
@@ -158,22 +164,28 @@
     --signin-accent-color: var(--mdc-theme-primary-lightest);
     --signin-background: #202020;
     --signin-light-text-color: #e0e0e08a;
+    --table-row-even-background: #363636;
+    --table--row-odd-background: #303030;
+    --table-row-hover-color: #8096cd1a;
+    --table-heading_row-background-color: var(--mdc-theme-primary-darker);
+    --tmd-table-color_rgb: 255,255,255;
   }
-  html.dark .top.light {
+  .top.light {
     --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
     --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
     --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
+    --topnav-ripple-color: #ffffff;
   }
-  html.dark .top {
-    --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
+  .top {
     --topnav-dropdown-bg-color: #303030;
+    --topnav-dropdown-text-color: var(--mdc-theme-text-on-background);
     --topnav-dropdown-ripple-color: #ffffff;
   }
   @media (max-width: 600px) {
-    html.dark .top.mobile-light {
+    .top.mobile-light {
       --titlebar-heading-color: var(--mdc-theme-primary-lightest-most);
       --menu-icon-fill: var(--mdc-theme-primary-lightest-most);
       --topnav-currentpage-color: var(--mdc-theme-primary-lightest-most);
     }
   }
-/*}*/
+}

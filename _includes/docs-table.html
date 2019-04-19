@@ -1,0 +1,17 @@
+{% if include.part == 'header' %}
+<tr class="tmd-table-header_row">
+  <th class="th-name">File name</th>
+  <th class="th-date">Last updated</th>
+  <th class="th-type">Type</th>
+  <th class="th-size">Size</th>
+</tr>
+{% else %}{% endif %}
+
+{% if include.part == 'row' %}
+<tr class="tmd-table-row" onclick="window.location='{{ include.link }}'">
+  <td>{{ include.name }}</td>
+  <td>{{ include.date }}</td>
+  <td>{{ include.type }}</td>
+  <td>{{ include.size }}</td>
+</tr>
+{% else %}{% endif %}
