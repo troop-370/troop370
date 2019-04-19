@@ -243,6 +243,9 @@ table:not(.tmd-table) th, table:not(.tmd-table) td {
 a {
   color: inherit;
 }
+a.mdc-button.button-adjust {
+  margin-left: -8px;
+}
 p, ol, ul {
   color: var(--mdc-theme-text-on-background)
 }
