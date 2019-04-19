@@ -1,0 +1,78 @@
+.collapsible {
+  border-top: 1px solid $collapsible-border-color;
+  border-right: 1px solid $collapsible-border-color;
+  border-left: 1px solid $collapsible-border-color;
+  margin: $element-top-margin 0 $element-bottom-margin 0;
+}
+
+.collapsible-header {
+  &:focus {
+    outline: 0
+  }
+
+  display: flex;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
+  padding: 1rem;
+  background-color: $collapsible-header-color;
+  border-bottom: 1px solid $collapsible-border-color;
+
+  i {
+    width: 2rem;
+    font-size: 1.6rem;
+    display: inline-block;
+    text-align: center;
+    margin-right: 1rem;
+  }
+}
+.keyboard-focused .collapsible-header:focus {
+  background-color: #eee;
+}
+
+.collapsible-body {
+  display: none;
+  border-bottom: 1px solid $collapsible-border-color;
+  box-sizing: border-box;
+  padding: 2rem;
+}
+
+// Sidenav collapsible styling
+.sidenav,
+.sidenav.fixed {
+
+  .collapsible {
+    border: none;
+    box-shadow: none;
+
+    li { padding: 0; }
+  }
+
+  .collapsible-header {
+    background-color: transparent;
+    border: none;
+    line-height: inherit;
+    height: inherit;
+    padding: 0 $sidenav-padding;
+
+    &:hover { background-color: rgba(0,0,0,.05); }
+    i {
+      line-height: inherit;
+      &.drop-arrow {
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
+
+  .collapsible-body {
+    border: 0;
+    background-color: $collapsible-header-color;
+
+    li a {
+      padding: 0 (7.5px + $sidenav-padding)
+               0 (15px + $sidenav-padding);
+    }
+  }
+
+}
