@@ -11,5 +11,7 @@ sass:
 exclude:
   - vendor
   - node_modules
+  - js/main(source).js
+  - js/cibuild
 include:
   - node_modules/@material
