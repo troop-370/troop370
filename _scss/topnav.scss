@@ -34,7 +34,7 @@
         text-transform: uppercase;
         font-weight: 700;
         font-size: 16px;
-        padding: 14px 15.3px;
+        padding: 18px 15.3px;
         @include mdc-ripple-surface;
         @include mdc-ripple-radius-bounded;
         @include mdc-states($mdc-theme-primary);
@@ -53,6 +53,7 @@
           display: flex;
           > a {
             width: 100%;
+            padding: 14px;
           }
         }
       }
@@ -77,11 +78,11 @@
 }
 @media (max-width: 1160px) and (min-width: 600px) {
   .topnav #main-nav li a {
-    padding: 14px 12px;
+    padding: 18px 12px;
   }
   @media (max-width: 1110px) {
     .topnav #main-nav li a {
-      padding: 14px 8px;
+      padding: 18px 8px;
     }
     @media (max-width: 1040px) {
       .grid-container {
