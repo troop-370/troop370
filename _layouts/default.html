@@ -125,7 +125,9 @@
         </div>
       </div>
     </div>
-    {{ content }}
+    <div class="page-content">
+      {{ content }}
+    </div>
     <!--main script-->
     <script src="./js/main.js"></script>
     <!--materialize script for sidenav-->
@@ -143,6 +145,14 @@
         }
       }
       window.onload = sidenav;
+    </script>
+    <!-- pjax navigation -->
+    <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+    <script type="text/javascript">
+      var pjax = new Pjax({
+        elements: "a", // default is "a[href], form[action]"
+        selectors: [".page-content"]
+      })
     </script>
   </body>
 </html>
