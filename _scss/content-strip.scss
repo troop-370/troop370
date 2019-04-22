@@ -1,18 +1,29 @@
-.flex-container {
-  display: flex;
-  justify-content: center;
-}
 .content-strip {
   padding: $content-strip-padding-y $content-strip-padding-x;
+  display: flex;
+  justify-content: center;
   .flex-item {
     width: $content-width;
   }
-  h1, h2, h3, h4, h5, h6, p, .mdc-button {
-    margin: $content-strip-item-margin-y $content-strip-item-margin-x;
-    line-height: 1.5 !important;
+  h1, h2, h3, h4, h5, h6 {
+    &, p, .mdc-button {
+      margin: $content-strip-item-margin-y $content-strip-item-margin-x;
+      line-height: 1.5 !important;
+    }
+    &+p {
+      margin: calc(2 * #{$content-strip-item-margin-y}) $content-strip-item-margin-x;
+    }
   }
   p, .mdc-button {
-    margin: calc(2 * #{$content-strip-item-margin-y}) $content-strip-item-margin-x
+    margin: calc(3 * #{$content-strip-item-margin-y}) $content-strip-item-margin-x;
+  }
+  ul {
+    list-style-type: disc;
+    padding-inline-start: 20px;
+  }
+  ol {
+    list-style-type: decimal;
+    padding-inline-start: 20px;
   }
   .mdc-button {
     @include mdc-button-outline-width(1px);
