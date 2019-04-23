@@ -1,0 +1,70 @@
+---
+layout: default
+title: Contact
+---
+<div class="content-strip content-strip--primary content-strip--extra-padding content-strip--center">
+  <div class="flex-item">
+    <h1>Contact Troop 370</h1>
+    <p>Use the contact form below to get in contact with a representative from Troop 370. We do our best to respond quickly to any questions you may have. If you are having issues with the website or need the password, <a href="/contact-webmaster">contact a webmaster</a>.</p>
+  </div>
+</div>
+<div class="content-strip">
+  <div class="flex-item">
+    <form name="contact-general" method="POST" action="https://formspree.io/jackebuehner@gmail.com">
+      {% include text-field-row.html
+        variant="field-input"
+        type="text"
+        required="yes"
+        width="100%"
+        name="First_Name"
+        label="First name"
+      %}
+      {% include text-field-row.html
+        variant="field-input"
+        type="text"
+        required="yes"
+        width="100%"
+        name="Last_Name"
+        label="Last name"
+      %}
+      {% include text-field-row.html
+        variant="field-input"
+        type="email"
+        required="yes"
+        width="100%"
+        name="_replyto"
+        label="Email"
+      %}
+      {% include text-field-row.html
+        variant="field-input"
+        type="text"
+        width="100%"
+        name="Phone"
+        label="Phone"
+      %}
+      {% include text-field-row.html
+        variant="field-input"
+        type="text"
+        width="100%"
+        name="_subject"
+        label="Subject"
+      %}
+      {% include text-field-row.html
+        variant="field-input"
+        type="text"
+        required="yes"
+        width="100%"
+        height="200px"
+        name="message"
+        label="Message"
+      %}
+      <button class="mdc-button mdc-button--raised" type="submit" name="action">
+        <span class="mdc-button__label">Submit</span>
+      </button>
+      <meta name="referrer" content="origin"/>
+      <input type="hidden" name="_next" value="submission-received.html"/>
+      <input type="hidden" name="_format" value="plain"/>
+      <input type="hidden" name="_cc" value="hgevans@bellsouth.net,iconherder@gmail.com"/>
+    </form>
+  </div>
+</div>

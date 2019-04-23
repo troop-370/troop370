@@ -25,6 +25,18 @@
     list-style-type: decimal;
     padding-inline-start: 20px;
   }
+  a {
+    color: inherit;
+    &:hover {
+      background-color: #80808033;
+    }
+    &:active {
+      background-color: #80808066;
+    }
+  }
+  .mdc-text-field {
+    margin: $content-strip-item-margin-y 0;
+  }
   .mdc-button {
     @include mdc-button-outline-width(1px);
     margin-right: 6px;
@@ -61,6 +73,12 @@
   }
   &--no-bottom-padding {
     padding: $content-strip-padding-y $content-strip-padding-x 0;
+  }
+  &--reduced-padding {
+    padding: $content-strip-padding-y-reduced $content-strip-padding-x;
+  }
+  &--center {
+    text-align: center;
   }
   h1 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h1));
