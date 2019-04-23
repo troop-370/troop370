@@ -6,7 +6,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="./css/main.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>{{ page.title }} | {{ site.title }}</title>
+    <title class="page-title">{{ page.title }} | {{ site.title }}</title>
   </head>
   <body>
     <ul id="slide-out" class="sidenav">
@@ -127,9 +127,9 @@
     </div>
     <div class="page-content">
       {{ content }}
+      <!--imported mdc script-->
+      <script src="./js/main.js"></script>
     </div>
-    <!--main script-->
-    <script src="./js/main.js"></script>
     <!--materialize script for sidenav-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- Initialize sidenav  -->
@@ -146,12 +146,21 @@
       }
       window.onload = sidenav;
     </script>
-    <!-- pjax navigation -->
+    <!-- pjax navigation with loading bar -->
     <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+    <script src="/js/topbar.min.js"></script>
     <script type="text/javascript">
       var pjax = new Pjax({
         elements: "a", // default is "a[href], form[action]"
-        selectors: [".page-content"]
+        selectors: [".page-content", ".page-title"]
+      })
+      document.addEventListener('pjax:send', topbar.show)
+      document.addEventListener('pjax:complete', topbar.hide)
+      topbar.config({
+        barColors: {
+          '0':'rgba(0, 63, 135, 0.3)'
+        },
+        shadowBlur: 0
       })
     </script>
   </body>
