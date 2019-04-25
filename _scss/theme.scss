@@ -24,6 +24,10 @@ $mdc-typography-styles-headline6: (
   font-family: $mdc-typography-headline-font-family,
   font-weight: 500
 );
+$mdc-typography-styles-button: (
+  font-family: $mdc-typography-font-family,
+  font-weight: 600
+);
 $content-width: 1200px;
 
 $mdc-theme-primary: #003f87;

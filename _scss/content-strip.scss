@@ -44,6 +44,9 @@
       margin-right: 0;
     }
   }
+  .mdc-button:not(.mdc-button--outlined) {
+    margin: 0 0 0 -15px;
+  }
   &--primary {
     background-color: $mdc-theme-primary;
     color: $mdc-theme-on-primary;
@@ -80,13 +83,13 @@
   &--center {
     text-align: center;
   }
-  h1 {
+  h1, .mdc-typography--headline4 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h1));
   }
-  h2 {
+  h2, .mdc-typography--headline5 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h2));
   }
-  h3 {
+  h3, .mdc-typography--headline6 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h3));
   }
   h4 {
