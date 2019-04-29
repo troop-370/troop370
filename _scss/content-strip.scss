@@ -74,11 +74,14 @@
   &--extra-padding {
     padding: $content-strip-padding-y-extra $content-strip-padding-x;
   }
-  &--no-bottom-padding {
-    padding: $content-strip-padding-y $content-strip-padding-x 0;
-  }
   &--reduced-padding {
     padding: $content-strip-padding-y-reduced $content-strip-padding-x;
+  }
+  &--min-padding {
+    padding: $content-strip-padding-y-min $content-strip-padding-x;
+  }
+  &--no-bottom-padding {
+    padding-bottom: 0;
   }
   &--center {
     text-align: center;
@@ -100,5 +103,15 @@
   }
   h6 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h6));
+  }
+}
+.col-1, .col-2 {
+  float: left;
+  width: 50%;
+  .content-strip {
+    justify-content: flex-start;
+    .flex-item {
+      width: unset;
+    }
   }
 }
