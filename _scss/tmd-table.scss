@@ -1,0 +1,76 @@
+.tmd-table-wrapper {
+  border: 1px solid $tmd-table-color,$tmd-table-border-opacity;
+  border-radius: 3px;
+  margin: $content-strip-padding-x $content-strip-padding-x;
+}
+.tmd-table-wrapper .tmd-table-header {
+  font-family: "IBM Plex Sans", "Roboto", sans-serif;
+  font-size: $tmd-table-header-font-size;
+  line-height: $tmd-table-header-height !important;
+  font-weight: $tmd-table-header-font-weight;
+  padding: 0 0 0 $tmd-table-outside_cell-padding;
+  color: rgba($tmd-table-color, $tmd-table-header-text-opacity)
+}
+.tmd-table {
+  font-family: "Roboto", sans-serif;
+  margin: 0 auto;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.tmd-table-row {
+  height: $tmd-table-row-height;
+  font-size: $tmd-table-row-font-size;
+  border-bottom: 1px solid rgba($tmd-table-color,$tmd-table-row-border-opacity);
+  color: rgba($tmd-table-color, $tmd-table-row-text-opacity)
+}
+.tmd-table-row:last-of-type {
+  border-bottom: none;
+}
+.tmd-table-header_row {
+  font-family: "Roboto", sans-serif;
+  height: $tmd-table-row-height;
+  font-size: $tmd-table-row-font-size;
+  border-bottom: 1px solid rgba($tmd-table-color,$tmd-table-row-border-opacity);
+  color: rgba($tmd-table-color, $tmd-table-header_row-text-opacity)
+}
+.tmd-table-header_row th {
+  font-weight: $tmd-table-header_row-font-weight;
+  text-align: $tmd-table-header_row-text-align;
+}
+.tmd-table-wrapper tr[onclick] {
+  cursor: pointer;
+  transition: background-color 0.15s linear;
+}
+.tmd-table-wrapper tr[onclick]:hover {
+  background-color: rgba($tmd-table-row-hover-color, 0.08);
+  transition: none;
+}
+.tmd-table-wrapper tr[onclick]:hover:active {
+  background-color: rgba($tmd-table-row-hover-color, 0.16);
+  transition: background-color 0.15s linear;
+}
+.tmd-table-wrapper th, .tmd-table-wrapper td {
+  padding: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tmd-table-wrapper th:first-of-type, .tmd-table-wrapper td:first-of-type {
+  padding-left: $tmd-table-outside_cell-padding;
+}
+.tmd-table-wrapper th:last-of-type, .tmd-table-wrapper td:last-of-type {
+  padding-right: $tmd-table-outside_cell-padding;
+}
+.th-name {
+  width: 52%;
+}
+.th-date {
+  width: 24%
+}
+.th-type {
+  width: 12%;
+}
+.th-size {
+  width: 12%;
+}
