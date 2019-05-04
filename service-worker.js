@@ -1,6 +1,6 @@
 var APP_PREFIX = "troop370_";
-var DATE = "28apr2019_"; // update the date and time every time the website is updated (or the content will not update on PWAs)
-var TIME = "1256";
+var DATE = "4may2019_"; // update the date and time every time the website is updated (or the content will not update on PWAs)
+var TIME = "1616";
 var CACHE_NAME = APP_PREFIX + DATE + TIME;
 var URLS = [
   "./index.html?utm_source=homescreen",
