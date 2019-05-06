@@ -88,7 +88,7 @@ $tmd-table-header-height: 64px;
 $tmd-table-row-font-size: 14px;
 $tmd-table-row-height: 48px;
 $tmd-table-color: #000000;
-$tmd-table-row-hover-color: var($tmd-table-color);
+$tmd-table-row-hover-color: $tmd-table-color;
 $tmd-table-header_row-font-weight: 500;
 $tmd-table-header_row-text-align: left;
 $tmd-table-outside_cell-padding: 16px;
