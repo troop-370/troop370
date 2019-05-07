@@ -1,0 +1,27 @@
+<iframe src="{{ include.src }}" class="general-iframe"></iframe>
+
+<style media="screen">
+  html {
+    overflow: hidden;
+  }
+  .page-content {
+    overflow: hidden;
+  }
+  .general-iframe {
+    width: 100%;
+    height: calc(100vh + 4px);
+    border: none;
+    margin: -8px 0 0 0;
+  }
+  @media (max-width: 1040px) and (min-width: 600px) {
+    .general-iframe {
+      height: calc(100vh - 52px);
+    }
+  }
+  @media (max-width: 750px) {
+    .general-iframe {
+      width: calc(100% + 27px);
+      margin: -8px 0px 0 -5px;
+    }
+  }
+</style>
