@@ -2,6 +2,8 @@
   padding: $content-strip-padding-y $content-strip-padding-x;
   display: flex;
   justify-content: center;
+  background-color: $mdc-theme-background;
+  color: $mdc-theme-on-background;
   .flex-item {
     width: $content-width;
   }
@@ -48,7 +50,7 @@
     margin: 0 0 0 -15px;
   }
   &--primary {
-    background-color: $mdc-theme-primary;
+    background-color: $content-strip-primary-background;
     color: $mdc-theme-on-primary;
     .mdc-button {
       @include button-color($mdc-theme-on-primary);
@@ -59,7 +61,7 @@
     }
   }
   &--secondary {
-    background-color: $mdc-theme-secondary;
+    background-color: $content-strip-secondary-background;
     color: $mdc-theme-on-secondary;
     .mdc-button {
       @include button-color($mdc-theme-on-secondary);

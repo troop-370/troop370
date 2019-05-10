@@ -66,7 +66,7 @@ ul {
       line-height: $sidenav-line-height;
       margin: 0 calc($sidenav-padding - 6px) 0 0;
       width: 2rem;
-      color: rgba(0,0,0,.54);
+      color: rgba($sidenav-font-color,.54);
       transition: transform 0.2s;
     }
   }

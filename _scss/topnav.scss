@@ -1,8 +1,7 @@
 .topnav {
   display: flex;
   justify-content: center;
-  background: #f7f7f7;
-  border-bottom: 1px solid lightgray;
+  background: $topnav-background;
   padding: 0 $content-strip-padding-x;
   position: sticky;
   top: 0;
