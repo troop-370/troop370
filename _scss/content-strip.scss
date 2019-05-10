@@ -27,7 +27,7 @@
     list-style-type: decimal;
     padding-inline-start: 20px;
   }
-  a {
+  a:not(.mdc-button) {
     color: inherit;
     &:hover {
       background-color: #80808033;
@@ -45,32 +45,43 @@
     &:last-of-type {
       margin-right: 0;
     }
-  }
-  .mdc-button:not(.mdc-button--outlined) {
-    margin: 0 0 0 -15px;
+    &--raised {
+      @include mdc-button-ink-color($button-filled-text-color);
+    }
+    &:not(.mdc-button--outlined) {
+      margin: 0 0 0 -15px;
+    }
   }
   &--primary {
     background-color: $content-strip-primary-background;
     color: $mdc-theme-on-primary;
     .mdc-button {
-      @include button-color($mdc-theme-on-primary);
+      @include button-color($button-on-primary);
+      @include mdc-button-ink-color($button-on-primary);
     }
     &-light {
       background-color: lighten($mdc-theme-primary, 64%);
       color: unset;
+    }
+    &:not(.content-strip--no-bottom-padding) {
+      border-bottom: 1px solid $content-strip-primary-bottom-border-color;
     }
   }
   &--secondary {
     background-color: $content-strip-secondary-background;
     color: $mdc-theme-on-secondary;
     .mdc-button {
-      @include button-color($mdc-theme-on-secondary);
+      @include button-color($button-on-secondary);
+      @include mdc-button-ink-color($button-on-secondary);
     }
     &-light {
       background-color: lighten($mdc-theme-secondary, 54%);
       .mdc-button {
         @include button-color($mdc-theme-secondary);
       }
+    }
+    &:not(.content-strip--no-bottom-padding) {
+      border-bottom: 1px solid $content-strip-secondary-bottom-border-color;
     }
   }
   &--extra-padding {
@@ -87,6 +98,9 @@
   }
   &--center {
     text-align: center;
+  }
+  &:not(.content-strip--no-bottom-padding) {
+    border-bottom: 1px solid $content-strip-background-bottom-border-color;
   }
   h1, .mdc-typography--headline4 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h1));

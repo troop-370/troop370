@@ -44,6 +44,15 @@ $mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #00
 
 $topnav-background: #f7f7f7;
 
+$button-filled-text-color: $mdc-theme-background;
+$button-on-background: $mdc-theme-primary;
+$button-on-primary: $mdc-theme-on-primary;
+$button-on-secondary: $mdc-theme-on-secondary;
+
+$states-hover-opacity: 0.08;
+$states-focus-opacity: 0.24;
+$states-press-opacity: 0.32;
+
 $content-strip-heading-headline-size: (
   h1: headline4,
   h2: headline5,
@@ -61,6 +70,9 @@ $content-strip-item-margin-y: 5px;
 $content-strip-item-margin-x: 0;
 $content-strip-primary-background: $mdc-theme-primary;
 $content-strip-secondary-background: $mdc-theme-secondary;
+$content-strip-background-bottom-border-color: transparent;
+$content-strip-primary-bottom-border-color: $content-strip-background-bottom-border-color;
+$content-strip-secondary-bottom-border-color: $content-strip-background-bottom-border-color;
 
 $sidenav-width: 300px;
 $sidenav-bg-color: $mdc-theme-surface;

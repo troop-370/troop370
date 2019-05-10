@@ -11,6 +11,9 @@ p, ul, ol {
 }
 .mdc-button {
   @include mdc-button-shape-radius(0px);
+  @include mdc-states-hover-opacity($states-hover-opacity !important);
+  @include mdc-states-focus-opacity($states-focus-opacity !important);
+  @include mdc-states-press-opacity($states-press-opacity !important);
 }
 .mdc-text-field {
   @include mdc-text-field-ink-color($mdc-theme-on-background);
