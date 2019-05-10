@@ -33,7 +33,7 @@
         text-transform: uppercase;
         font-weight: 700;
         font-size: 16px;
-        padding: 18px 15.3px;
+        padding: $topnav-padding-y 15.3px;
         @include mdc-ripple-surface;
         @include mdc-ripple-radius-bounded;
         @include mdc-states($mdc-theme-primary);
@@ -53,6 +53,9 @@
           > a {
             width: 100%;
             padding: 11px;
+            font-family: $mdc-typography-headline-font-family;
+            font-size: 16px;
+            letter-spacing: 0.5px;
           }
         }
       }
@@ -64,7 +67,7 @@
 }
 .grid-container {
   display: grid;
-  grid-template-columns: [title] 300px [navigation] auto;
+  grid-template-columns: [title] 180px [navigation] auto;
   grid-template-rows: 56px;
 }
 .grid-item-title {
@@ -75,32 +78,33 @@
 .grid-item-navigation {
   justify-self: end;
 }
-@media (max-width: 1160px) and (min-width: 600px) {
+@media (max-width: 1100px) and (min-width: 600px) {
   .topnav #main-nav li a {
-    padding: 18px 12px;
+    padding: $topnav-padding-y 12px;
   }
-  @media (max-width: 1110px) {
+  @media (max-width: 1020px) {
     .topnav #main-nav li a {
-      padding: 18px 8px;
+      padding: $topnav-padding-y 8px;
     }
-    @media (max-width: 1040px) {
-      .grid-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: [title] 56px [navigation] 56px;
+    @media (max-width: 960px) {
+      .topnav #main-nav li a {
+        font-family: $mdc-typography-headline-condensed-font-family;
+        padding: $topnav-padding-y 6px;
       }
-      .grid-item-navigation {
-        justify-self: start;
-      }
-      .topnav #main-nav {
-        margin-left: -8px;
-      }
-      @media (max-width: 740px) {
-        .topnav #main-nav li a {
-          font-size: 15px;
-        }
+      @media (max-width: 840px) {
         .hide-small {
           display: none;
+        }
+        @media (max-width: 730px) {
+          .topnav #main-nav li a {
+            font-size: 14.5px;
+          }
+          @media (max-width: 680px) {
+            .topnav #main-nav li a {
+              padding: 16px 3px;
+              letter-spacing: -0.2px;
+            }
+          }
         }
       }
     }

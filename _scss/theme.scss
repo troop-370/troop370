@@ -1,5 +1,6 @@
 $mdc-typography-font-family: Roboto, sans-serif;
 $mdc-typography-headline-font-family: "IBM Plex Sans", Roboto, sans-serif;
+$mdc-typography-headline-condensed-font-family: "IBM Plex Sans Condensed", "Helvetica Neue", Arial, sans-serif;
 $mdc-typography-styles-headline1: (
   font-family: $mdc-typography-headline-font-family,
   font-weight: 500
@@ -75,6 +76,8 @@ $sidenav-header-background-color: $mdc-theme-background;
 $sidenav-header-bugler-fill-color: $mdc-theme-primary;
 $sidenav-header-text-color: $mdc-theme-primary;
 $sidenav-header-social-icons-fill-color: $mdc-theme-primary;
+
+$topnav-padding-y: 16px;
 
 $collapsible-border-color: transparent;
 $collapsible-header-color: transparent;
