@@ -17,10 +17,10 @@ p, ul, ol {
 }
 .mdc-text-field {
   @include mdc-text-field-ink-color($mdc-theme-on-background);
-  @include mdc-text-field-label-color(rgba(0,0,0,.6));
-  @include mdc-text-field-caret-color(rgba(0,0,0,.6));
-  @include mdc-text-field-outline-color(rgba(0,0,0,.24));
-  @include mdc-text-field-hover-outline-color(rgba(0,0,0,.87));
+  @include mdc-text-field-label-color(rgba($mdc-theme-on-background,.6));
+  @include mdc-text-field-caret-color(rgba($mdc-theme-on-background,.6));
+  @include mdc-text-field-outline-color(rgba($mdc-theme-on-background,.24));
+  @include mdc-text-field-hover-outline-color(rgba($mdc-theme-on-background,.87));
   @include mdc-text-field-focused-outline-color($mdc-theme-primary);
   @include mdc-text-field-outline-shape-radius(0);
   &--focused:not(.mdc-text-field--disabled) {
