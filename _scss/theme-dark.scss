@@ -35,14 +35,14 @@ $mdc-theme-primary: #809fc3;
 $mdc-theme-on-primary: if(mdc-theme-contrast-tone($mdc-theme-primary) == "dark", #000, #fff) !default;
 $mdc-theme-secondary: #de8d96;
 $mdc-theme-on-secondary: if(mdc-theme-contrast-tone($mdc-theme-secondary) == "dark", #000, #fff) !default;
-$mdc-theme-background: #121212;
+$mdc-theme-background: #212121;
 $mdc-theme-on-background: #ffffff;
 $mdc-theme-surface: #fff !default;
 $mdc-theme-on-surface: if(mdc-theme-contrast-tone($mdc-theme-surface) == "dark", #000, #fff) !default;
 $mdc-theme-error: #cf6679;
 $mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #000, #fff) !default;
 
-$topnav-background: #171717;
+$topnav-background: #2e2e2e;
 
 $button-filled-text-color: $mdc-theme-background;
 $button-on-background: $mdc-theme-primary;
@@ -82,7 +82,7 @@ $sidenav-font-size: 14px;
 $sidenav-font-family: $mdc-typography-font-family;
 $sidenav-item-height: 48px;
 $sidenav-padding: 16px;
-$sidenav-divider-color: #212121;
+$sidenav-divider-color: #323232;
 $primary-color: navy;
 $sidenav-header-background-color: $mdc-theme-background;
 $sidenav-header-bugler-fill-color: $mdc-theme-primary;
