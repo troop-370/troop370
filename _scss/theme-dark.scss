@@ -31,15 +31,15 @@ $mdc-typography-styles-button: (
 );
 $content-width: 1200px;
 
-$mdc-theme-primary: #aac0eb;
+$mdc-theme-primary: #809fc3;
 $mdc-theme-on-primary: if(mdc-theme-contrast-tone($mdc-theme-primary) == "dark", #000, #fff) !default;
-$mdc-theme-secondary: #ffb3b3;
+$mdc-theme-secondary: #de8d96;
 $mdc-theme-on-secondary: if(mdc-theme-contrast-tone($mdc-theme-secondary) == "dark", #000, #fff) !default;
 $mdc-theme-background: #121212;
 $mdc-theme-on-background: #ffffff;
 $mdc-theme-surface: #fff !default;
 $mdc-theme-on-surface: if(mdc-theme-contrast-tone($mdc-theme-surface) == "dark", #000, #fff) !default;
-$mdc-theme-error: #b00020 !default;
+$mdc-theme-error: #cf6679;
 $mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #000, #fff) !default;
 
 $topnav-background: #171717;
