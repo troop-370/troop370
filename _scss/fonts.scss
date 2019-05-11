@@ -2,6 +2,7 @@
 /* latin */
 @font-face {
   font-family: 'IBM Plex Sans';
+  font-display: swap;
   font-style: normal;
   font-weight: 500;
   src: url(https://fonts.gstatic.com/s/ibmplexsans/v3/zYX9KVElMYYaJe8bpLHnCwDKjSL9AIFsdA.woff2) format('woff2');
@@ -9,6 +10,7 @@
 }
 @font-face {
   font-family: 'IBM Plex Sans';
+  font-display: swap;
   font-style: normal;
   font-weight: 600;
   src: url(https://fonts.gstatic.com/s/ibmplexsans/v3/zYX9KVElMYYaJe8bpLHnCwDKjQ76AIFsdA.woff2) format('woff2');
@@ -16,6 +18,7 @@
 }
 @font-face {
   font-family: 'IBM Plex Sans';
+  font-display: swap;
   font-style: normal;
   font-weight: 700;
   src: url(../src/fonts/IBM_Plex_Sans_Bold.woff) format('woff');
@@ -23,6 +26,7 @@
 }
 @font-face {
   font-family: 'IBM Plex Sans Condensed';
+  font-display: swap;
   font-style: normal;
   font-weight: 700;
   src: url(../src/fonts/IBMPlexSansCondensed-Bold.woff2) format('woff2');
@@ -32,6 +36,7 @@
 /* Latin */
 @font-face {
   font-family: 'Roboto';
+  font-display: swap;
   font-style: normal;
   font-weight: 400;
   src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
@@ -39,6 +44,7 @@
 }
 @font-face {
   font-family: 'Roboto';
+  font-display: swap;
   font-style: italic;
   font-weight: 400;
   src: local('Roboto Italic'), local('Roboto-Italic'), url(https://fonts.gstatic.com/s/roboto/v18/KFOkCnqEu92Fr1Mu51xIIzI.woff2) format('woff2');
@@ -46,6 +52,7 @@
 }
 @font-face {
   font-family: 'Roboto';
+  font-display: swap;
   font-style: normal;
   font-weight: 500;
   src: local('Roboto Medium'), local('Roboto-Medium'), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4.woff2) format('woff2');
@@ -53,6 +60,7 @@
 }
 @font-face {
   font-family: 'Roboto';
+  font-display: swap;
   font-style: italic;
   font-weight: 500;
   src: local('Roboto Medium Italic'), local('Roboto-MediumItalic'), url(https://fonts.gstatic.com/s/roboto/v18/KFOjCnqEu92Fr1Mu51S7ACc6CsQ.woff2) format('woff2');
@@ -61,6 +69,7 @@
 /*MATERIAL ICONS*/
 @font-face {
   font-family: 'Material Icons';
+  font-display: swap;
   font-style: normal;
   font-weight: 400;
   src: url(https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
