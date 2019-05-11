@@ -9,12 +9,17 @@
   .flex-item {
     width: $content-width;
   }
-  #topnav-title {
-    font-family: $mdc-typography-headline-font-family;
-    color: $mdc-theme-primary;
-    font-size: 20px;
-    font-weight: 500;
-    width: 286px;
+  .grid-item-title {
+    #topnav-title {
+      font-family: $mdc-typography-headline-font-family;
+      color: $mdc-theme-primary;
+      font-size: 20px;
+      font-weight: 500;
+      width: 180px;
+    }
+    i {
+      color: $mdc-theme-primary;
+    }
   }
   #main-nav {
     list-style-type: none;
