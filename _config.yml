@@ -5,6 +5,7 @@ plugins:
   - jekyll-redirect-from
   - jekyll-relative-links
 sass:
+  style: compressed
   load_paths:
     - _scss
     - node_modules
