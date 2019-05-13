@@ -4,6 +4,9 @@
   justify-content: center;
   background-color: $mdc-theme-background;
   color: $mdc-theme-on-background;
+  @media (max-width: $breakpoint-mobile) {
+    padding: $content-strip-padding-bm-y $content-strip-padding-x;
+  }
   .flex-item {
     width: $content-width;
   }
@@ -86,6 +89,9 @@
   }
   &--extra-padding {
     padding: $content-strip-padding-y-extra $content-strip-padding-x;
+    @media (max-width: $breakpoint-mobile) {
+      padding: $content-strip-padding-bm-y-extra $content-strip-padding-x;
+    }
   }
   &--reduced-padding {
     padding: $content-strip-padding-y-reduced $content-strip-padding-x;
@@ -124,6 +130,9 @@
 .col-1, .col-2 {
   float: left;
   width: 50%;
+  @media (max-width: $breakpoint-middle) {
+    width: 100%;
+  }
   .content-strip {
     justify-content: flex-start;
     .flex-item {
