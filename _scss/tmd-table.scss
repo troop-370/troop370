@@ -66,11 +66,20 @@
   width: 52%;
 }
 .th-date {
-  width: 24%
+  width: 24%;
+  @media (max-width: $breakpoint-mobile) {
+    width: 90px;
+  }
 }
 .th-type {
   width: 12%;
+  @media (max-width: $breakpoint-mobile) {
+    width: 46px;
+  }
 }
 .th-size {
   width: 12%;
+  @media (max-width: $breakpoint-mobile) {
+    width: 46px;
+  }
 }
