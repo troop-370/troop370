@@ -110,9 +110,15 @@
   }
   h1, .mdc-typography--headline4 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h1));
+    @media (max-width: $breakpoint-mobile) {
+      font-size: 1.8rem;
+    }
   }
   h2, .mdc-typography--headline5 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h2));
+    @media (max-width: $breakpoint-mobile) {
+      font-size: 1.4rem;
+    }
   }
   h3, .mdc-typography--headline6 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h3));
