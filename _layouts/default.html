@@ -168,12 +168,23 @@
       })
       document.addEventListener('pjax:send', topbar.show)
       document.addEventListener('pjax:complete', topbar.hide)
-      topbar.config({
-        barColors: {
-          '0':'rgba(0, 63, 135, 0.3)'
-        },
-        shadowBlur: 0
-      })
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        topbar.config({
+          barColors: {
+            '0':'rgba(128, 159, 195, 1)'
+          },
+          barThickness : 2,
+          shadowBlur: 0
+        })
+      } else {
+        topbar.config({
+          barColors: {
+            '0':'rgba(0, 63, 135, 0.3)'
+          },
+          barThickness : 2,
+          shadowBlur: 0
+        })
+      }
     </script>
   </body>
 </html>
