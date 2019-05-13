@@ -1,5 +1,7 @@
 $breakpoint-mobile: 600px;
 $breakpoint-middle: 1000px;
+$content-width: 1200px;
+$breakpoint-large: 1400px;
 
 $mdc-typography-font-family: Roboto, sans-serif;
 $mdc-typography-headline-font-family: "IBM Plex Sans", Roboto, sans-serif;
@@ -32,7 +34,6 @@ $mdc-typography-styles-button: (
   font-family: $mdc-typography-headline-font-family,
   font-weight: 700
 );
-$content-width: 1200px;
 
 $mdc-theme-primary: #809fc3;
 $mdc-theme-on-primary: if(mdc-theme-contrast-tone($mdc-theme-primary) == "dark", #000, #dedede) !default;
@@ -55,6 +56,9 @@ $button-on-secondary: $mdc-theme-primary;
 $states-hover-opacity: 0.04;
 $states-focus-opacity: 0.12;
 $states-press-opacity: 0.16;
+
+$index-welcome-image: url(/src/370-mountains-dark.jpg);
+$index-announcement-gradient: linear-gradient(180deg, #373737 0%, #292929 51%, #212121 82%);
 
 $content-strip-heading-headline-size: (
   h1: headline4,

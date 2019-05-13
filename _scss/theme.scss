@@ -1,5 +1,7 @@
 $breakpoint-mobile: 600px;
 $breakpoint-middle: 1000px;
+$content-width: 1200px;
+$breakpoint-large: 1400px;
 
 $mdc-typography-font-family: Roboto, sans-serif;
 $mdc-typography-headline-font-family: "IBM Plex Sans", Roboto, sans-serif;
@@ -32,7 +34,6 @@ $mdc-typography-styles-button: (
   font-family: $mdc-typography-headline-font-family,
   font-weight: 700
 );
-$content-width: 1200px;
 
 $mdc-theme-primary: #003f87;
 $mdc-theme-on-primary: if(mdc-theme-contrast-tone($mdc-theme-primary) == "dark", #000, #fff) !default;
@@ -55,6 +56,9 @@ $button-on-secondary: $mdc-theme-on-secondary;
 $states-hover-opacity: 0.08;
 $states-focus-opacity: 0.24;
 $states-press-opacity: 0.32;
+
+$index-welcome-image: url(/src/370-mountains-light.jpg);
+$index-announcement-gradient: linear-gradient(180deg, #c6c6c6 0%, #dedede 51%, white 82%);
 
 $content-strip-heading-headline-size: (
   h1: headline4,
