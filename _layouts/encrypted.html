@@ -2,11 +2,29 @@
 <html class="staticrypt-html">
 <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
-    <meta name="theme-color" content="#efefef">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="./css/main-dark.css">
     <link rel="stylesheet" href="./css/page/staticrypt.css">
     <title>Protected Page</title>
+    <style>
+      @media (prefers-color-scheme:dark) {
+        html,body,h1,h2,h3,h4,h5,h6,p,button,a {background:black;color:black;border:black;}
+      }
+      @media (prefers-color-scheme:light) {
+        html,body,h1,h2,h3,h4,h5,h6,p,button,a {background:white;color:white;border:white;}
+      }
+      @media (prefers-color-scheme:no-preference) {
+        html,body,h1,h2,h3,h4,h5,h6,p,button,a {background:white;color:white;border:white;}
+      }
+    </style>
+    <script>
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="./css/main-dark.css">';
+        document.querySelector('head').innerHTML += '<meta name="theme-color" content="#262626">';
+      } else {
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="./css/main.css">';
+        document.querySelector('head').innerHTML += '<meta name="theme-color" content="#efefef">';
+      }
+    </script>
 
     <!-- do not cache this page -->
     <meta http-equiv="cache-control" content="max-age=0"/>
