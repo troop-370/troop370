@@ -35,7 +35,7 @@ $mdc-typography-styles-button: (
   font-weight: 700
 );
 
-$mdc-theme-primary: #809fc3;
+$mdc-theme-primary: #aac0eb;
 $mdc-theme-on-primary: if(mdc-theme-contrast-tone($mdc-theme-primary) == "dark", #000, #dedede) !default;
 $mdc-theme-secondary: #de8d96;
 $mdc-theme-on-secondary: if(mdc-theme-contrast-tone($mdc-theme-secondary) == "dark", #000, #dedede) !default;
