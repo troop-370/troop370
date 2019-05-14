@@ -51,6 +51,9 @@
     &--raised {
       @include mdc-button-ink-color($button-filled-text-color);
     }
+    &--outlined {
+      @include mdc-button-outline-color($button-outlined-on-background-outline);
+    }
     &:not(.mdc-button--outlined) {
       margin: 0 0 0 -15px;
     }
@@ -61,6 +64,9 @@
     .mdc-button {
       @include button-color($button-on-primary);
       @include mdc-button-ink-color($button-on-primary);
+      &--outlined {
+        @include mdc-button-outline-color($button-outlined-on-primary-outline);
+      }
     }
     &-light {
       background-color: lighten($mdc-theme-primary, 64%);
@@ -76,6 +82,9 @@
     .mdc-button {
       @include button-color($button-on-secondary);
       @include mdc-button-ink-color($button-on-secondary);
+      &--outlined {
+        @include mdc-button-outline-color($button-outlined-on-secondary-outline);
+      }
     }
     &-light {
       background-color: lighten($mdc-theme-secondary, 54%);
