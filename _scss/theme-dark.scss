@@ -41,7 +41,7 @@ $mdc-theme-secondary: #de8d96;
 $mdc-theme-on-secondary: if(mdc-theme-contrast-tone($mdc-theme-secondary) == "dark", #000, #dedede) !default;
 $mdc-theme-background: #212121;
 $mdc-theme-on-background: #dedede;
-$mdc-theme-surface: #fff !default;
+$mdc-theme-surface: #242424;
 $mdc-theme-on-surface: if(mdc-theme-contrast-tone($mdc-theme-surface) == "dark", #000, #fff) !default;
 $mdc-theme-error: #cf6679;
 $mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #000, #fff) !default;
