@@ -164,7 +164,8 @@
     <script type="text/javascript">
       var pjax = new Pjax({
         elements: "a", // default is "a[href], form[action]"
-        selectors: [".page-content", ".page-title"]
+        selectors: [".page-content", ".page-title"],
+        cacheBust: false
       })
       document.addEventListener('pjax:send', topbar.show)
       document.addEventListener('pjax:complete', topbar.hide)
