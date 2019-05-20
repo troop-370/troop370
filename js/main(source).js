@@ -7,7 +7,11 @@ const buttonRipple = [].map.call(document.querySelectorAll('.mdc-button'), funct
 const iconButtonRipple = new MDCRipple(document.querySelector('.mdc-icon-button'));
 iconButtonRipple.unbounded = true;
 
-const ripple = [].map.call(document.querySelectorAll('li>a'), function(el) {
+const topNavRipple = [].map.call(document.querySelectorAll('li>a'), function(el) {
+  return new MDCRipple(el);
+});
+
+const ripple = [].map.call(document.querySelectorAll('.mdc-ripple-surface'), function(el) {
   return new MDCRipple(el);
 });
 

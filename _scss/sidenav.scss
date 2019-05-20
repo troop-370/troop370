@@ -39,7 +39,6 @@ ul {
     line-height: $sidenav-line-height;
 
     &.active {
-      background-color: rgba(0,0,0,.05);
       > a > i.material-icons.drop-arrow {
         transform: rotate(-180deg);
       }
@@ -55,8 +54,13 @@ ul {
     line-height: $sidenav-line-height;
     padding: 0 $sidenav-padding;
     text-decoration: none;
-
-    &:hover { background-color: rgba(0,0,0,.05);}
+    @include mdc-ripple-surface;
+    @include mdc-ripple-radius-bounded;
+    @include mdc-states-base-color($mdc-theme-primary);
+    @include mdc-states-hover-opacity($states-hover-opacity);
+    @include mdc-states-focus-opacity($states-focus-opacity);
+    @include mdc-states-press-opacity($states-press-opacity);
+    overflow:hidden;
 
     & > i,
     & > [class^="mdi-"], li > a > [class*="mdi-"],

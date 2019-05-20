@@ -41,7 +41,10 @@
         padding: $topnav-padding-y 15.3px;
         @include mdc-ripple-surface;
         @include mdc-ripple-radius-bounded;
-        @include mdc-states($mdc-theme-primary);
+        @include mdc-states-base-color($mdc-theme-primary);
+        @include mdc-states-hover-opacity($states-hover-opacity);
+        @include mdc-states-focus-opacity($states-focus-opacity);
+        @include mdc-states-press-opacity($states-press-opacity);
         overflow:hidden;
       }
     }
@@ -120,6 +123,12 @@
   margin-left: -6px;
   margin-right: 8px;
   fill: $mdc-theme-primary;
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-unbounded;
+  @include mdc-states-base-color($mdc-theme-primary);
+  @include mdc-states-hover-opacity($states-hover-opacity);
+  @include mdc-states-focus-opacity($states-focus-opacity);
+  @include mdc-states-press-opacity($states-press-opacity);
 }
 @media (max-width: 600px) {
   .grid-container {

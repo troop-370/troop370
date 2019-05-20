@@ -51,3 +51,12 @@ canvas#topbar {
     }
   }
 }
+.mdc-ripple-surface {
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states-base-color($mdc-theme-primary);
+  @include mdc-states-hover-opacity($states-hover-opacity);
+  @include mdc-states-focus-opacity($states-focus-opacity);
+  @include mdc-states-press-opacity($states-press-opacity);
+  overflow:hidden;
+}
