@@ -50,6 +50,8 @@
           </svg>
         SmugMug</a>
       </li>
+      {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" name="Install Troop 370 App" %}
+      <li><div class="divider" id="sideNavAppInstallDivider"></div></li>
       {% include sidenav-link.html url="/index.html" name="Home" %}
       <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">About<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
         {% include sidenav-link.html url="/about.html" name="General Information" %}
@@ -205,6 +207,36 @@
           });
       }
     }
+    </script>
+    <!-- install prompt for pwa -->
+    <script>
+      let deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+      });
+      async function install() {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          console.log(deferredPrompt)
+          deferredPrompt.userChoice.then(function(choiceResult){
+            if (choiceResult.outcome === 'accepted') {
+              console.log('[Troop 370 Service Worker] PWA installed');
+            } else {
+              console.log('[Troop 370 Service Worker] User declined to install PWA');
+            }
+            deferredPrompt = null;
+          });
+        }
+      }
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        var snai = document.getElementById("sideNavAppInstall");
+        snai.style.display = "none";
+        var snaid = document.getElementById("sideNavAppInstallDivider");
+        snaid.style.display = "none";
+      }
     </script>
   </body>
 </html>
