@@ -99,7 +99,9 @@ GEM
     yell (2.2.0)
 
 PLATFORMS
-  x64-mingw32
+  x86-mingw32
+  ruby
+  x86_64-linux
 
 DEPENDENCIES
   html-proofer
