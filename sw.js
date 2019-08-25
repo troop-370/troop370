@@ -1,6 +1,6 @@
 var APP_PREFIX = "troop370_";
-var DATE = "16july2019_"; // update the date and time for every set of pushed commits that one of the cached pages is is updated (or the content will not update on PWAs) (not necessary for changes only to index.html)
-var TIME = "2331";
+var DATE = "24august2019_"; // update the date and time for every set of pushed commits that one of the cached pages is is updated (or the content will not update on PWAs) (not necessary for changes only to index.html)
+var TIME = "2317";
 
 const CACHE = APP_PREFIX + DATE + TIME;
 const precacheFiles = [
