@@ -30,6 +30,13 @@
     list-style-type: decimal;
     padding-inline-start: 20px;
   }
+  span.indent {
+    padding-inline-start: 36px;
+    &--new-line {
+      padding-inline-start: 36px;
+      display: block;
+    }
+  }
   a:not(.mdc-button) {
     color: inherit;
     &:hover {
