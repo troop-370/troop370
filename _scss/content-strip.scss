@@ -148,6 +148,29 @@
   h6 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h6));
   }
+  .event {
+    &-card {
+      width: $event-card-width;
+      margin: $event-card-margin;
+      display: inline-flex;
+      vertical-align: top;
+      @media (max-width: $breakpoint-middle) {
+        width: $event-card-width-middle;
+      }
+      @media (max-width: $breakpoint-mobile) {
+        width: $event-card-width-mobile;
+      }
+      &-image {
+        height: $event-card-image-height;
+        background-position: center;
+        background-repeat: non-repeat;
+        background-size: cover;
+      }
+      &-content {
+        padding: $event-card-content-padding;
+      }
+    }
+  }
 }
 .col-1, .col-2 {
   float: left;
