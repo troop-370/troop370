@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <title class="page-title">{{ page.title }} | {{ site.title }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="/src/troop370-logo/favicon.ico">
     <style>
@@ -50,7 +50,7 @@
           </svg>
         SmugMug</a>
       </li>
-      {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" name="Install Troop 370 App" %}
+      {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" href="#" name="Install Troop 370 App" %}
       <li><div class="divider" id="sideNavAppInstallDivider"></div></li>
       {% include sidenav-link.html url="/index.html" name="Home" %}
       <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">About<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
@@ -135,7 +135,7 @@
     <div class="page-content">
       {{ content }}
       <!--imported mdc script-->
-      <script src="./js/main.js"></script>
+      <script src="/js/main.js"></script>
     </div>
     <!--materialize script for sidenav-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
