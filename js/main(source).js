@@ -28,3 +28,7 @@ import {MDCNotchedOutline} from '@material/notched-outline';
 const notchedOutline = [].map.call(document.querySelectorAll('.mdc-notched-outline'), function(el) {
   return new MDCNotchedOutline(el);
 });
+
+import {MDCTabBar} from '@material/tab-bar';
+
+const tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
