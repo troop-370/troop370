@@ -91,27 +91,33 @@
   .topnav #main-nav li a {
     padding: $topnav-padding-y 12px;
   }
-  @media (max-width: 1020px) {
+  @media (max-width: 1124px) {
     .topnav #main-nav li a {
       padding: $topnav-padding-y 8px;
     }
-    @media (max-width: 960px) {
+    @media (max-width: 1066px) {
       .topnav #main-nav li a {
         font-family: $mdc-typography-headline-condensed-font-family;
         padding: $topnav-padding-y 6px;
       }
-      @media (max-width: 840px) {
+      @media (max-width: 996px) {
         .hide-small {
           display: none;
         }
-        @media (max-width: 730px) {
+        @media (max-width: 896px) {
           .topnav #main-nav li a {
             font-size: 14.5px;
           }
-          @media (max-width: 680px) {
+          @media (max-width: 776px) {
             .topnav #main-nav li a {
               padding: 16px 3px;
               letter-spacing: -0.2px;
+            }
+            @media (max-width: 646px) {
+              .topnav #main-nav li a {
+                padding: 16px 2px;
+                letter-spacing: -0.8px;
+              }
             }
           }
         }
