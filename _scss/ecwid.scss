@@ -1,0 +1,120 @@
+html#ecwid_html {
+  body#ecwid_body {
+    div.ec-size {
+      .ec-store {
+        .form-control__button {
+
+        }
+        .grid__products--appearance-frame {
+          .grid-product__wrap-inner {
+            box-shadow: none;
+            border-radius: 0;
+            @include mdc-ripple-surface;
+            @include mdc-ripple-radius-bounded;
+            @include mdc-states-base-color($mdc-theme-primary);
+            @include mdc-states-hover-opacity($states-hover-opacity);
+            @include mdc-states-focus-opacity($states-focus-opacity);
+            @include mdc-states-press-opacity($states-press-opacity);
+            overflow: hidden;
+            &:hover {
+              background-color: unset !important;
+              box-shadow: none !important;
+            }
+            .grid-product__title {
+              .grid-product__title-inner {
+                font-family: $mdc-typography-headline-font-family;
+                font-weight: 500;
+                font-size: 20px;
+              }
+            }
+          }
+          .grid-product__shadow {
+            border-radius: 0;
+          }
+        }
+        .product-details__product-title {
+          font-size: 28px !important;
+        }
+        .product-details__product-price {
+          font-size: 24px !important;
+          font-weight: 500 !important;
+        }
+        .form-control--primary, .form-control, .form-control--large {
+          .form-control__button {
+            @include mdc-button-core-styles;
+            @include mdc-button-base_(structure);
+            @include mdc-button-shape-radius(0px);
+            @include mdc-button-container-fill-color(transparent);
+            @include mdc-ripple-surface;
+            @include mdc-ripple-radius-bounded;
+            @include mdc-states-base-color($mdc-theme-primary);
+            @include mdc-states-hover-opacity($states-hover-opacity);
+            @include mdc-states-focus-opacity($states-focus-opacity);
+            @include mdc-states-press-opacity($states-press-opacity);
+            @include mdc-button-outline-width(1px);
+            @include mdc-button-outline-color($button-outlined-on-background-outline);
+            @include mdc-button--outlined_(structure);
+            width: unset;
+            color: $mdc-theme-primary;
+            font-family: $mdc-typography-headline-font-family;
+            text-transform: uppercase;
+            font-weight: 700;
+            min-height: 0 !important;
+            &:hover, &:active, &:focus {
+              box-shadow: none;
+              transform: none;
+              animation: none;
+            }
+          }
+        }
+        .product-details-module__title {
+          font-weight: 500 !important;
+          &:not(.details-product-purchase__place) {
+            text-transform: uppercase;
+          }
+        }
+        .ec-store__content-wrapper {
+          .ec-page-title {
+            text-align: center;
+            padding: 10px 0;
+          }
+        }
+        @media (max-width: $breakpoint-mobile) {
+          .ec-footer {
+            z-index: 10;
+            position: fixed;
+            bottom: 0;
+            background: $topnav-background;
+            box-shadow: 0px 10px 4px 11px rgba(0,0,0,0.1), 0 4px 5px 0 rgba(0,0,0,0.07), 0 1px 10px 0 rgba(0,0,0,0.06);
+            margin: 0;
+            padding: 0 !important;
+            width: 100%;
+            margin-left: -20px;
+            ul[data-items="3"] {
+              flex-wrap: nowrap !important;
+              li {
+                padding: 0 !important;
+                .ec-link {
+                  color: $mdc-theme-on-background;
+                  font-family: $mdc-typography-font-family;
+                  font-size: 12px;
+                  padding: 8px 0 12px 0;
+                  @include mdc-ripple-surface;
+                  @include mdc-ripple-radius-bounded(60px);
+                  @include mdc-states-base-color($mdc-theme-primary);
+                  @include mdc-states-hover-opacity($states-hover-opacity);
+                  @include mdc-states-focus-opacity($states-focus-opacity);
+                  @include mdc-states-press-opacity($states-press-opacity);
+                  overflow: hidden;
+                  &.link--icon-top .svg-icon {
+                    margin: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
