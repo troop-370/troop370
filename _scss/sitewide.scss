@@ -1,14 +1,12 @@
-html, body, h1, h2, h3, h4, h5, h6, p, button, a {
+html, body, h1, h2, h3, h4, h5, h6, p, button, a, ul, ol {
   background: unset;
   color: unset;
   border: unset;
+  @include mdc-typography(body1);
 }
 html, body, h1, h2, h3, h4, h5, h6, p {
   padding: 0;
   margin: 0;
-}
-p, ul, ol {
-  @include mdc-typography(body1);
 }
 @media (max-width: $breakpoint-mobile) {
   input, textarea, button, select, a {
@@ -59,4 +57,21 @@ canvas#topbar {
   @include mdc-states-focus-opacity($states-focus-opacity);
   @include mdc-states-press-opacity($states-press-opacity);
   overflow:hidden;
+}
+.mdc-tab {
+  @include mdc-tab-text-label-color($mdc-theme-on-primary);
+  @include mdc-tab-active-text-label-color($mdc-theme-on-primary);
+  @include mdc-tab-indicator-underline-color($mdc-theme-on-primary);
+  @include mdc-tab-states-color($mdc-theme-on-primary);
+  @include mdc-states-hover-opacity($states-hover-opacity);
+  @include mdc-states-focus-opacity($states-focus-opacity);
+  @include mdc-states-press-opacity($states-press-opacity);
+  padding-left: 8px;
+  padding-right: 8px;
+  @media (max-width: $breakpoint-mobile) {
+    @include mdc-tab-text-label-color($mdc-theme-on-background);
+    @include mdc-tab-active-text-label-color($mdc-theme-primary);
+    @include mdc-tab-indicator-underline-color($mdc-theme-primary);
+    @include mdc-tab-states-color($mdc-theme-primary);
+  }
 }
