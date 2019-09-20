@@ -20,3 +20,5 @@ include:
 collections:
   about:
     output: true
+  information:
+    output: true
