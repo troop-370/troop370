@@ -27,6 +27,7 @@
     "@material/radio": "^1.1.0",
     "@material/ripple": "^1.1.0",
     "@material/snackbar": "^1.1.1",
+    "@material/tab-bar": "^3.1.0",
     "@material/textfield": "^1.1.1",
     "@material/theme": "^1.1.0",
     "@material/typography": "^1.0.0"
