@@ -39,8 +39,8 @@
   }
   a:not(.mdc-button):not(.event-card-a) {
     text-decoration: underline;
-    text-decoration-color: $mdc-theme-primary;
-    color: $mdc-theme-primary;
+    text-decoration-color: inherit;
+    color: inherit;
     &:hover {
       background-color: #80808033;
     }
