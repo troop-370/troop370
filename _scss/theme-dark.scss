@@ -45,6 +45,7 @@ $mdc-theme-surface: #242424;
 $mdc-theme-on-surface: if(mdc-theme-contrast-tone($mdc-theme-surface) == "dark", #000, #fff) !default;
 $mdc-theme-error: #cf6679;
 $mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #000, #fff) !default;
+$mdc-theme-radius: 0;
 
 $topnav-background: #2e2e2e;
 
@@ -131,3 +132,5 @@ $event-card-width-mobile: 100%;
 $event-card-margin: 0 8px 16px 0;
 $event-card-image-height: 200px;
 $event-card-content-padding: 16px;
+
+$card-shape-radius: $mdc-theme-radius;

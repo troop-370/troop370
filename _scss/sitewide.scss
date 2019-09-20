@@ -60,3 +60,6 @@ canvas#topbar {
   @include mdc-states-press-opacity($states-press-opacity);
   overflow:hidden;
 }
+.mdc-card {
+  @include mdc-card-shape-radius($card-shape-radius);
+}
