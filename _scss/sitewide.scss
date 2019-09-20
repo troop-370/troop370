@@ -1,8 +1,10 @@
-html, body, h1, h2, h3, h4, h5, h6, p, button, a, ul, ol {
+html, body, h1, h2, h3, h4, h5, h6, p, a, button, ul, ol {
   background: unset;
-  color: unset;
-  border: unset;
-  @include mdc-typography(body1);
+  &:not(a) {
+    color: unset;
+    border: unset;
+    @include mdc-typography(body1);
+  }
 }
 html, body, h1, h2, h3, h4, h5, h6, p {
   padding: 0;
