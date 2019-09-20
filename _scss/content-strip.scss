@@ -169,6 +169,10 @@
       &-content {
         padding: $event-card-content-padding;
       }
+      &-a {
+        text-decoration: none;
+        display: contents;
+      }
     }
   }
 }
