@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <title class="page-title">{{ page.title }} | {{ site.title }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="/src/troop370-logo/favicon.ico">
     <style>
@@ -18,10 +18,10 @@
     </style>
     <script>
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="./css/main-dark.css">';
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/css/main-dark.css">';
         document.querySelector('head').innerHTML += '<meta name="theme-color" content="#262626">';
       } else {
-        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="./css/main.css">';
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/css/main.css">';
         document.querySelector('head').innerHTML += '<meta name="theme-color" content="#efefef">';
       }
     </script>
@@ -50,7 +50,7 @@
           </svg>
         SmugMug</a>
       </li>
-      {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" name="Install Troop 370 App" %}
+      {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" url="#" name="Install Troop 370 App" %}
       <li><div class="divider" id="sideNavAppInstallDivider"></div></li>
       {% include sidenav-link.html url="/index.html" name="Home" %}
       <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">About<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
@@ -67,10 +67,7 @@
         {% include sidenav-link.html url="/finding-mb.html" name="Merit Badges" %}
         {% include sidenav-link.html url="/helpful-links.html" name="Helpful Links" %}
       </ul></div></li></ul></li>
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">Events<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/camps-adventure.html" name="Camps/High Adventure" %}
-        {% include sidenav-link.html url="/campout-schedule-local-events.html" name="Campout Schedule &amp; Local Events" %}
-      </ul></div></li></ul></li>
+      {% include sidenav-link.html url="/events.html" name="Events" %}
       <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">Members<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
         {% include sidenav-link.html url="/communication.html" name="Communication" %}
         {% include sidenav-link.html url="/calendar.html" name="Calendar" %}
@@ -118,12 +115,7 @@
                   <li><a href="/helpful-links.html">Helpful Links</a></li>
                 </ul>
               </li>
-              <li class="dropdown"><a href="javascript:void(0)" id="tevents">Events</a>
-                <ul>
-                  <li><a href="/camps-adventure.html">Camps/High Adventure</a><li>
-                  <li><a href="/campout-schedule-local-events.html">Campout Schedule &amp; Local Events</a><li>
-                </ul>
-              </li>
+              <li><a href="/events.html" id="tevents">Events</a></li>
               <li class="dropdown"><a href="javascript:void(0)" id="members">Members</a>
                 <ul>
                   <li><a href="/communication.html">Communication</a><li>
@@ -145,7 +137,7 @@
     <div class="page-content">
       {{ content }}
       <!--imported mdc script-->
-      <script src="./js/main.js"></script>
+      <script src="/js/main.js"></script>
     </div>
     <!--materialize script for sidenav-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

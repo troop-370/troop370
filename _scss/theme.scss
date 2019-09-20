@@ -45,6 +45,7 @@ $mdc-theme-surface: #fff !default;
 $mdc-theme-on-surface: if(mdc-theme-contrast-tone($mdc-theme-surface) == "dark", #000, #fff) !default;
 $mdc-theme-error: #b00020 !default;
 $mdc-theme-on-error: if(mdc-theme-contrast-tone($mdc-theme-error) == "dark", #000, #fff) !default;
+$mdc-theme-radius: 0;
 
 $topnav-background: #f7f7f7;
 
@@ -124,3 +125,12 @@ $tmd-table-header_row-font-weight: 500;
 $tmd-table-header_row-text-align: left;
 $tmd-table-outside_cell-padding: 16px;
 $tmd-table-border-opacity: 0.2;
+
+$event-card-width: calc(33.3% - 11px);
+$event-card-width-middle: calc(50% - 11px);
+$event-card-width-mobile: 100%;
+$event-card-margin: 0 8px 16px 0;
+$event-card-image-height: 200px;
+$event-card-content-padding: 16px;
+
+$card-shape-radius: $mdc-theme-radius;

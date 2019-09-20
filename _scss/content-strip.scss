@@ -37,8 +37,10 @@
       display: block;
     }
   }
-  a:not(.mdc-button) {
-    color: inherit;
+  a:not(.mdc-button):not(.event-card-a) {
+    text-decoration: underline;
+    text-decoration-color: $mdc-theme-primary;
+    color: $mdc-theme-primary;
     &:hover {
       background-color: #80808033;
     }
@@ -147,6 +149,34 @@
   }
   h6 {
     @include mdc-typography(map-get($content-strip-heading-headline-size, h6));
+  }
+  .event {
+    &-card {
+      width: $event-card-width;
+      margin: $event-card-margin;
+      display: inline-flex;
+      vertical-align: top;
+      @media (max-width: $breakpoint-middle) {
+        width: $event-card-width-middle;
+      }
+      @media (max-width: $breakpoint-mobile) {
+        width: $event-card-width-mobile;
+      }
+      &-image {
+        height: $event-card-image-height;
+        background-position: center;
+        background-repeat: non-repeat;
+        background-size: cover;
+      }
+      &-content {
+        padding: $event-card-content-padding;
+      }
+      &-a {
+        text-decoration: none;
+        display: contents;
+        color: inherit;
+      }
+    }
   }
 }
 .col-1, .col-2 {

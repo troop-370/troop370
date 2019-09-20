@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr" class="staticrypt-html">
   <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <title class="page-title">{{ page.title }} | {{ site.title }}</title>
     <style>
       @media (prefers-color-scheme:dark) {
@@ -17,10 +17,10 @@
     </style>
     <script>
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="./css/main-dark.css">';
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/css/main-dark.css">';
         document.querySelector('head').innerHTML += '<meta name="theme-color" content="#262626">';
       } else {
-        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="./css/main.css">';
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/css/main.css">';
         document.querySelector('head').innerHTML += '<meta name="theme-color" content="#efefef">';
       }
     </script>
@@ -51,7 +51,7 @@
             </div>
           </div>
           <p class="password-question">Don't know the password? Request the password from the Webmaster.</p>
-          <a href="./contact-webmaster.html" class="mdc-button contact">Contact Webmaster</a>
+          <a href="/contact-webmaster.html" class="mdc-button contact">Contact Webmaster</a>
           <div class="submit-button">
             <button type="submit" class="mdc-button mdc-button--raised" value="Submit">Submit</button>
           </div>
@@ -96,6 +96,6 @@
       });
     </script>
     <!--imported mdc script-->
-    <script defer src="./js/main.js"></script>
+    <script defer src="/js/main.js"></script>
   </body>
 </html>
