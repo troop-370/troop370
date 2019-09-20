@@ -17,3 +17,6 @@ exclude:
   - js/cibuild
 include:
   - node_modules/@material
+collections:
+  about:
+    output: true
