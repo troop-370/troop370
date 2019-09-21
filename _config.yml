@@ -4,7 +4,6 @@ plugins:
   - jekyll-github-metadata
   - jekyll-sitemap
   - jekyll-redirect-from
-  - jekyll-relative-links
 sass:
   style: compressed
   load_paths:
