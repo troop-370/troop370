@@ -28,7 +28,7 @@ collections:
     permalink: /events/:path.html
   members:
     output: true
-    permalink: /events/:path.html
+    permalink: /members/:path.html
   photos:
     output: true
     permalink: /:path.html
