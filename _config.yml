@@ -21,3 +21,6 @@ collections:
     output: true
   information:
     output: true
+  contact:
+    output: true
+    permalink: /:path
