@@ -53,31 +53,14 @@
       {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" url="#" name="Install Troop 370 App" %}
       <li><div class="divider" id="sideNavAppInstallDivider"></div></li>
       {% include sidenav-link.html url="/index.html" name="Home" %}
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">About<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/about.html" name="General Information" %}
-        {% include sidenav-link.html url="/leaders.html" name="Leaders" %}
-        {% include sidenav-link.html url="/eagle-scout-honor-roll.html" name="Eagle Scout Honor Roll" %}
-      </ul></div></li></ul></li>
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">Information<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/forms-documents.html" name="Forms &amp; Documents" %}
-        {% include sidenav-link.html url="/advancement.html" name="Advancement" %}
-        {% include sidenav-link.html url="/participation.html" name="Participation" %}
-        {% include sidenav-link.html url="/leadership-training.html" name="Leadership Training" %}
-        {% include sidenav-link.html url="/faqs.html" name="Frequently Asked Questions" %}
-        {% include sidenav-link.html url="/finding-mb.html" name="Merit Badges" %}
-        {% include sidenav-link.html url="/helpful-links.html" name="Helpful Links" %}
-      </ul></div></li></ul></li>
-      {% include sidenav-link.html url="/events.html" name="Events" %}
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">Members<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/communication.html" name="Communication" %}
-        {% include sidenav-link.html url="/calendar.html" name="Calendar" %}
-        {% include sidenav-link.html url="/mb-counselors.html" name="Merit Badge Counselors" %}
-        {% include sidenav-link.html url="/troop-roster.html" name="Troop Roster" %}
-        {% include sidenav-link.html url="/what-can-i-do.html" name="What Can I Do?" %}
-      </ul></div></li></ul></li>
-      {% include sidenav-link.html url="/photos.html" name="Photos" %}
-      {% include sidenav-link.html url="/payments.html" name="Payments" %}
-      {% include sidenav-link.html url="/store.html" name="Store" %}
+      {% include sidenav-item.html collection="about" collection-label="About" %}
+      {% include sidenav-item.html collection="information" collection-label="Info" collection-label-hide-small="rmation" %}
+      {% include sidenav-item.html collection="events" collection-label="Events" %}
+      {% include sidenav-item.html collection="members" collection-label="Members" %}
+      {% include sidenav-item.html collection="photos" collection-label="Photos" %}
+      {% include sidenav-item.html collection="contact" collection-label="Contact" %}
+      {% include sidenav-item.html collection="payments" collection-label="Pay" collection-label-hide-small="ments" %}
+      {% include sidenav-item.html collection="store" collection-label="Store" %}
       <li><div class="divider"></div></li>
       {% include sidenav-link.html url="https://tmweb.troopmaster.com/mysite/troop370atl" name="TroopMaster" %}
       <li><div class="divider"></div></li>
