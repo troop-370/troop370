@@ -34,3 +34,6 @@ collections:
   payments:
     output: true
     permalink: /pay/:path
+  store:
+    output: true
+    permalink: /pay/:path
