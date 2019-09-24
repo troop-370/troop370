@@ -37,3 +37,4 @@ collections:
   store:
     output: true
     permalink: /pay/:path
+collections_dir: _collections
