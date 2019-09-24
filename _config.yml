@@ -19,6 +19,7 @@ include:
 collections:
   about:
     output: true
+    permalink: /:path
   information:
     output: true
   events:
