@@ -25,6 +25,9 @@ collections:
     output: true
   members:
     output: true
+  photos:
+    output: true
+    permalink: /:path
   contact:
     output: true
     permalink: /:path
