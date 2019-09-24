@@ -1,17 +1,17 @@
-{% assign t = site.collections | where:'label',[include.collection] | first %}
+{% assign sorted = site.[include.collection] | sort: 'nav_order' | where_exp: "item", "item.menu == hide" %}
 
-{% assign sorted = site.[include.collection] | sort: 'nav_order' %}
-
-{% if site.[include.collection].size == 1 %}
-  {% for item in site.[include.collection] %}
-  <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+{% if sorted.size == 1 %}
+  {% for item in sorted %}
+    <li><a href="{{item.url}}">{{include.collection-label}}<span class="hide-small">{{include.collection-label-hide-small}}</span></a></li>
   {% endfor %}
-{% elsif site.[include.collection].size >= 2 %}
-<li class="dropdown"><a href="javascript:void(0)" id="{{include.collection}}">{{include.collection}}</a>
-  <ul>
-    {% for item in sorted %}
-    <li><a href="{{ item.url }}">{{ item.title }}</a></li>
-    {% endfor %}
-  </ul>
-</li>
+{% endif %}
+
+{% if sorted.size > 1 %}
+  <li class="dropdown"><a href="javascript:void(0)" id="{{include.collection}}">{{include.collection-label}}<span class="hide-small">{{include.collection-label-hide-small}}</span></a>
+    <ul>
+      {% for item in sorted %}
+        <li><a href="{{item.url}}">{{item.title}}</a></li>
+      {% endfor %}
+    </ul>
+  </li>
 {% endif %}
