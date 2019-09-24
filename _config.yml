@@ -19,23 +19,26 @@ include:
 collections:
   about:
     output: true
-    permalink: /:path
+    permalink: /:path.html
   information:
     output: true
+    permalink: /information/:path.html
   events:
     output: true
+    permalink: /events/:path.html
   members:
     output: true
+    permalink: /events/:path.html
   photos:
     output: true
-    permalink: /:path
+    permalink: /:path.html
   contact:
     output: true
-    permalink: /:path
+    permalink: /:path.html
   payments:
     output: true
-    permalink: /pay/:path
+    permalink: /pay/:path.html
   store:
     output: true
-    permalink: /pay/:path
+    permalink: /pay/:path.html
 collections_dir: _collections
