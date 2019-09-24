@@ -21,6 +21,8 @@ collections:
     output: true
   information:
     output: true
+  events:
+    output: true
   contact:
     output: true
     permalink: /:path
