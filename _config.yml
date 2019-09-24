@@ -31,3 +31,6 @@ collections:
   contact:
     output: true
     permalink: /:path
+  payments:
+    output: true
+    permalink: /pay/:path
