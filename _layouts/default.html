@@ -53,36 +53,19 @@
       {% include sidenav-link.html onclick="install()" id="sideNavAppInstall" url="#" name="Install Troop 370 App" %}
       <li><div class="divider" id="sideNavAppInstallDivider"></div></li>
       {% include sidenav-link.html url="/index.html" name="Home" %}
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">About<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/about.html" name="General Information" %}
-        {% include sidenav-link.html url="/leaders.html" name="Leaders" %}
-        {% include sidenav-link.html url="/eagle-scout-honor-roll.html" name="Eagle Scout Honor Roll" %}
-      </ul></div></li></ul></li>
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">Information<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/forms-documents.html" name="Forms &amp; Documents" %}
-        {% include sidenav-link.html url="/advancement.html" name="Advancement" %}
-        {% include sidenav-link.html url="/participation.html" name="Participation" %}
-        {% include sidenav-link.html url="/leadership-training.html" name="Leadership Training" %}
-        {% include sidenav-link.html url="/faqs.html" name="Frequently Asked Questions" %}
-        {% include sidenav-link.html url="/finding-mb.html" name="Merit Badges" %}
-        {% include sidenav-link.html url="/helpful-links.html" name="Helpful Links" %}
-      </ul></div></li></ul></li>
-      {% include sidenav-link.html url="/events.html" name="Events" %}
-      <li class="no-padding"><ul class="collapsible collapsible-accordion"><li><a class="collapsible-header">Members<i class="material-icons drop-arrow">arrow_drop_down</i></a><div class="collapsible-body"><ul>
-        {% include sidenav-link.html url="/communication.html" name="Communication" %}
-        {% include sidenav-link.html url="/calendar.html" name="Calendar" %}
-        {% include sidenav-link.html url="/mb-counselors.html" name="Merit Badge Counselors" %}
-        {% include sidenav-link.html url="/troop-roster.html" name="Troop Roster" %}
-        {% include sidenav-link.html url="/what-can-i-do.html" name="What Can I Do?" %}
-      </ul></div></li></ul></li>
-      {% include sidenav-link.html url="/photos.html" name="Photos" %}
-      {% include sidenav-link.html url="/payments.html" name="Payments" %}
-      {% include sidenav-link.html url="/store.html" name="Store" %}
+      {% include sidenav-item.html collection="about" collection-label="About" %}
+      {% include sidenav-item.html collection="information" collection-label="Information" %}
+      {% include sidenav-item.html collection="events" collection-label="Events" %}
+      {% include sidenav-item.html collection="members" collection-label="Members" %}
+      {% include sidenav-item.html collection="photos" collection-label="Photos" %}
+      {% include sidenav-item.html collection="contact" collection-label="Contact" %}
+      {% include sidenav-item.html collection="payments" collection-label="Payments" %}
+      {% include sidenav-item.html collection="store" collection-label="Store" %}
       <li><div class="divider"></div></li>
       {% include sidenav-link.html url="https://tmweb.troopmaster.com/mysite/troop370atl" name="TroopMaster" %}
       <li><div class="divider"></div></li>
       {% include sidenav-link.html url="/contact-webmaster.html" name="Help &amp; Feedback" %}
-      {% include sidenav-link.html url="/cookies.html" name="Cookie Policy" %}
+      {% include sidenav-link.html url="/information/cookies.html" name="Cookie Policy" %}
       {% include sidenav-link.html url="https://github.com/troop-370/troop370" name="Source Code" %}
     </ul>
     <div class="flex-container topnav">
@@ -97,38 +80,14 @@
           <div class="grid-item-navigation">
             <ul id="main-nav">
               <li><a href="/index.html" id="home">Home</a></li>
-              <li class="dropdown"><a href="javascript:void(0)" id="about">About</a>
-                <ul>
-                  <li><a href="/about.html">General Information</a></li>
-                  <li><a href="/leaders.html">Leaders</a></li>
-                  <li><a href="/eagle-scout-honor-roll.html">Eagle Scout Honor Roll</a></li>
-                </ul>
-              </li>
-              <li class="dropdown"><a href="javascript:void(0)" id="info">Info<spam class="hide-small">rmation</span></a>
-                <ul>
-                  <li><a href="/forms-documents.html">Forms &amp; Documents</a></li>
-                  <li><a href="/advancement.html">Advancement</a></li>
-                  <li><a href="/participation.html">Participation</a></li>
-                  <li><a href="/leadership-training.html">Leadership Training</a></li>
-                  <li><a href="/faqs.html">Frequently Asked Questions</a></li>
-                  <li><a href="/finding-mb.html">Merit Badges</a></li>
-                  <li><a href="/helpful-links.html">Helpful Links</a></li>
-                </ul>
-              </li>
-              <li><a href="/events.html" id="tevents">Events</a></li>
-              <li class="dropdown"><a href="javascript:void(0)" id="members">Members</a>
-                <ul>
-                  <li><a href="/communication.html">Communication</a><li>
-                  <li><a href="/calendar.html">Calendar</a><li>
-                  <li><a href="/mb-counselors.html">Merit Badge Counselors</a><li>
-                  <li><a href="/troop-roster.html">Troop Roster</a><li>
-                  <li><a href="/what-can-i-do.html">What Can I Do?</a><li>
-                </ul>
-              </li>
-              <li><a href="/photos.html" id="photos">Photos</a></li>
-              <li><a href="/contact.html" id="contact">Contact</a></li>
-              <li><a href="/payments.html" id="payments">Pay<spam class="hide-small">ments</span></a></li>
-              <li><a href="/store.html" id="store">Store</a></li>
+              {% include topnav-item.html collection="about" collection-label="About" %}
+              {% include topnav-item.html collection="information" collection-label="Info" collection-label-hide-small="rmation" %}
+              {% include topnav-item.html collection="events" collection-label="Events" %}
+              {% include topnav-item.html collection="members" collection-label="Members" %}
+              {% include topnav-item.html collection="photos" collection-label="Photos" %}
+              {% include topnav-item.html collection="contact" collection-label="Contact" %}
+              {% include topnav-item.html collection="payments" collection-label="Pay" collection-label-hide-small="ments" %}
+              {% include topnav-item.html collection="store" collection-label="Store" %}
             </ul>
           </div>
         </div>

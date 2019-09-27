@@ -1,0 +1,54 @@
+---
+layout: default
+title: Events
+permalink: /:path.html
+redirect_from:
+ - campout-schedule-local-events.html
+ - events.html
+---
+<div class="content-strip content-strip--primary content-strip--extra-padding content-strip--center">
+  <div class="flex-item">
+    <h1>Events</h1>
+    <p>Use the options below to view Troop 370 events. Events and event details can be viewed in one place from <a href="/calendar.html">Troop 370's Google Calendar</a></p>
+  </div>
+</div>
+<div class="content-strip content-strip--no-bottom-padding">
+  <div class="flex-item">
+    {% include event-card.html
+        card-title="Camping Schedule"
+        card-subtitle="View the schedule, theme, and location for Troop 370's monthly campouts."
+        card-href="/events/campouts.html"
+        background-image="/src/carousel-images/generic camping - tent with light.jpg"
+    %}
+    {% include event-card.html
+        card-title="Camps &amp; High Adventure"
+        card-subtitle="Summer Camp, Winter Camp, Philmont, Northern Tier, Sea Base, Summit, Jamboree."
+        card-href="/events/camps-adventure.html"
+        background-image="/src/carousel-images/bright-daytime-winter.jpg"
+    %}
+    {% include event-card.html
+        card-title="Meetings"
+        card-subtitle="See the schedule for troop meetings, PLC meetings, and committee meetings."
+        card-href="/events/meetings.html"
+        background-image="/src/carousel-images/troop370-scouts-jamboree-2017.jpg"
+    %}
+    {% include event-card.html
+        card-title="Merit Badge Clinics"
+        card-subtitle="Learn about Troop 370's Merit Badge Clinics."
+        card-href="/events/merit-badge-clinics.html"
+        background-image="/src/carousel-images/merit-badges.jpg"
+    %}
+    {% include event-card.html
+        card-title="Pine Straw Sales"
+        card-subtitle="Learn about timing, pricing, and payment for Troop 370's biannual fundraiser."
+        card-href="/events/pinestraw.html"
+        background-image="/src/carousel-images/pineneedles_l.jpg"
+    %}
+    {% include event-card.html
+        card-title="Additional Events"
+        card-subtitle="Other events, activities, and trainings to know about."
+        card-href="/events/additional-events.html"
+        background-image="/src/carousel-images/forest-with-mountains.png"
+    %}
+  </div>
+</div>

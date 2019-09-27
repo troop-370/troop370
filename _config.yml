@@ -4,7 +4,6 @@ plugins:
   - jekyll-github-metadata
   - jekyll-sitemap
   - jekyll-redirect-from
-  - jekyll-relative-links
 sass:
   style: compressed
   load_paths:
@@ -17,3 +16,29 @@ exclude:
   - js/cibuild
 include:
   - node_modules/@material
+collections:
+  about:
+    output: true
+    permalink: /:path.html
+  information:
+    output: true
+    permalink: /information/:path.html
+  events:
+    output: true
+    permalink: /events/:path.html
+  members:
+    output: true
+    permalink: /members/:path.html
+  photos:
+    output: true
+    permalink: /:path.html
+  contact:
+    output: true
+    permalink: /:path.html
+  payments:
+    output: true
+    permalink: /pay/:path.html
+  store:
+    output: true
+    permalink: /pay/:path.html
+collections_dir: _collections
