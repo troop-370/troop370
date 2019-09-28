@@ -1,5 +1,10 @@
 html#ecwid_html {
   body#ecwid_body {
+    .ecwid {
+      min-height: calc(100vh - 175px) !important;
+      position: relative;
+      z-index: 1;
+    }
     div.ec-size {
       .ec-store {
         a {
@@ -78,8 +83,7 @@ html#ecwid_html {
         }
         .ec-store__content-wrapper {
           .ec-page-title {
-            text-align: center;
-            padding: 10px 0;
+            display: none;
           }
         }
         @media (max-width: $breakpoint-mobile) {
