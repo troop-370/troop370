@@ -68,7 +68,7 @@
       {% include sidenav-link.html url="/information/cookies.html" name="Cookie Policy" %}
       {% include sidenav-link.html url="https://github.com/troop-370/troop370" name="Source Code" %}
     </ul>
-    <div class="flex-container topnav">
+    <div class="flex-container topnav" id="topnav">
       <div class="flex-item">
         <div class="grid-container">
           <div class="grid-item-title">
@@ -88,6 +88,7 @@
               {% include topnav-item.html collection="contact" collection-label="Contact" %}
               {% include topnav-item.html collection="payments" collection-label="Pay" collection-label-hide-small="ments" %}
               {% include topnav-item.html collection="store" collection-label="Store" %}
+              <style media="screen">a#store + ul {margin-left: -100px;}</style>
             </ul>
           </div>
         </div>
@@ -113,6 +114,16 @@
         }
       }
       window.onload = sidenav;
+    </script>
+    <!-- add class on scroll to topnav -->
+    <script type="text/javascript">
+      window.onscroll = function (e) {
+        if (window.scrollY >= 1) {
+          document.getElementById("topnav").classList.add('scroll');
+        } else {
+          document.getElementById("topnav").classList.remove('scroll');
+        }
+      };
     </script>
     <!-- pjax navigation with loading bar -->
     <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
