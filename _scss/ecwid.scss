@@ -86,6 +86,13 @@ html#ecwid_html {
             display: none;
           }
         }
+        &.ec-store__confirmation-page {
+          .ec-store__content-wrapper {
+            .ec-page-title {
+              display: block;
+            }
+          }
+        }
         @media (max-width: $breakpoint-mobile) {
           .ec-footer {
             z-index: 10;
