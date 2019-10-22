@@ -1,0 +1,155 @@
+---
+layout: default
+title: Troop 370 Announcement Submission
+---
+<script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/inline/ckeditor.js"></script>
+<div class="content-strip content-strip--primary content-strip--extra-padding content-strip--center">
+  <div class="flex-item">
+    <h1>Troop 370 Announcement Submission Form</h1>
+    <p>Use this form to submit announcements for Troop 370's weekly emails, remind text messages, and website.</p>
+    <p>Emails are sent Monday, so please submit your email announcement by Sunday at noon.<br>Remind text messages are sent Wednesday at 3:30 pm and Sunday at 12:30 pm.<br>Website announcements may take several days to be posted.</p>
+  </div>
+</div>
+<div class="content-strip">
+  <div class="flex-item">
+    <form name="submit-to-google-sheet">
+      <p class="mdc-typography--headline6" style="margin-bottom:0">Where do you want to submit your announcement(s)?</p>
+      <p style="margin-top:0">After this step, you will be able to submit multiple announcements at once.</p>
+      {% include text-field-row.html
+        variant="checkbox-input"
+        type="checkbox"
+        width="100%"
+        name="On_Weekly_Email"
+        label="Weekly Email"
+        onclick="longAnnouncementSection()"
+      %}
+      {% include text-field-row.html
+        variant="checkbox-input"
+        type="checkbox"
+        width="100%"
+        name="On_Remind"
+        label="Remind Text"
+        onclick="checkFluency()"
+      %}
+      {% include text-field-row.html
+        variant="checkbox-input"
+        type="checkbox"
+        width="100%"
+        name="On_Website"
+        label="Troop 370 Website"
+        onclick="longAnnouncementSection()"
+      %}
+      <div class="" id="web-email-div" style="display:none;">
+        <p class="mdc-typography--headline6" style="margin-bottom:0" >What is your website or weekly email announcement?</p>
+        <p style="margin-top:0">If you have an event, be sure to include date, time, location, and any equipment needed.</p>
+        {% include text-field-row.html
+          variant="textarea"
+          type="textarea"
+          width="100%"
+          height="300px"
+          name="Long Announcement A"
+          label="Announcement 1 for Email/Website"
+        %}
+        <p class="mdc-typography--headline6" style="margin-bottom:0">When should this announcment be sent?</p>
+        <p style="margin-top:0">Please provide a date range</p>
+        {% include text-field-row.html
+          variant="field-input"
+          type="text"
+          width="100%"
+          name="Long Announcement A Dates"
+          label="Date Range"
+        %}
+      </div>
+
+      <div class="" id="remind-div" style="display:none;">
+        <p class="mdc-typography--headline6" style="margin-bottom:0">What is your event announcement for Remind?</p>
+        <p style="margin-top:0">For Remind, there is a 116 character limit. If necessary, your announcement may be slightly modified to fit the character limit.</p>
+        {% include text-field-row.html
+          variant="textarea"
+          type="textarea"
+          width="100%"
+          height="150px"
+          name="Short Announcement A"
+          label="Announcement 1 for Remind"
+        %}
+        <p class="mdc-typography--headline6" style="margin-bottom:0">Choose a time for your announcement:</p>
+        <div class="mdc-select mdc-select--outlined">
+          <input type="hidden" name="Remind Announcement Time">
+          <i class="mdc-select__dropdown-icon"></i>
+          <div class="mdc-select__selected-text"></div>
+          <div class="mdc-select__menu mdc-menu mdc-menu-surface">
+            <ul class="mdc-list">
+              <li class="mdc-list-item" data-value="" aria-selected="true"></li>
+              <li class="mdc-list-item" data-value="Sunday at 12:30 PM">
+                Sunday before your event at 12:30 PM
+              </li>
+              <li class="mdc-list-item" data-value="Wednesday at 3:30 PM">
+                Wednesday before your event at 3:30 PM
+              </li>
+            </ul>
+          </div>
+          <div class="mdc-notched-outline">
+            <div class="mdc-notched-outline__leading"></div>
+            <div class="mdc-notched-outline__notch">
+              <label class="mdc-floating-label">Pick a Time</label>
+            </div>
+            <div class="mdc-notched-outline__trailing"></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="mdc-typography--headline6" style="margin-bottom:0">Contact Information</p>
+      <p style="margin-top:0">In case we have any questions.<br>(Optional)</p>
+      {% include text-field-row.html
+        variant="field-input"
+        type="text"
+        width="100%"
+        name="Name"
+        label="Name"
+      %}
+      {% include text-field-row.html
+        variant="field-input"
+        type="email"
+        width="100%"
+        name="_replyto"
+        label="Email"
+      %}
+      <button class="mdc-button mdc-button--raised" type="submit" name="action" id="submit-form" onclick="CKupdate()">
+        <span class="mdc-button__label">Submit</span>
+      </button>
+    </form>
+  </div>
+</div>
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzniKUF3giisiLXwwVv2d0rXPVHJP0kYm5Zv3gJI3ABkHd8q0Jy/exec'
+  const form = document.forms['submit-to-google-sheet']
+
+  form.addEventListener('submit', e => {
+    e.preventDefault()
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+      .then(response => console.log('Success!', response))
+      .catch(error => console.error('Error!', error.message))
+  })
+</script>
+<script type="text/javascript">
+  function checkFluency(){
+    if (document.getElementById('On_Remind').checked == true){
+      document.getElementById("remind-div").style.display = "block";
+    }
+    else {
+      document.getElementById("remind-div").style.display = "none";
+    }
+  }
+  function longAnnouncementSection(){
+    if (document.getElementById('On_Weekly_Email').checked == true){
+      document.getElementById("web-email-div").style.display = "block";
+    }
+    else if (document.getElementById('On_Website').checked == true){
+      document.getElementById("web-email-div").style.display = "block";
+    }
+    else {
+      alert("long disabled");
+      document.getElementById("web-email-div").style.display = "none";
+    }
+  }
+</script>
