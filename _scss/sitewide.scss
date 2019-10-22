@@ -54,6 +54,14 @@ canvas#topbar {
     }
   }
 }
+.mdc-select--outlined {
+  @include mdc-select-ink-color($mdc-theme-on-background);
+  @include mdc-select-label-color(rgba($mdc-theme-on-background,.6));
+  @include mdc-select-outline-color(rgba($mdc-theme-on-background,.24));
+  @include mdc-select-hover-outline-color(rgba($mdc-theme-on-background,.87));
+  @include mdc-select-focused-outline-color($mdc-theme-primary);
+  @include mdc-select-outline-shape-radius(0);
+}
 .mdc-ripple-surface {
   @include mdc-ripple-surface;
   @include mdc-ripple-radius-bounded;
@@ -62,6 +70,15 @@ canvas#topbar {
   @include mdc-states-focus-opacity($states-focus-opacity);
   @include mdc-states-press-opacity($states-press-opacity);
   overflow:hidden;
+}
+.mdc-checkbox {
+  @include mdc-checkbox-container-colors($mdc-theme-on-background, $mdc-theme-background, $mdc-theme-primary, $mdc-theme-primary);
+  @include mdc-checkbox-ink-color($mdc-theme-background);
+  @include mdc-states-base-color($mdc-theme-primary);
+  @include mdc-states-hover-opacity($states-hover-opacity);
+  @include mdc-states-focus-opacity($states-focus-opacity);
+  @include mdc-states-press-opacity($states-press-opacity);
+  overflow: hidden;
 }
 .mdc-card {
   @include mdc-card-shape-radius($card-shape-radius);
