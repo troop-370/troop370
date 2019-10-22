@@ -2,7 +2,7 @@
 <div class="text-field-row text-field-row-fullwidth">
   <div class="text-field-container">
     <div class="mdc-text-field text-field mdc-text-field--fullwidth mdc-text-field--textarea">
-      <textarea id="text-field-fullwidth-textarea-helper" rows="{{ include.rows }}" maxlength="{{ include.maxlength }}" class="mdc-text-field__input" name="{{ include.name }}" {% if include.required == 'yes' %} required {% else %} {% endif %}></textarea>
+      <textarea id="text-field-fullwidth-textarea-helper" rows="{{ include.rows }}" maxlength="{{ include.maxlength }}" class="mdc-text-field__input" name="{{ include.name }}" style="width:{{ include.width }};height:{{ include.height }};" {% if include.required == 'yes' %} required {% else %} {% endif %}></textarea>
       <div class="mdc-notched-outline mdc-notched-outline--upgraded">
         <div class="mdc-notched-outline__leading"></div>
         <div class="mdc-notched-outline__notch" style="">
@@ -31,7 +31,7 @@
 {% if include.variant == 'checkbox-input' %}
 <div class="mdc-form-field" id="{{ include.name }}_div">
   <div class="mdc-checkbox">
-    <input type="{{ include.type }}" name="{{ include.name }}" class="mdc-checkbox__native-control" id="{{ include.name }}"/>
+    <input type="{{ include.type }}" name="{{ include.name }}" class="mdc-checkbox__native-control" id="{{ include.name }}" onclick="{{ include.onclick }}"/>
     <div class="mdc-checkbox__background">
       <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
         <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
