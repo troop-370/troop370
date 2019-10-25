@@ -127,8 +127,8 @@ title: Troop 370 Announcement Submission
   form.addEventListener('submit', e => {
     e.preventDefault()
     fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => console.log('Success!', response))
-      .catch(error => console.error('Error!', error.message))
+      .then(response => { console.log('Success!', response); window.location.href="/submission-sent.html";} )
+      .catch(error => { console.error('Error!', error.message); alert("There was an error submitting the announcement request\n\nPlease try again later\n\nIf your issue continues, please contact the webmaster at https://troop370atlanta.org/contact-webmaster");} )
   })
 </script>
 <script type="text/javascript">
@@ -148,7 +148,6 @@ title: Troop 370 Announcement Submission
       document.getElementById("web-email-div").style.display = "block";
     }
     else {
-      alert("long disabled");
       document.getElementById("web-email-div").style.display = "none";
     }
   }
