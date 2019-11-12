@@ -1,0 +1,26 @@
+name: Build Website
+
+on:
+  pull_request:
+    branches:
+    - master-new
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby 2.5.5
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.5.5
+    - name: Install Gems
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Install Node Modules
+      run: npm install
+    - name: Build Website
+      run: jekyll build
