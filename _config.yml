@@ -1,5 +1,5 @@
 title: BSA Troop 370
-site: "https://troop370atlanta.org"
+url: "https://troop370atlanta.org"
 plugins:
   - jekyll-github-metadata
   - jekyll-sitemap
