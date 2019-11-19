@@ -1,0 +1,49 @@
+name: Publish Website
+
+on:
+  push:
+    branches:
+    - master-new
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby 2.5.5
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.5.5
+    - name: Install Gems
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Install Node Modules
+      run: npm install
+    - name: Build Website
+      run: jekyll build
+    - name: Publish Website
+      env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+      run: |
+        mkdir temp
+        shopt -s extglob dotglob
+        mv !(temp|_site) temp
+        shopt -u dotglob
+        rm -rf temp
+        cd _site
+        mv * ../
+        cd ../
+        rm -rf _site
+        git init
+        git add .
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "build@troop370atlanta.org"
+        git remote add orgin https://github.com/troop-370/troop370.git
+        git checkout -b gh-pages
+        git commit -a -m "add built version of website files (action)"
+        git push --set-upstream https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git gh-pages -f

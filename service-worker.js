@@ -9,11 +9,11 @@ const offlineFallbackPage = "/offline.html";
 
 // Install stage sets up the offline page in the cache and opens a new cache
 self.addEventListener("install", function (event) {
-  console.log("[Troop 370 Service Worker] Install Event processing");
+  console.log("[Troop 370 Service Worker Legacy] Install Event processing");
 
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      console.log("[Troop 370 Service Worker] Cached offline page during install");
+      console.log("[Troop 370 Service Worker Legacy] Cached offline page during install");
 
       if (offlineFallbackPage === "ToDo-replace-this-name.html") {
         return cache.add(new Response("TODO: Update the value of the offlineFallbackPage constant in the serviceworker."));
@@ -38,7 +38,7 @@ self.addEventListener("fetch", function (event) {
         return;
       }
 
-      console.error("[Troop 370 Service Worker] Network request Failed. Serving offline page " + error);
+      console.error("[Troop 370 Service Worker Legacy] Network request Failed. Serving offline page " + error);
       return caches.open(CACHE).then(function (cache) {
         return cache.match(offlineFallbackPage);
       });
@@ -52,7 +52,7 @@ self.addEventListener("refreshOffline", function () {
 
   return fetch(offlineFallbackPage).then(function (response) {
     return caches.open(CACHE).then(function (cache) {
-      console.log("[Troop 370 Service Worker] Offline page updated from refreshOffline event: " + response.url);
+      console.log("[Troop 370 Service Worker Legacy] Offline page updated from refreshOffline event: " + response.url);
       return cache.put(offlinePageRequest, response);
     });
   });
