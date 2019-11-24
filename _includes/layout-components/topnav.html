@@ -1,0 +1,26 @@
+<div class="flex-container topnav" id="topnav">
+  <div class="flex-item">
+    <div class="grid-container">
+      <div class="grid-item-title">
+        <button data-target="slide-out" class="menu-icon mdc-icon-button sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </button>
+        <a id="topnav-title">BSA Troop 370</a>
+      </div>
+      <div class="grid-item-navigation">
+        <ul id="main-nav">
+          <li><a href="/index.html" id="home">Home</a></li>
+          {% include topnav-item.html collection="about" collection-label="About" %}
+          {% include topnav-item.html collection="information" collection-label="Info" collection-label-hide-small="rmation" %}
+          {% include topnav-item.html collection="events" collection-label="Events" %}
+          {% include topnav-item.html collection="members" collection-label="Members" %}
+          {% include topnav-item.html collection="photos" collection-label="Photos" %}
+          {% include topnav-item.html collection="contact" collection-label="Contact" %}
+          {% include topnav-item.html collection="payments" collection-label="Pay" collection-label-hide-small="ments" %}
+          {% include topnav-item.html collection="store" collection-label="Store" %}
+          <style media="screen">a#store + ul {margin-left: -100px;}</style>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
