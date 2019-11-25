@@ -1,0 +1,103 @@
+<!--materialize script for sidenav-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- Initialize sidenav  -->
+<script>
+  function sidenav() {
+    var sidenavs = document.querySelectorAll('.sidenav')
+    for (var i = 0; i < sidenavs.length; i++){
+      M.Sidenav.init(sidenavs[i]);
+    }
+    var collapsibles = document.querySelectorAll('.collapsible')
+    for (var i = 0; i < collapsibles.length; i++){
+      M.Collapsible.init(collapsibles[i]);
+    }
+  }
+  window.onload = sidenav;
+</script>
+<!-- add class on scroll to topnav -->
+<script type="text/javascript">
+  window.onscroll = function (e) {
+    if (window.scrollY >= 1) {
+      document.getElementById("topnav").classList.add('scroll');
+    } else {
+      document.getElementById("topnav").classList.remove('scroll');
+    }
+  };
+</script>
+<!-- pjax navigation with loading bar -->
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+<script src="/js/topbar.min.js"></script>
+<script type="text/javascript">
+  var pjax = new Pjax({
+    elements: "a", // default is "a[href], form[action]"
+    selectors: [".page-content", ".page-title"],
+    cacheBust: false
+  })
+  document.addEventListener('pjax:send', topbar.show)
+  document.addEventListener('pjax:complete', topbar.hide)
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    topbar.config({
+      barColors: {
+        '0':'rgba(128, 159, 195, 1)'
+      },
+      barThickness : 2,
+      shadowBlur: 0
+    })
+  } else {
+    topbar.config({
+      barColors: {
+        '0':'rgba(0, 63, 135, 0.3)'
+      },
+      barThickness : 2,
+      shadowBlur: 0
+    })
+  }
+</script>
+<!-- service worker -->
+<script>
+// Check compatibility for the browser we're running this in
+if ("serviceWorker" in navigator) {
+  if (navigator.serviceWorker.controller) {
+    console.log("[Troop 370 Service Worker] Active service worker found; no need to register");
+  } else {
+    // Register the service worker
+    navigator.serviceWorker
+      .register("sw.js", {
+        scope: "./"
+      })
+      .then(function (reg) {
+        console.log("[Troop 370 Service Worker] Service worker has been registered for scope: " + reg.scope);
+      });
+  }
+}
+</script>
+<!-- install prompt for pwa -->
+<script>
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+  });
+  async function install() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      console.log(deferredPrompt)
+      deferredPrompt.userChoice.then(function(choiceResult){
+        if (choiceResult.outcome === 'accepted') {
+          console.log('[Troop 370 Service Worker] PWA installed');
+        } else {
+          console.log('[Troop 370 Service Worker] User declined to install PWA');
+        }
+        deferredPrompt = null;
+      });
+    }
+  }
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    var snai = document.getElementById("sideNavAppInstall");
+    snai.style.display = "none";
+    var snaid = document.getElementById("sideNavAppInstallDivider");
+    snaid.style.display = "none";
+  }
+</script>
