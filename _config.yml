@@ -42,3 +42,7 @@ collections:
     output: true
     permalink: /pay/:path.html
 collections_dir: _collections
+markdown: kramdown
+kramdown:
+    parse_block_html: true
+    input: GFM
