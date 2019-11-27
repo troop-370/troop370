@@ -35,6 +35,9 @@
     padding-inline-start: 20px;
     @include mdc-typography(body1);
   }
+  img {
+    max-width: calc(100% - 20px);
+  }
   span.indent {
     padding-inline-start: 36px;
     &--new-line {
