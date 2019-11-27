@@ -1,4 +1,4 @@
-.content-strip {
+.content-strip, section {
   padding: $content-strip-padding-y $content-strip-padding-x;
   display: flex;
   justify-content: center;
@@ -7,7 +7,7 @@
   @media (max-width: $breakpoint-mobile) {
     padding: $content-strip-padding-bm-y $content-strip-padding-x;
   }
-  .flex-item {
+  .flex-item, &>div {
     width: $content-width;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -21,6 +21,9 @@
   }
   p, .mdc-button {
     margin: calc(3 * #{$content-strip-item-margin-y}) $content-strip-item-margin-x;
+  }
+  p {
+    @include mdc-typography(body1);
   }
   ul {
     list-style-type: disc;
@@ -65,6 +68,10 @@
     }
     &:not(.mdc-button--outlined) {
       margin: 0 0 0 -15px;
+    }
+    &.md {
+      margin-top: calc(2 * #{$content-strip-item-margin-y});
+      margin-bottom: 0;
     }
   }
   &--primary {
@@ -117,13 +124,13 @@
   &--min-padding {
     padding: $content-strip-padding-y-min $content-strip-padding-x;
   }
-  &--no-bottom-padding {
+  &--no-bottom-padding, &:not(:last-of-type):not(.content-strip) {
     padding-bottom: 0;
   }
   &--center {
     text-align: center;
   }
-  &:not(.content-strip--no-bottom-padding) {
+  &:not(.content-strip--no-bottom-padding), &:last-of-type:not(.content-strip) {
     border-bottom: 1px solid $content-strip-background-bottom-border-color;
   }
   h1, .mdc-typography--headline4 {
@@ -191,4 +198,7 @@
       width: unset;
     }
   }
+}
+section:not(.content-strip--no-bottom-padding) {
+  border: none;
 }
