@@ -28,10 +28,12 @@
   ul {
     list-style-type: disc;
     padding-inline-start: 20px;
+    @include mdc-typography(body1);
   }
   ol {
     list-style-type: decimal;
     padding-inline-start: 20px;
+    @include mdc-typography(body1);
   }
   span.indent {
     padding-inline-start: 36px;
