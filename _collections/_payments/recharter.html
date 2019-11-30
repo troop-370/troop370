@@ -33,7 +33,12 @@ menu: hide
   <div class="flex-item">
     <h2>PayPal</h2>
     <p>Like last year the Troop is offering the option of making your payment using PayPal. Although PayPal will impose merchant fees for annual dues (which are not eligible for Friends and Family treatment), we understand that many scout families prefer PayPal over Venmo. You may pay using the button below.<br>Simply follow the online instructions. In the box entitled "Scout Name/Event", enter "John Doe/Recharter." As with Venmo, you may use only your last name if your family has more than one member renewing their registration.</p>
-    <input id="paypal-button" type="image" src="https://raw.githubusercontent.com/troop-370/troop370/master/src/icons/pay-using-paypal-button.png" name="submit" alt="PayPal" border="0" style="height: 36px;">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+      <input type="hidden" name="cmd" value="_s-xclick">
+      <input type="hidden" name="hosted_button_id" value="SXVTG8VBCPUNJ">
+      <input id="paypal-button" type="image" src="https://raw.githubusercontent.com/troop-370/troop370/master/src/icons/pay-using-paypal-button.png" name="submit" alt="PayPal - The safer, easier way to pay online!" border="0" style="height: 36px;">
+      <img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" border="0">
+    </form>
   </div>
 </div>
 <div class="content-strip">
