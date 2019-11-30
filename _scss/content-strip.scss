@@ -1,14 +1,38 @@
 .content-strip, section {
   padding: $content-strip-padding-y $content-strip-padding-x;
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   background-color: $mdc-theme-background;
   color: $mdc-theme-on-background;
   @media (max-width: $breakpoint-mobile) {
     padding: $content-strip-padding-bm-y $content-strip-padding-x;
   }
-  .flex-item, &>div {
+  .flex-item {
     width: $content-width;
+    columns: var(--column-width) var(--column-count);
+    column-gap: $content-strip-padding-x;
+    &.column {
+      .md-generated {
+        padding: $content-strip-padding-y-reduced 0 0 0;
+        &:last-of-type {
+          padding: $content-strip-padding-y-reduced 0;
+        }
+      }
+    }
+    .md-generated {
+      break-inside: avoid;
+      padding: $content-strip-padding-y 0 0 0;
+      @media (max-width: $breakpoint-mobile) {
+        padding: $content-strip-padding-bm-y 0 0 0;
+      }
+      &:last-of-type {
+        padding: $content-strip-padding-y 0;
+        @media (max-width: $breakpoint-mobile) {
+          padding: $content-strip-padding-bm-y 0;
+        }
+      }
+    }
   }
   h1, h2, h3, h4, h5, h6 {
     &, p, .mdc-button {
