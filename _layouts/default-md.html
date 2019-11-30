@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  {% include layout-components/head.html %}
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <body>
+    {% include layout-components/sidenav.html %}
+    {% include layout-components/topnav.html %}
+    <div class="page-content md-page-content">
+      <div class="content-strip content-strip--primary content-strip--extra-padding content-strip--center">
+        <div class="flex-item">
+          <h1>{% if page.long_title %}{{ page.long_title }}{% else %}{{ page.title }}{% endif %}</h1>
+          {% if page.subtitle %}<p>{{ page.subtitle }}</p>{% endif %}
+        </div>
+      </div>
+      <section {% if page.no-headings == true %}{% else %}style="padding-top:0;padding-bottom:0;"{% endif %}>
+        <div class="flex-item {% if page.column-count > 1 %}column{% else %}{% endif %}">
+          {{ content }}
+        </div>
+      </section>
+      <style media="screen">
+        section > .flex-item {
+          --column-count: {{ page.column-count }};
+          --column-width: {% if page.column-count == 2 %}490px{% elsif page.column-count == 3 %}389px{% else %}{% endif %}
+        }
+      </style>
+      <!--imported mdc script-->
+      <script src="/js/main.js"></script>
+    </div>
+    {% include layout-components/scripts.html %}
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.md-page-content h2').each(function(i, e) {
+          $(this).add( $(this).nextUntil('.md-page-content h2') ).wrapAll('<div class="md-generated"></div>');
+        });
+        $(".column p").has("a.mdc-button.md").css("margin","-10px 0 0 0");
+      });
+    </script>
+    <script type="text/javascript">
+      document.addEventListener("pjax:complete", function(){
+        $('.md-page-content h2').each(function(){
+          $(this).add( $(this).nextUntil('.md-page-content h2') ).wrapAll('<div class="md-generated"></div>');
+        });
+        $(".column p").has("a.mdc-button.md").css("margin","-10px 0 0 0");
+      });
+    </script>
+  </body>
+</html>
