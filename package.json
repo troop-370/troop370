@@ -1,0 +1,42 @@
+{
+  "name": "troop370website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "service-worker.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/troop-370/troop370.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/troop-370/troop370/issues"
+  },
+  "homepage": "https://github.com/troop-370/troop370#readme",
+  "scripts": {
+    "build-js": "webpack -p"
+  },
+  "dependencies": {
+    "@material/button": "^1.1.1",
+    "@material/card": "^1.1.1",
+    "@material/checkbox": "^1.1.0",
+    "@material/elevation": "^1.1.0",
+    "@material/floating-label": "^1.1.0",
+    "@material/form-field": "^1.1.0",
+    "@material/icon-button": "^1.1.0",
+    "@material/radio": "^1.1.0",
+    "@material/ripple": "^1.1.0",
+    "@material/snackbar": "^1.1.1",
+    "@material/tab-bar": "^3.1.0",
+    "@material/textfield": "^1.1.1",
+    "@material/theme": "^1.1.0",
+    "@material/typography": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.5"
+  }
+}

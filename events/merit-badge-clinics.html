@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+  <link rel="manifest" href="/manifest.json">
+  <title class="page-title">Merit Badge Clinics | BSA Troop 370</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/src/troop370-logo/favicon.ico">
+  <style>
+    @media (prefers-color-scheme:dark) {
+      html,body,h1,h2,h3,h4,h5,h6,p,button,a {background:black;color:black;border:black;}
+    }
+    @media (prefers-color-scheme:light) {
+      html,body,h1,h2,h3,h4,h5,h6,p,button,a {background:white;color:white;border:white;}
+    }
+    @media (prefers-color-scheme:no-preference) {
+      html,body,h1,h2,h3,h4,h5,h6,p,button,a {background:white;color:white;border:white;}
+    }
+  </style>
+  <script>
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/css/main-dark.css">';
+      document.querySelector('head').innerHTML += '<meta name="theme-color" content="#262626">';
+    } else {
+      document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/css/main.css">';
+      document.querySelector('head').innerHTML += '<meta name="theme-color" content="#efefef">';
+    }
+  </script>
+</head>
+
+  <body>
+    <ul id="slide-out" class="sidenav"0>
+  <li class='header'>
+    <svg class='bugler' xmlns="http://www.w3.org/2000/svg" width="60" height="119" viewBox="0 0 215.4 370.4" style='fill:currentColor;'>
+      <path d='M32.9 370l-.5-1.4-.8-2.9c-.4-1-.6-2.2-.6-2.6l-.6-2.6c-.3-1-.4-2-.3-2.4 0-.3 0-.9-.2-1.2-.4-.8-1-5.4-1.3-10.6l-.6-7.8a123.6 123.6 0 0 1 .7-25c.4-1 .9-1.6 3.4-4.1 1.3-1.4 1.5-2.7 1-6.4 0-1 0-1.7.3-2.4 2-5 2-5.2 2.5-11.4a16 16 0 0 0-.8-7.6c-.8-2.1-.9-3.4-.3-4.5.4-.7.4-1 0-2.3l-1-3.6a15 15 0 0 1-.9-4.5c-.2-3.5-.5-4.8-2-7.8-.8-1.8-1.3-3.2-1.4-4.2a41.2 41.2 0 0 1-1-13c0-5.1-.2-10.5-.3-12-.2-2.6-.3-2.7-1-3.4l-1.3-.6a2 2 0 0 1-1-.4c-.2-.2-.8-.4-1.3-.5-.8-.2-4.5-3.1-5.5-4.4-.7-.8-.5-2 2.1-9.8.3-.7.6-2 .7-3 .2-1.7.7-4.2 1.6-8.7l.2-4v-2.6l-2.2-2.5a30.2 30.2 0 0 1-5.8-9.8 13 13 0 0 0-1.7-3.2 49 49 0 0 1-1.6-7.9c0-.4-.4-2-1-3.6-.6-1.9-.9-3.4-.9-4.3 0-.8-.2-2-.4-2.6a777.7 777.7 0 0 0-1.3-12.6 131 131 0 0 1-.4-9.4c0-3.4-.1-5.6-.4-6.9l-.4-3.2c0-1.5 1-7 1.4-8.2l.5-3c.1-1.4.4-2.8.6-3.2.2-.4.4-1.2.4-1.8 0-1.6 1-4.9 1.7-6 .8-1.2.8-1.4.3-3-.7-2-.3-3.7 2-7.3a61.2 61.2 0 0 0 3.9-8.5l.8-2 1.3-2.7 1.7-2.9a14 14 0 0 1 1.8-2.5l1.6-2.2 1.1-1.9c.4-.4 1.8-2 3-3.6 2.2-2.6 2.3-2.8 2.1-3.7-.5-3.1-.4-3.4 1.1-3.6 1.1-.2 1.2-.3 1.2-1.8 0-1.7-.7-2.8-2.2-3.8a21.8 21.8 0 0 1-5.6-4.8C24 48.2 24 48 23 48.3c-.5 0-1 .3-1.3.5-.6.5-4.8 2.6-7.2 3.5l-2.8 1.3c-.8.7-6.4 2-8.8 2-1.1.1-1 .1-2.6-1.8-.4-.4-.4-.9-.1-.9l.7-1.4c.3-.7.8-1.7 1.2-2.1a40 40 0 0 1 8.6-6.3l2.8-2c3-2 2.7-1.7 2.7-4a24.3 24.3 0 0 0-.8-5.9c0-.6-.3-1.7-.5-2.3-.3-.9-.4-1.7-.3-3.4.1-1.3.3-2.5.5-2.6l.2-1c0-.5.3-1.3.6-2l.5-1.2c0-.4 1.7-3 2.4-3.8a70.8 70.8 0 0 1 11-11.8l1.3-.5c1-.6 1.4-.6 7.1-.6a25.6 25.6 0 0 1 10.4 1.3c1 .3 2.1.8 2.7 1.2.5.5 1.2.8 1.5.8a8 8 0 0 1 2.4 1 31.3 31.3 0 0 1 9 8.3c1.5 2.4 2 2.7 3.6 1.9l1.6-.8c.3-.2 1-.4 1.3-.4.7 0 4.7-1.2 5.1-1.6a22 22 0 0 1 6.5-1.5c1.5-.2 3.1-.5 3.6-.7 1.3-.6 2.2-.5 3.1.3.7.6.8.9.8 2 0 1.6-1 3.9-2 4.6a24.3 24.3 0 0 1-5.6 3.2c-.8.2-2 .7-2.6 1a19 19 0 0 1-4.5 1.7l-1.2.4-1.8.7c-2.4.8-2.7 1.4-1.7 4 .6 1.6 1.3 2.4 2.3 2.9.4.1 1 .7 1.5 1.3.4.6 1.3 1.4 2 1.8 2.1 1.3 4.5 3.4 4.5 4.1 0 .4-.6 1.2-1.6 2-2.6 2.5-2.5 2.6 4 2.5h5.6l1-.8c1.5-1.2 1.6-1.2 3.6-1.4 5.7-.6 7.2-1 8-2l.8-.4c.5 0 1.2-.7 2.1-2.2.4-.5 1.2-1.3 1.8-1.7l1.7-1.1c1.7-1.1 3.9-1.2 20.5-.8 1 0 4.5-.6 5.1-.9l2.7-.7 2.7-.7a4 4 0 0 1 1.4-.4c.5 0 1-.1 1.4-.3a4 4 0 0 1 1.7-.4c.5 0 1-.2 1.2-.4.2-.2.8-.4 1.3-.5.6 0 1.4-.3 1.8-.4a58 58 0 0 1 4-1l4-1c1.3-.5 3.6-1.1 5.5-1.5l2.4-.6 1.8-.4 1.8-.5c1.1-.5 3.4-1.1 4-1.1l1.6-.4 2-.6c.7 0 1.7-.5 2.3-.8.6-.4 1.3-.8 1.7-.8 1.3-.1 2.3-.4 2.9-1 .3-.2 1-.4 1.5-.4.7 0 1-.2 1.7-1a4 4 0 0 1 1.7-1c.4-.1 1.2-.5 1.7-1 .4-.4 1.1-.8 1.5-.9.4 0 1-.3 1.2-.5l1.5-.8c.6-.2 1.1-.6 1.1-.7 0-.1.4-.5 1-.8.5-.3 1-.8 1.1-1.2a27 27 0 0 0 7.1-7c1.3-2.4 1.4-2.6 2-3 .2 0 .5-.4.5-.6 0-.2.3-.3.7-.3.6 0 .8.1.8.4 0 .2.5.9 1 1.4l.9 1.2 1 2c.7 1 1.3 2.3 1.4 2.7.2 1 1 3.2 1.8 4.8 1.4 3.2 1.5 3.3 2 9.3.1 1 .3 1.7.4 1.7.2 0 .3 1.6.3 3.6 0 3.5 0 3.6-.7 4.4-1 1-1.4 1-2.2.1-.4-.3-.8-.6-1-.6-.3 0-1-.6-1.6-1.4-.8-.9-1.5-1.4-2.2-1.6-.6-.1-1.4-.5-1.8-.9-.4-.3-1-.6-1.3-.6-.3 0-.8-.2-1.1-.5-.6-.4-1.2-.4-4-.4-7.4.1-10.7.5-11.6 1.3l-1 .4c-.6.3-.5.6.8 1.5l2 2c.7 1.2 2 4 2.2 5.3.2 1-.2 3.6-.8 5.4-1.5 4.1-3.2 6.3-5.5 6.9l-1.3.5c-.1.2-.5.3-.9.3s-1.5.3-2.6.7c-2.3.8-5.4 1.6-11.5 2.8A43 43 0 0 0 164 54c-.6.2-1.4.4-1.9.4-.8 0-1.6.2-4.3 1l-2.2.4c-.5 0-1.3.2-1.7.4-2.3.8-3.6 1.1-4.4 1.1-.4 0-1.2.2-1.5.4l-2.7.7a56.2 56.2 0 0 0-8.2 1.8l-2.7.8c-.3.2-1.4.4-2.4.5-2 .1-3.4.8-3.4 1.6 0 .6-.2 1.2-.5 2.2-.2.5-.4 2-.6 3.4a10 10 0 0 1-.5 2.7c-.1.2-.3 1-.3 1.7 0 1.4 0 1.7-1.9 5.6l-.7 1.1c-.1 0-1 .9-1.9 2a9 9 0 0 1-2 2c-.2 0-1.2.7-2.3 1.5-2.8 2.3-8 5-12.7 6.4l-2.7 1c-.4.2-1.8.5-3.2.6a12 12 0 0 0-3.7.8c-1.3.6-4 1.4-6.2 1.9-.8.2-1.7.6-2.4 1.3-1 .9-1.1 1-1 2 0 .7.5 2.3 1.3 4a70 70 0 0 1 4.1 9.3l.4.7.4.6c.3.5 1.2 2.9 1.7 4.7.2.5.4 5 .6 9.8.1 6.3.3 9 .6 9.5 1 2 1 2.7 1 4.9a163.6 163.6 0 0 0 1 23.7c0 .6.2 1.6.5 2.4.3.8.7 2.3.8 3.3.2 1 .7 2.9 1.2 4.2.6 1.5 1 3.2 1.3 5a91 91 0 0 0 1.6 9.3c.2.6.5 2.3.5 3.8.2 3 .7 6.1 1 6.8.3.6 1 4.2 1 5.2 0 .5.2 1.3.4 1.8.3.5.4 1.2.4 1.5 0 .2.2.8.5 1.3.3.6.5 2 .6 5.4.3 5.4.1 6-2 7.8a20.5 20.5 0 0 1-5 3.4c-.4 0-2.3 1.5-3.1 2.5a55 55 0 0 0-2.7 9.8c-.5 2.8-.7 3.2-1.5 4.5-.5.6-.8 1.3-.8 1.5l-.4.9a30.1 30.1 0 0 0-2 8.6c-.1.9-.4 2-.9 2.9l-.7 2c0 .3-.2.9-.5 1.4-.3.5-.5 1.1-.5 1.4 0 .4-.2 1-.4 1.3-.2.3-.4 1-.4 1.3l-.4 1.3a16 16 0 0 0-1.5 4c-.1.8-.5 1.8-.7 2.3-.2.5-.3 1.3-.3 1.8l-.3 1.6c-.4 1-1 5-1.3 8.9-.4 5.3-1.1 7.8-3 10.4l-.9 2.1c-.6 2-1.6 3.3-4.5 6.5-.8.8-1.4 1.6-1.4 1.8 0 .2-.3.5-.7.7-1.3.7-3 2.4-3.6 3.7-.6 1-.6 1.4-.4 2 .6 1.8.4 3.2-.7 5-.9 1.4-1 1.7-1 3.4 0 1-.1 2.3-.3 2.8-.2.6-.5 2.1-.6 3.4a9.1 9.1 0 0 1-.6 3c-.3.5-.6 1.2-.7 1.8a6 6 0 0 1-.8 1.8c-1.1 1.8-1.2 2.4-1.1 9.8 0 5.8 0 7-.3 7.6-.4.6-.4 2.2-.5 8.5v10.3H46.7c-12.8 0-13.6 0-13.9-.5zm36-303.5l2.3-.9c1.4-.7 5.5-.8 6.2-.1.5.5 1.8 1 3 1 .6 0 1.4 0 1.7.2.7.3.8.2 1.6-.5.7-.7 1-.8 2.1-.8.7 0 1.5-.2 1.9-.5.3-.2 1.6-.5 2.8-.7a7 7 0 0 0 3-1.1c.8-.6 1.2-.7 2-.6.9.1 1.4 0 3-.8 1.8-1 2.8-2 2.8-3 0-.4-.2-.5-3.2-.6-4.3-.1-6.4-.6-9.4-2.2-2.1-1-2.7-1.5-4.1-3.2-1.6-1.9-1.7-1.9-3-1.9-1 0-1.3.1-1.7.6-.7.8-.7 1.6.1 3.1.9 1.7.9 3.1 0 4.5-.3.6-.9 1.2-1.1 1.3a12.6 12.6 0 0 1-5.7 2l-5 .1h-3.6l-.7 1.1c-1 1.5-.9 2.2.2 2.9 1 .7 2.8.7 4.8.1zm64-10.6l3.5-.9a52.3 52.3 0 0 0 5.7-1.3c2.3-.5 4.5-1.1 5.7-1.5a24 24 0 0 1 3.3-.6c1.8-.2 3.4-.7 4.1-1.1l1.5-.4c1.4-.2 3.6-.9 4.3-1.3a4 4 0 0 1 1.7-.4c1.6 0 4-.4 5.4-1a6 6 0 0 1 1.8-.3l.9-.2c0-.2.7-.4 1.4-.5a6 6 0 0 0 1.7-.5c.3-.2 1.7-.5 3-.6a12 12 0 0 0 3.3-.9l2.2-1.2c1-.6 1.4-1 1.8-2 .9-2.2.4-5-1-6.6-1.7-1.7-4.5-1.9-8.7-.4l-3.3.6c-1.4.2-3 .6-3.5.8-.8.3-2.4.7-5 1.2a83.6 83.6 0 0 1-9.7 2.1l-3.4.8c-2.3.7-5.3 1.4-7.3 1.8a95.6 95.6 0 0 0-10 2.5c-1.4.3-3 .7-3.5 1l-.9.4-.2 2.5c-.2 1.7-.1 3 0 4l.4 2.2c0 .4.2 1 .7 1.5 1 1 2 1 4.2.3zM101.5 54c.4-.4.4-.8.2-3.5-.1-1.6-.2-3.4 0-3.8 0-1.1-.2-1.3-2.1-1.2-1 0-1.6.2-2 .5a3 3 0 0 1-1.5.7c-2.5.3-3.3.5-4.2 1-.5.3-1.6.6-2.4.7-1.4.1-1.4.2-1.5 1-.1 1 .7 2.2 1.6 2.2.2 0 .8.4 1.2.8.6.7 1 .9 2 1a4 4 0 0 1 1.9.6c.6.6 2 .7 4.5.6 1.2-.1 2-.3 2.3-.6z'/>
+    </svg>
+    <p class='site-title'>BSA Troop 370</p>
+    <p class='location'>Atlanta, GA</p>
+    <a href='https://www.facebook.com/groups/126169727423188/' class='social mdc-button standard-dark-button mdc-button--outlined ripple-mobile'>
+      <svg class='mdc-button__icon' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+      <path d='M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M18,5H15.5A3.5,3.5 0 0,0 12,8.5V11H10V14H12V21H15V14H18V11H15V9A1,1 0 0,1 16,8H18V5Z' />
+      </svg>
+    Facebook</a>
+    <a href='https://www.instagram.com/bsatroop370/' class='social mdc-button standard-dark-button mdc-button--outlined'>
+      <svg class='mdc-button__icon' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+      <path d='M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z'>
+      </svg>
+    Instagram</a>
+    <a href='https://troop370.smugmug.com/' class='social mdc-button standard-dark-button mdc-button--outlined'>
+      <svg class='mdc-button__icon' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+      <path d='M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z' />
+      </svg>
+    SmugMug</a>
+  </li>
+  <li><a href="#" class="sidenav-close" id="sideNavAppInstall" onclick="install()">Install Troop 370 App</a></li>
+
+  <li><div class="divider" id="sideNavAppInstallDivider"></div></li>
+  <li><a href="/index.html" class="sidenav-close" id="" onclick="">Home</a></li>
+
+  
+
+
+
+
+  <li class="no-padding">
+    <ul class="collapsible collapsible-accordion">
+      <li>
+        <a class="collapsible-header">About<span class="hide-small"></span><i class="material-icons drop-arrow">arrow_drop_down</i></a>
+        <div class="collapsible-body">
+          <ul>
+            
+              <li><a href="/about.html">About</a></li>
+            
+              <li><a href="/leaders.html">Leaders</a></li>
+            
+              <li><a href="/eagle-scout-honor-roll.html">Eagle Scout Honor Roll</a></li>
+            
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </li>
+
+
+  
+
+
+
+
+  <li class="no-padding">
+    <ul class="collapsible collapsible-accordion">
+      <li>
+        <a class="collapsible-header">Information<span class="hide-small"></span><i class="material-icons drop-arrow">arrow_drop_down</i></a>
+        <div class="collapsible-body">
+          <ul>
+            
+              <li><a href="/information/forms-documents.html">Forms &amp; Documents</a></li>
+            
+              <li><a href="/information/advancement.html">Advancement</a></li>
+            
+              <li><a href="/information/participation.html">Scout/Parent Participation</a></li>
+            
+              <li><a href="/information/leadership-training.html">Leadership Training</a></li>
+            
+              <li><a href="/information/faqs.html">FAQs</a></li>
+            
+              <li><a href="/information/finding-mb.html">Finding MB Class/Counselor</a></li>
+            
+              <li><a href="/information/helpful-links.html">Helpful Links</a></li>
+            
+              <li><a href="/information/contact-info-directions.html">Update Contact Information</a></li>
+            
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </li>
+
+
+  
+
+
+  
+    <li><a href="/events/hub.html" class="sidenav-close">Events<span class="hide-small"></span></a></li>
+  
+
+
+
+
+  
+
+
+
+
+  <li class="no-padding">
+    <ul class="collapsible collapsible-accordion">
+      <li>
+        <a class="collapsible-header">Members<span class="hide-small"></span><i class="material-icons drop-arrow">arrow_drop_down</i></a>
+        <div class="collapsible-body">
+          <ul>
+            
+              <li><a href="/members/communication.html">Communication</a></li>
+            
+              <li><a href="/members/calendar.html">Calendar</a></li>
+            
+              <li><a href="/members/mb-counselors.html">Merit Badge Counselors</a></li>
+            
+              <li><a href="/members/troop-roster.html">Troop Roster</a></li>
+            
+              <li><a href="/members/what-can-i-do.html">What Can I Do?</a></li>
+            
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </li>
+
+
+  
+
+
+  
+    <li><a href="/photos.html" class="sidenav-close">Photos<span class="hide-small"></span></a></li>
+  
+
+
+
+
+  
+
+
+  
+    <li><a href="/contact.html" class="sidenav-close">Contact<span class="hide-small"></span></a></li>
+  
+
+
+
+
+  
+
+
+  
+    <li><a href="/pay/payments.html" class="sidenav-close">Payments<span class="hide-small"></span></a></li>
+  
+
+
+
+
+  
+
+
+
+
+
+  <li><div class="divider"></div></li>
+  <li><a href="https://tmweb.troopmaster.com/mysite/troop370atl" class="sidenav-close" id="" onclick="">TroopMaster</a></li>
+
+  <li><div class="divider"></div></li>
+  <li><a href="/contact-webmaster.html" class="sidenav-close" id="" onclick="">Help &amp; Feedback</a></li>
+
+  <li><a href="/information/cookies.html" class="sidenav-close" id="" onclick="">Cookie Policy</a></li>
+
+  <li><a href="https://github.com/troop-370/troop370" class="sidenav-close" id="" onclick="">Source Code</a></li>
+
+</ul>
+
+    <div class="flex-container topnav" id="topnav">
+  <div class="flex-item">
+    <div class="grid-container">
+      <div class="grid-item-title">
+        <button data-target="slide-out" class="menu-icon mdc-icon-button sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </button>
+        <a id="topnav-title">BSA Troop 370</a>
+      </div>
+      <div class="grid-item-navigation">
+        <ul id="main-nav">
+          <li><a href="/index.html" id="home">Home</a></li>
+          
+
+
+
+
+  <li class="dropdown"><a href="javascript:void(0)" id="about">About<span class="hide-small"></span></a>
+    <ul>
+      
+        <li><a href="/about.html">About</a></li>
+      
+        <li><a href="/leaders.html">Leaders</a></li>
+      
+        <li><a href="/eagle-scout-honor-roll.html">Eagle Scout Honor Roll</a></li>
+      
+    </ul>
+  </li>
+
+
+          
+
+
+
+
+  <li class="dropdown"><a href="javascript:void(0)" id="information">Info<span class="hide-small">rmation</span></a>
+    <ul>
+      
+        <li><a href="/information/forms-documents.html">Forms &amp; Documents</a></li>
+      
+        <li><a href="/information/advancement.html">Advancement</a></li>
+      
+        <li><a href="/information/participation.html">Scout/Parent Participation</a></li>
+      
+        <li><a href="/information/leadership-training.html">Leadership Training</a></li>
+      
+        <li><a href="/information/faqs.html">FAQs</a></li>
+      
+        <li><a href="/information/finding-mb.html">Finding MB Class/Counselor</a></li>
+      
+        <li><a href="/information/helpful-links.html">Helpful Links</a></li>
+      
+        <li><a href="/information/contact-info-directions.html">Update Contact Information</a></li>
+      
+    </ul>
+  </li>
+
+
+          
+
+
+  
+    <li><a href="/events/hub.html">Events<span class="hide-small"></span></a></li>
+  
+
+
+
+
+          
+
+
+
+
+  <li class="dropdown"><a href="javascript:void(0)" id="members">Members<span class="hide-small"></span></a>
+    <ul>
+      
+        <li><a href="/members/communication.html">Communication</a></li>
+      
+        <li><a href="/members/calendar.html">Calendar</a></li>
+      
+        <li><a href="/members/mb-counselors.html">Merit Badge Counselors</a></li>
+      
+        <li><a href="/members/troop-roster.html">Troop Roster</a></li>
+      
+        <li><a href="/members/what-can-i-do.html">What Can I Do?</a></li>
+      
+    </ul>
+  </li>
+
+
+          
+
+
+  
+    <li><a href="/photos.html">Photos<span class="hide-small"></span></a></li>
+  
+
+
+
+
+          
+
+
+  
+    <li><a href="/contact.html">Contact<span class="hide-small"></span></a></li>
+  
+
+
+
+
+          
+
+
+  
+    <li><a href="/pay/payments.html">Pay<span class="hide-small">ments</span></a></li>
+  
+
+
+
+
+          
+
+
+
+
+
+          <style media="screen">a#store + ul {margin-left: -100px;}</style>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<style media="screen">
+  #topnav {
+    background-color: #ffcc00 !important;
+    box-shadow: none !important;
+  }
+  #topnav-title, .menu-icon>i, .topnav #main-nav>li>a, #storeTabBar .mdc-tab .mdc-tab__text-label {
+    color: black !important;
+  }
+  #storeTabBar .mdc-tab .mdc-tab-indicator__content--underline {
+    border-color: black !important;
+  }
+  #storeTabBar {
+    top:98px;
+    background-color: #ffcc00 !important;
+  }
+</style>
+<div class="content-strip content-strip--center content-strip--min-padding" style="background-color:yellow;position:sticky;top:56px;z-index:8;box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 4px 5px 0 rgba(0,0,0,0.07), 0 1px 10px 0 rgba(0,0,0,0.06);">
+  <div class="flex-item">
+    <p style="display:inline-block;color:black;margin:0;font-family:'IBM Plex Sans',Roboto,sans-serif;font-weight:600;">Coronavirus (COVID-19) Updates</p>
+    <a href="/information/covid-19.html" class="mdc-button mdc-button--dense" style="margin:0 10px;padding:0 10px;color:#000000;background-color:#ffcc00;">Read the Updates</a>
+  </div>
+</div>
+
+    <div class="page-content">
+      <div class="content-strip content-strip--primary content-strip--extra-padding content-strip--center">
+  <div class="flex-item">
+    <h1>Troop 370 Merit Badge Clinics</h1>
+    <p>The Troop hosts two Merit Badge Clinics each year, open to Scouts within and outside of Troop 370. Sign ups are available on <a href="https://www.eventbrite.com/o/troop-370-10799742690">Eventbrite</a></p>
+  </div>
+</div>
+<div class="content-strip content-strip--no-bottom-padding">
+  <div class="flex-item">
+    <h2>2019-2020 Merit Badge Clinics</h2>
+    <p>Summer Merit Badge Clinic<br>August 18, 2019</p>
+    <p>Winter Merit Badge Clinic<br>February 8, 2020 (Part of Scout Weekend)</p>
+  </div>
+</div>
+<div class="content-strip content-strip--no-bottom-padding">
+  <div class="flex-item">
+    <h3>Winter Merit Badge Clinic (2020)</h3>
+    <p>Troop 370 Merit Badge Clinic is coming up on February 8th. Please sign up early through Eventbrite as spaces will fill. We are offering many Eagle Required badges and some other hard to find options, including Dentistry with Dr. Michael Sebastian. Specific details, including prequesites, can be found on the registration page.</p>
+    <ul>
+      <li>Camping</li>
+      <li>Citizenship in the Community</li>
+      <li>Cooking</li>
+      <li>Emergency Preparedness</li>
+      <li>First Aid</li>
+      <li>Personal Management</li>
+      <li>Woodworking</li>
+      <li>Dentistry</li>
+    </ul>
+    <p>The link to register: <a href="https://www.eventbrite.com/e/boy-scout-troop-370-merit-badge-clinic-8feb2020-tickets-88438025515">http://bit.ly/37CBYSR</a></p>
+    <p>And the link to volunteer...please help us make this clinic possible for close to 200 scouts! <a href="https://www.eventbrite.com/e/volunteer-troop-370-merit-badge-clinic-8feb2020-tickets-88444396571">http://bit.ly/37Dg6qD</a></p>
+    <a href="https://www.eventbrite.com/e/boy-scout-troop-370-merit-badge-clinic-8feb2020-tickets-88438025515#tickets" class="mdc-button mdc-button--outlined">
+      <svg class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="height:24px;">
+        <path d="M20,12A2,2 0 0,0 22,14V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V14C3.11,14 4,13.1 4,12A2,2 0 0,0 2,10V6C2,4.89 2.9,4 4,4H20A2,2 0 0,1 22,6V10A2,2 0 0,0 20,12M16.5,16.25C16.5,14.75 13.5,14 12,14C10.5,14 7.5,14.75 7.5,16.25V17H16.5V16.25M12,12.25A2.25,2.25 0 0,0 14.25,10A2.25,2.25 0 0,0 12,7.75A2.25,2.25 0 0,0 9.75,10A2.25,2.25 0 0,0 12,12.25Z" />
+      </svg>
+      Register</a>
+    <a href="https://www.eventbrite.com/e/volunteer-troop-370-merit-badge-clinic-8feb2020-tickets-88444396571" class="mdc-button mdc-button--outlined">
+      <svg class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="height:24px;">
+        <path d="M6.58,19H14.58V22H6.58V19M19.74,11.6C19.55,11.4 19.29,11.28 19,11.28L18.78,11.31L15.58,13V11.83L16.09,2.9C16.12,2.35 15.7,1.87 15.15,1.84C14.6,1.81 14.12,2.23 14.09,2.78L13.82,7.47H13.58L12.54,7.58V2A1,1 0 0,0 11.54,1C11,1 10.54,1.45 10.54,2V8.41L9.72,8.78L9.03,3.32C8.96,2.77 8.46,2.38 7.91,2.45C7.36,2.5 6.97,3 7.04,3.57L7.81,9.63L7.43,9.8C7.3,9.85 7.18,9.93 7.07,10L5.97,6.11C5.81,5.54 5.25,5.2 4.71,5.34C4.18,5.5 3.88,6.08 4.04,6.65L6.61,15.77C6.61,15.8 6.63,15.84 6.64,15.87L6.67,16H6.68C6.9,16.57 7.47,17 8.08,17H14.58C14.97,17 15.32,16.84 15.58,16.57L20.5,12.37L19.74,11.6Z" />
+      </svg>
+      Volunteer</a>
+  </div>
+</div>
+
+      <!--imported mdc script-->
+      <script src="/js/main.js"></script>
+    </div>
+    <!--materialize script for sidenav-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- Initialize sidenav  -->
+<script>
+  function sidenav() {
+    var sidenavs = document.querySelectorAll('.sidenav')
+    for (var i = 0; i < sidenavs.length; i++){
+      M.Sidenav.init(sidenavs[i]);
+    }
+    var collapsibles = document.querySelectorAll('.collapsible')
+    for (var i = 0; i < collapsibles.length; i++){
+      M.Collapsible.init(collapsibles[i]);
+    }
+  }
+  window.onload = sidenav;
+</script>
+<!-- add class on scroll to topnav -->
+<script type="text/javascript">
+  window.onscroll = function (e) {
+    if (window.scrollY >= 1) {
+      document.getElementById("topnav").classList.add('scroll');
+    } else {
+      document.getElementById("topnav").classList.remove('scroll');
+    }
+  };
+</script>
+<!-- pjax navigation with loading bar -->
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+<script src="/js/topbar.min.js"></script>
+<script type="text/javascript">
+  var pjax = new Pjax({
+    elements: "a", // default is "a[href], form[action]"
+    selectors: [".page-content", ".page-title"],
+    cacheBust: false
+  })
+  document.addEventListener('pjax:send', topbar.show)
+  document.addEventListener('pjax:complete', topbar.hide)
+  topbar.config({
+    barColors: {
+      '0':'rgba(170, 130, 0, 1)'
+    },
+    barThickness : 2,
+    shadowBlur: 0
+  })
+//  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+//    topbar.config({
+//      barColors: {
+//        '0':'rgba(128, 159, 195, 1)'
+//      },
+//      barThickness : 2,
+//      shadowBlur: 0
+//    })
+//  } else {
+//    topbar.config({
+//      barColors: {
+//        '0':'rgba(0, 63, 135, 0.3)'
+//      },
+//      barThickness : 2,
+//      shadowBlur: 0
+//    })
+//  }
+</script>
+<!-- service worker -->
+<script>
+// Check compatibility for the browser we're running this in
+if ("serviceWorker" in navigator) {
+  if (navigator.serviceWorker.controller) {
+    console.log("[Troop 370 Service Worker] Active service worker found; no need to register");
+  } else {
+    // Register the service worker
+    navigator.serviceWorker
+      .register("sw.js", {
+        scope: "./"
+      })
+      .then(function (reg) {
+        console.log("[Troop 370 Service Worker] Service worker has been registered for scope: " + reg.scope);
+      });
+  }
+}
+</script>
+<!-- install prompt for pwa -->
+<script>
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+  });
+  async function install() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      console.log(deferredPrompt)
+      deferredPrompt.userChoice.then(function(choiceResult){
+        if (choiceResult.outcome === 'accepted') {
+          console.log('[Troop 370 Service Worker] PWA installed');
+        } else {
+          console.log('[Troop 370 Service Worker] User declined to install PWA');
+        }
+        deferredPrompt = null;
+      });
+    }
+  }
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    var snai = document.getElementById("sideNavAppInstall");
+    snai.style.display = "none";
+    var snaid = document.getElementById("sideNavAppInstallDivider");
+    snaid.style.display = "none";
+  }
+</script>
+
+  </body>
+</html>

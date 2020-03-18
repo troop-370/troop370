@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "campout-schedule-local-events.css",
+	"sources": [
+		"campout-schedule-local-events.scss"
+	],
+	"sourcesContent": [
+		".content-strip p, .content-strip .mdc-button {\n  margin: calc(1.5 * 5px) 0;\n}\n"
+	],
+	"names": [],
+	"mappings": "AAAA,AAAA,cAAc,CAAC,CAAC,CAAE,cAAc,CAAC,WAAW,AAAC,CAC3C,MAAM,CAAE,eAAe,CAAC,CAAC,CAC1B"
+}
