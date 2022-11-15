@@ -10,7 +10,9 @@ type Billing {
   subscription_active: Boolean!
   subscription_last_payment: String
 
-  """Gets the usage to be used for billing"""
+  """
+  Gets the usage to be used for billing
+  """
   usage: Usage!
 }
 
@@ -29,7 +31,9 @@ type CollectionActionAccess {
   archive: Boolean
   create: Boolean!
 
-  """Only for the users collection"""
+  """
+  Only for the users collection
+  """
   deactivate: Boolean
   delete: Boolean!
   get: Boolean!
@@ -37,7 +41,9 @@ type CollectionActionAccess {
   lock: Boolean!
   modify: Boolean!
 
-  """Only for collections that allow publishing"""
+  """
+  Only for collections that allow publishing
+  """
   publish: Boolean
   watch: Boolean!
 }
@@ -95,7 +101,9 @@ type ConfigurationCollection {
   name: String!
   raw: JSON!
 
-  """Use SchemaDef type from genSchema.ts"""
+  """
+  Use SchemaDef type from genSchema.ts
+  """
   schemaDef: JSON!
   withPermissions: Boolean
 }
@@ -143,7 +151,9 @@ type ConfigurationDashboardCollectionRowTo {
 }
 
 type ConfigurationNavigation {
-  """Get the items to use for the main navigation panel in the app."""
+  """
+  Get the items to use for the main navigation panel in the app.
+  """
   main: [ConfigurationNavigationMainItem]!
 
   """
@@ -231,10 +241,14 @@ input ContentModifyInput {
   yState: String
 }
 
-"""ISO date string scalar type"""
+"""
+ISO date string scalar type
+"""
 scalar Date
 
-"""JSON string"""
+"""
+JSON string
+"""
 scalar JSON
 
 type Mutation {
@@ -252,10 +266,22 @@ type Mutation {
   """
   contentClone(_id: ObjectID!): Content
 
-  """Create a new Content document."""
-  contentCreate(alert: String, aliases: [String], body: String, columns: Int, enable_password_protection: Boolean, name: String!, slug: String): Content
+  """
+  Create a new Content document.
+  """
+  contentCreate(
+    alert: String
+    aliases: [String]
+    body: String
+    columns: Int
+    enable_password_protection: Boolean
+    name: String!
+    slug: String
+  ): Content
 
-  """Deletes a Content document."""
+  """
+  Deletes a Content document.
+  """
   contentDelete(_id: ObjectID!): Void
 
   """
@@ -274,7 +300,9 @@ type Mutation {
   """
   contentLock(_id: ObjectID!, lock: Boolean): Content
 
-  """Modify an existing Content document."""
+  """
+  Modify an existing Content document.
+  """
   contentModify(_id: ObjectID!, input: ContentModifyInput!): Content
 
   """
@@ -300,10 +328,23 @@ type Mutation {
   """
   postClone(_id: ObjectID!): Post
 
-  """Create a new Post document."""
-  postCreate(authored_by: [String]!, body: String!, button_text: String, categories: [String]!, description: String!, enable_password_protection: Boolean, name: String!, tags: [String]!): Post
+  """
+  Create a new Post document.
+  """
+  postCreate(
+    authored_by: [String]!
+    body: String!
+    button_text: String
+    categories: [String]!
+    description: String!
+    enable_password_protection: Boolean
+    name: String!
+    tags: [String]!
+  ): Post
 
-  """Deletes a Post document."""
+  """
+  Deletes a Post document.
+  """
   postDelete(_id: ObjectID!): Void
 
   """
@@ -322,10 +363,14 @@ type Mutation {
   """
   postLock(_id: ObjectID!, lock: Boolean): Post
 
-  """Modify an existing Post document."""
+  """
+  Modify an existing Post document.
+  """
   postModify(_id: ObjectID!, input: PostModifyInput!): Post
 
-  """Publishes an existing Post document."""
+  """
+  Publishes an existing Post document.
+  """
   postPublish(_id: ObjectID!, publish: Boolean, published_at: Date): Post
 
   """
@@ -352,10 +397,14 @@ type Mutation {
   """
   teamClone(_id: ObjectID!): Team
 
-  """Create a new Team document."""
+  """
+  Create a new Team document.
+  """
   teamCreate(members: [ObjectID]!, name: String!, organizers: [ObjectID]!, slug: String!): Team
 
-  """Deletes a Team document."""
+  """
+  Deletes a Team document.
+  """
   teamDelete(_id: ObjectID!): Void
 
   """
@@ -374,7 +423,9 @@ type Mutation {
   """
   teamLock(_id: ObjectID!, lock: Boolean): Team
 
-  """Modify an existing Team document."""
+  """
+  Modify an existing Team document.
+  """
   teamModify(_id: ObjectID!, input: TeamModifyInput!): Team
 
   """
@@ -399,8 +450,26 @@ type Mutation {
   """
   userClone(_id: ObjectID!): User
 
-  """Create a new User document."""
-  userCreate(biography: String, current_title: String, email: String, flags: [String], github_id: Int, group: Float, last_magic_code: String, methods: [String], name: String, phone: Float, photo: String, retired: Boolean, slug: String, twitter: String, username: String!): User
+  """
+  Create a new User document.
+  """
+  userCreate(
+    biography: String
+    current_title: String
+    email: String
+    flags: [String]
+    github_id: Int
+    group: Float
+    last_magic_code: String
+    methods: [String]
+    name: String
+    phone: Float
+    photo: String
+    retired: Boolean
+    slug: String
+    twitter: String
+    username: String!
+  ): User
 
   """
   Toggle whether aan existing user is deactivated.
@@ -408,7 +477,9 @@ type Mutation {
   """
   userDeactivate(_id: ObjectID!, deactivate: Boolean): User
 
-  """Deletes a User document."""
+  """
+  Deletes a User document.
+  """
   userDelete(_id: ObjectID!): Void
 
   """
@@ -435,13 +506,19 @@ type Mutation {
   """
   userMigrateToPassword(_id: ObjectID!): User
 
-  """Modify an existing User document."""
+  """
+  Modify an existing User document.
+  """
   userModify(_id: ObjectID!, input: UserModifyInput!): User
 
-  """Change the password for the current user."""
+  """
+  Change the password for the current user.
+  """
   userPasswordChange(newPassword: String!, oldPassword: String!): User
 
-  """Resend an invitation for a user with a temporary password."""
+  """
+  Resend an invitation for a user with a temporary password.
+  """
   userResendInvite(_id: ObjectID!): User
 
   """
@@ -466,10 +543,14 @@ type Mutation {
   """
   webConfigClone(_id: ObjectID!): WebConfig
 
-  """Create a new WebConfig document."""
+  """
+  Create a new WebConfig document.
+  """
   webConfigCreate(config: JSON, name: String!): WebConfig
 
-  """Deletes a WebConfig document."""
+  """
+  Deletes a WebConfig document.
+  """
   webConfigDelete(_id: ObjectID!): Void
 
   """
@@ -488,7 +569,9 @@ type Mutation {
   """
   webConfigLock(_id: ObjectID!, lock: Boolean): WebConfig
 
-  """Modify an existing WebConfig document."""
+  """
+  Modify an existing WebConfig document.
+  """
   webConfigModify(_id: ObjectID!, input: WebConfigModifyInput!): WebConfig
 
   """
@@ -500,7 +583,9 @@ type Mutation {
   webConfigWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): WebConfig
 }
 
-"""mongoose ObjectID scalar type"""
+"""
+mongoose ObjectID scalar type
+"""
 scalar ObjectID
 
 type PagedCollectionActivity {
@@ -680,11 +765,20 @@ type PublishableCollectionTimestamps {
 type Query {
   billing: Billing!
 
-  """Get the recent activity in the specified collections"""
-  collectionActivity(collections: [String], exclude: [String], limit: Int!, page: Int): PagedCollectionActivity
+  """
+  Get the recent activity in the specified collections
+  """
+  collectionActivity(
+    collections: [String]
+    exclude: [String]
+    limit: Int!
+    page: Int
+  ): PagedCollectionActivity
   configuration: Configuration
 
-  """Get a Content document by _id."""
+  """
+  Get a Content document by _id.
+  """
   content(_id: ObjectID!): Content
 
   """
@@ -697,7 +791,14 @@ type Query {
   Get a set of Content documents by _id.
   If _id is omitted, the API will return all Content documents.
   """
-  contents(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedContent
+  contents(
+    _ids: [ObjectID]
+    filter: JSON
+    limit: Int!
+    offset: Int
+    page: Int
+    sort: JSON
+  ): PagedContent
 
   """
   Get an authenticated URL to the fathom analytics dashboard.
@@ -705,7 +806,9 @@ type Query {
   """
   fathomDashboard: String
 
-  """Get a Post document by _id."""
+  """
+  Get a Post document by _id.
+  """
   post(_id: ObjectID!): Post
 
   """
@@ -725,7 +828,9 @@ type Query {
   """
   s3Sign(fileName: String!, fileType: String!, s3Bucket: String!): S3SignedResponse
 
-  """Get a Team document by _id."""
+  """
+  Get a Team document by _id.
+  """
   team(_id: ObjectID!): Team
 
   """
@@ -734,7 +839,9 @@ type Query {
   """
   teamActionAccess(_id: ObjectID): CollectionActionAccess
 
-  """Lists the active users who are not assigned to any teams."""
+  """
+  Lists the active users who are not assigned to any teams.
+  """
   teamUnassignedUsers: [User]
 
   """
@@ -743,7 +850,9 @@ type Query {
   """
   teams(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedTeam
 
-  """Get some details about the tenant."""
+  """
+  Get some details about the tenant.
+  """
   tenant: TenantDetails
 
   """
@@ -771,13 +880,19 @@ type Query {
   """
   userExists(username: String!): UserExistsResponse!
 
-  """Returns the sign-on methods for the username."""
+  """
+  Returns the sign-on methods for the username.
+  """
   userMethods(username: String!): [String]!
 
-  """Get a pruned User document by _id."""
+  """
+  Get a pruned User document by _id.
+  """
   userPublic(_id: ObjectID!): PrunedUser
 
-  """Returns a list of documents in collections that reference this user"""
+  """
+  Returns a list of documents in collections that reference this user
+  """
   userReferences(_id: ObjectID, collections: [String!], exclude: [String!]): [UserReference!]!
 
   """
@@ -790,9 +905,18 @@ type Query {
   Get a set of pruned User documents by _id.
   If _id is omitted, the API will return all User documents.
   """
-  usersPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedUser
+  usersPublic(
+    _ids: [ObjectID]
+    filter: JSON
+    limit: Int!
+    offset: Int
+    page: Int
+    sort: JSON
+  ): PagedPrunedUser
 
-  """Get a WebConfig document by _id."""
+  """
+  Get a WebConfig document by _id.
+  """
   webConfig(_id: ObjectID!): WebConfig
 
   """
@@ -805,7 +929,14 @@ type Query {
   Get a set of WebConfig documents by _id.
   If _id is omitted, the API will return all WebConfig documents.
   """
-  webConfigs(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedWebConfig
+  webConfigs(
+    _ids: [ObjectID]
+    filter: JSON
+    limit: Int!
+    offset: Int
+    page: Int
+    sort: JSON
+  ): PagedWebConfig
 }
 
 type S3SignedResponse {
@@ -942,7 +1073,9 @@ type UserTimestamps {
   modified_at: Date!
 }
 
-"""Void custom scalar"""
+"""
+Void custom scalar
+"""
 scalar Void
 
 type WebConfig {
