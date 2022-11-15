@@ -1,0 +1,6 @@
+query TenantDetails {
+	tenant {
+		name
+		displayName
+	}
+}

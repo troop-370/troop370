@@ -1,0 +1,973 @@
+type ApiUsage {
+  billable: Float!
+  since: Date!
+  total: Float!
+}
+
+type Billing {
+  stripe_customer_id: String
+  stripe_subscription_id: String
+  subscription_active: Boolean!
+  subscription_last_payment: String
+
+  """Gets the usage to be used for billing"""
+  usage: Usage!
+}
+
+type Collection {
+  _id: ObjectID!
+  archived: Boolean!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  people: CollectionPeople
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+type CollectionActionAccess {
+  archive: Boolean
+  create: Boolean!
+
+  """Only for the users collection"""
+  deactivate: Boolean
+  delete: Boolean!
+  get: Boolean!
+  hide: Boolean!
+  lock: Boolean!
+  modify: Boolean!
+
+  """Only for collections that allow publishing"""
+  publish: Boolean
+  watch: Boolean!
+}
+
+type CollectionActivity {
+  _id: ObjectID!
+  action: String!
+  at: Date!
+  in: String!
+  name: String
+  user: User
+}
+
+type CollectionHistory {
+  at: Date!
+  type: String!
+  user: User
+}
+
+type CollectionPeople {
+  created_by: User
+  last_modified_by: User
+  modified_by: [User]
+  watching: [User]
+}
+
+type CollectionPermissions {
+  teams: [String]!
+  users: [User]!
+}
+
+input CollectionPermissionsInput {
+  teams: [ObjectID]
+  users: [ObjectID]
+}
+
+type CollectionTimestamps {
+  created_at: Date!
+  modified_at: Date!
+}
+
+type Configuration {
+  collection(name: String!): ConfigurationCollection
+  collections: [ConfigurationCollection]
+  dashboard: ConfigurationDashboard!
+  navigation: ConfigurationNavigation!
+  security: ConfigurationSecurity!
+  void: Void
+}
+
+type ConfigurationCollection {
+  by: ConfigurationCollectionBy!
+  canPublish: Boolean
+  generationOptions: ConfigurationCollectionGenerationOptions
+  name: String!
+  raw: JSON!
+
+  """Use SchemaDef type from genSchema.ts"""
+  schemaDef: JSON!
+  withPermissions: Boolean
+}
+
+type ConfigurationCollectionBy {
+  many: String!
+  one: String!
+}
+
+type ConfigurationCollectionGenerationOptions {
+  mandatoryWatchers: [String]
+  nameField: String
+  previewUrl: String
+}
+
+type ConfigurationDashboard {
+  collectionRows: [ConfigurationDashboardCollectionRow]!
+}
+
+type ConfigurationDashboardCollectionRow {
+  arrPath: String!
+  dataKeys: ConfigurationDashboardCollectionRowDataKeys!
+  header: ConfigurationDashboardCollectionRowHeader!
+  query: String!
+  to: ConfigurationDashboardCollectionRowTo!
+}
+
+type ConfigurationDashboardCollectionRowDataKeys {
+  _id: String!
+  description: String
+  lastModifiedAt: String!
+  lastModifiedBy: String!
+  name: String!
+  photo: String
+}
+
+type ConfigurationDashboardCollectionRowHeader {
+  icon: String!
+  label: String!
+}
+
+type ConfigurationDashboardCollectionRowTo {
+  idPrefix: String!
+  idSuffix: String!
+}
+
+type ConfigurationNavigation {
+  """Get the items to use for the main navigation panel in the app."""
+  main: [ConfigurationNavigationMainItem]!
+
+  """
+  Get the groups of items to use for the sub navigation panel in the app.
+  """
+  sub(key: String!): [ConfigurationNavigationSubGroup]!
+}
+
+type ConfigurationNavigationMainItem {
+  icon: String!
+  label: String!
+  subNav: String
+  to: String!
+}
+
+type ConfigurationNavigationSubGroup {
+  items: [ConfigurationNavigationSubGroupItems]!
+  label: String!
+}
+
+type ConfigurationNavigationSubGroupItems {
+  icon: String!
+  label: String!
+  to: String!
+}
+
+type ConfigurationSecurity {
+  introspection: Boolean!
+  secrets: ConfigurationSecuritySecrets!
+  tokens: [ConfigurationSecurityToken]!
+}
+
+type ConfigurationSecuritySecrets {
+  aws: ConfigurationSecuritySecretsAws
+  fathom: ConfigurationSecuritySecretsFathom
+}
+
+type ConfigurationSecuritySecretsAws {
+  accessKeyId: String!
+  secretAccessKey: String!
+}
+
+type ConfigurationSecuritySecretsFathom {
+  dashboardPassword: String!
+  siteId: String!
+}
+
+type ConfigurationSecurityToken {
+  expires: String!
+  name: String!
+  scope: ConfigurationSecurityTokenScope!
+  token: String!
+}
+
+type ConfigurationSecurityTokenScope {
+  admin: Boolean
+}
+
+type Content {
+  _id: ObjectID!
+  alert: String
+  aliases: [String]
+  archived: Boolean!
+  body: String!
+  columns: Int!
+  enable_password_protection: Boolean!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String!
+  people: CollectionPeople
+  slug: String!
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+input ContentModifyInput {
+  alert: String
+  aliases: [String]
+  body: String
+  columns: Int
+  enable_password_protection: Boolean
+  name: String
+  slug: String
+  yState: String
+}
+
+"""ISO date string scalar type"""
+scalar Date
+
+"""JSON string"""
+scalar JSON
+
+type Mutation {
+  """
+  Set whether an existing Content document is archived.
+  This mutation sets archived: true by default.
+  Archived Content documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  contentArchive(_id: ObjectID!, archive: Boolean): Content
+
+  """
+  Clone an existing Content document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  contentClone(_id: ObjectID!): Content
+
+  """Create a new Content document."""
+  contentCreate(alert: String, aliases: [String], body: String, columns: Int, enable_password_protection: Boolean, name: String!, slug: String): Content
+
+  """Deletes a Content document."""
+  contentDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing Content document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden Content documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  contentHide(_id: ObjectID!, hide: Boolean): Content
+
+  """
+  Set whether an existing Content document is locked.
+  This mutation sets locked: true by default.
+  Locked Content documents should only be editable by the server
+  and by admins.
+  """
+  contentLock(_id: ObjectID!, lock: Boolean): Content
+
+  """Modify an existing Content document."""
+  contentModify(_id: ObjectID!, input: ContentModifyInput!): Content
+
+  """
+  Add a watcher to a Content document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  contentWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Content
+  deleteCollection(name: String!): Void
+
+  """
+  Set whether an existing Post document is archived.
+  This mutation sets archived: true by default.
+  Archived Post documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  postArchive(_id: ObjectID!, archive: Boolean): Post
+
+  """
+  Clone an existing Post document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  postClone(_id: ObjectID!): Post
+
+  """Create a new Post document."""
+  postCreate(authored_by: [String]!, body: String!, button_text: String, categories: [String]!, description: String!, enable_password_protection: Boolean, name: String!, tags: [String]!): Post
+
+  """Deletes a Post document."""
+  postDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing Post document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden Post documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  postHide(_id: ObjectID!, hide: Boolean): Post
+
+  """
+  Set whether an existing Post document is locked.
+  This mutation sets locked: true by default.
+  Locked Post documents should only be editable by the server
+  and by admins.
+  """
+  postLock(_id: ObjectID!, lock: Boolean): Post
+
+  """Modify an existing Post document."""
+  postModify(_id: ObjectID!, input: PostModifyInput!): Post
+
+  """Publishes an existing Post document."""
+  postPublish(_id: ObjectID!, publish: Boolean, published_at: Date): Post
+
+  """
+  Add a watcher to a Post document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  postWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Post
+  setRawConfigurationCollection(name: String!, raw: JSON): JSON
+  setSecret(key: String!, value: String!): String!
+
+  """
+  Set whether an existing Team document is archived.
+  This mutation sets archived: true by default.
+  Archived Team documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  teamArchive(_id: ObjectID!, archive: Boolean): Team
+
+  """
+  Clone an existing Team document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  teamClone(_id: ObjectID!): Team
+
+  """Create a new Team document."""
+  teamCreate(members: [ObjectID]!, name: String!, organizers: [ObjectID]!, slug: String!): Team
+
+  """Deletes a Team document."""
+  teamDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing Team document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden Team documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  teamHide(_id: ObjectID!, hide: Boolean): Team
+
+  """
+  Set whether an existing Team document is locked.
+  This mutation sets locked: true by default.
+  Locked Team documents should only be editable by the server
+  and by admins.
+  """
+  teamLock(_id: ObjectID!, lock: Boolean): Team
+
+  """Modify an existing Team document."""
+  teamModify(_id: ObjectID!, input: TeamModifyInput!): Team
+
+  """
+  Add a watcher to a Team document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  teamWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Team
+
+  """
+  Set whether an existing User document is archived.
+  This mutation sets archived: true by default.
+  Archived User documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  userArchive(_id: ObjectID!, archive: Boolean): User
+
+  """
+  Clone an existing User document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  userClone(_id: ObjectID!): User
+
+  """Create a new User document."""
+  userCreate(biography: String, current_title: String, email: String, flags: [String], github_id: Int, group: Float, last_magic_code: String, methods: [String], name: String, phone: Float, photo: String, retired: Boolean, slug: String, twitter: String, username: String!): User
+
+  """
+  Toggle whether aan existing user is deactivated.
+  This mutation deactivates by default.
+  """
+  userDeactivate(_id: ObjectID!, deactivate: Boolean): User
+
+  """Deletes a User document."""
+  userDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing User document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden User documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  userHide(_id: ObjectID!, hide: Boolean): User
+
+  """
+  Set whether an existing User document is locked.
+  This mutation sets locked: true by default.
+  Locked User documents should only be editable by the server
+  and by admins.
+  """
+  userLock(_id: ObjectID!, lock: Boolean): User
+
+  """
+  Migrate a user without a local account.
+  Sends a email with the new user's new username and temporary password.
+  The user must sign in with the local account at least once within 48
+  hours to prevent their account from becoming inaccessable.
+  """
+  userMigrateToPassword(_id: ObjectID!): User
+
+  """Modify an existing User document."""
+  userModify(_id: ObjectID!, input: UserModifyInput!): User
+
+  """Change the password for the current user."""
+  userPasswordChange(newPassword: String!, oldPassword: String!): User
+
+  """Resend an invitation for a user with a temporary password."""
+  userResendInvite(_id: ObjectID!): User
+
+  """
+  Add a watcher to a User document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  userWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): User
+
+  """
+  Set whether an existing WebConfig document is archived.
+  This mutation sets archived: true by default.
+  Archived WebConfig documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  webConfigArchive(_id: ObjectID!, archive: Boolean): WebConfig
+
+  """
+  Clone an existing WebConfig document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  webConfigClone(_id: ObjectID!): WebConfig
+
+  """Create a new WebConfig document."""
+  webConfigCreate(config: JSON, name: String!): WebConfig
+
+  """Deletes a WebConfig document."""
+  webConfigDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing WebConfig document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden WebConfig documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  webConfigHide(_id: ObjectID!, hide: Boolean): WebConfig
+
+  """
+  Set whether an existing WebConfig document is locked.
+  This mutation sets locked: true by default.
+  Locked WebConfig documents should only be editable by the server
+  and by admins.
+  """
+  webConfigLock(_id: ObjectID!, lock: Boolean): WebConfig
+
+  """Modify an existing WebConfig document."""
+  webConfigModify(_id: ObjectID!, input: WebConfigModifyInput!): WebConfig
+
+  """
+  Add a watcher to a WebConfig document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  webConfigWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): WebConfig
+}
+
+"""mongoose ObjectID scalar type"""
+scalar ObjectID
+
+type PagedCollectionActivity {
+  docs: [CollectionActivity]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedContent {
+  docs: [Content]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedPost {
+  docs: [Post]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedPrunedUser {
+  docs: [PrunedUser]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedTeam {
+  docs: [Team]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedUser {
+  docs: [User]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedWebConfig {
+  docs: [WebConfig]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type Post {
+  _id: ObjectID!
+  archived: Boolean!
+  authored_by: [String]!
+  body: String!
+  button_text: String!
+  categories: [String]!
+  description: String!
+  enable_password_protection: Boolean!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String!
+  people: PublishableCollectionPeople
+  permissions: CollectionPermissions!
+  tags: [String]!
+  timestamps: PublishableCollectionTimestamps
+  yState: String
+}
+
+input PostModifyInput {
+  authored_by: [String]
+  body: String
+  button_text: String
+  categories: [String]
+  description: String
+  enable_password_protection: Boolean
+  name: String
+  permissions: CollectionPermissionsInput
+  tags: [String]
+  yState: String
+}
+
+type PrunedUser {
+  _id: ObjectID!
+  biography: String
+  constantcontact: PrunedUserConstantcontact
+  current_title: String
+  email: String
+  github_id: Int
+  group: Float
+  name: String!
+  photo: String
+  slug: String!
+  timestamps: PrunedUserTimestamps
+  twitter: String
+}
+
+type PrunedUserConstantcontact {
+  void: Void
+}
+
+type PrunedUserTimestamps {
+  void: Void
+}
+
+type PublishableCollection {
+  _id: ObjectID!
+  archived: Boolean!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  people: PublishableCollectionPeople
+  timestamps: PublishableCollectionTimestamps
+  yState: String
+}
+
+type PublishableCollectionPeople {
+  created_by: User
+  last_modified_by: User
+  last_published_by: User
+  modified_by: [User]
+  published_by: [User]
+  watching: [User]
+}
+
+type PublishableCollectionTimestamps {
+  created_at: Date!
+  modified_at: Date!
+  published_at: Date!
+  updated_at: Date!
+}
+
+type Query {
+  billing: Billing!
+
+  """Get the recent activity in the specified collections"""
+  collectionActivity(collections: [String], exclude: [String], limit: Int!, page: Int): PagedCollectionActivity
+  configuration: Configuration
+
+  """Get a Content document by _id."""
+  content(_id: ObjectID!): Content
+
+  """
+  Get the permissions of the currently authenticated user for the
+  Content collection.
+  """
+  contentActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of Content documents by _id.
+  If _id is omitted, the API will return all Content documents.
+  """
+  contents(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedContent
+
+  """
+  Get an authenticated URL to the fathom analytics dashboard.
+  Only administrators can use this query.
+  """
+  fathomDashboard: String
+
+  """Get a Post document by _id."""
+  post(_id: ObjectID!): Post
+
+  """
+  Get the permissions of the currently authenticated user for the
+  Post collection.
+  """
+  postActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of Post documents by _id.
+  If _id is omitted, the API will return all Post documents.
+  """
+  posts(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPost
+
+  """
+  Get a signed s3 URL for uploading photos and documents to an existing s3 bucket.
+  """
+  s3Sign(fileName: String!, fileType: String!, s3Bucket: String!): S3SignedResponse
+
+  """Get a Team document by _id."""
+  team(_id: ObjectID!): Team
+
+  """
+  Get the permissions of the currently authenticated user for the
+  Team collection.
+  """
+  teamActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """Lists the active users who are not assigned to any teams."""
+  teamUnassignedUsers: [User]
+
+  """
+  Get a set of Team documents by _id.
+  If _id is omitted, the API will return all Team documents.
+  """
+  teams(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedTeam
+
+  """Get some details about the tenant."""
+  tenant: TenantDetails
+
+  """
+  Get a user by _id. If _id is omitted, the API will return the current
+  user.
+  """
+  user(_id: ObjectID): User
+
+  """
+  Get the permissions of the currently authenticated user for the
+  User collection.
+  """
+  userActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a pruned User document by _id.
+  Provide the date of to ensure that the correct document is provided
+  (in case the slug is not unique).
+  """
+  userBySlugPublic(date: Date, slug: String!): PrunedUser
+
+  """
+  Returns whether the username exists in the database.
+  Also return the pruned user.
+  """
+  userExists(username: String!): UserExistsResponse!
+
+  """Returns the sign-on methods for the username."""
+  userMethods(username: String!): [String]!
+
+  """Get a pruned User document by _id."""
+  userPublic(_id: ObjectID!): PrunedUser
+
+  """Returns a list of documents in collections that reference this user"""
+  userReferences(_id: ObjectID, collections: [String!], exclude: [String!]): [UserReference!]!
+
+  """
+  Get a set of User documents by _id.
+  If _id is omitted, the API will return all User documents.
+  """
+  users(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedUser
+
+  """
+  Get a set of pruned User documents by _id.
+  If _id is omitted, the API will return all User documents.
+  """
+  usersPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedUser
+
+  """Get a WebConfig document by _id."""
+  webConfig(_id: ObjectID!): WebConfig
+
+  """
+  Get the permissions of the currently authenticated user for the
+  WebConfig collection.
+  """
+  webConfigActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of WebConfig documents by _id.
+  If _id is omitted, the API will return all WebConfig documents.
+  """
+  webConfigs(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedWebConfig
+}
+
+type S3SignedResponse {
+  location: String!
+  signedRequest: String!
+}
+
+type Team {
+  _id: ObjectID!
+  archived: Boolean!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  members: [User]!
+  name: String!
+  organizers: [User]!
+  people: CollectionPeople
+  slug: String!
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+input TeamModifyInput {
+  members: [ObjectID]
+  name: String
+  organizers: [ObjectID]
+  slug: String
+  yState: String
+}
+
+type TenantDetails {
+  displayName: String
+  name: String!
+}
+
+type Usage {
+  api(month: Int, year: Int): ApiUsage
+  storage: UsageStorage!
+}
+
+type UsageStorage {
+  database: Float!
+  files: Float!
+}
+
+type User {
+  _id: ObjectID!
+  archived: Boolean!
+  biography: String
+  constantcontact: UserConstantcontact
+  current_title: String
+  email: String
+  flags: [String]!
+  github_id: Int
+  group: Float
+  hidden: Boolean!
+  history: [CollectionHistory]
+  last_magic_code: String
+  locked: Boolean!
+  methods: [String]
+  name: String!
+  people: CollectionPeople
+  phone: Float
+  photo: String
+  retired: Boolean
+  slug: String!
+  teams(_id: ObjectID!, limit: Int!, offset: Int, page: Int, sort: JSON): PagedTeam
+  timestamps: UserTimestamps
+  twitter: String
+  username: String
+  yState: String
+}
+
+type UserConstantcontact {
+  access_token: String
+  expires_at: Int
+  refresh_token: String
+}
+
+type UserExistsResponse {
+  doc: PrunedUser
+  exists: Boolean!
+  methods: [String]!
+}
+
+input UserModifyInput {
+  biography: String
+  constantcontact: UserModifyInputConstantcontact
+  current_title: String
+  email: String
+  group: Float
+  name: String
+  phone: Float
+  photo: String
+  slug: String
+  timestamps: UserModifyInputTimestamps
+  twitter: String
+  yState: String
+}
+
+input UserModifyInputConstantcontact {
+  access_token: String
+  expires_at: Int
+  refresh_token: String
+  yState: String
+}
+
+input UserModifyInputTimestamps {
+  joined_at: Date
+  last_active_at: Date
+  last_login_at: Date
+  left_at: Date
+  yState: String
+}
+
+type UserReference {
+  _id: String!
+  count: Int!
+  docs: [UserReferenceDoc!]!
+}
+
+type UserReferenceDoc {
+  _id: ObjectID!
+  name: String
+  url: String
+}
+
+type UserTimestamps {
+  created_at: Date!
+  joined_at: Date!
+  last_active_at: Date!
+  last_login_at: Date!
+  left_at: Date!
+  modified_at: Date!
+}
+
+"""Void custom scalar"""
+scalar Void
+
+type WebConfig {
+  _id: ObjectID!
+  archived: Boolean!
+  config: JSON
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String!
+  people: CollectionPeople
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+input WebConfigModifyInput {
+  config: JSON
+  name: String
+  yState: String
+}
+
+type WithPermissions {
+  permissions: CollectionPermissions!
+}
+
+input WithPermissionsInput {
+  permissions: CollectionPermissionsInput
+}
