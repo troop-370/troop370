@@ -12,7 +12,7 @@ const config = {
     Date: { type: 'string' },
     JSON: { type: 'string' },
     ObjectID: { type: 'string' },
-    Void: { type: null },
+    Void: { type: 'null' },
   },
 };
 
