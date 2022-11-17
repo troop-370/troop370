@@ -1,0 +1,16 @@
+diff --git a/node_modules/houdini-svelte/build/plugin-esm/index.js b/node_modules/houdini-svelte/build/plugin-esm/index.js
+index e827713..0f3455e 100644
+--- a/node_modules/houdini-svelte/build/plugin-esm/index.js
++++ b/node_modules/houdini-svelte/build/plugin-esm/index.js
+@@ -179883,7 +179883,10 @@ function append_VariablesFunction(type, config2, queries) {
+     return `
+ export type ${config2.variableFunctionName(
+       name2
+-    )} = VariableFunction<${type}Params, ${name2}$input>;`;
++    )} = VariableFunction<${type}Params, ${name2}$input>;
++export type ${config2.variableFunctionName(
++      name2
++    )}Type = VariableFunction<${type}Params, ${name2}$input>;`;
+   }).join("\n");
+ }
+ function append_loadInput(queries) {
