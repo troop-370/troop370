@@ -12,6 +12,7 @@ const config = {
     alias: {
       $houdini: './$houdini',
       $utils: './src/utils',
+      $stores: './src/stores',
     },
   },
 };
