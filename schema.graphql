@@ -215,6 +215,7 @@ type Content {
   locked: Boolean!
   name: String!
   people: CollectionPeople
+  quick_links: [ContentQuick_links]
   slug: String!
   timestamps: CollectionTimestamps
   yState: String
@@ -227,8 +228,20 @@ input ContentModifyInput {
   columns: Int
   enable_password_protection: Boolean
   name: String
+  quick_links: [ContentModifyInputQuick_links]
   slug: String
   yState: String
+}
+
+input ContentModifyInputQuick_links {
+  label: String
+  path: String
+  yState: String
+}
+
+type ContentQuick_links {
+  label: String
+  path: String
 }
 
 """ISO date string scalar type"""
@@ -661,8 +674,13 @@ type PrunedContent {
   columns: Int!
   enable_password_protection: Boolean!
   name: String!
+  quick_links: [ContentQuick_links]
   slug: String!
   timestamps: PrunedContentTimestamps
+}
+
+type PrunedContentQuick_links {
+  void: Void
 }
 
 type PrunedContentTimestamps {

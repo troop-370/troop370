@@ -1,7 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { title } from '$stores/title';
+  import TopNav from '$components/TopNavigation/TopNav.svelte';
   import { afterUpdate } from 'svelte';
+  import type { LayoutData } from './$houdini';
+
+  export let data: LayoutData;
+  $: ({ TenantDetails } = data);
+  $: navConfig = JSON.parse($TenantDetails.data?.webConfigPublic?.config || '{}');
 
   // keep track of the page path
   export let path: string = $page.url.pathname;
@@ -20,5 +26,7 @@
 <svelte:head>
   <title>{title_}</title>
 </svelte:head>
+
+<TopNav groups={navConfig.group} />
 
 <slot />
