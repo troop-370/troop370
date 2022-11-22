@@ -13,6 +13,7 @@ const config = {
       $houdini: './$houdini',
       $utils: './src/utils',
       $stores: './src/stores',
+      $components: './src/components',
     },
   },
 };
