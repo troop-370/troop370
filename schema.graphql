@@ -568,6 +568,19 @@ type PagedPrunedUser {
   totalPages: Int
 }
 
+type PagedPrunedWebConfig {
+  docs: [PrunedWebConfig]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
 type PagedTeam {
   docs: [Team]!
   hasNextPage: Boolean
@@ -676,6 +689,17 @@ type PrunedUserConstantcontact {
 }
 
 type PrunedUserTimestamps {
+  void: Void
+}
+
+type PrunedWebConfig {
+  _id: ObjectID!
+  config: JSON
+  name: String!
+  timestamps: PrunedWebConfigTimestamps
+}
+
+type PrunedWebConfigTimestamps {
   void: Void
 }
 
@@ -846,11 +870,20 @@ type Query {
   """
   webConfigActionAccess(_id: ObjectID): CollectionActionAccess
 
+  """Get a pruned WebConfig document by _id."""
+  webConfigPublic(_id: ObjectID!): PrunedWebConfig
+
   """
   Get a set of WebConfig documents by _id.
   If _id is omitted, the API will return all WebConfig documents.
   """
   webConfigs(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedWebConfig
+
+  """
+  Get a set of pruned WebConfig documents by _id.
+  If _id is omitted, the API will return all WebConfig documents.
+  """
+  webConfigsPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedWebConfig
 }
 
 type S3SignedResponse {
