@@ -11,6 +11,12 @@
   $error: color-palette.$red-900
 );
 
+@use '@material/shape/index' as shape with (
+  $small-component-radius: 0,
+  $medium-component-radius: 0,
+  $large-component-radius: 0
+);
+
 html,
 body {
   background-color: theme.$surface;
