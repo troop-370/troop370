@@ -15,7 +15,6 @@
   :global(.mdc-button-outlined--on-primary) {
     @include mdc-button.ink-color(#e0e0e0);
     @include mdc-button.outline-color(#e0e0e0);
-    margin: 15px 0;
   }
 
   :global(.mdc-button-outlined--on-primary .mdc-button__ripple) {
