@@ -26,6 +26,6 @@ export const houdini_load = graphql`
 // Query variable functions must be named <QueryName>Variables.
 export const ContentPageVariables: ContentPageVariablesType = ({ params }) => {
   return {
-    slug: params.contentPath,
+    slug: params.contentPath.endsWith('/') ? params.contentPath.slice(0, -1) : params.contentPath,
   };
 };
