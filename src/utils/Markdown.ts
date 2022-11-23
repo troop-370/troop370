@@ -69,6 +69,36 @@ class MarkDown {
 
       return false;
     },
+    link(href, title, text) {
+      let className = '';
+
+      // outlined button
+      if (text.indexOf('.ob') > 0 && text.indexOf('.ob') === text.length - 3) {
+        text = text.replace('.ob', '');
+        className = 'mdc-button mdc-button--outlined';
+      }
+      // forced-inverted outlined button (when on dark surface)
+      else if (text.indexOf('.iob') > 0 && text.indexOf('.iob') === text.length - 4) {
+        text = text.replace('.iob', '');
+        className = 'mdc-button-outlined--on-primary mdc-button mdc-button--outlined';
+      }
+      // plain-text button
+      else if (text.indexOf('.pb') > 0 && text.indexOf('.pb') === text.length - 3) {
+        text = text.replace('.pb', '');
+        className = 'mdc-button';
+      }
+
+      if (className.includes('mdc-button')) {
+        return `
+            <a href="${href}" class="${className}">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__label">${text}</span>
+            </a>
+          `;
+      }
+
+      return false;
+    },
   };
 
   constructor() {
