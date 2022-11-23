@@ -155,7 +155,7 @@ class MarkDown {
     );
 
     // group children of h2s
-    const shouldSkipGrouping = tokensFilteredHeadings.some((token) => containsHTML(token.raw));
+    const shouldSkipGrouping = tokensFilteredHeadings.some((token) => containsStyleTag(token.raw));
     const tokensGrouped: marked.Tokens.Generic[] = [];
     tokensFilteredHeadings.forEach((token) => {
       if (shouldSkipGrouping) {
@@ -237,4 +237,13 @@ function isH2DivWrap(toCheck?: marked.Tokens.Generic): toCheck is h2DivWrapToken
 
 function containsHTML(toCheck?: string): boolean {
   return !!toCheck?.match(/<\/?[a-z][\s\S]*>/);
+}
+
+function containsStyleTag(toCheck?: string): boolean {
+  return !!(
+    toCheck &&
+    containsHTML(toCheck) &&
+    toCheck.includes('<style') &&
+    toCheck.includes('</style>')
+  );
 }
