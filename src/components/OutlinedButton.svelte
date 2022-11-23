@@ -21,8 +21,9 @@
     @include mdc-ripple.states-base-color('on-primary');
   }
 
-  :global(.mdc-button-outlined--on-primary .mdc-button__label) {
+  :global(.mdc-button .mdc-button__label) {
     text-transform: uppercase;
     font-family: var(--font-headline);
+    font-weight: 700;
   }
 </style>
