@@ -8,17 +8,10 @@ class MarkDown {
       if (level === 1) {
         if (subtitle) {
           return `
-            <div class="banner">
               <h1>${title}</h1>
               <p>${subtitle}</p>
-            </div>
           `;
         }
-        return `
-          <div class="banner">
-            <h1>${title}</h1>
-          </div>
-        `;
       }
 
       return false;
@@ -62,7 +55,37 @@ class MarkDown {
     });
   }
 
-  parse(md: string) {
+  parse(md: string, appendH1Md?: string) {
+    const tokens = this.parseTokens(md);
+
+    // append tokens in from `appendHeadingMd` if there is an h1 heading
+    const h1TokenIndex = tokens.findIndex((token) => isHeadingToken(token) && token.depth === 1);
+    if (appendH1Md && h1TokenIndex !== -1) {
+      const h1token = tokens[h1TokenIndex] as marked.Tokens.Heading;
+      const inlineText = marked.parseInline(appendH1Md);
+
+      const h1HasParagraph = !!h1token.tokens.find(
+        (token) => token.type === 'text' && token.text === '__splitSubtitle__'
+      );
+      if (!h1HasParagraph) {
+        h1token.tokens.push({
+          type: 'text',
+          raw: '__splitSubtitle__',
+          text: '__splitSubtitle__',
+        });
+      }
+
+      h1token.tokens.push({
+        type: 'text',
+        raw: appendH1Md,
+        text: inlineText,
+      });
+    }
+
+    return this.transform(tokens);
+  }
+
+  parseTokens(md: string) {
     const tokens = marked.lexer(md);
 
     // take the first paragraph after h1 and make it the subtitle
@@ -79,9 +102,26 @@ class MarkDown {
       }
     }
 
-    // parse and return
-    const parsed = marked.parser(tokens);
-    return parsed;
+    // remove all but the first heading level 1
+    const tokensFilteredHeadings = tokens.filter(
+      (token, index) => !(isHeadingToken(token) && token.depth === 1 && index !== h1Index)
+    );
+
+    return tokensFilteredHeadings;
+  }
+
+  transform(tokens: marked.Token[]): [string | null, string] {
+    const parsedContent = marked.parser(
+      tokens.filter((token) => !(isHeadingToken(token) && token.depth === 1))
+    );
+
+    const headingToken = tokens.find((token) => isHeadingToken(token) && token.depth === 1);
+    if (headingToken) {
+      const parsedHeading = marked.parser([headingToken]);
+      return [parsedHeading, parsedContent];
+    }
+
+    return [null, parsedContent];
   }
 }
 
