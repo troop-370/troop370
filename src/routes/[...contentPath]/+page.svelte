@@ -132,6 +132,10 @@
     margin-bottom: 0.7em;
   }
 
+  div#main-content > :global(* + div[id*='section']:first-of-type) {
+    margin-top: calc(35px + (0.7em * 1.5));
+  }
+
   article :global(a.mdc-button--outlined) {
     margin-top: 10px;
     margin-bottom: 5px;
