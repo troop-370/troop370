@@ -18,8 +18,8 @@
       (ql): ql is NonNullable<Required<typeof ql>> => !!ql && !!ql.label && !!ql.path
     ) || [];
 
-  $: [headingMD, bodyMD] = pageData?.body ? Markdown.parse(pageData.body) : [null, ''];
-  $: [, alertMD] = pageData?.alert ? Markdown.parse(pageData.alert) : [null, ''];
+  $: [headingMD, bodyMD, toc] = pageData?.body ? Markdown.parse(pageData.body) : [null, '', []];
+  $: [, alertMD] = pageData?.alert ? Markdown.parse(pageData.alert) : [null, '', []];
 
   $: columns = pageData?.dual_columns ? 2 : 1;
 
@@ -55,6 +55,18 @@
       </div>
     {/if}
     <div id="main-content" class:dualColumns={columns === 2}>
+      {#if pageData.show_table_of_contents && toc.length > 0 && columns === 1}
+        <aside>
+          <h2>Table of contents</h2>
+          {#each toc as { title, level, slug }}
+            {#if level === 2}
+              <div>
+                <a href="#{slug}">{title}</a>
+              </div>
+            {/if}
+          {/each}
+        </aside>
+      {/if}
       {@html bodyMD}
     </div>
   </article>
@@ -65,6 +77,24 @@
 <pre>{JSON.stringify($ContentPage.data, null, 2)}</pre>
 
 <style>
+  article #main-content aside {
+    float: right;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 1px solid var(--color-neutral-50);
+    padding: 20px;
+    box-sizing: border-box;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
+
+  article #main-content aside h2 {
+    margin: 6px 0 12px 0;
+  }
+
   .alert {
     background-color: var(--color-secondary);
     color: var(--color-neutral-30);
@@ -101,6 +131,7 @@
   article .banner > :global(*),
   article .alert > :global(*) {
     max-width: 1200px;
+    box-sizing: border-box;
     margin-left: auto;
     margin-right: auto;
     padding: 0 20px;
@@ -132,7 +163,7 @@
     margin-bottom: 0.7em;
   }
 
-  div#main-content > :global(* + div[id*='section']:first-of-type) {
+  div#main-content > :global(*:not(aside) + div[id*='section']:first-of-type) {
     margin-top: calc(35px + (0.7em * 1.5));
   }
 
@@ -177,8 +208,19 @@
     break-inside: avoid;
   }
 
+  article :global(:target:before) {
+    content: '';
+    display: block;
+    /* ensure that links to link targets are not cut off by header */
+    height: 100px;
+    margin: -100px 0 0;
+  }
+
   #main-content {
     padding-top: 35px;
+    max-width: 1600px;
+    box-sizing: border-box;
+    margin: 0 auto;
   }
 
   #main-content > :global(div[id*='section']) {

@@ -220,6 +220,7 @@ type Content {
   name: String!
   people: CollectionPeople
   quick_links: [ContentQuick_links]
+  show_table_of_contents: Boolean
   slug: String!
   timestamps: CollectionTimestamps
   yState: String
@@ -233,6 +234,7 @@ input ContentModifyInput {
   enable_password_protection: Boolean
   name: String
   quick_links: [ContentModifyInputQuick_links]
+  show_table_of_contents: Boolean
   slug: String
   yState: String
 }
@@ -330,7 +332,7 @@ type Mutation {
   contentClone(_id: ObjectID!): Content
 
   """Create a new Content document."""
-  contentCreate(alert: String, aliases: [String], body: String, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, slug: String): Content
+  contentCreate(alert: String, aliases: [String], body: String, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String): Content
 
   """Deletes a Content document."""
   contentDelete(_id: ObjectID!): Void
@@ -767,6 +769,7 @@ type PrunedContent {
   enable_password_protection: Boolean!
   name: String!
   quick_links: [ContentQuick_links]
+  show_table_of_contents: Boolean
   slug: String!
   timestamps: PrunedContentTimestamps
 }
