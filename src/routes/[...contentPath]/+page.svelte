@@ -21,7 +21,7 @@
   $: [headingMD, bodyMD] = pageData?.body ? Markdown.parse(pageData.body) : [null, ''];
   $: [, alertMD] = pageData?.alert ? Markdown.parse(pageData.alert) : [null, ''];
 
-  $: columns = pageData?.columns || 1;
+  $: columns = pageData?.dual_columns ? 2 : 1;
 
   afterUpdate(() => {
     if ((browser && bodyMD) || (browser && alertMD)) {

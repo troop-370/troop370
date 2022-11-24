@@ -8,7 +8,7 @@ export const houdini_load = graphql`
       _id
       name
       body
-      columns
+      dual_columns
       timestamps {
         void
       }
