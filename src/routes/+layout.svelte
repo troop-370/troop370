@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { title } from '$stores/title';
   import TopNav from '$components/TopNavigation/TopNav.svelte';
+  import { title } from '$stores/title';
   import { afterUpdate } from 'svelte';
   import type { LayoutData } from './$houdini';
 
