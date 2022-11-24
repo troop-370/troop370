@@ -41,7 +41,7 @@
       {:else}
         {@html Markdown.parse(`# ${pageData.name}`)[0]}
       {/if}
-      {#if quickLinks}
+      {#if quickLinks && quickLinks.length > 0}
         <div class="quick-links">
           {#each quickLinks as { path, label }}
             <OutlinedButton href={path || ''}>{label}</OutlinedButton>
