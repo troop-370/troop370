@@ -42,9 +42,11 @@
         {@html Markdown.parse(`# ${pageData.name}`)[0]}
       {/if}
       {#if quickLinks}
-        {#each quickLinks as { path, label }}
-          <OutlinedButton href={path || ''}>{label}</OutlinedButton>
-        {/each}
+        <div class="quick-links">
+          {#each quickLinks as { path, label }}
+            <OutlinedButton href={path || ''}>{label}</OutlinedButton>
+          {/each}
+        </div>
       {/if}
     </div>
     {#if alertMD}
@@ -177,5 +179,19 @@
   #main-content.dualColumns {
     columns: 2;
     column-gap: 20px;
+  }
+
+  .quick-links {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 5px 0;
+  }
+
+  .quick-links :global(a.mdc-button--outlined) {
+    margin: 0;
   }
 </style>
