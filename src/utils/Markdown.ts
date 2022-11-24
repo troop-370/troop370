@@ -1,8 +1,13 @@
 import { marked } from 'marked';
 import { findLastIndex } from './findLastIndex';
+
+type TOC = { title: string; level: 2 | 3 | 4 | 5 | 6 | 1; slug: string }[];
+
 class MarkDown {
+  #toc: TOC = [];
+
   #renderer: marked.RendererObject = {
-    heading(text, level, raw, slugger) {
+    heading: (text, level, raw, slugger) => {
       const [title, subtitle] = text.split('__splitSubtitle__');
 
       if (level === 1) {
@@ -15,6 +20,9 @@ class MarkDown {
       }
 
       const slug = slugger.slug(text);
+
+      this.#toc.push({ title, level, slug });
+
       return `
         <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
       `;
@@ -106,6 +114,7 @@ class MarkDown {
   }
 
   parse(md: string, appendH1Md?: string) {
+    this.#toc = [];
     const tokens = this.parseTokens(md);
 
     // append tokens in from `appendHeadingMd` if there is an h1 heading
@@ -202,7 +211,7 @@ class MarkDown {
     return tokensGrouped;
   }
 
-  transform(tokens: marked.Tokens.Generic[]): [string | null, string] {
+  transform(tokens: marked.Tokens.Generic[]): [string | null, string, TOC] {
     const parsedContent = marked.parser(
       tokens.filter((token) => !(isHeadingToken(token) && token.depth === 1)) as marked.Token[]
     );
@@ -210,10 +219,10 @@ class MarkDown {
     const headingToken = tokens.find((token) => isHeadingToken(token) && token.depth === 1);
     if (headingToken) {
       const parsedHeading = marked.parser([headingToken as marked.Token]);
-      return [parsedHeading, parsedContent];
+      return [parsedHeading, parsedContent, this.#toc];
     }
 
-    return [null, parsedContent];
+    return [null, parsedContent, this.#toc];
   }
 }
 
