@@ -136,6 +136,11 @@
     margin-top: calc(35px + (0.7em * 1.5));
   }
 
+  article :global(ul),
+  article :global(ol) {
+    padding-inline-start: 20px;
+  }
+
   article :global(a.mdc-button--outlined) {
     margin-top: 10px;
     margin-bottom: 5px;
