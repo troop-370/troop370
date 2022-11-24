@@ -16,6 +16,7 @@
   "devDependencies": {
     "@smui/button": "^7.0.0-beta.0",
     "@smui/ripple": "^7.0.0-beta.0",
+    "@smui/textfield": "^7.0.0-beta.0",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "@types/marked": "^4.0.7",
@@ -39,6 +40,7 @@
   },
   "type": "module",
   "dependencies": {
-    "marked": "^4.2.2"
+    "marked": "^4.2.2",
+    "svelte-kit-cookie-session": "^3.2.2"
   }
 }
