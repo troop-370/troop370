@@ -1,5 +1,6 @@
 import { graphql } from '$houdini';
-import type { ContentPageVariablesType } from './$houdini';
+import { redirect } from '@sveltejs/kit';
+import type { AfterLoadEvent, ContentPageVariablesType } from './$houdini';
 
 export const houdini_load = graphql`
   query ContentPage($slug: String!) {
@@ -29,3 +30,12 @@ export const ContentPageVariables: ContentPageVariablesType = ({ params }) => {
     slug: params.contentPath.endsWith('/') ? params.contentPath.slice(0, -1) : params.contentPath,
   };
 };
+
+export async function afterLoad({ data, event }: AfterLoadEvent) {
+  if (data.ContentPage.contentBySlugPublic?.enable_password_protection) {
+    const { session } = await event.parent();
+    if (session.authenticated !== true) {
+      throw redirect(302, `/basic-login?from=${encodeURIComponent(event.url.href)}`);
+    }
+  }
+}
