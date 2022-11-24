@@ -106,6 +106,10 @@ type ConfigurationCollectionBy {
 }
 
 type ConfigurationCollectionGenerationOptions {
+  disableArchiveMutation: Boolean
+  disableCreateMutation: Boolean
+  disableHideMutation: Boolean
+  disablePublishMutation: Boolean
   mandatoryWatchers: [String]
   nameField: String
   previewUrl: String
@@ -247,6 +251,66 @@ type ContentQuick_links {
 """ISO date string scalar type"""
 scalar Date
 
+type File {
+  _id: ObjectID!
+  archived: Boolean!
+  file_type: String!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  location: String!
+  locked: Boolean!
+  name: String!
+  note: String
+  people: CollectionPeople
+  size_bytes: Int!
+  tags: [String]
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+type FileCollectionActionAccess {
+  archive: FileCollectionActionAccessObject
+  bypassDocPermissions: FileCollectionActionAccessObject
+  create: FileCollectionActionAccessObject
+  delete: FileCollectionActionAccessObject
+  get: FileCollectionActionAccessObject
+  hide: FileCollectionActionAccessObject
+  lock: FileCollectionActionAccessObject
+  modify: FileCollectionActionAccessObject
+  publish: FileCollectionActionAccessObject
+  watch: FileCollectionActionAccessObject
+}
+
+input FileCollectionActionAccessInput {
+  archive: FileCollectionActionAccessObjectInput
+  bypassDocPermissions: FileCollectionActionAccessObjectInput
+  create: FileCollectionActionAccessObjectInput
+  delete: FileCollectionActionAccessObjectInput
+  get: FileCollectionActionAccessObjectInput
+  hide: FileCollectionActionAccessObjectInput
+  lock: FileCollectionActionAccessObjectInput
+  modify: FileCollectionActionAccessObjectInput
+  publish: FileCollectionActionAccessObjectInput
+  watch: FileCollectionActionAccessObjectInput
+}
+
+type FileCollectionActionAccessObject {
+  teams: [String!]
+  users: [String!]
+}
+
+input FileCollectionActionAccessObjectInput {
+  teams: [String!]
+  users: [String!]
+}
+
+input FileModifyInput {
+  name: String
+  note: String
+  tags: [String]
+  yState: String
+}
+
 """JSON string"""
 scalar JSON
 
@@ -298,6 +362,21 @@ type Mutation {
   """
   contentWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Content
   deleteCollection(name: String!): Void
+
+  """
+  Clone an existing File document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  fileClone(_id: ObjectID!): File
+
+  """Sets the action access config for the File collection."""
+  fileCollectionSetActionAccess(actionAccess: FileCollectionActionAccessInput!): FileCollectionActionAccess
+
+  """Create a new File document."""
+  fileCreate(file_type: String!, location: String!, name: String!, note: String, size_bytes: Int!, tags: [String]): File
+
+  """Modify an existing File document."""
+  fileModify(_id: ObjectID!, input: FileModifyInput!): File
 
   """
   Set whether an existing Post document is archived.
@@ -531,6 +610,19 @@ type PagedCollectionActivity {
 
 type PagedContent {
   docs: [Content]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedFile {
+  docs: [File]!
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -791,6 +883,21 @@ type Query {
   Only administrators can use this query.
   """
   fathomDashboard: String
+
+  """Get a File document by _id."""
+  file(_id: ObjectID!): File
+
+  """
+  Get the permissions of the currently authenticated user for the
+  File collection.
+  """
+  fileActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of File documents by _id.
+  If _id is omitted, the API will return all File documents.
+  """
+  files(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedFile
 
   """Get a Post document by _id."""
   post(_id: ObjectID!): Post
