@@ -2,19 +2,22 @@ import { marked } from 'marked';
 import { findLastIndex } from './findLastIndex';
 class MarkDown {
   #renderer: marked.RendererObject = {
-    heading(text, level) {
+    heading(text, level, raw, slugger) {
       const [title, subtitle] = text.split('__splitSubtitle__');
 
       if (level === 1) {
         if (subtitle) {
           return `
-              <h1>${title}</h1>
-              <p>${subtitle}</p>
+            <h1>${title}</h1>
+            <p>${subtitle}</p>
           `;
         }
       }
 
-      return false;
+      const slug = slugger.slug(text);
+      return `
+        <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
+      `;
     },
     link(href, title, text) {
       let className = '';
