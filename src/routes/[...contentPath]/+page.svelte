@@ -74,8 +74,6 @@
   Something went wrong
 {/if}
 
-<pre>{JSON.stringify($ContentPage.data, null, 2)}</pre>
-
 <style>
   article #main-content aside {
     float: right;
