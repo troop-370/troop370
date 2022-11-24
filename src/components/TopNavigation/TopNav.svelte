@@ -15,7 +15,7 @@
     <Icon class="material-icons header-icon">menu</Icon>
   </IconButton>
   <a href="/" use:Ripple={{ surface: true, color: 'primary' }}>BSA Troop 370</a>
-  <NavRow {groups} />
+  <NavRow groups={groups.filter((group) => group.show_horizontal_nav === true)} />
 </header>
 
 <NavDrawer bind:open={menuOpen} {groups} />
