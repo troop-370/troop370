@@ -61,6 +61,21 @@
     cursor: pointer;
   }
 
+  @media (max-width: 1000px) {
+    #main-nav > li > span,
+    #main-nav > li > a {
+      font-size: 14px;
+      padding: 0 10px;
+    }
+  }
+
+  @media (max-width: 870px) {
+    #main-nav > li > span,
+    #main-nav > li > a {
+      display: none;
+    }
+  }
+
   .dropdown > ul {
     display: none;
     position: absolute;
