@@ -17,6 +17,9 @@ class MarkDown {
             <p>${subtitle}</p>
           `;
         }
+        return `
+          <h1>${title}</h1>
+        `;
       }
 
       const slug = slugger.slug(text);
