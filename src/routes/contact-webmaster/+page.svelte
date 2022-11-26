@@ -1,0 +1,70 @@
+<script>
+  import Banner from '$components/Banner.svelte';
+  import { title } from '$stores/title';
+  import { Icon, Label } from '@smui/button';
+  import Button from '@smui/button/src/Button.svelte';
+  import Textfield from '@smui/textfield';
+
+  $: title.set('Contact Webmaster');
+</script>
+
+<Banner>
+  <h1>Contact Webmaster</h1>
+  <p>
+    Use the contact form below to get in contact with a Troop 370 Webmaster. We do our best to
+    respond quickly to requests for passwords or website assistance. For general questions and
+    contact, use our <a href="/contact/">general contact form</a>.
+  </p>
+</Banner>
+
+<form name="contact-webmaster" method="POST" action="https://formspree.io/jackebuehner@gmail.com">
+  <Textfield
+    value=""
+    variant="outlined"
+    label="First name"
+    input$name="First_Name"
+    type="text"
+    autocomplete="given-name"
+    required
+  />
+  <Textfield
+    value=""
+    variant="outlined"
+    label="Last name"
+    input$name="Last_name"
+    type="text"
+    autocomplete="family-name"
+    required
+  />
+  <Textfield
+    value=""
+    variant="outlined"
+    label="Email"
+    input$name="_replyto"
+    type="email"
+    autocomplete="email"
+    required
+  />
+  <Textfield value="" variant="outlined" label="Subject" input$name="_subject" type="text" />
+  <Textfield textarea value="" label="Message" input$name="message" input$rows={5} required />
+  <Button type="submit" value="Submit" variant="outlined" name="action">
+    <Icon class="material-icons">send</Icon>
+    <Label>Submit</Label>
+  </Button>
+  <meta name="referrer" content="origin" />
+  <input type="hidden" name="_next" value="submission-received" />
+  <input type="hidden" name="_format" value="plain" />
+</form>
+
+<style>
+  form {
+    width: 100%;
+    max-width: 1200px;
+    margin: 35px auto;
+  }
+
+  form > :global(label) {
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+</style>
