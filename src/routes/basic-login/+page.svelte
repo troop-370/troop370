@@ -1,12 +1,24 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { title } from '$stores/title';
+  import { MDCRipple } from '@material/ripple';
   import Button, { Label } from '@smui/button';
   import Textfield from '@smui/textfield';
+  import { onMount } from 'svelte';
   import type { ActionData } from './$types';
 
   export let form: ActionData;
 
   $: title.set('Sign in to continue');
+
+  onMount(() => {
+    if (browser) {
+      const buttonElems = document.querySelectorAll('.mdc-button');
+      buttonElems.forEach((buttonElem) => {
+        MDCRipple.attachTo(buttonElem);
+      });
+    }
+  });
 </script>
 
 <div class="wrapper">
