@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import Banner from '$components/Banner.svelte';
   import PostCard from '$components/PostCard.svelte';
+  import { title } from '$stores/title';
   import { notEmpty } from '$utils';
   import Button from '@smui/button/src/Button.svelte';
   import Ripple from '@smui/ripple';
@@ -9,6 +10,8 @@
 
   export let data: PageData;
   $: ({ Posts } = data);
+
+  title.set('Posts');
 </script>
 
 <Banner>
