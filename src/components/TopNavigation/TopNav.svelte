@@ -35,6 +35,12 @@
     z-index: 99;
   }
 
+  @media print {
+    header {
+      display: none;
+    }
+  }
+
   a {
     justify-self: start;
     display: flex;

@@ -271,4 +271,10 @@
   * :global(.mdc-drawer__content) {
     overflow: unset;
   }
+
+  @media print {
+    .drawer-container {
+      display: none;
+    }
+  }
 </style>
