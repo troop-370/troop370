@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import Banner from '$components/Banner.svelte';
   import OutlinedButton from '$components/OutlinedButton.svelte';
   import { title } from '$stores/title';
   import { Markdown } from '$utils';
@@ -35,7 +36,7 @@
 
 {#if pageData}
   <article>
-    <div class="banner">
+    <Banner>
       {#if headingMD}
         {@html headingMD}
       {:else}
@@ -48,7 +49,7 @@
           {/each}
         </div>
       {/if}
-    </div>
+    </Banner>
     {#if alertMD}
       <div class="alert">
         {@html alertMD}
@@ -100,23 +101,11 @@
     max-width: 100%;
   }
 
-  article .banner :global(h1) {
-    color: var(--color-neutral-10);
-    font-family: var(--font-headline);
-    font-size: 2.125rem;
-    line-height: 2.5rem;
-    font-weight: 500;
-    letter-spacing: 0.00735294em;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    line-height: 1.5;
-  }
-
   article :global(p) {
     margin-top: 0;
     margin-bottom: 15px;
   }
-  .banner :global(p),
+
   .alert :global(p) {
     margin-top: 15px;
   }
@@ -126,7 +115,6 @@
   }
 
   article #main-content > :global(*),
-  article .banner > :global(*),
   article .alert > :global(*) {
     max-width: 1200px;
     box-sizing: border-box;
@@ -139,16 +127,6 @@
     font-family: var(--font-detail);
     line-height: 1.5rem;
     letter-spacing: 0.03125em;
-  }
-
-  article .banner {
-    text-align: center;
-    background-color: var(--color-primary);
-    color: var(--color-neutral-30);
-    padding: 80px 20px;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
   }
 
   article :global(h2),
