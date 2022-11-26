@@ -30,3 +30,12 @@
 <TopNav groups={navConfig.group} />
 
 <slot />
+
+<style>
+  /* use correct font for button labels */
+  :global(.mdc-button .mdc-button__label) {
+    text-transform: uppercase;
+    font-family: var(--font-headline);
+    font-weight: 700;
+  }
+</style>
