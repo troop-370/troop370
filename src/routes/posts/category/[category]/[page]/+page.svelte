@@ -20,6 +20,12 @@
 
 <div class="grid">
   <div>
+    {#if $page.params.category !== 'all'}
+      <div class="category-warning">
+        Only showing posts from category “{$page.params.category}” |
+        <a href="/posts">Show all posts</a>
+      </div>
+    {/if}
     {#if $Posts.data?.postsPublic?.docs}
       {#each $Posts.data.postsPublic.docs as post}
         {#if post}
@@ -112,10 +118,16 @@
     text-align: center;
   }
 
-  aside > div {
+  aside > div,
+  .category-warning {
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin: 10px 0;
+    font-family: var(--font-detail);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.03125em;
   }
 
   aside h3 {
@@ -131,11 +143,6 @@
   }
 
   aside p {
-    font-family: var(--font-detail);
-    font-size: 1rem;
-    line-height: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 0.03125em;
     margin: 15px 0;
   }
 
@@ -150,5 +157,23 @@
     font-weight: 500;
     color: var(--color-primary);
     text-decoration: none;
+  }
+
+  .category-warning a {
+    color: var(--color-primary);
+    box-shadow: 0 1px 0 0 var(--color-primary);
+    transition: background-color 0.2s, box-shadow 0.1s, color 0.2s;
+    text-decoration: none;
+  }
+  .category-warning a:hover {
+    box-shadow: 0 2px 0 0 var(--color-primary);
+    background-color: hsla(var(--color-primary-hsl), 0.1);
+    color: var(--color-neutral-200);
+  }
+  .category-warning a:active {
+    background-color: hsla(var(--color-primary-hsl), 0.16);
+  }
+  .category-warning a:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 </style>
