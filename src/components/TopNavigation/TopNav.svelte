@@ -32,6 +32,7 @@
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 4px 5px 0 rgba(0, 0, 0, 0.07),
       0 1px 10px 0 rgba(0, 0, 0, 0.06);
     align-items: center;
+    z-index: 99;
   }
 
   a {
