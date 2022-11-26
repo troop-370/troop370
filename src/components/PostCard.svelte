@@ -3,6 +3,7 @@
   import Renderer from '@cristata/prosemirror-to-html-js';
   import Button, { Icon } from '@smui/button';
   import { DOMParser } from 'xmldom';
+  import { marked } from 'marked';
 
   const renderer = new Renderer.Renderer();
 
@@ -41,7 +42,7 @@
 </script>
 
 <article>
-  <a {href}><h2>{name}</h2> </a>
+  <a {href}><h2>{@html marked.parseInline(name)}</h2> </a>
   {#if hasPassword}
     <Icon
       class="material-icons post-card--lock-icon"

@@ -5,6 +5,7 @@
   import { formatISODate, listOxford, Markdown, notEmpty } from '$utils';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import { MDCRipple } from '@material/ripple';
+  import { marked } from 'marked';
   import { afterUpdate } from 'svelte';
   import type { PageData } from './$houdini';
 
@@ -46,8 +47,8 @@
 {#if post}
   <article>
     <Banner>
-      <h1>{post.name}</h1>
-      <p>{post.description}</p>
+      <h1>{@html marked.parseInline(post.name)}</h1>
+      <p>{@html marked.parseInline(post.description)}</p>
     </Banner>
 
     <div id="main-content">
