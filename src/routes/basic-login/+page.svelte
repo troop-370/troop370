@@ -1,9 +1,12 @@
 <script lang="ts">
+  import { title } from '$stores/title';
   import Button, { Label } from '@smui/button';
   import Textfield from '@smui/textfield';
   import type { ActionData } from './$types';
 
   export let form: ActionData;
+
+  $: title.set('Sign in to continue');
 </script>
 
 <div class="wrapper">
