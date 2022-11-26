@@ -215,7 +215,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    margin: 10px 0 5px 0;
+    margin-bottom: 5px;
   }
 
   .quick-links :global(a.mdc-button--outlined) {

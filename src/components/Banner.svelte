@@ -37,7 +37,11 @@
 
   .page-header-banner :global(p) {
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+  }
+
+  .page-header-banner > :global(p + .quick-links) {
+    margin-top: 20px;
   }
 
   .page-header-banner > :global(*) {
