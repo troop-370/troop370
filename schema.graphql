@@ -381,6 +381,53 @@ type Mutation {
   fileModify(_id: ObjectID!, input: FileModifyInput!): File
 
   """
+  Set whether an existing Newsletter document is archived.
+  This mutation sets archived: true by default.
+  Archived Newsletter documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  newsletterArchive(_id: ObjectID!, archive: Boolean): Newsletter
+
+  """
+  Clone an existing Newsletter document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  newsletterClone(_id: ObjectID!): Newsletter
+
+  """Create a new Newsletter document."""
+  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID]): Newsletter
+
+  """Deletes a Newsletter document."""
+  newsletterDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing Newsletter document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden Newsletter documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  newsletterHide(_id: ObjectID!, hide: Boolean): Newsletter
+
+  """
+  Set whether an existing Newsletter document is locked.
+  This mutation sets locked: true by default.
+  Locked Newsletter documents should only be editable by the server
+  and by admins.
+  """
+  newsletterLock(_id: ObjectID!, lock: Boolean): Newsletter
+
+  """Modify an existing Newsletter document."""
+  newsletterModify(_id: ObjectID!, input: NewsletterModifyInput!): Newsletter
+
+  """
+  Add a watcher to a Newsletter document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  newsletterWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Newsletter
+
+  """
   Set whether an existing Post document is archived.
   This mutation sets archived: true by default.
   Archived Post documents should not be presented to clients
@@ -395,7 +442,7 @@ type Mutation {
   postClone(_id: ObjectID!): Post
 
   """Create a new Post document."""
-  postCreate(authored_by: [String]!, body: String!, button_text: String, categories: [String]!, description: String!, enable_password_protection: Boolean, name: String!, tags: [String]!): Post
+  postCreate(body: String!, button_text: String, categories: [String]!, description: String!, enable_password_protection: Boolean, legacy_markdown: Boolean, name: String!, slug: String, stage: Float, submitted_by: [String], tags: [String]!): Post
 
   """Deletes a Post document."""
   postDelete(_id: ObjectID!): Void
@@ -594,6 +641,52 @@ type Mutation {
   webConfigWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): WebConfig
 }
 
+type Newsletter {
+  _id: ObjectID!
+  advancement_mini_posts: [Post]
+  announcements: [Post]
+  archived: Boolean!
+  camping_mini_posts: [Post]
+  fundraiser_mini_posts: [Post]
+  hidden: Boolean!
+  high_adventure_mini_posts: [Post]
+  history: [CollectionHistory]
+  locked: Boolean!
+  manual_calendar: [NewsletterManual_calendar]
+  name: String!
+  newsletter_date: Date
+  people: CollectionPeople
+  pinned_mini_posts: [Post]
+  service_mini_posts: [Post]
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+type NewsletterManual_calendar {
+  events: String
+  month: String
+}
+
+input NewsletterModifyInput {
+  advancement_mini_posts: [ObjectID]
+  announcements: [ObjectID]
+  camping_mini_posts: [ObjectID]
+  fundraiser_mini_posts: [ObjectID]
+  high_adventure_mini_posts: [ObjectID]
+  manual_calendar: [NewsletterModifyInputManual_calendar]
+  name: String
+  newsletter_date: Date
+  pinned_mini_posts: [ObjectID]
+  service_mini_posts: [ObjectID]
+  yState: String
+}
+
+input NewsletterModifyInputManual_calendar {
+  events: String
+  month: String
+  yState: String
+}
+
 """mongoose ObjectID scalar type"""
 scalar ObjectID
 
@@ -636,6 +729,19 @@ type PagedFile {
   totalPages: Int
 }
 
+type PagedNewsletter {
+  docs: [Newsletter]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
 type PagedPost {
   docs: [Post]!
   hasNextPage: Boolean
@@ -651,6 +757,19 @@ type PagedPost {
 
 type PagedPrunedContent {
   docs: [PrunedContent]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedPrunedPost {
+  docs: [PrunedPost]!
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -730,7 +849,6 @@ type PagedWebConfig {
 type Post {
   _id: ObjectID!
   archived: Boolean!
-  authored_by: [String]!
   body: String!
   button_text: String!
   categories: [String]!
@@ -738,26 +856,43 @@ type Post {
   enable_password_protection: Boolean!
   hidden: Boolean!
   history: [CollectionHistory]
+  legacy_markdown: Boolean!
   locked: Boolean!
   name: String!
   people: PublishableCollectionPeople
-  permissions: CollectionPermissions!
+  permissions: PostPermissions
+  slug: String
+  stage: Float
+  submitted_by: [String]
   tags: [String]!
   timestamps: PublishableCollectionTimestamps
   yState: String
 }
 
 input PostModifyInput {
-  authored_by: [String]
   body: String
   button_text: String
   categories: [String]
   description: String
   enable_password_protection: Boolean
   name: String
-  permissions: CollectionPermissionsInput
+  permissions: PostModifyInputPermissions
+  slug: String
+  stage: Float
+  submitted_by: [String]
   tags: [String]
   yState: String
+}
+
+input PostModifyInputPermissions {
+  teams: [ObjectID]
+  users: [ObjectID]
+  yState: String
+}
+
+type PostPermissions {
+  teams: [ObjectID]!
+  users: [User]!
 }
 
 type PrunedContent {
@@ -780,6 +915,31 @@ type PrunedContentQuick_links {
 
 type PrunedContentTimestamps {
   void: Void
+}
+
+type PrunedPost {
+  _id: ObjectID!
+  body: String!
+  button_text: String!
+  categories: [String]!
+  description: String!
+  enable_password_protection: Boolean!
+  legacy_markdown: Boolean!
+  name: String!
+  permissions: PrunedPostPermissions
+  slug: String
+  submitted_by: [String]
+  tags: [String]!
+  timestamps: PrunedPostTimestamps
+}
+
+type PrunedPostPermissions {
+  void: Void
+}
+
+type PrunedPostTimestamps {
+  published_at: Date!
+  updated_at: Date!
 }
 
 type PrunedUser {
@@ -902,6 +1062,21 @@ type Query {
   """
   files(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedFile
 
+  """Get a Newsletter document by _id."""
+  newsletter(_id: ObjectID!): Newsletter
+
+  """
+  Get the permissions of the currently authenticated user for the
+  Newsletter collection.
+  """
+  newsletterActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of Newsletter documents by _id.
+  If _id is omitted, the API will return all Newsletter documents.
+  """
+  newsletters(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedNewsletter
+
   """Get a Post document by _id."""
   post(_id: ObjectID!): Post
 
@@ -912,10 +1087,26 @@ type Query {
   postActionAccess(_id: ObjectID): CollectionActionAccess
 
   """
+  Get a pruned Post document by _id.
+  Provide the date of to ensure that the correct document is provided
+  (in case the slug is not unique).
+  """
+  postBySlugPublic(date: Date, slug: String!): PrunedPost
+
+  """Get a pruned Post document by _id."""
+  postPublic(_id: ObjectID!): PrunedPost
+
+  """
   Get a set of Post documents by _id.
   If _id is omitted, the API will return all Post documents.
   """
   posts(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPost
+
+  """
+  Get a set of pruned Post documents by _id.
+  If _id is omitted, the API will return all Post documents.
+  """
+  postsPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedPost
 
   """
   Get a signed s3 URL for uploading photos and documents to an existing s3 bucket.
