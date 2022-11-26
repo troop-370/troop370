@@ -159,21 +159,20 @@
   }
 
   .drawer-container :global(.drawer--accordian .smui-accordion__panel::before) {
-    box-shadow: none;
+    box-shadow: none !important;
   }
 
   .drawer-container :global(.drawer--accordian .smui-paper__content) {
-    padding: 0;
+    padding: 0 !important;
   }
 
   .drawer-container :global(.drawer--accordian .smui-paper__content .drawer--list-item) {
     padding-left: 32px;
   }
 
-  .drawer-container :global(.drawer--accordian .smui-accordion__header),
   .drawer-container :global(.drawer--accordian .smui-accordion__header__title) {
     margin: 0;
-    padding: 0;
+    padding: 0 !important;
     font-size: 14px;
   }
 
@@ -200,7 +199,7 @@
 
   .drawer-container :global(.drawer--accordian .smui-accordion__header__icon) {
     margin: 0;
-    padding: 0;
+    padding: 0 !important;
   }
   .drawer-container :global(.drawer--accordian .smui-accordion__header__icon .material-icons) {
     font-size: 16px;
