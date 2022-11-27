@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { notEmpty } from '$utils';
   import { marked } from 'marked';
   import { CardTable, ContainerTable } from '.';
 
@@ -11,34 +12,36 @@
   }[];
 </script>
 
-<tr>
-  <td>
-    <CardTable>
-      <tr>
-        <td>
-          <ContainerTable>
-            <tr>
-              <td>
-                <h2>{label}</h2>
-              </td>
-            </tr>
-            {#each posts as post}
+{#if posts.filter(notEmpty).length > 0}
+  <tr>
+    <td>
+      <CardTable>
+        <tr>
+          <td>
+            <ContainerTable>
               <tr>
                 <td>
-                  <h3>{@html marked.parseInline(post.name)}</h3>
-                  <p>{@html marked.parseInline(post.description)}</p>
-                </td>
-                <td class="button-td" width={124}>
-                  <a href="https://troop370atlanta.org/posts/{post.slug}">{post.button_text}</a>
+                  <h2>{label}</h2>
                 </td>
               </tr>
-            {/each}
-          </ContainerTable>
-        </td>
-      </tr>
-    </CardTable>
-  </td>
-</tr>
+              {#each posts as post}
+                <tr>
+                  <td>
+                    <h3>{@html marked.parseInline(post.name)}</h3>
+                    <p>{@html marked.parseInline(post.description)}</p>
+                  </td>
+                  <td class="button-td" width={124}>
+                    <a href="https://troop370atlanta.org/posts/{post.slug}">{post.button_text}</a>
+                  </td>
+                </tr>
+              {/each}
+            </ContainerTable>
+          </td>
+        </tr>
+      </CardTable>
+    </td>
+  </tr>
+{/if}
 
 <style>
   h2 {
