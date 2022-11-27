@@ -124,7 +124,7 @@ export const actions: Actions = {
             reply_to_email: data.replyEmail,
             from_name: data.senderName,
             subject: data.subject,
-            html_content: data.body,
+            html_content: data.body + '[[trackingImage]]',
             preheader: '',
             physical_address_in_footer: {
               address_line1: '4400 Peachtree Dunwoody Road',

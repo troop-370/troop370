@@ -17,6 +17,7 @@
     let html: string | undefined = undefined;
 
     if (type === 'markdown') {
+      marked.setOptions(marked.getDefaults());
       html = marked.parse(body);
     }
 
