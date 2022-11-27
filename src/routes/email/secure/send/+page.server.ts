@@ -183,6 +183,6 @@ export const actions: Actions = {
         throw error(400);
       });
 
-    return `https://app.constantcontact.com/pages/campaigns/email-details/reporting/activity/${result.campaign_activity_id}`;
+    return `https://app.constantcontact.com/pages/campaigns/email-details/details/activity/${result.campaign_activity_id}`;
   },
 };
