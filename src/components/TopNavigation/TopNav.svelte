@@ -46,7 +46,7 @@
     margin: 0 0 0 -10px;
     width: calc(100% + 30px);
     padding: 4px 20px;
-
+    box-sizing: border-box;
     font-family: var(--font-detail);
     color: var(--color-neutral-10);
   }
