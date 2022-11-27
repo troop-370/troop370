@@ -28,7 +28,7 @@
     }
 
     if (html) {
-      const dom = new DOMParser().parseFromString(html, 'text/html').documentElement;
+      const dom = new DOMParser().parseFromString(html, 'text/html');
 
       /**
        * Style the buttons in the content,
@@ -58,9 +58,9 @@
         }
       });
 
-      processedHtml = dom.toString() || body || '';
+      processedHtml = dom.toString() || html || body || '';
     } else {
-      processedHtml = body || '';
+      processedHtml = html || body || '';
     }
   }
 </script>
