@@ -28,60 +28,66 @@ class MarkDown {
     renderer: this.#renderer,
   };
 
-  constructor() {
-    this.#renderer.heading = (text, level, raw, slugger) => {
-      const [title, subtitle] = text.split('__splitSubtitle__');
+  configure() {
+    marked.setOptions(this.#options);
 
-      if (level === 1) {
-        if (subtitle) {
-          return `
+    marked.use({
+      renderer: {
+        heading: (text, level, raw, slugger) => {
+          const [title, subtitle] = text.split('__splitSubtitle__');
+
+          if (level === 1) {
+            if (subtitle) {
+              return `
+              <h1>${title}</h1>
+              <p>${subtitle}</p>
+            `;
+            }
+            return `
             <h1>${title}</h1>
-            <p>${subtitle}</p>
           `;
-        }
-        return `
-          <h1>${title}</h1>
+          }
+
+          const slug = slugger.slug(text);
+
+          this.#toc.push({ title, level, slug });
+
+          return `
+          <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
         `;
-      }
+        },
+        link: (href, title, text) => {
+          let className = '';
 
-      const slug = slugger.slug(text);
+          // outlined button
+          if (text.indexOf('.ob') > 0 && text.indexOf('.ob') === text.length - 3) {
+            text = text.replace('.ob', '');
+            className = 'mdc-button mdc-button--outlined';
+          }
+          // forced-inverted outlined button (when on dark surface)
+          else if (text.indexOf('.iob') > 0 && text.indexOf('.iob') === text.length - 4) {
+            text = text.replace('.iob', '');
+            className = 'mdc-button-outlined--on-primary mdc-button mdc-button--outlined';
+          }
+          // plain-text button
+          else if (text.indexOf('.pb') > 0 && text.indexOf('.pb') === text.length - 3) {
+            text = text.replace('.pb', '');
+            className = 'mdc-button';
+          }
 
-      this.#toc.push({ title, level, slug });
+          if (className.includes('mdc-button')) {
+            return `
+                <a href="${href}" class="${className}">
+                  <span class="mdc-button__ripple"></span>
+                  <span class="mdc-button__label">${text}</span>
+                </a>
+              `;
+          }
 
-      return `
-        <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
-      `;
-    };
-    this.#renderer.link = (href, title, text) => {
-      let className = '';
-
-      // outlined button
-      if (text.indexOf('.ob') > 0 && text.indexOf('.ob') === text.length - 3) {
-        text = text.replace('.ob', '');
-        className = 'mdc-button mdc-button--outlined';
-      }
-      // forced-inverted outlined button (when on dark surface)
-      else if (text.indexOf('.iob') > 0 && text.indexOf('.iob') === text.length - 4) {
-        text = text.replace('.iob', '');
-        className = 'mdc-button-outlined--on-primary mdc-button mdc-button--outlined';
-      }
-      // plain-text button
-      else if (text.indexOf('.pb') > 0 && text.indexOf('.pb') === text.length - 3) {
-        text = text.replace('.pb', '');
-        className = 'mdc-button';
-      }
-
-      if (className.includes('mdc-button')) {
-        return `
-            <a href="${href}" class="${className}">
-              <span class="mdc-button__ripple"></span>
-              <span class="mdc-button__label">${text}</span>
-            </a>
-          `;
-      }
-
-      return `<a href="${href}">${text}</a>`;
-    };
+          return `<a href="${href}">${text}</a>`;
+        },
+      },
+    });
 
     marked.use({
       extensions: [
@@ -116,6 +122,8 @@ class MarkDown {
   }
 
   parse(md: string, appendH1Md?: string) {
+    this.configure();
+
     this.#toc = [];
     const tokens = this.parseTokens(md);
 
@@ -123,7 +131,7 @@ class MarkDown {
     const h1TokenIndex = tokens.findIndex((token) => isHeadingToken(token) && token.depth === 1);
     if (appendH1Md && h1TokenIndex !== -1) {
       const h1token = tokens[h1TokenIndex] as marked.Tokens.Heading;
-      const inlineText = marked.parseInline(appendH1Md, this.#options);
+      const inlineText = marked.parseInline(appendH1Md);
 
       const h1HasParagraph = !!h1token.tokens.find(
         (token) => token.type === 'text' && token.text === '__splitSubtitle__'
@@ -147,7 +155,8 @@ class MarkDown {
   }
 
   parseTokens(md: string): marked.Tokens.Generic[] {
-    const tokens = marked.lexer(md, this.#options);
+    this.configure();
+    const tokens = marked.lexer(md);
 
     // take the first paragraph after h1 and make it the subtitle
     const h1Index = tokens.findIndex((token) => isHeadingToken(token) && token.depth === 1);
@@ -214,14 +223,15 @@ class MarkDown {
   }
 
   transform(tokens: marked.Tokens.Generic[]): [string | null, string, TOC] {
+    this.configure();
+
     const parsedContent = marked.parser(
-      tokens.filter((token) => !(isHeadingToken(token) && token.depth === 1)) as marked.Token[],
-      this.#options
+      tokens.filter((token) => !(isHeadingToken(token) && token.depth === 1)) as marked.Token[]
     );
 
     const headingToken = tokens.find((token) => isHeadingToken(token) && token.depth === 1);
     if (headingToken) {
-      const parsedHeading = marked.parser([headingToken as marked.Token], this.#options);
+      const parsedHeading = marked.parser([headingToken as marked.Token]);
       return [parsedHeading, parsedContent, this.#toc];
     }
 
