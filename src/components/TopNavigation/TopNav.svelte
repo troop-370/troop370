@@ -14,8 +14,12 @@
   <IconButton class="header-icon-button" on:click={() => (menuOpen = !menuOpen)}>
     <Icon class="material-icons header-icon">menu</Icon>
   </IconButton>
-  <a href="/" use:Ripple={{ surface: true, color: 'primary' }}>BSA Troop 370</a>
+  <a class="wordmark" href="/" use:Ripple={{ surface: true, color: 'primary' }}>BSA Troop 370</a>
   <NavRow groups={groups.filter((group) => group.show_horizontal_nav === true)} />
+  <div>
+    This is the work-in-progress rewrite of the BSA Troop 370 website.
+    <a href="https://troop370atlanta.org">Click here to go to the main version of the website.</a>
+  </div>
 </header>
 
 <NavDrawer bind:open={menuOpen} {groups} />
@@ -35,13 +39,29 @@
     z-index: 99;
   }
 
+  div {
+    background-color: var(--color-secondary);
+    grid-column-start: 1;
+    grid-column-end: 4;
+    margin: 0 0 0 -10px;
+    width: calc(100% + 30px);
+    padding: 4px 20px;
+
+    font-family: var(--font-detail);
+    color: var(--color-neutral-10);
+  }
+
+  div a {
+    color: var(--color-neutral-10);
+  }
+
   @media print {
     header {
       display: none;
     }
   }
 
-  a {
+  a.wordmark {
     justify-self: start;
     display: flex;
     align-items: center;
