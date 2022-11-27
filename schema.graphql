@@ -395,7 +395,7 @@ type Mutation {
   newsletterClone(_id: ObjectID!): Newsletter
 
   """Create a new Newsletter document."""
-  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID]): Newsletter
+  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], slug: String, stage: Float): Newsletter
 
   """Deletes a Newsletter document."""
   newsletterDelete(_id: ObjectID!): Void
@@ -418,6 +418,9 @@ type Mutation {
 
   """Modify an existing Newsletter document."""
   newsletterModify(_id: ObjectID!, input: NewsletterModifyInput!): Newsletter
+
+  """Publishes an existing Newsletter document."""
+  newsletterPublish(_id: ObjectID!, publish: Boolean, published_at: Date): Newsletter
 
   """
   Add a watcher to a Newsletter document.
@@ -655,10 +658,12 @@ type Newsletter {
   manual_calendar: [NewsletterManual_calendar]
   name: String!
   newsletter_date: Date
-  people: CollectionPeople
+  people: PublishableCollectionPeople
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
-  timestamps: CollectionTimestamps
+  slug: String
+  stage: Float
+  timestamps: PublishableCollectionTimestamps
   yState: String
 }
 
@@ -678,6 +683,8 @@ input NewsletterModifyInput {
   newsletter_date: Date
   pinned_mini_posts: [ObjectID]
   service_mini_posts: [ObjectID]
+  slug: String
+  stage: Float
   yState: String
 }
 
@@ -757,6 +764,19 @@ type PagedPost {
 
 type PagedPrunedContent {
   docs: [PrunedContent]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedPrunedNewsletter {
+  docs: [PrunedNewsletter]!
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -917,6 +937,31 @@ type PrunedContentTimestamps {
   void: Void
 }
 
+type PrunedNewsletter {
+  _id: ObjectID!
+  advancement_mini_posts: [Post]
+  announcements: [Post]
+  camping_mini_posts: [Post]
+  fundraiser_mini_posts: [Post]
+  high_adventure_mini_posts: [Post]
+  manual_calendar: [NewsletterManual_calendar]
+  name: String!
+  newsletter_date: Date
+  pinned_mini_posts: [Post]
+  service_mini_posts: [Post]
+  slug: String
+  timestamps: PrunedNewsletterTimestamps
+}
+
+type PrunedNewsletterManual_calendar {
+  void: Void
+}
+
+type PrunedNewsletterTimestamps {
+  published_at: Date!
+  updated_at: Date!
+}
+
 type PrunedPost {
   _id: ObjectID!
   body: String!
@@ -1072,10 +1117,26 @@ type Query {
   newsletterActionAccess(_id: ObjectID): CollectionActionAccess
 
   """
+  Get a pruned Newsletter document by _id.
+  Provide the date of to ensure that the correct document is provided
+  (in case the slug is not unique).
+  """
+  newsletterBySlugPublic(date: Date, slug: String!): PrunedNewsletter
+
+  """Get a pruned Newsletter document by _id."""
+  newsletterPublic(_id: ObjectID!): PrunedNewsletter
+
+  """
   Get a set of Newsletter documents by _id.
   If _id is omitted, the API will return all Newsletter documents.
   """
   newsletters(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedNewsletter
+
+  """
+  Get a set of pruned Newsletter documents by _id.
+  If _id is omitted, the API will return all Newsletter documents.
+  """
+  newslettersPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedNewsletter
 
   """Get a Post document by _id."""
   post(_id: ObjectID!): Post
