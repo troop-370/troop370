@@ -47,6 +47,7 @@
   "type": "module",
   "dependencies": {
     "@cristata/prosemirror-to-html-js": "^2.5.0",
+    "css-inliner": "^2.0.0",
     "luxon": "^3.1.0",
     "marked": "^4.2.2",
     "svelte-kit-cookie-session": "^3.2.2",

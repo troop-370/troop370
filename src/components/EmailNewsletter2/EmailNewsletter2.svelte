@@ -15,9 +15,10 @@
   } from '.';
 
   export let newsletter: NonNullable<Newsletter$result['newsletterPublic']>;
+  export let element: HTMLHtmlElement | undefined = undefined;
 </script>
 
-<html id="newsletter-doc" lang="en-us">
+<html id="newsletter-doc" lang="en-us" bind:this={element}>
   <body style="margin: 0;">
     <BackgroundTable>
       <MainTable>
@@ -51,29 +52,29 @@
                       <td>
                         <h1
                           style="
-                            font-family: roboto, sans-serif;
-                            font-size: 24px;
-                            color: rgb(224, 224, 224);
-                            line-height: 1.2;
-                            font-weight: 500;
-                            letter-spacing: normal;
-                            margin: 5px 0px;
-                            text-align: center;
-                          "
+                              font-family: roboto, sans-serif;
+                              font-size: 24px;
+                              color: rgb(224, 224, 224);
+                              line-height: 1.2;
+                              font-weight: 500;
+                              letter-spacing: normal;
+                              margin: 5px 0px;
+                              text-align: center;
+                            "
                         >
                           {newsletter.name}
                         </h1>
                         <p
                           style="
-                            font-family: roboto, sans-serif;
-                            font-size: 16px;
-                            color: rgb(224, 224, 224);
-                            line-height: 1;
-                            font-weight: 400;
-                            letter-spacing: normal;
-                            margin: 0px 0px 10px;
-                            text-align: center;
-                          "
+                              font-family: roboto, sans-serif;
+                              font-size: 16px;
+                              color: rgb(224, 224, 224);
+                              line-height: 1;
+                              font-weight: 400;
+                              letter-spacing: normal;
+                              margin: 0px 0px 10px;
+                              text-align: center;
+                            "
                         >
                           {formatISODate(
                             new Date(newsletter.newsletter_date || new Date()).toISOString(),
@@ -170,12 +171,12 @@
                 bordercolor="#e0e0e0"
                 cellpadding={20}
                 style="
-                  border: 1px solid rgba(222,222,222,0.7);
-                  padding: 20px;
-                  width: 100%;
-                  background: #ffffff;
-                  border-collapse: collapse;
-                "
+                    border: 1px solid rgba(222,222,222,0.7);
+                    padding: 20px;
+                    width: 100%;
+                    background: #ffffff;
+                    border-collapse: collapse;
+                  "
               >
                 <tr>
                   <td>
@@ -257,12 +258,12 @@
                       <td width="100%" align="center" valign="top">
                         <p
                           style="
-                            font-family: roboto, sans-serif;
-                            font-size: 13px;
-                            line-height: 1.5;
-                            font-weight: 400;
-                            margin: 0;
-                          "
+                              font-family: roboto, sans-serif;
+                              font-size: 13px;
+                              line-height: 1.5;
+                              font-weight: 400;
+                              margin: 0;
+                            "
                         >
                           <a
                             href="https://www.facebook.com/groups/126169727423188/"
