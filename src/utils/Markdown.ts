@@ -1,13 +1,35 @@
-import { marked } from 'marked';
+import { marked, Renderer } from 'marked';
 import { findLastIndex } from './findLastIndex';
 
 type TOC = { title: string; level: 2 | 3 | 4 | 5 | 6 | 1; slug: string }[];
-
 class MarkDown {
   #toc: TOC = [];
 
-  #renderer: marked.RendererObject = {
-    heading: (text, level, raw, slugger) => {
+  #renderer = new Renderer();
+
+  #options: marked.MarkedOptions = {
+    baseUrl: undefined,
+    breaks: false,
+    gfm: true,
+    headerIds: true,
+    headerPrefix: '',
+    highlight: undefined,
+    langPrefix: 'language-',
+    mangle: true,
+    pedantic: false,
+    sanitize: false,
+    sanitizer: undefined,
+    silent: false,
+    smartLists: false,
+    smartypants: false,
+    tokenizer: undefined,
+    walkTokens: undefined,
+    xhtml: true,
+    renderer: this.#renderer,
+  };
+
+  constructor() {
+    this.#renderer.heading = (text, level, raw, slugger) => {
       const [title, subtitle] = text.split('__splitSubtitle__');
 
       if (level === 1) {
@@ -29,8 +51,8 @@ class MarkDown {
       return `
         <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
       `;
-    },
-    link(href, title, text) {
+    };
+    this.#renderer.link = (href, title, text) => {
       let className = '';
 
       // outlined button
@@ -58,33 +80,10 @@ class MarkDown {
           `;
       }
 
-      return false;
-    },
-  };
-
-  constructor() {
-    marked.setOptions({
-      baseUrl: undefined,
-      breaks: false,
-      gfm: true,
-      headerIds: true,
-      headerPrefix: '',
-      highlight: undefined,
-      langPrefix: 'language-',
-      mangle: true,
-      pedantic: false,
-      sanitize: false,
-      sanitizer: undefined,
-      silent: false,
-      smartLists: false,
-      smartypants: false,
-      tokenizer: undefined,
-      walkTokens: undefined,
-      xhtml: true,
-    });
+      return `<a href="${href}">${text}</a>`;
+    };
 
     marked.use({
-      renderer: this.#renderer,
       extensions: [
         {
           name: 'hidden',
@@ -124,7 +123,7 @@ class MarkDown {
     const h1TokenIndex = tokens.findIndex((token) => isHeadingToken(token) && token.depth === 1);
     if (appendH1Md && h1TokenIndex !== -1) {
       const h1token = tokens[h1TokenIndex] as marked.Tokens.Heading;
-      const inlineText = marked.parseInline(appendH1Md);
+      const inlineText = marked.parseInline(appendH1Md, this.#options);
 
       const h1HasParagraph = !!h1token.tokens.find(
         (token) => token.type === 'text' && token.text === '__splitSubtitle__'
@@ -148,7 +147,7 @@ class MarkDown {
   }
 
   parseTokens(md: string): marked.Tokens.Generic[] {
-    const tokens = marked.lexer(md);
+    const tokens = marked.lexer(md, this.#options);
 
     // take the first paragraph after h1 and make it the subtitle
     const h1Index = tokens.findIndex((token) => isHeadingToken(token) && token.depth === 1);
@@ -216,12 +215,13 @@ class MarkDown {
 
   transform(tokens: marked.Tokens.Generic[]): [string | null, string, TOC] {
     const parsedContent = marked.parser(
-      tokens.filter((token) => !(isHeadingToken(token) && token.depth === 1)) as marked.Token[]
+      tokens.filter((token) => !(isHeadingToken(token) && token.depth === 1)) as marked.Token[],
+      this.#options
     );
 
     const headingToken = tokens.find((token) => isHeadingToken(token) && token.depth === 1);
     if (headingToken) {
-      const parsedHeading = marked.parser([headingToken as marked.Token]);
+      const parsedHeading = marked.parser([headingToken as marked.Token], this.#options);
       return [parsedHeading, parsedContent, this.#toc];
     }
 
