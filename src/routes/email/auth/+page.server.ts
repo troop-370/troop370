@@ -19,7 +19,7 @@ function createAuthorizationRequest(from: string, to: string) {
   url.searchParams.set('response_type', 'token');
   url.searchParams.set('state', from);
   url.searchParams.set('nonce', 'lol');
-  url.searchParams.set('scope', 'account_read campaign_data');
+  url.searchParams.set('scope', 'account_read campaign_data contact_data');
 
   return url;
 }

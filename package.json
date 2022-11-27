@@ -16,10 +16,13 @@
   "devDependencies": {
     "@smui-extra/accordion": "^7.0.0-beta.0",
     "@smui/button": "^7.0.0-beta.0",
+    "@smui/checkbox": "^7.0.0-beta.0",
     "@smui/drawer": "^7.0.0-beta.0",
+    "@smui/form-field": "^7.0.0-beta.0",
     "@smui/icon-button": "^7.0.0-beta.0",
     "@smui/list": "^7.0.0-beta.0",
     "@smui/ripple": "^7.0.0-beta.0",
+    "@smui/select": "^7.0.0-beta.0",
     "@smui/textfield": "^7.0.0-beta.0",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
@@ -51,6 +54,7 @@
     "luxon": "^3.1.0",
     "marked": "^4.2.2",
     "svelte-kit-cookie-session": "^3.2.2",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "zod": "^3.19.1"
   }
 }

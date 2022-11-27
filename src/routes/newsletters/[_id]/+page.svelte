@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { EmailNewsletter2 } from '$components/EmailNewsletter2';
-  import Button, { Label, Icon } from '@smui/button';
+  import Button, { Icon, Label } from '@smui/button';
   import type { PageData } from './$houdini';
 
   export let data: PageData;
@@ -9,10 +10,7 @@
 
   let newsletterElement: HTMLHtmlElement;
 
-  let copyLoading = false;
   const getBodyWithInlinedCss = async () => {
-    copyLoading = true;
-
     // get all avialable css styles
     let cssText = '';
     Array.from(document.styleSheets).forEach((sheet) => {
@@ -30,10 +28,17 @@
     clone.appendChild(styleElem);
 
     // get the html string with inlined css
-    fetch('/newsletters/utils/inline', {
+    return fetch('/newsletters/utils/inline', {
       method: 'POST',
       body: clone.outerHTML,
-    })
+    });
+  };
+
+  let copyLoading = false;
+  const copyEmail = () => {
+    copyLoading = true;
+
+    getBodyWithInlinedCss()
       .finally(() => {
         copyLoading = false;
       })
@@ -44,6 +49,22 @@
         }
       });
   };
+
+  let sendLoading = false;
+  const sendEmail = () => {
+    sendLoading = true;
+
+    getBodyWithInlinedCss()
+      .finally(() => {
+        sendLoading = false;
+      })
+      .then(async (res) => {
+        const text = await res.text();
+        if (newsletter?.name) sessionStorage.setItem('email.subject', newsletter.name);
+        sessionStorage.setItem('email.body', text);
+        goto('/email/secure/send');
+      });
+  };
 </script>
 
 {#if newsletter}
@@ -52,13 +73,21 @@
       <Icon class="material-icons">printer</Icon>
       <Label>Print email</Label>
     </Button>
-    <Button on:click={getBodyWithInlinedCss} variant="outlined">
+    <Button on:click={copyEmail} variant="outlined">
       {#if copyLoading}
         <Icon class="material-icons">hourglass_top</Icon>
       {:else}
         <Icon class="material-icons">content_copy</Icon>
       {/if}
       <Label>Copy email</Label>
+    </Button>
+    <Button on:click={sendEmail} variant="outlined">
+      {#if sendLoading}
+        <Icon class="material-icons">hourglass_top</Icon>
+      {:else}
+        <Icon class="material-icons">send</Icon>
+      {/if}
+      <Label>Send email</Label>
     </Button>
   </div>
   <EmailNewsletter2 {newsletter} bind:element={newsletterElement} />
