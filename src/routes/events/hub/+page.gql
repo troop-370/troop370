@@ -1,0 +1,6 @@
+query EventsPageConfig {
+  webConfigPublic(_id: "63819ab3075a1bf292b5742f") {
+    name
+    config
+  }
+}
