@@ -55,7 +55,11 @@
         {@html alertMD}
       </div>
     {/if}
-    <div id="main-content" class:dualColumns={columns === 2}>
+    <div
+      id="main-content"
+      class:dualColumns={columns === 2}
+      class:centerText={pageData.center_text === true}
+    >
       {#if pageData.show_table_of_contents && toc.length > 0 && columns === 1}
         <aside>
           <h2>Table of contents</h2>
@@ -198,6 +202,10 @@
     max-width: 1600px;
     box-sizing: border-box;
     margin: 0 auto;
+  }
+
+  #main-content.centerText {
+    text-align: center;
   }
 
   #main-content > :global(div[id*='section']) {

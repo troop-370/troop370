@@ -20,6 +20,7 @@ export const houdini_load = graphql`
         path
       }
       show_table_of_contents
+      center_text
     }
   }
 `;

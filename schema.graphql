@@ -206,6 +206,7 @@ type Content {
   aliases: [String]
   archived: Boolean!
   body: String!
+  center_text: Boolean
   dual_columns: Boolean
   enable_password_protection: Boolean!
   hidden: Boolean!
@@ -224,6 +225,7 @@ input ContentModifyInput {
   alert: String
   aliases: [String]
   body: String
+  center_text: Boolean
   dual_columns: Boolean
   enable_password_protection: Boolean
   name: String
@@ -326,7 +328,7 @@ type Mutation {
   contentClone(_id: ObjectID!): Content
 
   """Create a new Content document."""
-  contentCreate(alert: String, aliases: [String], body: String, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String): Content
+  contentCreate(alert: String, aliases: [String], body: String, center_text: Boolean, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String): Content
 
   """Deletes a Content document."""
   contentDelete(_id: ObjectID!): Void
@@ -914,6 +916,7 @@ type PrunedContent {
   alert: String
   aliases: [String]
   body: String!
+  center_text: Boolean
   dual_columns: Boolean
   enable_password_protection: Boolean!
   name: String!
