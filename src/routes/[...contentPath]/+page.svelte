@@ -144,6 +144,16 @@
     margin-bottom: 0.7em;
   }
 
+  article :global(h3),
+  .alert :global(h3) {
+    font-family: var(--font-headline);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.0125em;
+    margin-top: 1.2em;
+    margin-bottom: 0.7em;
+  }
+
   div#main-content > :global(*:not(aside) + div[id*='section']:first-of-type) {
     margin-top: calc(35px + (0.7em * 1.5));
   }
