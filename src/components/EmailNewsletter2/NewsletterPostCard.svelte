@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Link } from '$pm/render/Link';
+  import { Markdown } from '$utils';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
