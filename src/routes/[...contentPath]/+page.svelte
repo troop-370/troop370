@@ -129,7 +129,7 @@
 
   article {
     font-family: var(--font-detail);
-    line-height: 1.5rem;
+    line-height: 1.4rem;
     letter-spacing: 0.03125em;
   }
 
