@@ -2,40 +2,22 @@
   import { browser } from '$app/environment';
   import Banner from '$components/Banner.svelte';
   import { title } from '$stores/title';
-  import { formatISODate, listOxford, Markdown, notEmpty } from '$utils';
-  import Renderer from '@cristata/prosemirror-to-html-js';
+  import { formatISODate, listOxford, notEmpty } from '$utils';
   import { MDCRipple } from '@material/ripple';
   import { marked } from 'marked';
   import { afterUpdate } from 'svelte';
   import type { PageData } from './$houdini';
 
-  const renderer = new Renderer.Renderer();
-
   export let data: PageData;
-  $: ({ Post } = data);
+  $: ({ Post, html } = data);
   $: post = $Post.data?.postBySlugPublic;
 
   $: {
     if (post) title.set(post.name);
   }
 
-  let bodyHtml = '';
-  $: {
-    if (post) {
-      if (post.legacy_markdown) {
-        const [, html] = Markdown.parse(post.body);
-        bodyHtml = html;
-      } else {
-        bodyHtml = renderer.render({
-          type: 'doc',
-          content: JSON.parse(post.body),
-        });
-      }
-    }
-  }
-
   afterUpdate(() => {
-    if (browser && bodyHtml) {
+    if (browser && html) {
       const buttonElems = document.querySelectorAll('.mdc-button');
       buttonElems.forEach((buttonElem) => {
         MDCRipple.attachTo(buttonElem);
@@ -59,7 +41,7 @@
         {/if}
       </p>
 
-      {@html bodyHtml}
+      {@html html}
     </div>
   </article>
 {/if}

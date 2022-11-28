@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { Markdown } from '$utils';
-  import { marked } from 'marked';
-  import { CardTable } from '.';
+  import { Link } from '$pm/render/Link';
   import Renderer from '@cristata/prosemirror-to-html-js';
+  import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
-
-  const renderer = new Renderer.Renderer();
+  import { CardTable } from '.';
 
   export let name: string;
   export let description: string;
@@ -22,6 +20,8 @@
     }
 
     if (type === 'prosemirror') {
+      const renderer = new Renderer.Renderer();
+      renderer.addMark(Link);
       html = renderer.render({
         type: 'doc',
         content: JSON.parse(body),
