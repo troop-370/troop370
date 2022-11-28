@@ -5,7 +5,64 @@ type TOC = { title: string; level: 2 | 3 | 4 | 5 | 6 | 1; slug: string }[];
 class MarkDown {
   #toc: TOC = [];
 
-  #renderer = new Renderer();
+  rendererObject: {
+    heading: NonNullable<marked.Renderer['heading']>;
+    link: NonNullable<marked.Renderer['link']>;
+  } = {
+    heading: (text, level, raw, slugger) => {
+      const [title, subtitle] = text.split('__splitSubtitle__');
+
+      if (level === 1) {
+        if (subtitle) {
+          return `
+          <h1>${title}</h1>
+          <p>${subtitle}</p>
+        `;
+        }
+        return `
+        <h1>${title}</h1>
+      `;
+      }
+
+      const slug = slugger.slug(text);
+
+      this.#toc.push({ title, level, slug });
+
+      return `
+      <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
+    `;
+    },
+    link: (href, title, text) => {
+      let className = '';
+
+      // forced-inverted outlined button (when on dark surface)
+      if (text.indexOf('.iob') > 0 && text.indexOf('.iob') === text.length - 4) {
+        text = text.replace('.iob', '');
+        className = 'mdc-button-outlined--on-primary mdc-button mdc-button--outlined';
+      }
+      // outlined button
+      else if (text.indexOf('.ob') > 0 && text.indexOf('.ob') === text.length - 3) {
+        text = text.replace('.ob', '');
+        className = 'mdc-button mdc-button--outlined';
+      }
+      // plain-text button
+      else if (text.indexOf('.pb') > 0 && text.indexOf('.pb') === text.length - 3) {
+        text = text.replace('.pb', '');
+        className = 'mdc-button';
+      }
+
+      if (className.includes('mdc-button')) {
+        return `
+            <a href="${href}" class="${className}">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__label">${text}</span>
+            </a>
+          `;
+      }
+
+      return `<a href="${href}">${text}</a>`;
+    },
+  };
 
   #options: marked.MarkedOptions = {
     baseUrl: undefined,
@@ -25,68 +82,16 @@ class MarkDown {
     tokenizer: undefined,
     walkTokens: undefined,
     xhtml: true,
-    renderer: this.#renderer,
   };
 
   configure() {
     marked.setOptions(this.#options);
 
+    const renderer = new Renderer();
+    renderer.heading = this.rendererObject.heading;
+    renderer.link = this.rendererObject.link;
     marked.use({
-      renderer: {
-        heading: (text, level, raw, slugger) => {
-          const [title, subtitle] = text.split('__splitSubtitle__');
-
-          if (level === 1) {
-            if (subtitle) {
-              return `
-              <h1>${title}</h1>
-              <p>${subtitle}</p>
-            `;
-            }
-            return `
-            <h1>${title}</h1>
-          `;
-          }
-
-          const slug = slugger.slug(text);
-
-          this.#toc.push({ title, level, slug });
-
-          return `
-          <a href="#${slug}" style="color: inherit;"><h${level} id="${slug}">${title}</h${level}></a>
-        `;
-        },
-        link: (href, title, text) => {
-          let className = '';
-
-          // outlined button
-          if (text.indexOf('.ob') > 0 && text.indexOf('.ob') === text.length - 3) {
-            text = text.replace('.ob', '');
-            className = 'mdc-button mdc-button--outlined';
-          }
-          // forced-inverted outlined button (when on dark surface)
-          else if (text.indexOf('.iob') > 0 && text.indexOf('.iob') === text.length - 4) {
-            text = text.replace('.iob', '');
-            className = 'mdc-button-outlined--on-primary mdc-button mdc-button--outlined';
-          }
-          // plain-text button
-          else if (text.indexOf('.pb') > 0 && text.indexOf('.pb') === text.length - 3) {
-            text = text.replace('.pb', '');
-            className = 'mdc-button';
-          }
-
-          if (className.includes('mdc-button')) {
-            return `
-                <a href="${href}" class="${className}">
-                  <span class="mdc-button__ripple"></span>
-                  <span class="mdc-button__label">${text}</span>
-                </a>
-              `;
-          }
-
-          return `<a href="${href}">${text}</a>`;
-        },
-      },
+      renderer: renderer,
     });
 
     marked.use({
