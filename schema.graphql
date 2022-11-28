@@ -181,13 +181,7 @@ type ConfigurationSecurity {
 }
 
 type ConfigurationSecuritySecrets {
-  aws: ConfigurationSecuritySecretsAws
   fathom: ConfigurationSecuritySecretsFathom
-}
-
-type ConfigurationSecuritySecretsAws {
-  accessKeyId: String!
-  secretAccessKey: String!
 }
 
 type ConfigurationSecuritySecretsFathom {
@@ -445,7 +439,7 @@ type Mutation {
   postClone(_id: ObjectID!): Post
 
   """Create a new Post document."""
-  postCreate(body: String!, button_text: String, categories: [String]!, description: String!, enable_password_protection: Boolean, legacy_markdown: Boolean, name: String!, slug: String, stage: Float, submitted_by: [String], tags: [String]!): Post
+  postCreate(body: String!, button_text: String, categories: [String], description: String!, enable_password_protection: Boolean, legacy_markdown: Boolean, name: String!, slug: String, stage: Float, submitted_by: [String], tags: [String]): Post
 
   """Deletes a Post document."""
   postDelete(_id: ObjectID!): Void
