@@ -1,6 +1,6 @@
 import { graphql } from '$houdini';
 import { error, redirect } from '@sveltejs/kit';
-import type { AfterLoadEvent, ContentPageVariablesType } from './$houdini';
+import type { AfterLoadEvent, BeforeLoadEvent, ContentPageVariablesType } from './$houdini';
 
 export const houdini_load = graphql`
   query ContentPage($slug: String!) {
@@ -23,6 +23,15 @@ export const houdini_load = graphql`
     }
   }
 `;
+
+export const beforeLoad = async ({ params, parent }: BeforeLoadEvent) => {
+  const { redirects } = await parent();
+
+  const foundRedirect = redirects.find((redirect) => redirect.from.slice(1) === params.contentPath);
+  if (foundRedirect) {
+    throw redirect(307, foundRedirect.to);
+  }
+};
 
 // This is the function for the AllItems query.
 // Query variable functions must be named <QueryName>Variables.
