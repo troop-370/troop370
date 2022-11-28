@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatISODate, listOxford, Markdown } from '$utils';
+  import { formatISODate, listOxford } from '$utils';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import Button, { Icon } from '@smui/button';
   import { DOMParser } from 'xmldom';
@@ -21,8 +21,8 @@
     let html: string | undefined = undefined;
 
     if (type === 'markdown') {
-      const [, _html] = Markdown.parse(body);
-      html = _html;
+      marked.setOptions(marked.getDefaults());
+      html = marked.parse(body);
     }
 
     if (type === 'prosemirror') {
@@ -33,10 +33,18 @@
     }
 
     if (html) {
-      const text = new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
-      previewText = text || body.slice(0, 200) || '';
+      const dom = new DOMParser().parseFromString(html, 'text/html');
+
+      let _text = '';
+      Array.from(dom.childNodes).map((node) => {
+        if (node.nodeType === 1) {
+          _text += node.textContent + ' ' || '';
+        }
+      });
+
+      previewText = _text.slice(0, 200) + '…' || body.slice(0, 200) + '…' || '';
     } else {
-      previewText = body.slice(0, 200) || '';
+      previewText = body.slice(0, 200) + '…' || '';
     }
   }
 </script>
