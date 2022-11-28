@@ -135,7 +135,8 @@
     font-size: 1.5rem;
     font-weight: 500;
     letter-spacing: normal;
-    margin-top: 0.7em;
+    padding-top: 0.7em;
+    margin-top: 0;
     margin-bottom: 0.7em;
   }
 
