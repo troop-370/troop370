@@ -1,5 +1,5 @@
 import { graphql } from '$houdini';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { AfterLoadEvent, ContentPageVariablesType } from './$houdini';
 
 export const houdini_load = graphql`
@@ -33,6 +33,10 @@ export const ContentPageVariables: ContentPageVariablesType = ({ params }) => {
 };
 
 export async function afterLoad({ data, event }: AfterLoadEvent) {
+  if (!data.ContentPage.contentBySlugPublic) {
+    throw error(404);
+  }
+
   if (data.ContentPage.contentBySlugPublic?.enable_password_protection) {
     const { session } = await event.parent();
     if (session.authenticated !== true) {
