@@ -1,4 +1,5 @@
 import { graphql } from '$houdini';
+import { notEmpty } from '$utils';
 import { z } from 'zod';
 import type { AfterLoadData, LayoutLoadEvent } from './$houdini';
 
@@ -26,7 +27,7 @@ export async function afterLoad({ data, event }: { data: AfterLoadData; event: L
         JSON.parse(data.TenantDetails.redirectsConfig.config)?.redirects || []
       );
 
-      return { ...event.data, redirects };
+      return { ...event.data, redirects: redirects.filter(notEmpty) };
     } catch (error) {
       console.error(error);
     }

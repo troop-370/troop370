@@ -28,7 +28,9 @@ export const houdini_load = graphql`
 export const beforeLoad = async ({ params, parent }: BeforeLoadEvent) => {
   const { redirects } = await parent();
 
-  const foundRedirect = redirects.find((redirect) => redirect.from.slice(1) === params.contentPath);
+  const foundRedirect = redirects.find(
+    (redirect) => redirect.from.slice(1) === params.contentPath.split('.')[0]
+  );
   if (foundRedirect) {
     throw redirect(307, foundRedirect.to);
   }
