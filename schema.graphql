@@ -255,7 +255,6 @@ type File {
   file_type: String!
   hidden: Boolean!
   history: [CollectionHistory]
-  location: String!
   locked: Boolean!
   name: String!
   note: String
@@ -263,6 +262,7 @@ type File {
   size_bytes: Int!
   tags: [String]
   timestamps: CollectionTimestamps
+  uuid: String!
   yState: String
 }
 
@@ -371,7 +371,7 @@ type Mutation {
   fileCollectionSetActionAccess(actionAccess: FileCollectionActionAccessInput!): FileCollectionActionAccess
 
   """Create a new File document."""
-  fileCreate(file_type: String!, location: String!, name: String!, note: String, size_bytes: Int!, tags: [String]): File
+  fileCreate(file_type: String!, name: String!, note: String, size_bytes: Int!, tags: [String], uuid: String!): File
 
   """Modify an existing File document."""
   fileModify(_id: ObjectID!, input: FileModifyInput!): File
