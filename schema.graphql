@@ -255,6 +255,7 @@ type File {
   file_type: String!
   hidden: Boolean!
   history: [CollectionHistory]
+  href: String
   locked: Boolean!
   name: String!
   note: String
@@ -1247,6 +1248,9 @@ type Query {
   """
   webConfigActionAccess(_id: ObjectID): CollectionActionAccess
 
+  """Gets forms and documents for the forms and documents page"""
+  webConfigFormsDocumentsPublic: [WebConfigFormsDocumentsPublic]
+
   """Get a pruned WebConfig document by _id."""
   webConfigPublic(_id: ObjectID!): PrunedWebConfig
 
@@ -1411,6 +1415,11 @@ type WebConfig {
   people: CollectionPeople
   timestamps: CollectionTimestamps
   yState: String
+}
+
+type WebConfigFormsDocumentsPublic {
+  documents: [File]!
+  label: String!
 }
 
 input WebConfigModifyInput {
