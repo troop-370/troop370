@@ -240,4 +240,41 @@
   .quick-links :global(a.mdc-button--outlined) {
     margin: 0;
   }
+
+  #main-content :global(table) {
+    width: 100%;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);
+    border-collapse: collapse;
+  }
+
+  #main-content :global(tr) {
+    font-family: var(--font-detail);
+    height: 48px;
+    font-size: 14px;
+    box-shadow: 0 1px 0 0px rgb(0 0 0 / 10%);
+  }
+
+  #main-content :global(tbody tr:last-of-type) {
+    box-shadow: none;
+  }
+
+  #main-content :global(th) {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  #main-content :global(th),
+  #main-content :global(td) {
+    padding-right: 32px;
+    white-space: nowrap;
+  }
+
+  #main-content :global(th:not(:last-of-type)),
+  #main-content :global(td:not(:last-of-type)) {
+    width: 1px;
+  }
+
+  #main-content :global(th:first-of-type),
+  #main-content :global(td:first-of-type) {
+    padding-left: 16px;
+  }
 </style>
