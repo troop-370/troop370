@@ -17,7 +17,13 @@
   let scrolled = false;
   afterUpdate(() => {
     const elem = document.querySelector($page.url.hash);
-    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    if (elem) {
+      const elemPosition = elem.getBoundingClientRect().top;
+      window.scrollTo({
+        top: elemPosition - 80,
+        behavior: 'smooth',
+      });
+    }
     scrolled = true;
   });
 </script>
