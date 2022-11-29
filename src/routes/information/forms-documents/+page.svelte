@@ -1,13 +1,25 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import Banner from '$components/Banner.svelte';
   import { notEmpty } from '$utils';
+  import { Slugger } from 'marked';
   import mime from 'mime-types';
+  import { afterUpdate } from 'svelte';
   import type { PageData } from './$houdini';
+
+  const slugger = new Slugger();
 
   export let data: PageData;
   $: ({ FormsDocumentsPageConfig } = data);
   $: groups = $FormsDocumentsPageConfig.data?.webConfigFormsDocumentsPublic;
+
+  let scrolled = false;
+  afterUpdate(() => {
+    const elem = document.querySelector($page.url.hash);
+    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    scrolled = true;
+  });
 </script>
 
 <Banner>
@@ -30,9 +42,12 @@
             </thead>
             <tbody>
               {#each group.documents.filter(notEmpty) as doc}
+                {@const slug = slugger.slug(doc.name || doc._id)}
                 <tr
                   on:click={() =>
                     goto(`https://server.cristata.app/filestore/troop-370/${doc._id}`)}
+                  id={slug}
+                  class:current={$page.url.hash.slice(1) === slug}
                 >
                   <td align="left" style="width: 100%; overflow: hidden; text-overflow: ellipsis;">
                     <a href="https://server.cristata.app/filestore/troop-370/{doc._id}">
@@ -151,6 +166,10 @@
   tbody tr {
     cursor: pointer;
     transition: background-color 0.15s linear;
+  }
+
+  tbody tr.current {
+    background-color: rgba(255, 217, 0, 0.2);
   }
 
   tbody tr:hover {
