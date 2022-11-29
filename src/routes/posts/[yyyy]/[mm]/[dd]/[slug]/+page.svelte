@@ -35,7 +35,10 @@
 
     <div id="main-content">
       <p class="meta">
-        Posted by {listOxford((post.submitted_by || []).filter(notEmpty))}
+        Posted
+        {#if post.submitted_by && post.submitted_by.filter(notEmpty).length > 0}
+          by {listOxford(post.submitted_by.filter(notEmpty))}
+        {/if}
         {#if post.timestamps?.published_at}
           on {formatISODate(post.timestamps.published_at, true, true, false)}
         {/if}
