@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Banner from '$components/Banner.svelte';
@@ -16,15 +17,17 @@
 
   let scrolled = false;
   afterUpdate(() => {
-    const elem = document.querySelector($page.url.hash);
-    if (elem) {
-      const elemPosition = elem.getBoundingClientRect().top;
-      window.scrollTo({
-        top: elemPosition - 80,
-        behavior: 'smooth',
-      });
+    if (browser && document) {
+      const elem = document.querySelector($page.url.hash);
+      if (elem) {
+        const elemPosition = elem.getBoundingClientRect().top;
+        window.scrollTo({
+          top: elemPosition - 80,
+          behavior: 'smooth',
+        });
+      }
+      scrolled = true;
     }
-    scrolled = true;
   });
 </script>
 
