@@ -17,7 +17,7 @@
 
   let scrolled = false;
   afterUpdate(() => {
-    if (browser && document) {
+    if (browser && document && $page.url.hash) {
       const elem = document.querySelector($page.url.hash);
       if (elem) {
         const elemPosition = elem.getBoundingClientRect().top;
