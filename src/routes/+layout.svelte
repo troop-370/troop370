@@ -52,7 +52,8 @@
   }
 
   /* use correct font for button labels */
-  :global(.mdc-button .mdc-button__label) {
+  :global(.mdc-button .mdc-button__label),
+  :global(.mdc-tab .mdc-tab__text-label) {
     text-transform: uppercase;
     font-family: var(--font-headline);
     font-weight: 700;
