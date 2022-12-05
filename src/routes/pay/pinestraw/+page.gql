@@ -1,0 +1,8 @@
+query PinestrawContentPage {
+  contentPublic(_id: "6381e1f876a1a0004f98f35a") {
+    _id
+    name
+    body
+    dual_columns
+  }
+}
