@@ -6,11 +6,12 @@
   import NavRow from './NavRow.svelte';
 
   export let groups: NavigationGroup[];
+  export let hideShadow = false;
 
   let menuOpen = false;
 </script>
 
-<header>
+<header class:hideShadow>
   <IconButton class="header-icon-button" on:click={() => (menuOpen = !menuOpen)}>
     <Icon class="material-icons header-icon">menu</Icon>
   </IconButton>
@@ -37,6 +38,9 @@
       0 1px 10px 0 rgba(0, 0, 0, 0.06);
     align-items: center;
     z-index: 99;
+  }
+  header.hideShadow {
+    box-shadow: none;
   }
 
   div {

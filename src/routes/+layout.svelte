@@ -28,7 +28,10 @@
 </svelte:head>
 
 <div id="global-wrapper">
-  <TopNav groups={navConfig.group} />
+  <TopNav
+    groups={navConfig.group}
+    hideShadow={$page.url.pathname.slice(0, 14) === '/pay/pinestraw'}
+  />
 
   <div id="content-wrapper">
     <slot />
