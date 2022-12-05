@@ -27,9 +27,13 @@
   <title>{title_}</title>
 </svelte:head>
 
-<TopNav groups={navConfig.group} />
+<div id="global-wrapper">
+  <TopNav groups={navConfig.group} />
 
-<slot />
+  <div id="content-wrapper">
+    <slot />
+  </div>
+</div>
 
 <style lang="scss">
   @use '@material/button/index' as mdc-button;
@@ -49,5 +53,15 @@
     text-transform: uppercase;
     font-family: var(--font-headline);
     font-weight: 700;
+  }
+
+  div#global-wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+  }
+
+  div#content-wrapper {
+    overflow: auto;
   }
 </style>
