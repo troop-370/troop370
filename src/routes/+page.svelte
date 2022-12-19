@@ -3,6 +3,7 @@
   import Button, { Label } from '@smui/button';
   import type { PageData } from './$houdini';
   import z from 'zod';
+  import PhotoCarousel from '$components/PhotoCarousel.svelte';
 
   export let data: PageData;
   $: ({ TenantDetails, AnnoucementsConfig } = data);
@@ -60,20 +61,20 @@
   </div>
 </section>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<p>
-  GraphQL queries are connected to the {$TenantDetails.data?.tenant?.displayName} tenant on Cristata.
-</p>
+<section class="photos">
+  <div>
+    <PhotoCarousel />
+  </div>
+</section>
 
 <style>
   section.welcome {
-    padding-top: 90px;
-    padding-bottom: 250px;
+    padding-top: 100px;
+    padding-bottom: 260px;
     text-align: center;
     background-color: transparent;
     background-image: url(/photos/backgrounds/370-mountains-light.jpg);
-    background-position: 50%;
+    background-position: 50% 57%;
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -97,6 +98,12 @@
 
   section.meetings {
     text-align: center;
+    padding: 40px 0 60px 0;
+  }
+
+  section.photos > div {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   h1,
@@ -109,6 +116,24 @@
     text-decoration: inherit;
     text-transform: inherit;
     margin-bottom: 10px;
+  }
+
+  @media (max-width: 600px) {
+    h1,
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    section.welcome {
+      padding-top: 10px;
+      padding-bottom: 100px;
+    }
+
+    section.meetings {
+      text-align: center;
+      padding-top: 6px;
+      padding-bottom: 20px;
+    }
   }
 
   p {

@@ -192,4 +192,12 @@
       height: 200px;
     }
   }
+
+  :global(.flickity-button) {
+    background: none !important;
+  }
+
+  :global(.flickity-button-icon) {
+    fill: var(--color-neutral-40);
+  }
 </style>
