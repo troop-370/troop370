@@ -61,6 +61,8 @@
     width: 100%;
     max-width: 1200px;
     margin: 35px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
   }
 
   form > :global(label) {

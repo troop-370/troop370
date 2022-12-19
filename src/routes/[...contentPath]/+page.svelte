@@ -81,8 +81,6 @@
 
 <style>
   article #main-content aside {
-    float: right;
-    width: 340px;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -92,6 +90,13 @@
     margin-left: 20px;
     margin-bottom: 20px;
     margin-right: 20px;
+  }
+
+  @media (min-width: 700px) {
+    article #main-content aside {
+      float: right;
+      width: 340px;
+    }
   }
 
   article #main-content aside h2 {
@@ -129,7 +134,7 @@
 
   article {
     font-family: var(--font-detail);
-    line-height: 1.4rem;
+    line-height: 1.4;
     letter-spacing: 0.03125em;
   }
 
@@ -222,9 +227,15 @@
     padding-bottom: 35px;
   }
 
-  #main-content.dualColumns {
-    columns: 2;
-    column-gap: 20px;
+  @media (min-width: 1000px) {
+    #main-content.dualColumns {
+      columns: 2;
+      column-gap: 20px;
+    }
+  }
+
+  #main-content :global(img) {
+    max-width: 100%;
   }
 
   .quick-links {

@@ -108,7 +108,7 @@
 {/if} -->
 <style>
   .cols {
-    columns: 2;
+    columns: 1;
     column-gap: 20px;
 
     padding: 35px 20px;
@@ -120,6 +120,12 @@
     font-family: var(--font-detail);
     color: var(--color-neutral-180);
     user-select: none;
+  }
+
+  @media (min-width: 1000px) {
+    .cols {
+      columns: 2;
+    }
   }
 
   .group {

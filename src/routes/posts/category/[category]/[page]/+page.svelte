@@ -7,18 +7,26 @@
   import Button from '@smui/button/src/Button.svelte';
   import Ripple from '@smui/ripple';
   import type { PageData } from './$houdini';
+  import CategoriesList from './CategoriesList.svelte';
 
   export let data: PageData;
   $: ({ Posts } = data);
 
   title.set('Posts');
+
+  let windowWidth = 1200;
 </script>
+
+<svelte:window bind:innerWidth={windowWidth} />
 
 <Banner>
   <h1>Posts</h1>
 </Banner>
 
 <div class="grid">
+  <aside class="top-categories">
+    <CategoriesList />
+  </aside>
   <div>
     {#if $page.params.category !== 'all'}
       <div class="category-warning">
@@ -70,29 +78,8 @@
       </p>
       <Button variant="outlined" href="/members/communication">Sign up</Button>
     </div>
-    <div>
-      <h3>Categories</h3>
-      <div class="catlist">
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts">all categories</a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/advancement">
-          advancement
-        </a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/camping">
-          camping
-        </a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/fundraiser">
-          fundraiser
-        </a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/high%20adventure">
-          high adventure
-        </a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/meeting">
-          meeting
-        </a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/service">
-          service
-        </a>
-      </div>
+    <div class="bottom-categories">
+      <CategoriesList />
     </div>
   </aside>
 </div>
@@ -113,12 +100,28 @@
     grid-column-gap: 10px;
   }
 
+  @media (max-width: 1000px) {
+    div.grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto 1fr;
+    }
+    .bottom-categories {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1001px) {
+    aside.top-categories {
+      display: none;
+    }
+  }
+
   div.nav {
     padding: 0 20px 35px 20px;
     text-align: center;
   }
 
-  aside > div,
+  aside > div:first-of-type,
   .category-warning {
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 20px;
@@ -144,19 +147,6 @@
 
   aside p {
     margin: 15px 0;
-  }
-
-  .catlist a {
-    margin: 0 -20px;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    height: 32px;
-    text-transform: lowercase;
-    font-family: var(--font-detail);
-    font-weight: 500;
-    color: var(--color-primary);
-    text-decoration: none;
   }
 
   .category-warning a {

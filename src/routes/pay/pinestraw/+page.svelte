@@ -126,6 +126,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 35px 20px;
+    box-sizing: border-box;
   }
 
   article :global(div[id='section__order'] .mdc-button:first-of-type) {
