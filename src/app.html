@@ -40,4 +40,21 @@
   <body>
     <div>%sveltekit.body%</div>
   </body>
+  <style>
+    /* progress bar styles */
+    #nprogress {
+      position: fixed;
+      top: 0;
+      height: 3px;
+      left: 0;
+      width: 100%;
+      z-index: 998;
+      background-color: hsla(var(--color-primary-hsl), 0.1);
+    }
+
+    #nprogress .peg {
+      height: 3px;
+      background-color: hsla(var(--color-primary-hsl), 1);
+    }
+  </style>
 </html>
