@@ -1,5 +1,6 @@
 import { graphql } from '$houdini';
-import type { PostsVariablesType } from './$houdini';
+import { error } from '@sveltejs/kit';
+import type { PostsVariablesType, AfterLoadEvent } from './$houdini';
 
 export const houdini_load = graphql`
   query Posts($limit: Int!, $page: Int, $sort: JSON, $filter: JSON) {
@@ -36,3 +37,10 @@ export const PostsVariables: PostsVariablesType = ({ params }) => {
         : JSON.stringify({}),
   };
 };
+
+// check for presence of data before allowing page to load
+export async function afterLoad({ data }: AfterLoadEvent) {
+  if (!data.Posts.postsPublic) {
+    throw error(404);
+  }
+}
