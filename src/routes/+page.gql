@@ -1,0 +1,6 @@
+query AnnoucementsConfig {
+  webConfigPublic(_id: "63a09e314bb06435ffcadcfa") {
+    name
+    config
+  }
+}

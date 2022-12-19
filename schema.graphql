@@ -260,6 +260,7 @@ type File {
   name: String!
   note: String
   people: CollectionPeople
+  require_auth: Boolean
   size_bytes: Int!
   tags: [String]
   timestamps: CollectionTimestamps
@@ -306,6 +307,7 @@ input FileCollectionActionAccessObjectInput {
 input FileModifyInput {
   name: String
   note: String
+  require_auth: Boolean
   tags: [String]
   yState: String
 }
@@ -372,7 +374,7 @@ type Mutation {
   fileCollectionSetActionAccess(actionAccess: FileCollectionActionAccessInput!): FileCollectionActionAccess
 
   """Create a new File document."""
-  fileCreate(file_type: String!, name: String!, note: String, size_bytes: Int!, tags: [String], uuid: String!): File
+  fileCreate(file_type: String!, name: String!, note: String, require_auth: Boolean, size_bytes: Int!, tags: [String], uuid: String!): File
 
   """Modify an existing File document."""
   fileModify(_id: ObjectID!, input: FileModifyInput!): File
@@ -426,6 +428,21 @@ type Mutation {
   be used.
   """
   newsletterWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Newsletter
+
+  """
+  Clone an existing Photo document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  photoClone(_id: ObjectID!): Photo
+
+  """Sets the action access config for the Photo collection."""
+  photoCollectionSetActionAccess(actionAccess: PhotoCollectionActionAccessInput!): PhotoCollectionActionAccess
+
+  """Create a new Photo document."""
+  photoCreate(file_type: String!, height: Int!, json: JSON, legacy_caption: String, legacy_thumbnail_id: String, name: String!, note: String, require_auth: Boolean, size_bytes: Int!, tags: [String], uuid: String!, width: Int!): Photo
+
+  """Modify an existing Photo document."""
+  photoModify(_id: ObjectID!, input: PhotoModifyInput!): Photo
 
   """
   Set whether an existing Post document is archived.
@@ -746,6 +763,19 @@ type PagedNewsletter {
   totalPages: Int
 }
 
+type PagedPhoto {
+  docs: [Photo]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
 type PagedPost {
   docs: [Post]!
   hasNextPage: Boolean
@@ -861,6 +891,90 @@ type PagedWebConfig {
   prevPage: Int
   totalDocs: Int
   totalPages: Int
+}
+
+type Photo {
+  _id: ObjectID!
+  archived: Boolean!
+  file_type: String!
+  height: Int!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  href: String
+  json: JSON
+  legacy_caption: String
+  legacy_thumbnail_id: String
+  locked: Boolean!
+  name: String!
+  note: String
+  people: PhotoPeople
+  photo_url: String
+  require_auth: Boolean
+  size_bytes: Int!
+  tags: [String]
+  timestamps: CollectionTimestamps
+  uuid: String!
+  width: Int!
+  yState: String
+}
+
+type PhotoCollectionActionAccess {
+  archive: PhotoCollectionActionAccessObject
+  bypassDocPermissions: PhotoCollectionActionAccessObject
+  create: PhotoCollectionActionAccessObject
+  delete: PhotoCollectionActionAccessObject
+  get: PhotoCollectionActionAccessObject
+  hide: PhotoCollectionActionAccessObject
+  lock: PhotoCollectionActionAccessObject
+  modify: PhotoCollectionActionAccessObject
+  publish: PhotoCollectionActionAccessObject
+  watch: PhotoCollectionActionAccessObject
+}
+
+input PhotoCollectionActionAccessInput {
+  archive: PhotoCollectionActionAccessObjectInput
+  bypassDocPermissions: PhotoCollectionActionAccessObjectInput
+  create: PhotoCollectionActionAccessObjectInput
+  delete: PhotoCollectionActionAccessObjectInput
+  get: PhotoCollectionActionAccessObjectInput
+  hide: PhotoCollectionActionAccessObjectInput
+  lock: PhotoCollectionActionAccessObjectInput
+  modify: PhotoCollectionActionAccessObjectInput
+  publish: PhotoCollectionActionAccessObjectInput
+  watch: PhotoCollectionActionAccessObjectInput
+}
+
+type PhotoCollectionActionAccessObject {
+  teams: [String!]
+  users: [String!]
+}
+
+input PhotoCollectionActionAccessObjectInput {
+  teams: [String!]
+  users: [String!]
+}
+
+input PhotoModifyInput {
+  json: JSON
+  name: String
+  note: String
+  people: PhotoModifyInputPeople
+  require_auth: Boolean
+  tags: [String]
+  yState: String
+}
+
+input PhotoModifyInputPeople {
+  photo_created_by: String
+  yState: String
+}
+
+type PhotoPeople {
+  created_by: User
+  last_modified_by: User
+  modified_by: [User]
+  photo_created_by: String
+  watching: [User]
 }
 
 type Post {
@@ -1135,6 +1249,21 @@ type Query {
   If _id is omitted, the API will return all Newsletter documents.
   """
   newslettersPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedNewsletter
+
+  """Get a Photo document by _id."""
+  photo(_id: ObjectID!): Photo
+
+  """
+  Get the permissions of the currently authenticated user for the
+  Photo collection.
+  """
+  photoActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of Photo documents by _id.
+  If _id is omitted, the API will return all Photo documents.
+  """
+  photos(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPhoto
 
   """Get a Post document by _id."""
   post(_id: ObjectID!): Post
