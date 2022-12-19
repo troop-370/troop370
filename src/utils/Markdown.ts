@@ -8,6 +8,7 @@ class MarkDown {
   rendererObject: {
     heading: NonNullable<marked.Renderer['heading']>;
     link: NonNullable<marked.Renderer['link']>;
+    table: NonNullable<marked.Renderer['table']>;
   } = {
     heading: (text, level, raw, slugger) => {
       const [title, subtitle] = text.split('__splitSubtitle__');
@@ -62,6 +63,20 @@ class MarkDown {
 
       return `<a href="${href}">${text}</a>`;
     },
+    table: (header, body) => {
+      if (body) body = `<tbody>${body}</tbody>`;
+
+      return (
+        '<div class="table-wrapper">' +
+        '<table>\n' +
+        '<thead>\n' +
+        header +
+        '</thead>\n' +
+        body +
+        '</table>' +
+        '</div>\n'
+      );
+    },
   };
 
   #options: marked.MarkedOptions = {
@@ -90,6 +105,7 @@ class MarkDown {
     const renderer = new Renderer();
     renderer.heading = this.rendererObject.heading;
     renderer.link = this.rendererObject.link;
+    renderer.table = this.rendererObject.table;
     marked.use({
       renderer: renderer,
     });

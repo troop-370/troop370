@@ -252,9 +252,14 @@
     margin: 0;
   }
 
+  #main-content :global(.table-wrapper) {
+    width: 100%;
+    overflow: auto;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);
+  }
+
   #main-content :global(table) {
     width: 100%;
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);
     border-collapse: collapse;
   }
 
