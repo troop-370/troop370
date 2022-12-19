@@ -74,24 +74,24 @@
       <h3>Categories</h3>
       <div class="catlist">
         <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts">all categories</a>
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/advancement"
-          >advancement</a
-        >
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/camping"
-          >camping</a
-        >
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/fundraiser"
-          >fundraiser</a
-        >
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/high-adventure"
-          >high adventure</a
-        >
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/meeting"
-          >meeting</a
-        >
-        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/service"
-          >service</a
-        >
+        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/advancement">
+          advancement
+        </a>
+        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/camping">
+          camping
+        </a>
+        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/fundraiser">
+          fundraiser
+        </a>
+        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/high%20adventure">
+          high adventure
+        </a>
+        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/meeting">
+          meeting
+        </a>
+        <a use:Ripple={{ surface: true, color: 'primary' }} href="/posts/category/service">
+          service
+        </a>
       </div>
     </div>
   </aside>
