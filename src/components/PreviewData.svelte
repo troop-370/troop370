@@ -4,12 +4,14 @@
   import { hasKey } from '$utils';
   import { onMount } from 'svelte';
 
-  export let origin: string;
+  const target = 'https://cristata.app/';
+  const devTarget = 'http://localhost:4000/';
   export let fields: Readonly<Record<string, any>> = Object.freeze({});
 
   // tell the parent component that we are ready for data
   if (browser) {
-    parent.postMessage('connected', origin);
+    parent.postMessage('connected', target);
+    parent.postMessage('connected', devTarget);
   }
 
   // send a copy of this page's content to the parent of the frame
@@ -30,7 +32,8 @@
           return cssRules.map((rule) => rule.cssText).join('\n');
         })
         .join('\n');
-      parent.postMessage(JSON.stringify({ contentTag, styleString }), origin);
+      parent.postMessage(JSON.stringify({ contentTag, styleString }), target);
+      parent.postMessage(JSON.stringify({ contentTag, styleString }), devTarget);
     }
   }
 

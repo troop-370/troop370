@@ -37,7 +37,7 @@
   $: data = parsed.success ? parsed.data : null;
 </script>
 
-<PreviewData origin="http://localhost:4000/" bind:fields />
+<PreviewData bind:fields />
 
 {#if data}
   <div id="cristata-preview-content">
