@@ -52,3 +52,4 @@
 {/if}
 
 <PreviewDataCard data={fields} />
+<PreviewDataCard {data} label="Parsed data" />
