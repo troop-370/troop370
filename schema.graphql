@@ -110,6 +110,7 @@ type ConfigurationCollectionGenerationOptions {
   disableCreateMutation: Boolean
   disableHideMutation: Boolean
   disablePublishMutation: Boolean
+  dynamicPreviewHref: String
   mandatoryWatchers: [String]
   nameField: String
   previewUrl: String
