@@ -36,4 +36,10 @@
     font-family: var(--font-detail);
     font-size: 0.9rem;
   }
+
+  @media print {
+    div {
+      display: none;
+    }
+  }
 </style>
