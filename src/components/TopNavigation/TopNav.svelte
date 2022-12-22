@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { beforeNavigate } from '$app/navigation';
   import IconButton, { Icon } from '@smui/icon-button';
   import Ripple from '@smui/ripple';
   import type { NavigationGroup } from '.';
@@ -9,6 +10,10 @@
   export let hideShadow = false;
 
   let menuOpen = false;
+
+  beforeNavigate(() => {
+    menuOpen = false;
+  });
 </script>
 
 <header class:hideShadow>
