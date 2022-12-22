@@ -498,6 +498,56 @@ type Mutation {
   setSecret(key: String!, value: String!): String!
 
   """
+  Set whether an existing StandaloneEmail document is archived.
+  This mutation sets archived: true by default.
+  Archived StandaloneEmail documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  standaloneEmailArchive(_id: ObjectID!, archive: Boolean): StandaloneEmail
+
+  """
+  Clone an existing StandaloneEmail document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  standaloneEmailClone(_id: ObjectID!): StandaloneEmail
+
+  """Create a new StandaloneEmail document."""
+  standaloneEmailCreate(body: String, header_date: Date!, legacy_markdown: Boolean, name: String!, sender_name: String!, stage: Float): StandaloneEmail
+
+  """Deletes a StandaloneEmail document."""
+  standaloneEmailDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing StandaloneEmail document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden StandaloneEmail documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  standaloneEmailHide(_id: ObjectID!, hide: Boolean): StandaloneEmail
+
+  """
+  Set whether an existing StandaloneEmail document is locked.
+  This mutation sets locked: true by default.
+  Locked StandaloneEmail documents should only be editable by the server
+  and by admins.
+  """
+  standaloneEmailLock(_id: ObjectID!, lock: Boolean): StandaloneEmail
+
+  """Modify an existing StandaloneEmail document."""
+  standaloneEmailModify(_id: ObjectID!, input: StandaloneEmailModifyInput!): StandaloneEmail
+
+  """Publishes an existing StandaloneEmail document."""
+  standaloneEmailPublish(_id: ObjectID!, publish: Boolean, published_at: Date): StandaloneEmail
+
+  """
+  Add a watcher to a StandaloneEmail document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  standaloneEmailWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): StandaloneEmail
+
+  """
   Set whether an existing Team document is archived.
   This mutation sets archived: true by default.
   Archived Team documents should not be presented to clients
@@ -829,6 +879,19 @@ type PagedPrunedPost {
   totalPages: Int
 }
 
+type PagedPrunedStandaloneEmail {
+  docs: [PrunedStandaloneEmail]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
 type PagedPrunedUser {
   docs: [PrunedUser]!
   hasNextPage: Boolean
@@ -844,6 +907,19 @@ type PagedPrunedUser {
 
 type PagedPrunedWebConfig {
   docs: [PrunedWebConfig]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedStandaloneEmail {
+  docs: [StandaloneEmail]!
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -1100,6 +1176,21 @@ type PrunedPostTimestamps {
   updated_at: Date!
 }
 
+type PrunedStandaloneEmail {
+  _id: ObjectID!
+  body: String!
+  header_date: Date!
+  legacy_markdown: Boolean!
+  name: String!
+  sender_name: String!
+  timestamps: PrunedStandaloneEmailTimestamps
+}
+
+type PrunedStandaloneEmailTimestamps {
+  published_at: Date!
+  updated_at: Date!
+}
+
 type PrunedUser {
   _id: ObjectID!
   biography: String
@@ -1302,6 +1393,30 @@ type Query {
   """
   s3Sign(fileName: String!, fileType: String!, s3Bucket: String!): S3SignedResponse
 
+  """Get a StandaloneEmail document by _id."""
+  standaloneEmail(_id: ObjectID!): StandaloneEmail
+
+  """
+  Get the permissions of the currently authenticated user for the
+  StandaloneEmail collection.
+  """
+  standaloneEmailActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """Get a pruned StandaloneEmail document by _id."""
+  standaloneEmailPublic(_id: ObjectID!): PrunedStandaloneEmail
+
+  """
+  Get a set of StandaloneEmail documents by _id.
+  If _id is omitted, the API will return all StandaloneEmail documents.
+  """
+  standaloneEmails(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedStandaloneEmail
+
+  """
+  Get a set of pruned StandaloneEmail documents by _id.
+  If _id is omitted, the API will return all StandaloneEmail documents.
+  """
+  standaloneEmailsPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedStandaloneEmail
+
   """Get a Team document by _id."""
   team(_id: ObjectID!): Team
 
@@ -1403,6 +1518,32 @@ type Query {
 type S3SignedResponse {
   location: String!
   signedRequest: String!
+}
+
+type StandaloneEmail {
+  _id: ObjectID!
+  archived: Boolean!
+  body: String!
+  header_date: Date!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  legacy_markdown: Boolean!
+  locked: Boolean!
+  name: String!
+  people: PublishableCollectionPeople
+  sender_name: String!
+  stage: Float!
+  timestamps: PublishableCollectionTimestamps
+  yState: String
+}
+
+input StandaloneEmailModifyInput {
+  body: String
+  header_date: Date
+  name: String
+  sender_name: String
+  stage: Float
+  yState: String
 }
 
 type Team {
