@@ -1,16 +1,17 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { page } from '$app/stores';
+  import Banner from '$components/Banner.svelte';
+  import { scrollTop } from '$stores/scrollTop';
+  import { title } from '$stores/title';
   import { Markdown } from '$utils';
-  import { afterUpdate, onMount, onDestroy } from 'svelte';
-  import type { PageData } from './$houdini';
-  import { mountStore } from './mountStore';
   import { MDCRipple } from '@material/ripple';
+  import Button, { Icon } from '@smui/button';
   import Tab, { Label } from '@smui/tab';
   import TabBar from '@smui/tab-bar';
-  import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
-  import Button, { Icon } from '@smui/button';
-  import { title } from '$stores/title';
+  import { afterUpdate, onDestroy, onMount } from 'svelte';
+  import type { PageData } from './$houdini';
+  import { mountStore } from './mountStore';
 
   export let data: PageData;
   $: ({ PinestrawContentPage } = data);
@@ -68,10 +69,25 @@
   onDestroy(() => {
     if (browser && window) window.removeEventListener('hashchange', hashListener);
   });
+
+  export let windowWidth = 0;
 </script>
 
+<svelte:window bind:innerWidth={windowWidth} />
+
+<Banner className="pinestraw-banner">
+  <h1>Pine Straw Fundraiser</h1>
+  <p>Support scouting by purchasing premium long leaf pine straw.</p>
+  <span style="height: 48px; display: block;" />
+</Banner>
+
 <div class="wrapper">
-  <TabBar tabs={['Pine Straw', 'Cart', 'Account']} let:tab bind:active class="tabbar">
+  <TabBar
+    tabs={['Pine Straw', 'Cart', 'Account']}
+    let:tab
+    bind:active
+    class="tabbar {$scrollTop < 264 && windowWidth > 600 ? 'transparent' : ''}"
+  >
     <Tab
       {tab}
       on:click={() => {
@@ -88,19 +104,28 @@
     {#if active === 'Pine Straw'}
       <article>
         {@html bodyMD}
-        {#if currentHash === hashes.pinestraw || currentHash === ''}
-          {''}
-        {:else}
-          <Button
-            variant="text"
-            on:click={() => (window.location = hashes.pinestraw)}
-            style="margin-top: 35px; margin-bottom: -15px;"
-          >
-            <Icon class="material-icons">arrow_back</Icon>
-            Return to store home
-          </Button>
-        {/if}
       </article>
+    {/if}
+
+    {#if active === 'Pine Straw' && currentHash !== hashes.pinestraw && currentHash !== ''}
+      <Button
+        variant="text"
+        on:click={() => (window.location = hashes.pinestraw)}
+        style="
+          margin-top: 35px;
+          margin-bottom: -15px;
+          position: sticky;
+          top: 68px;
+          {$scrollTop > 1320
+          ? `background: var(--color-neutral-10);
+          z-index: 10;
+          box-shadow: 0 2px 4px -1px rgb(0 0 0 / 10%), 0 4px 5px 0 rgb(0 0 0 / 7%), 0 1px 10px 0 rgb(0 0 0 / 6%)`
+          : ''}
+        "
+      >
+        <Icon class="material-icons">arrow_back</Icon>
+        Return to store home
+      </Button>
     {/if}
 
     <div id="store-browser" style="background:none;min-height:100px;" />
@@ -110,6 +135,23 @@
 <style>
   .wrapper {
     position: relative;
+    margin-top: -48px;
+  }
+
+  :global(.pinestraw-banner) {
+    background-image: url(/photos/backgrounds/pineneedles_l.jpg);
+    background-color: #555 !important;
+    background-blend-mode: multiply;
+  }
+
+  @media (max-width: 600px) {
+    :global(.pinestraw-banner) {
+      padding: 30px 10px !important;
+    }
+
+    :global(.pinestraw-banner p) {
+      margin: 5px 0 !important;
+    }
   }
 
   :global(.tabbar) {
@@ -119,6 +161,25 @@
     background-color: var(--color-neutral-10);
     box-shadow: 0 2px 4px -1px rgb(0 0 0 / 10%), 0 4px 5px 0 rgb(0 0 0 / 7%),
       0 1px 10px 0 rgb(0 0 0 / 6%);
+    transition: background-color 100ms, box-shadow 200ms;
+  }
+
+  :global(.tabbar.transparent) {
+    background-color: transparent;
+    /* box-shadow: none; */
+    --mdc-ripple-color: var(--color-neutral-10);
+  }
+
+  :global(.tabbar .mdc-tab__text-label) {
+    transition: none;
+    transition-delay: none;
+  }
+  :global(.tabbar.transparent .mdc-tab__text-label) {
+    color: var(--color-neutral-10);
+  }
+
+  :global(.tabbar.transparent .mdc-tab-indicator .mdc-tab-indicator__content--underline) {
+    border-color: var(--color-neutral-10);
   }
 
   #content {
