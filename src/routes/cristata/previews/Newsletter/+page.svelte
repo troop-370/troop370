@@ -202,7 +202,7 @@
     <Button
       on:click={() =>
         window.open(
-          `/newsletters/${data?._id}?hideNav=1`,
+          `/newsletters/${data?._id}?showSend=1&hideNav=1`,
           `newsletter-${data?._id}`,
           `width=1200,height=850`
         )}

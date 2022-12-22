@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import { EmailNewsletter2 } from '$components/EmailNewsletter2';
   import Button, { Icon, Label } from '@smui/button';
   import type { PageData } from './$houdini';
@@ -81,14 +82,16 @@
       {/if}
       <Label>Copy email</Label>
     </Button>
-    <Button on:click={sendEmail} variant="outlined">
-      {#if sendLoading}
-        <Icon class="material-icons">hourglass_top</Icon>
-      {:else}
-        <Icon class="material-icons">send</Icon>
-      {/if}
-      <Label>Send email</Label>
-    </Button>
+    {#if $page.url.searchParams.get('showSend') === '1'}
+      <Button on:click={sendEmail} variant="outlined">
+        {#if sendLoading}
+          <Icon class="material-icons">hourglass_top</Icon>
+        {:else}
+          <Icon class="material-icons">send</Icon>
+        {/if}
+        <Label>Send email</Label>
+      </Button>
+    {/if}
   </div>
   <EmailNewsletter2 {newsletter} bind:element={newsletterElement} />
 {/if}
