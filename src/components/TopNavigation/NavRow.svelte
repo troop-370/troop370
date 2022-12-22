@@ -10,7 +10,7 @@
     {#each groups as { label, items }}
       <li class="dropdown">
         {#if items.length > 1}
-          <span use:Ripple={{ surface: true, color: 'primary' }}>{label}</span>
+          <span>{label}</span>
           <ul class="dropdown-content">
             {#each items as { path, label }}
               <li><a href={path} use:Ripple={{ surface: true, color: 'primary' }}>{label}</a></li>
@@ -58,6 +58,9 @@
     will-change: transform, opacity;
     overflow: hidden;
     user-select: none;
+  }
+
+  #main-nav > li > a {
     cursor: pointer;
   }
 
