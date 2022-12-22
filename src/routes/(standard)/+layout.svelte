@@ -58,10 +58,12 @@
 </svelte:head>
 
 <div id="global-wrapper">
-  <TopNav
-    groups={navConfig.group}
-    hideShadow={$page.url.pathname.slice(0, 14) === '/pay/pinestraw'}
-  />
+  {#if path.indexOf('/email') !== 0 && path.indexOf('/basic-login') !== 0 && $page.url.searchParams.get('hideNav') !== '1'}
+    <TopNav
+      groups={navConfig.group}
+      hideShadow={$page.url.pathname.slice(0, 14) === '/pay/pinestraw'}
+    />
+  {/if}
 
   <div id="content-wrapper" bind:this={wrapper} data-scroll={$scrollTop}>
     <slot />
