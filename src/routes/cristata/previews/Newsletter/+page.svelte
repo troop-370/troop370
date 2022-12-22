@@ -199,7 +199,15 @@
       {/if}
       <Label>Download email</Label>
     </Button>
-    <Button on:click={() => window.open(`/newsletters/${data?._id}`)} variant="outlined">
+    <Button
+      on:click={() =>
+        window.open(
+          `/newsletters/${data?._id}?hideNav=1`,
+          `newsletter-${data?._id}`,
+          `width=1200,height=850`
+        )}
+      variant="outlined"
+    >
       <Icon class="material-icons">open_in_new</Icon>
       <Label>Open published version</Label>
     </Button>
