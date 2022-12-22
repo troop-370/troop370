@@ -1,6 +1,11 @@
-query AnnoucementsConfig {
-  webConfigPublic(_id: "63a09e314bb06435ffcadcfa") {
-    name
-    config
+query Annoucements {
+  webConfigAnnouncementsPublic {
+    href
+    href_text
+    subtitle
+    title
+    photo {
+      href
+    }
   }
 }

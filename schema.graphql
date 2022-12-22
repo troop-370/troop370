@@ -1378,6 +1378,9 @@ type Query {
   """
   webConfigActionAccess(_id: ObjectID): CollectionActionAccess
 
+  """Gets the announcements for the home page"""
+  webConfigAnnouncementsPublic: [WebConfigAnnouncementsPublic]
+
   """Gets forms and documents for the forms and documents page"""
   webConfigFormsDocumentsPublic: [WebConfigFormsDocumentsPublic]
 
@@ -1545,6 +1548,14 @@ type WebConfig {
   people: CollectionPeople
   timestamps: CollectionTimestamps
   yState: String
+}
+
+type WebConfigAnnouncementsPublic {
+  href: String
+  href_text: String
+  photo: Photo
+  subtitle: String
+  title: String
 }
 
 type WebConfigFormsDocumentsPublic {

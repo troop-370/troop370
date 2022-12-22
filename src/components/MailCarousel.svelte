@@ -9,6 +9,9 @@
     subtitle: string | null;
     href: string | null;
     href_text: string | null;
+    photo: {
+      href: string | null;
+    } | null;
   }[];
 
   let flickityElem: HTMLDivElement;
@@ -32,7 +35,7 @@
 
 <div class="main-carousel" bind:this={flickityElem}>
   {#each announcements as annoucement}
-    <div class="carousel-cell" style="background-image:url('');">
+    <div class="carousel-cell" style="background-image:url('{annoucement.photo?.href}');">
       <div class="carousel-text-card ripple-dark-bg ripple-mobile">
         <div>
           <h2 class="carousel-title">{annoucement.title}</h2>

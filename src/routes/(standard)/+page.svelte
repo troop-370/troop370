@@ -1,31 +1,12 @@
 <script lang="ts">
   import MainCarousel from '$components/MailCarousel.svelte';
+  import PhotoCarousel from '$components/PhotoCarousel.svelte';
+  import { notEmpty } from '$utils';
   import Button, { Label } from '@smui/button';
   import type { PageData } from './$houdini';
-  import z from 'zod';
-  import PhotoCarousel from '$components/PhotoCarousel.svelte';
 
   export let data: PageData;
-  $: ({ TenantDetails, AnnoucementsConfig } = data);
-
-  const announcementSchema = z
-    .object({
-      title: z.string().nullable(),
-      subtitle: z.string().nullable(),
-      href: z.string().nullable(),
-      href_text: z.string().nullable(),
-    })
-    .array();
-
-  $: announcements = (() => {
-    if ($AnnoucementsConfig?.data?.webConfigPublic?.config) {
-      const res = announcementSchema.safeParse(
-        JSON.parse($AnnoucementsConfig.data.webConfigPublic.config)?.cards
-      );
-      if (res.success) return res.data;
-      console.error(res.error);
-    }
-  })();
+  $: ({ Annoucements } = data);
 </script>
 
 <section class="welcome">
@@ -45,7 +26,9 @@
 
 <section class="carousel">
   <div>
-    <MainCarousel announcements={announcements || []} />
+    <MainCarousel
+      announcements={$Annoucements.data?.webConfigAnnouncementsPublic?.filter(notEmpty) || []}
+    />
   </div>
 </section>
 
