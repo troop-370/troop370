@@ -58,7 +58,7 @@
 </svelte:head>
 
 <div id="global-wrapper">
-  {#if path.indexOf('/email') !== 0 && path.indexOf('/basic-login') !== 0 && $page.url.searchParams.get('hideNav') !== '1'}
+  {#if (path.indexOf('/email') !== 0 || path.indexOf('/emails') === 0) && path.indexOf('/basic-login') !== 0 && $page.url.searchParams.get('hideNav') !== '1'}
     <TopNav
       groups={navConfig.group}
       hideShadow={$page.url.pathname.slice(0, 14) === '/pay/pinestraw'}
