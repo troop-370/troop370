@@ -78,8 +78,17 @@
       </p>
       <Button variant="outlined" href="/members/communication">Subscribe</Button>
     </div>
+
     <div class="bottom-categories">
       <CategoriesList />
+    </div>
+    <div>
+      <h3>Newsletter Archive</h3>
+      <p>
+        View previously sent weekly newsletters, which include relevant calendar information,
+        alerts, and relevant posts.
+      </p>
+      <Button variant="outlined" href="/newsletters">View archive</Button>
     </div>
   </aside>
 </div>
@@ -121,7 +130,7 @@
     text-align: center;
   }
 
-  aside > div:first-of-type,
+  aside > div:not(:nth-of-type(2)),
   .category-warning {
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 20px;

@@ -57,6 +57,17 @@
       </p>
       <Button variant="outlined" href="/members/communication">Subscribe</Button>
     </div>
+    <div>
+      <h3>Other Email Archives</h3>
+      <p>View past emails that are not weekly newsletters.</p>
+      <Button variant="outlined" href="/emails">View archive</Button>
+    </div>
+    <div>
+      <h3>Posts & Updates</h3>
+      <p>
+        View the individual posts and announcements that are included in the weekly newsletters.
+      </p>
+      <Button variant="outlined" href="/posts">View posts</Button>
     </div>
   </aside>
 </div>
@@ -89,7 +100,7 @@
     text-align: center;
   }
 
-  aside > div:first-of-type {
+  aside > div {
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin: 10px 0;
