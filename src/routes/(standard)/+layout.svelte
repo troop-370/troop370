@@ -2,10 +2,11 @@
   import { page } from '$app/stores';
   import TopNav from '$components/TopNavigation/TopNav.svelte';
   import { title } from '$stores/title';
-  import { afterUpdate } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
   import type { LayoutData } from './$houdini';
   import NProgress from 'nprogress';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
+  import { scrollTop } from '$stores/scrollTop';
 
   export let data: LayoutData;
   $: ({ TenantDetails } = data);
@@ -43,6 +44,13 @@
   afterNavigate(() => {
     NProgress.done();
   });
+
+  let wrapper: HTMLDivElement | null = null;
+  onMount(() => {
+    wrapper?.addEventListener('scroll', () => {
+      scrollTop.set(wrapper?.scrollTop || 0);
+    });
+  });
 </script>
 
 <svelte:head>
@@ -55,7 +63,7 @@
     hideShadow={$page.url.pathname.slice(0, 14) === '/pay/pinestraw'}
   />
 
-  <div id="content-wrapper">
+  <div id="content-wrapper" bind:this={wrapper} data-scroll={$scrollTop}>
     <slot />
   </div>
 </div>
