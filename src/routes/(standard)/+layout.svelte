@@ -71,13 +71,15 @@
 </div>
 
 <style>
-  div#global-wrapper {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100vh;
-  }
+  @media screen {
+    div#global-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
 
-  div#content-wrapper {
-    overflow: auto;
+    div#content-wrapper {
+      overflow: auto;
+    }
   }
 </style>
