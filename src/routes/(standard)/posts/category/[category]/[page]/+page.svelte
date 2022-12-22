@@ -71,12 +71,12 @@
   </div>
   <aside>
     <div>
-      <h3>Troop 370 Newsletter</h3>
+      <h3>Troop 370 Emails</h3>
       <p>
-        Sign up for BSA Troop 370's email newsletter for weekly updates, Eagle Court of Honor
-        announcements, merit badge announcements, and other additional notices and opportunities
+        Join BSA Troop 370's email list for weekly updates, Eagle Court of Honor announcements,
+        merit badge announcements, and other additional notices and opportunities.
       </p>
-      <Button variant="outlined" href="/members/communication">Sign up</Button>
+      <Button variant="outlined" href="/members/communication">Subscribe</Button>
     </div>
     <div class="bottom-categories">
       <CategoriesList />
