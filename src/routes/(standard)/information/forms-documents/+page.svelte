@@ -40,72 +40,48 @@
     {#each groups.filter(notEmpty) as group}
       <div class="group">
         <h2>{group.label}</h2>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th align="left" style="width: 100%;">File name</th>
-                <th align="left" style="width: 20px">Type</th>
-                <th align="left" style="width: 20px;">Size</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#each group.documents.filter(notEmpty) as doc}
-                {@const slug = slugger.slug(doc.name || doc._id)}
-                <tr
-                  on:click={() =>
-                    goto(`https://server.cristata.app/filestore/troop-370/${doc._id}`)}
-                  id={slug}
-                  class:current={$page.url.hash.slice(1) === slug}
-                >
-                  <td align="left" style="width: 100%; overflow: hidden; text-overflow: ellipsis;">
-                    <a href="https://server.cristata.app/filestore/troop-370/{doc._id}">
-                      {doc.name}
-                    </a>
+        <table>
+          <thead>
+            <tr>
+              <th align="left" style="width: 100%;">File name</th>
+              <th align="left" style="width: 20px">Type</th>
+              <th align="left" style="width: 20px;">Size</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each group.documents.filter(notEmpty) as doc}
+              {@const slug = slugger.slug(doc.name || doc._id)}
+              <tr
+                on:click={() => goto(`https://server.cristata.app/filestore/troop-370/${doc._id}`)}
+                id={slug}
+                class:current={$page.url.hash.slice(1) === slug}
+              >
+                <td align="left" style="width: 100%; overflow: hidden; text-overflow: ellipsis;">
+                  <a href="https://server.cristata.app/filestore/troop-370/{doc._id}">
+                    {doc.name}
+                  </a>
+                </td>
+                <td align="left" style="width: 18px">{mime.extension(doc.file_type)}</td>
+                {#if doc.size_bytes / 1000 < 1000}
+                  <td align="left" style="width: 22px">{Math.round(doc.size_bytes / 1000)} kB</td>
+                {:else if doc.size_bytes / 1000000 < 1000}
+                  <td align="left" style="width: 22px">
+                    {Math.round(doc.size_bytes / 1000000)} MB
                   </td>
-                  <td align="left" style="width: 18px">{mime.extension(doc.file_type)}</td>
-                  {#if doc.size_bytes / 1000 < 1000}
-                    <td align="left" style="width: 22px">{Math.round(doc.size_bytes / 1000)} kB</td>
-                  {:else if doc.size_bytes / 1000000 < 1000}
-                    <td align="left" style="width: 22px">
-                      {Math.round(doc.size_bytes / 1000000)} MB
-                    </td>
-                  {:else}
-                    <td align="left" style="width: 22px"
-                      >{Math.round(doc.size_bytes / 1000000000)} GB</td
-                    >
-                  {/if}
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
+                {:else}
+                  <td align="left" style="width: 22px"
+                    >{Math.round(doc.size_bytes / 1000000000)} GB</td
+                  >
+                {/if}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
       </div>
     {/each}
   {/if}
 </div>
 
-<!-- {#if cards}
-  <div class="grid">
-    {#each cards as card}
-      <a href={card.path || './'}>
-        <Card>
-          <PrimaryAction>
-            <img
-              alt=""
-              src={card.photo_src ||
-                'https://troop370atlanta.org/photos/backgrounds/bright-daytime-winter.jpg'}
-            />
-            <Content>
-              <h2>{card.label}</h2>
-              <p>{card.caption}</p>
-            </Content>
-          </PrimaryAction>
-        </Card>
-      </a>
-    {/each}
-  </div>
-{/if} -->
 <style>
   .cols {
     columns: 1;

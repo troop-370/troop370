@@ -243,7 +243,7 @@
     margin: 0;
   }
 
-  #main-content :global(.table-wrapper) {
+  #main-content :global(.table-wrapper-inner) {
     width: 100%;
     overflow: auto;
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);

@@ -64,16 +64,18 @@ class MarkDown {
       return `<a href="${href}">${text}</a>`;
     },
     table: (header, body) => {
-      if (body) body = `<tbody>${body}</tbody>`;
+      if (body) body = `<tbody>${body}</tbody>\n`;
 
       return (
-        '<div class="table-wrapper">' +
+        '<div class="table-wrapper-outer">\n' +
+        '<div class="table-wrapper-inner">\n' +
         '<table>\n' +
         '<thead>\n' +
         header +
         '</thead>\n' +
         body +
-        '</table>' +
+        '</table>\n' +
+        '</div>\n' +
         '</div>\n'
       );
     },
