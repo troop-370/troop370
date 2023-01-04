@@ -9,9 +9,6 @@ export const houdini_load = graphql`
       name
       body
       dual_columns
-      timestamps {
-        void
-      }
       alert
       aliases
       enable_password_protection
