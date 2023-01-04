@@ -5,6 +5,7 @@ type ApiUsage {
 }
 
 type Billing {
+  features: BillingFeatures!
   stripe_customer_id: String
   stripe_subscription_id: String
   subscription_active: Boolean!
@@ -12,6 +13,10 @@ type Billing {
 
   """Gets the usage to be used for billing"""
   usage: Usage!
+}
+
+type BillingFeatures {
+  allowDiskUse: Boolean!
 }
 
 type Collection {
@@ -111,6 +116,7 @@ type ConfigurationCollectionGenerationOptions {
   disableHideMutation: Boolean
   disablePublishMutation: Boolean
   dynamicPreviewHref: String
+  independentPublishedDocCopy: Boolean
   mandatoryWatchers: [String]
   nameField: String
   previewUrl: String
@@ -167,12 +173,37 @@ type ConfigurationNavigationMainItem {
 type ConfigurationNavigationSubGroup {
   items: [ConfigurationNavigationSubGroupItems]!
   label: String!
+  uuid: String!
+}
+
+input ConfigurationNavigationSubGroupInput {
+  items: [ConfigurationNavigationSubGroupItemsInput]!
+  label: String!
+  uuid: String!
 }
 
 type ConfigurationNavigationSubGroupItems {
+  hiddenFilter: ConfigurationNavigationSubGroupItemsHiddenFilter
   icon: String!
   label: String!
   to: String!
+  uuid: String!
+}
+
+type ConfigurationNavigationSubGroupItemsHiddenFilter {
+  notInTeam: [String!]
+}
+
+input ConfigurationNavigationSubGroupItemsHiddenFilterInput {
+  notInTeam: [String!]
+}
+
+input ConfigurationNavigationSubGroupItemsInput {
+  icon: String!
+  isHidden: ConfigurationNavigationSubGroupItemsHiddenFilterInput
+  label: String!
+  to: String!
+  uuid: String!
 }
 
 type ConfigurationSecurity {
@@ -214,11 +245,12 @@ type Content {
   history: [CollectionHistory]
   locked: Boolean!
   name: String!
-  people: CollectionPeople
+  people: PublishableCollectionPeople
   quick_links: [ContentQuick_links]
   show_table_of_contents: Boolean
   slug: String!
-  timestamps: CollectionTimestamps
+  stage: Float
+  timestamps: PublishableCollectionTimestamps
   yState: String
 }
 
@@ -233,6 +265,7 @@ input ContentModifyInput {
   quick_links: [ContentModifyInputQuick_links]
   show_table_of_contents: Boolean
   slug: String
+  stage: Float
   yState: String
 }
 
@@ -317,6 +350,8 @@ input FileModifyInput {
 scalar JSON
 
 type Mutation {
+  billing: MutationBilling!
+
   """
   Set whether an existing Content document is archived.
   This mutation sets archived: true by default.
@@ -332,7 +367,7 @@ type Mutation {
   contentClone(_id: ObjectID!): Content
 
   """Create a new Content document."""
-  contentCreate(alert: String, aliases: [String], body: String, center_text: Boolean, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String): Content
+  contentCreate(alert: String, aliases: [String], body: String, center_text: Boolean, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String, stage: Float): Content
 
   """Deletes a Content document."""
   contentDelete(_id: ObjectID!): Void
@@ -355,6 +390,9 @@ type Mutation {
 
   """Modify an existing Content document."""
   contentModify(_id: ObjectID!, input: ContentModifyInput!): Content
+
+  """Publishes an existing Content document."""
+  contentPublish(_id: ObjectID!, publish: Boolean, published_at: Date): Content
 
   """
   Add a watcher to a Content document.
@@ -395,7 +433,7 @@ type Mutation {
   newsletterClone(_id: ObjectID!): Newsletter
 
   """Create a new Newsletter document."""
-  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], slug: String, stage: Float): Newsletter
+  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date!, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], slug: String, stage: Float): Newsletter
 
   """Deletes a Newsletter document."""
   newsletterDelete(_id: ObjectID!): Void
@@ -460,7 +498,7 @@ type Mutation {
   postClone(_id: ObjectID!): Post
 
   """Create a new Post document."""
-  postCreate(body: String!, button_text: String, categories: [String], description: String!, enable_password_protection: Boolean, legacy_markdown: Boolean, name: String!, slug: String, stage: Float, submitted_by: [String], tags: [String]): Post
+  postCreate(body: String, button_text: String, categories: [String], description: String!, enable_password_protection: Boolean, legacy_markdown: Boolean, name: String!, slug: String, stage: Float, submitted_by: [String]!, tags: [String]): Post
 
   """Deletes a Post document."""
   postDelete(_id: ObjectID!): Void
@@ -494,6 +532,12 @@ type Mutation {
   be used.
   """
   postWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Post
+
+  """
+  Set the groups of items to use for the sub navigation panel in the app.
+  System groups that are provided in the query are removed upon receipt.
+  """
+  setConfigurationNavigationSub(input: [ConfigurationNavigationSubGroupInput]!, key: String!): [ConfigurationNavigationSubGroup]!
   setRawConfigurationCollection(name: String!, raw: JSON): JSON
   setSecret(key: String!, value: String!): String!
 
@@ -709,6 +753,14 @@ type Mutation {
   webConfigWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): WebConfig
 }
 
+type MutationBilling {
+  features: MutationBillingFeatures!
+}
+
+type MutationBillingFeatures {
+  allowDiskUse(allowDiskUse: Boolean!): Boolean!
+}
+
 type Newsletter {
   _id: ObjectID!
   advancement_mini_posts: [Post]
@@ -722,7 +774,7 @@ type Newsletter {
   locked: Boolean!
   manual_calendar: [NewsletterManual_calendar]
   name: String!
-  newsletter_date: Date
+  newsletter_date: Date!
   people: PublishableCollectionPeople
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
@@ -1071,7 +1123,7 @@ type Post {
   permissions: PostPermissions
   slug: String
   stage: Float
-  submitted_by: [String]
+  submitted_by: [String]!
   tags: [String]!
   timestamps: PublishableCollectionTimestamps
   yState: String
@@ -1123,7 +1175,8 @@ type PrunedContentQuick_links {
 }
 
 type PrunedContentTimestamps {
-  void: Void
+  published_at: Date!
+  updated_at: Date!
 }
 
 type PrunedNewsletter {
@@ -1135,7 +1188,7 @@ type PrunedNewsletter {
   high_adventure_mini_posts: [Post]
   manual_calendar: [NewsletterManual_calendar]
   name: String!
-  newsletter_date: Date
+  newsletter_date: Date!
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
   slug: String
@@ -1162,7 +1215,7 @@ type PrunedPost {
   name: String!
   permissions: PrunedPostPermissions
   slug: String
-  submitted_by: [String]
+  submitted_by: [String]!
   tags: [String]!
   timestamps: PrunedPostTimestamps
 }
