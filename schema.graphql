@@ -433,7 +433,7 @@ type Mutation {
   newsletterClone(_id: ObjectID!): Newsletter
 
   """Create a new Newsletter document."""
-  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date!, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], slug: String, stage: Float): Newsletter
+  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date!, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], stage: Float): Newsletter
 
   """Deletes a Newsletter document."""
   newsletterDelete(_id: ObjectID!): Void
@@ -778,7 +778,6 @@ type Newsletter {
   people: PublishableCollectionPeople
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
-  slug: String
   stage: Float
   timestamps: PublishableCollectionTimestamps
   yState: String
@@ -800,7 +799,6 @@ input NewsletterModifyInput {
   newsletter_date: Date
   pinned_mini_posts: [ObjectID]
   service_mini_posts: [ObjectID]
-  slug: String
   stage: Float
   yState: String
 }
@@ -1191,7 +1189,6 @@ type PrunedNewsletter {
   newsletter_date: Date!
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
-  slug: String
   timestamps: PrunedNewsletterTimestamps
 }
 
@@ -1372,13 +1369,6 @@ type Query {
   Newsletter collection.
   """
   newsletterActionAccess(_id: ObjectID): CollectionActionAccess
-
-  """
-  Get a pruned Newsletter document by _id.
-  Provide the date of to ensure that the correct document is provided
-  (in case the slug is not unique).
-  """
-  newsletterBySlugPublic(date: Date, slug: String!): PrunedNewsletter
 
   """Get a pruned Newsletter document by _id."""
   newsletterPublic(_id: ObjectID!): PrunedNewsletter
