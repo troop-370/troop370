@@ -23,8 +23,8 @@
   <a class="wordmark" href="/" use:Ripple={{ surface: true, color: 'primary' }}>BSA Troop 370</a>
   <NavRow groups={groups.filter((group) => group.show_horizontal_nav === true)} />
   <div>
-    This is the work-in-progress rewrite of the BSA Troop 370 website.
-    <a href="https://troop370atlanta.org">Click here to go to the main version of the website.</a>
+    This is the new BSA Troop 370 website.
+    <a href="https://old.troop370atlanta.org">Click here to go to the old website.</a>
   </div>
 </header>
 
