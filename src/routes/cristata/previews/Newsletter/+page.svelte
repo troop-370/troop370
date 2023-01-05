@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { ContentPageTemplate } from '$components/ContentPage';
   import { EmailNewsletter2 } from '$components/EmailNewsletter2';
   import PreviewData from '$components/PreviewData.svelte';
   import PreviewDataCard from '$components/PreviewDataCard.svelte';
-  import type { ContentPage$result, Newsletter$result } from '$houdini';
+  import type { Newsletter$result } from '$houdini';
   import Button, { Icon, Label } from '@smui/button';
   import { z } from 'zod';
 
@@ -12,7 +11,12 @@
   const validator = z.object({
     _id: z.string().default(''),
     name: z.string().default(''),
-    newsletter_date: z.string().nullable().default(null),
+    timestamps: z
+      .object({
+        published_at: z.string().nullable().default(null),
+      })
+      .optional()
+      .default({}),
     announcements: z
       .object({
         name: z.string().default(''),
@@ -166,8 +170,8 @@
         const url = window.URL || window.webkitURL;
         const link = url.createObjectURL(blob);
         const a = document.createElement('a');
-        if (data?.name && data.newsletter_date) {
-          a.download = data.name + ' – ' + data.newsletter_date + '.html';
+        if (data?.name && data.timestamps?.published_at) {
+          a.download = data.name + ' – ' + data.timestamps.published_at + '.html';
         } else {
           a.download = 'newsletter.html';
         }

@@ -6,7 +6,9 @@ export const houdini_load = graphql`
   query Newsletter($_id: ObjectID!) {
     newsletterPublic(_id: $_id) {
       name
-      newsletter_date
+      timestamps {
+        published_at
+      }
       announcements {
         name
         description
