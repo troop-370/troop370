@@ -306,6 +306,13 @@
                               </tr>
                               <tr>
                                 <td>
+                                  <a href="https://troop370atlanta.org/members/communication">
+                                    Subscribe
+                                  </a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
                                   <a href="https://www.facebook.com/groups/126169727423188/">
                                     Join us on Facebook
                                   </a>
@@ -316,11 +323,6 @@
                                   <a href="https://www.instagram.com/bsatroop370/">
                                     Follow us on Instagram
                                   </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <a href="https://troop370.smugmug.com/">View photos on SmugMug</a>
                                 </td>
                               </tr>
                             </ContainerTable>
