@@ -64,10 +64,17 @@
           margin-top: 24px !important;
         }
       }
+
+      /* hide trouble banner on clients that support media queries */
+      @media screen {
+        .trouble {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body style="margin: 0;">
-    <ContainerTable table$height="24" table$bgcolor="#ffffff">
+    <ContainerTable table$bgcolor="#ffffff">
       <tr>
         <td class="trouble">
           Having trouble viewing this email?
