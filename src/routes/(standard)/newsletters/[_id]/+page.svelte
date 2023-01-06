@@ -82,8 +82,25 @@
       })
       .then(async (res) => {
         const text = await res.text();
+
+        const doc = document.implementation.createHTMLDocument('email');
+        doc.documentElement.innerHTML = text.replaceAll('style=""', '');
+        const head = doc.querySelector('head');
+        const style = doc.querySelector('style');
+
+        const styleSheet = new CSSStyleSheet();
+        styleSheet.replaceSync(style?.innerText || '');
+        style?.parentNode?.removeChild(style);
+
+        Array.from(styleSheet.cssRules, (rule) => {
+          const newStyleTag = doc.createElement('style');
+          newStyleTag.type = 'text/css';
+          newStyleTag.textContent = rule.cssText;
+          head?.appendChild(newStyleTag);
+        });
+
         if (navigator.clipboard) {
-          navigator.clipboard.writeText(text);
+          navigator.clipboard.writeText('<!DOCTYPE html>' + doc.documentElement.outerHTML);
         }
       });
   };
