@@ -315,7 +315,7 @@
                               </tr>
                             </ContainerTable>
                           </td>
-                          <td valign="top" class="announcements-submit">
+                          <td valign="top" class="resources-row-cell announcements-submit">
                             <p>
                               You can submit your announcements for the weekly email, website, or
                               reminder text.
