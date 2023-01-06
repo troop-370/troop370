@@ -260,7 +260,7 @@
                         table$style="margin: 10px 0 8px 0; font-family: Roboto, sans-serif; font-size: 14.5px; line-height: 1.5;"
                       >
                         <tr class="resources-row">
-                          <td width="220px" valign="top" class="resources-row-cell">
+                          <td width="220" valign="top" class="resources-row-cell">
                             <ContainerTable>
                               <tr>
                                 <td>
@@ -318,7 +318,11 @@
                               </tr>
                             </ContainerTable>
                           </td>
-                          <td valign="top" class="resources-row-cell announcements-submit">
+                          <td
+                            valign="top"
+                            width="440"
+                            class="resources-row-cell announcements-submit"
+                          >
                             <p>
                               You can submit your announcements for the weekly email, website, or
                               reminder text.
@@ -383,5 +387,12 @@
 
   .trouble a {
     color: #333333;
+  }
+
+  /* make width automatic for clients that support css */
+  @media screen {
+    .announcements-submit {
+      width: unset;
+    }
   }
 </style>
