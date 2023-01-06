@@ -5,6 +5,7 @@ import type { AfterLoadEvent, NewsletterVariablesType } from './$houdini';
 export const houdini_load = graphql`
   query Newsletter($_id: ObjectID!) {
     newsletterPublic(_id: $_id) {
+      _id
       name
       timestamps {
         published_at
@@ -14,6 +15,16 @@ export const houdini_load = graphql`
         description
         body
         legacy_markdown
+        categories
+        submitted_by
+      }
+      past_announcements {
+        slug
+        name
+        description
+        button_text
+        categories
+        submitted_by
       }
       advancement_mini_posts {
         slug
@@ -50,6 +61,8 @@ export const houdini_load = graphql`
         name
         description
         button_text
+        categories
+        submitted_by
       }
       manual_calendar {
         month

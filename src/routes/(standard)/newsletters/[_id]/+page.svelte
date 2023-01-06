@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { EmailNewsletter2 } from '$components/EmailNewsletter2';
+  import { EmailNewsletter3 } from '$components/EmailNewsletter3';
   import Button, { Icon, Label } from '@smui/button';
   import type { PageData } from './$houdini';
 
@@ -93,7 +94,11 @@
       </Button>
     {/if}
   </div>
-  <EmailNewsletter2 {newsletter} bind:element={newsletterElement} />
+  {#if new Date(newsletter.timestamps?.published_at || new Date()) > new Date('2023-01-01')}
+    <EmailNewsletter3 {newsletter} bind:element={newsletterElement} />
+  {:else}
+    <EmailNewsletter2 {newsletter} bind:element={newsletterElement} />
+  {/if}
 {/if}
 
 <style>

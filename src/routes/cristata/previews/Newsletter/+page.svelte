@@ -1,5 +1,6 @@
 <script lang="ts">
   import { EmailNewsletter2 } from '$components/EmailNewsletter2';
+  import { EmailNewsletter3 } from '$components/EmailNewsletter3';
   import PreviewData from '$components/PreviewData.svelte';
   import PreviewDataCard from '$components/PreviewDataCard.svelte';
   import type { Newsletter$result } from '$houdini';
@@ -13,7 +14,7 @@
     name: z.string().default(''),
     timestamps: z
       .object({
-        published_at: z.string().nullable().default(null),
+        published_at: z.string().default(new Date().toISOString()),
       })
       .optional()
       .default({}),
@@ -23,6 +24,21 @@
         description: z.string().default(''),
         body: z.string().default(''),
         legacy_markdown: z.boolean().default(false),
+        categories: z.string().array().default([]),
+        submitted_by: z.string().array().default([]),
+      })
+      .nullable()
+      .array()
+      .nullable()
+      .default(null),
+    past_announcements: z
+      .object({
+        slug: z.string().default(''),
+        name: z.string().default(''),
+        description: z.string().default(''),
+        button_text: z.string().default('Read more'),
+        categories: z.string().array().default([]),
+        submitted_by: z.string().array().default([]),
       })
       .nullable()
       .array()
@@ -89,6 +105,8 @@
         name: z.string().default(''),
         description: z.string().default(''),
         button_text: z.string().default('Read more'),
+        categories: z.string().array().default([]),
+        submitted_by: z.string().array().default([]),
       })
       .nullable()
       .array()
@@ -217,7 +235,11 @@
     </Button>
   </div>
   <div id="cristata-preview-content">
-    <EmailNewsletter2 newsletter={data} bind:element={newsletterElement} />
+    {#if new Date(data.timestamps?.published_at || new Date()) > new Date('2023-01-01')}
+      <EmailNewsletter3 newsletter={data} bind:element={newsletterElement} />
+    {:else}
+      <EmailNewsletter2 newsletter={data} bind:element={newsletterElement} />
+    {/if}
   </div>
 {:else if !parsed.success}
   <PreviewDataCard
