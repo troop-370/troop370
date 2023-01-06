@@ -19,7 +19,8 @@
 </script>
 
 <html id="newsletter-doc" lang="en-us" bind:this={element}>
-  <body style="margin: 0;">
+  <head>
+    <title>{newsletter.name}</title>
     <style>
       a:hover {
         background: rgba(0, 77, 170, 0.06);
@@ -57,10 +58,12 @@
           width: 100% !important;
         }
         .announcements-submit {
-          margin-top: 24px;
+          margin-top: 24px !important;
         }
       }
     </style>
+  </head>
+  <body style="margin: 0;">
     <ContainerTable table$height="24" table$bgcolor="#ffffff">
       <tr>
         <td class="trouble">
