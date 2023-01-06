@@ -22,6 +22,9 @@
   <head>
     <title>{newsletter.name}</title>
     <style>
+      a {
+        color: #003f87;
+      }
       a:hover {
         background: rgba(0, 77, 170, 0.06);
       }
