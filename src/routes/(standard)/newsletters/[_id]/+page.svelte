@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { EmailNewsletter2 } from '$components/EmailNewsletter2';
   import { EmailNewsletter3 } from '$components/EmailNewsletter3';
+  import { hasKey } from '$utils';
   import Button, { Icon, Label } from '@smui/button';
   import type { PageData } from './$houdini';
 
@@ -12,12 +13,45 @@
 
   let newsletterElement: HTMLHtmlElement;
 
+  const CSS = {
+    isStyleRule: (rule: CSSRule): rule is CSSStyleRule => {
+      return hasKey(rule, 'style') && !rule.cssText.includes('@f');
+    },
+    isMediaRule: (rule: CSSRule): rule is CSSMediaRule => {
+      return hasKey(rule, 'media') && hasKey(rule, 'conditionText');
+    },
+  };
+
   const getBodyWithInlinedCss = async () => {
     // get all avialable css styles
     let cssText = '';
     Array.from(document.styleSheets).forEach((sheet) => {
       try {
         Array.from(sheet.cssRules).forEach((rule) => {
+          const approvedConditions = ['(max-width', '(min-width', 'screen'];
+          if (
+            CSS.isMediaRule(rule) &&
+            approvedConditions.includes(rule.conditionText.split(':')?.[0] || '') &&
+            !rule.cssText.includes('#main-nav')
+          ) {
+            cssText += rule.cssText;
+            return;
+          }
+          if (!CSS.isStyleRule(rule)) return;
+          if (rule.selectorText.includes('.mdc-')) return;
+          if (rule.selectorText.includes('.smui-')) return;
+          if (rule.selectorText.includes('.flickity-')) return;
+          if (rule.selectorText.includes('.dropdown.s-')) return;
+          if (
+            rule.selectorText.includes(':') &&
+            !rule.selectorText.includes(':hover') &&
+            !rule.selectorText.includes(':active') &&
+            !rule.selectorText.includes(':focus') &&
+            !rule.selectorText.includes(':focus-visible')
+          ) {
+            return;
+          }
+
           cssText += rule.cssText;
         });
       } catch (error) {}
@@ -27,7 +61,9 @@
     const clone = newsletterElement.cloneNode(true) as HTMLHtmlElement;
     const styleElem = document.createElement('style');
     styleElem.innerHTML = cssText;
-    clone.appendChild(styleElem);
+    const headElem = clone.querySelector('head');
+    if (headElem) headElem.appendChild(styleElem);
+    else clone.appendChild(styleElem);
 
     // get the html string with inlined css
     return fetch('/newsletters/utils/inline', {
