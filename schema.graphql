@@ -98,6 +98,7 @@ type ConfigurationCollection {
   canPublish: Boolean
   generationOptions: ConfigurationCollectionGenerationOptions
   name: String!
+  pluralName: String!
   raw: JSON!
 
   """Use SchemaDef type from genSchema.ts"""
@@ -433,7 +434,7 @@ type Mutation {
   newsletterClone(_id: ObjectID!): Newsletter
 
   """Create a new Newsletter document."""
-  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, newsletter_date: Date!, pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], stage: Float): Newsletter
+  newsletterCreate(advancement_mini_posts: [ObjectID], announcements: [ObjectID], camping_mini_posts: [ObjectID], fundraiser_mini_posts: [ObjectID], high_adventure_mini_posts: [ObjectID], name: String, past_announcements: [ObjectID], pinned_mini_posts: [ObjectID], service_mini_posts: [ObjectID], stage: Float): Newsletter
 
   """Deletes a Newsletter document."""
   newsletterDelete(_id: ObjectID!): Void
@@ -774,7 +775,7 @@ type Newsletter {
   locked: Boolean!
   manual_calendar: [NewsletterManual_calendar]
   name: String!
-  newsletter_date: Date!
+  past_announcements: [Post]
   people: PublishableCollectionPeople
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
@@ -796,7 +797,7 @@ input NewsletterModifyInput {
   high_adventure_mini_posts: [ObjectID]
   manual_calendar: [NewsletterModifyInputManual_calendar]
   name: String
-  newsletter_date: Date
+  past_announcements: [ObjectID]
   pinned_mini_posts: [ObjectID]
   service_mini_posts: [ObjectID]
   stage: Float
@@ -1186,7 +1187,7 @@ type PrunedNewsletter {
   high_adventure_mini_posts: [Post]
   manual_calendar: [NewsletterManual_calendar]
   name: String!
-  newsletter_date: Date!
+  past_announcements: [Post]
   pinned_mini_posts: [Post]
   service_mini_posts: [Post]
   timestamps: PrunedNewsletterTimestamps
@@ -1556,6 +1557,9 @@ type Query {
   If _id is omitted, the API will return all WebConfig documents.
   """
   webConfigsPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedWebConfig
+
+  """Get the docs in the different workflow categories"""
+  workflow(collections: [String], exclude: [String]): [WorkflowGroup!]
 }
 
 type S3SignedResponse {
@@ -1759,4 +1763,17 @@ type WithPermissions {
 
 input WithPermissionsInput {
   permissions: CollectionPermissionsInput
+}
+
+type WorkflowGroup {
+  _id: Int!
+  count: Int!
+  docs: [WorkflowGroupDoc]!
+}
+
+type WorkflowGroupDoc {
+  _id: ObjectID!
+  in: String!
+  name: String
+  stage: Float!
 }
