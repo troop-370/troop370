@@ -1,13 +1,18 @@
 <script lang="ts">
-  import type { Newsletter$result } from '$houdini';
   import { ContainerTable } from '.';
-
-  export let newsletter: NonNullable<Newsletter$result['newsletterPublic']>;
 </script>
 
 <ContainerTable table$height="8" table$bgcolor="#003f87" table$class="nav-overline" />
 
 <ContainerTable table$height="48" table$bgcolor="#f9f9f9">
+  <style>
+    @media (max-width: 900px) {
+      .link {
+        font-size: 14px;
+        padding: 0 8px;
+      }
+    }
+  </style>
   <tr>
     <td style="padding: 0 20px 0 0; height: 48px;">
       <ContainerTable table$height="48">
@@ -42,10 +47,10 @@
             </a>
           </td>
           {@html '<!--[if !mso]><!-->'}
-          <td align="right" class="links">
-            <a href="https://troop370atlanta.org/posts" class="hide-600">POSTS</a>
-            <a href="https://troop370atlanta.org/payments" class="hide-600">PAYMENTS</a>
-            <a href="https://troop370atlanta.org/events" class="hide-320">CALENDAR</a>
+          <td align="right">
+            <a href="https://troop370atlanta.org/posts" class="link hide-600">POSTS</a>
+            <a href="https://troop370atlanta.org/payments" class="link hide-600">PAYMENTS</a>
+            <a href="https://troop370atlanta.org/events" class="link hide-320">CALENDAR</a>
           </td>
           {@html '<!--<![endif]-->'}
         </tr>
@@ -55,7 +60,7 @@
 </ContainerTable>
 
 <style>
-  .links a {
+  .link {
     font-family: roboto, sans-serif;
     font-size: 16px;
     text-decoration: none;
@@ -68,14 +73,4 @@
     letter-spacing: 0.8px;
     border-radius: 2px;
   }
-  @media (max-width: 900px) {
-    .links a {
-      font-size: 14px;
-      padding: 0 8px;
-    }
-  }
-
-  /* :global(.nav-overline) {
-    border-radius: 3px 3px 0 0;
-  } */
 </style>

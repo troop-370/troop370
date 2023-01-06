@@ -78,7 +78,7 @@
     <BackgroundTable>
       <tr>
         <td>
-          <NavTable {newsletter} />
+          <NavTable />
         </td>
       </tr>
       <tr>
