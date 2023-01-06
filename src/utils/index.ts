@@ -1,3 +1,4 @@
+export { capitalize } from './capitalize';
 export { findLastIndex } from './findLastIndex';
 export { formatISODate } from './formatISODate';
 export { hasKey } from './hasKey';
