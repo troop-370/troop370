@@ -68,7 +68,7 @@
       /* hide trouble banner on clients that support media queries */
       @media screen {
         .trouble {
-          display: none;
+          display: none !important;
         }
       }
     </style>
@@ -401,7 +401,7 @@
   /* make width automatic for clients that support css */
   @media screen {
     .announcements-submit {
-      width: unset;
+      width: unset !important;
     }
   }
 </style>

@@ -8,8 +8,8 @@
   <style>
     @media (max-width: 900px) {
       .link {
-        font-size: 14px;
-        padding: 0 8px;
+        font-size: 14px !important;
+        padding: 0 8px !important;
       }
     }
   </style>
