@@ -50,7 +50,9 @@
           <td align="right">
             <a href="https://troop370atlanta.org/posts" class="link hide-600">POSTS</a>
             <a href="https://troop370atlanta.org/payments" class="link hide-600">PAYMENTS</a>
-            <a href="https://troop370atlanta.org/events" class="link hide-320">CALENDAR</a>
+            <a href="https://troop370atlanta.org/events/calendar/primary" class="link hide-320">
+              CALENDAR
+            </a>
           </td>
           {@html '<!--<![endif]-->'}
         </tr>
