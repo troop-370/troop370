@@ -14,12 +14,16 @@ export function formatISODate(
   date: string,
   showWeekday = false,
   showYear = true,
-  showTime = false
+  showTime = false,
+  showMonth = true,
+  showDay = true
 ) {
+  const showAt = showTime && (showWeekday || showYear || showMonth || showDay);
+
   const formatted = DateTime.fromISO(date).toFormat(
-    `${showWeekday ? `cccc, ` : ``}LLLL dd${showYear ? `, yyyy` : ``}${
-      showTime ? ` 'at' h:mm a` : ``
-    }`
+    `${showWeekday ? `cccc, ` : ``}${showMonth ? `LLLL ` : ``}${showDay ? `dd` : ``}${
+      showYear ? `, yyyy` : ``
+    }${showAt ? ` 'at' ` : ``}${showTime ? `h:mm a` : ``}`
   );
   const APFormatted = formatted
     .replace('January', 'Jan.')
@@ -31,5 +35,5 @@ export function formatISODate(
     .replace('December', 'Dec.')
     .replace('AM', 'a.m.')
     .replace('PM', 'p.m.');
-  return APFormatted;
+  return APFormatted.trim();
 }
