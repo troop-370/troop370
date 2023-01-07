@@ -60,6 +60,7 @@
     "luxon": "^3.1.0",
     "marked": "^4.2.2",
     "nprogress": "^0.2.0",
+    "rrule": "^2.7.1",
     "svelte-kit-cookie-session": "^3.2.2",
     "xmldom": "^0.6.0",
     "zod": "^3.19.1"
