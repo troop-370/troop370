@@ -22,10 +22,10 @@
   </IconButton>
   <a class="wordmark" href="/" use:Ripple={{ surface: true, color: 'primary' }}>BSA Troop 370</a>
   <NavRow groups={groups.filter((group) => group.show_horizontal_nav === true)} />
-  <div>
+  <!-- <div>
     This is the new BSA Troop 370 website.
     <a href="https://old.troop370atlanta.org">Click here to go to the old website.</a>
-  </div>
+  </div> -->
 </header>
 
 <NavDrawer bind:open={menuOpen} {groups} />
@@ -48,7 +48,7 @@
     box-shadow: none;
   }
 
-  div {
+  /* div {
     background-color: var(--color-secondary);
     grid-column-start: 1;
     grid-column-end: 4;
@@ -62,7 +62,7 @@
 
   div a {
     color: var(--color-neutral-10);
-  }
+  } */
 
   @media print {
     header {
