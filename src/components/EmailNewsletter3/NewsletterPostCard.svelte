@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link } from '$pm/render/Link';
+  import { Newsletter3Link } from '$pm/render/Newsletter3Link';
   import { capitalize } from '$utils';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import { marked } from 'marked';
@@ -25,14 +25,14 @@
 
       if (type === 'prosemirror') {
         const renderer = new Renderer.Renderer();
-        renderer.addMark(Link);
+        renderer.addMark(Newsletter3Link);
         html = renderer.render({
           type: 'doc',
           content: JSON.parse(body),
         });
       }
 
-      if (html) {
+      if (html && type === 'markdown') {
         const dom = new DOMParser().parseFromString(html, 'text/html');
 
         /**
@@ -53,7 +53,7 @@
             );
           }
           if (buttonTypeRegular === true) {
-            // only do the following if the anchor includes the text '.b'
+            // only do the following if the anchor includes the text '.pb'
             anchors[i].textContent = buttonText.replace('.pb', '');
             anchors[i].setAttribute('class', 'email-mdc-button');
             anchors[i].setAttribute(
