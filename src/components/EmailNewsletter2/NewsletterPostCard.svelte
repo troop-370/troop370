@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { HardBreak } from '$pm/render/HardBreak';
   import { Link } from '$pm/render/Link';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import { marked } from 'marked';
@@ -23,6 +24,7 @@
       if (type === 'prosemirror') {
         const renderer = new Renderer.Renderer();
         renderer.addMark(Link);
+        renderer.addNode(HardBreak);
         html = renderer.render({
           type: 'doc',
           content: JSON.parse(body),

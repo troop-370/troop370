@@ -3,6 +3,7 @@
   import PreviewData from '$components/PreviewData.svelte';
   import PreviewDataCard from '$components/PreviewDataCard.svelte';
   import type { Post$result } from '$houdini';
+  import { HardBreak } from '$pm/render/HardBreak';
   import { Link } from '$pm/render/Link';
   import { formatISODate, listOxford, Markdown, notEmpty } from '$utils';
   import Renderer from '@cristata/prosemirror-to-html-js';
@@ -58,6 +59,7 @@
       } else {
         const renderer = new Renderer.Renderer();
         renderer.addMark(Link);
+        renderer.addNode(HardBreak);
         bodyHtml = renderer.render({
           type: 'doc',
           content: JSON.parse(data.body),

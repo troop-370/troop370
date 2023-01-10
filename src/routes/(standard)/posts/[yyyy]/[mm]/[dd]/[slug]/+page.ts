@@ -1,4 +1,5 @@
 import { graphql } from '$houdini';
+import { HardBreak } from '$pm/render/HardBreak';
 import { Link } from '$pm/render/Link';
 import { Markdown } from '$utils';
 import Renderer from '@cristata/prosemirror-to-html-js';
@@ -53,6 +54,7 @@ export async function afterLoad({ data, event }: AfterLoadEvent) {
     } else {
       const renderer = new Renderer.Renderer();
       renderer.addMark(Link);
+      renderer.addNode(HardBreak);
       bodyHtml = renderer.render({
         type: 'doc',
         content: JSON.parse(data.Post.postBySlugPublic.body),

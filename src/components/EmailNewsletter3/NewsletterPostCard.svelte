@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { HardBreak } from '$pm/render/HardBreak';
   import { Newsletter3Link } from '$pm/render/Newsletter3Link';
   import { capitalize } from '$utils';
   import Renderer from '@cristata/prosemirror-to-html-js';
@@ -26,6 +27,7 @@
       if (type === 'prosemirror') {
         const renderer = new Renderer.Renderer();
         renderer.addMark(Newsletter3Link);
+        renderer.addNode(HardBreak);
         html = renderer.render({
           type: 'doc',
           content: JSON.parse(body),
