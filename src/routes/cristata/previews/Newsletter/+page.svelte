@@ -24,7 +24,7 @@
         name: z.string().default(''),
         description: z.string().default(''),
         body: z.string().default(''),
-        legacy_markdown: z.boolean().default(false),
+        legacy_markdown: z.boolean().optional().nullable().default(false),
         categories: z.string().array().default([]),
         submitted_by: z.string().array().default([]),
       })
