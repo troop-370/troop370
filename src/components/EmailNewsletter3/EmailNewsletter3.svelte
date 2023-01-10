@@ -338,14 +338,14 @@
                             </p>
                             <p>
                               Submit email announcements to
-                              <a href="sheri.buehner@troop370atlanta.org">Sheri Buehner</a>. Please
-                              submit your announcement by Sunday at noon.
+                              <a href="mailto:sheri.buehner@troop370atlanta.org">Sheri Buehner</a>.
+                              Please submit your announcement by Sunday at noon.
                             </p>
                             <p>
                               Submit website announcements and reminder texts to
-                              <a href="jack.buehner@troop370atlanta.org">Jack Buehner</a>. Please
-                              submit your reminder at least 48 hours in advance. Reminder texts have
-                              a 115-character limit.
+                              <a href="mailto:jack.buehner@troop370atlanta.org">Jack Buehner</a>.
+                              Please submit your reminder at least 48 hours in advance. Reminder
+                              texts have a 115-character limit.
                             </p>
                           </td>
                         </tr>
