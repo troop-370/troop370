@@ -1,3 +1,30 @@
+type Activity {
+  _id: ObjectID!
+  added: JSON
+  archived: Boolean!
+  at: Date!
+  colName: String!
+  deleted: JSON
+  docId: ObjectID!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String
+  people: CollectionPeople
+  timestamps: CollectionTimestamps
+  type: String!
+  updated: JSON
+  userIds: [User]!
+  yState: String
+}
+
+input ActivityModifyInput {
+  added: JSON
+  deleted: JSON
+  updated: JSON
+  yState: String
+}
+
 type ApiUsage {
   billable: Float!
   since: Date!
@@ -95,6 +122,11 @@ type Configuration {
 
 type ConfigurationCollection {
   by: ConfigurationCollectionBy!
+
+  """
+  Whether the current user has 'create' and 'get' permisson on this collection
+  """
+  canCreateAndGet: Boolean
   canPublish: Boolean
   generationOptions: ConfigurationCollectionGenerationOptions
   name: String!
@@ -813,6 +845,19 @@ input NewsletterModifyInputManual_calendar {
 """mongoose ObjectID scalar type"""
 scalar ObjectID
 
+type PagedActivity {
+  docs: [Activity]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
 type PagedCollectionActivity {
   docs: [CollectionActivity]!
   hasNextPage: Boolean
@@ -1304,6 +1349,14 @@ type PublishableCollectionTimestamps {
 }
 
 type Query {
+  """
+  Get a set of Activity documents by _id.
+  If _id is omitted, the API will return all Activity documents.
+  """
+  activities(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedActivity
+
+  """Get a Activity document by _id."""
+  activity(_id: ObjectID!): Activity
   billing: Billing!
 
   """Get the recent activity in the specified collections"""
@@ -1514,7 +1567,7 @@ type Query {
   userPublic(_id: ObjectID!): PrunedUser
 
   """Returns a list of documents in collections that reference this user"""
-  userReferences(_id: ObjectID, collections: [String!], exclude: [String!]): [UserReference!]!
+  userReferences(_id: ObjectID, collections: [String!], exclude: [String!], limit: Int): [UserReference!]!
 
   """
   Get a set of User documents by _id.
