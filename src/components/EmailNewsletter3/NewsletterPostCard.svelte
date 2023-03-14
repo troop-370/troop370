@@ -2,6 +2,7 @@
   import { HardBreak } from '$pm/render/HardBreak';
   import { Newsletter3Link } from '$pm/render/Newsletter3Link';
   import { capitalize } from '$utils';
+  import { isJSON } from '$utils/isJSON';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
@@ -30,7 +31,7 @@
         renderer.addNode(HardBreak);
         html = renderer.render({
           type: 'doc',
-          content: JSON.parse(body),
+          content: isJSON(body) ? JSON.parse(body) : [],
         });
       }
 

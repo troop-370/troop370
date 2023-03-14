@@ -6,6 +6,7 @@
   import { HardBreak } from '$pm/render/HardBreak';
   import { Link } from '$pm/render/Link';
   import { formatISODate, listOxford, Markdown, notEmpty } from '$utils';
+  import { isJSON } from '$utils/isJSON';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import { marked } from 'marked';
   import { z } from 'zod';
@@ -62,7 +63,7 @@
         renderer.addNode(HardBreak);
         bodyHtml = renderer.render({
           type: 'doc',
-          content: JSON.parse(data.body),
+          content: isJSON(data.body) ? JSON.parse(data.body) : [],
         });
       }
     }

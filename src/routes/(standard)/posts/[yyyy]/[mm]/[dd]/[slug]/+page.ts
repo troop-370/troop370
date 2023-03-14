@@ -2,6 +2,7 @@ import { graphql } from '$houdini';
 import { HardBreak } from '$pm/render/HardBreak';
 import { Link } from '$pm/render/Link';
 import { Markdown } from '$utils';
+import { isJSON } from '$utils/isJSON';
 import Renderer from '@cristata/prosemirror-to-html-js';
 import { redirect } from '@sveltejs/kit';
 import type { AfterLoadEvent, PostVariablesType } from './$houdini';
@@ -57,7 +58,9 @@ export async function afterLoad({ data, event }: AfterLoadEvent) {
       renderer.addNode(HardBreak);
       bodyHtml = renderer.render({
         type: 'doc',
-        content: JSON.parse(data.Post.postBySlugPublic.body),
+        content: isJSON(data.Post.postBySlugPublic.body)
+          ? JSON.parse(data.Post.postBySlugPublic.body)
+          : [],
       });
     }
   }

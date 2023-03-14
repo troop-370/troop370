@@ -1,9 +1,10 @@
 <script lang="ts">
   import { formatISODate, listOxford } from '$utils';
+  import { isJSON } from '$utils/isJSON';
   import Renderer from '@cristata/prosemirror-to-html-js';
   import Button, { Icon } from '@smui/button';
-  import { DOMParser } from 'xmldom';
   import { marked } from 'marked';
+  import { DOMParser } from 'xmldom';
 
   const renderer = new Renderer.Renderer();
 
@@ -28,7 +29,7 @@
     if (type === 'prosemirror') {
       html = renderer.render({
         type: 'doc',
-        content: JSON.parse(body),
+        content: isJSON(body) ? JSON.parse(body) : [],
       });
     }
 
