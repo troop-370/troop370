@@ -1,9 +1,9 @@
 import { graphql } from '$houdini';
 import { notEmpty } from '$utils';
 import { z } from 'zod';
-import type { AfterLoadData, LayoutLoadEvent } from './$houdini';
+import type { LayoutLoadEvent, _houdini_afterLoadData } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query TenantDetails {
     tenant {
       name
@@ -20,7 +20,13 @@ export const houdini_load = graphql`
   }
 `;
 
-export async function afterLoad({ data, event }: { data: AfterLoadData; event: LayoutLoadEvent }) {
+export async function _houdini_afterLoad({
+  data,
+  event,
+}: {
+  data: _houdini_afterLoadData;
+  event: LayoutLoadEvent;
+}) {
   if (data.TenantDetails.redirectsConfig?.config) {
     try {
       const redirects = redirectsConfigSchema.parse(

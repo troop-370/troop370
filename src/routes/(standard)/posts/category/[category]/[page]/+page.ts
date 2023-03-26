@@ -1,8 +1,8 @@
 import { graphql } from '$houdini';
 import { error } from '@sveltejs/kit';
-import type { PostsVariablesType, AfterLoadEvent } from './$houdini';
+import type { AfterLoadEvent, PostsVariables } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query Posts($limit: Int!, $page: Int, $sort: JSON, $filter: JSON) {
     postsPublic(limit: $limit, page: $page, sort: $sort, filter: $filter) {
       docs {
@@ -26,7 +26,7 @@ export const houdini_load = graphql`
 
 // This is the function for the AllItems query.
 // Query variable functions must be named <QueryName>Variables.
-export const PostsVariables: PostsVariablesType = ({ params }) => {
+export const _PostsVariables: PostsVariables = ({ params }) => {
   return {
     limit: 10,
     page: parseInt(params.page),
@@ -39,7 +39,7 @@ export const PostsVariables: PostsVariablesType = ({ params }) => {
 };
 
 // check for presence of data before allowing page to load
-export async function afterLoad({ data }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data }: AfterLoadEvent) {
   if (!data.Posts.postsPublic) {
     throw error(404);
   }

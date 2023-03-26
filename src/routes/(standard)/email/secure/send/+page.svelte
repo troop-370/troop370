@@ -9,7 +9,6 @@
   import { onMount } from 'svelte';
   import type { PageData } from './$types';
 
-  export const ssr = false;
   export let data: PageData;
 
   let subject = '';
