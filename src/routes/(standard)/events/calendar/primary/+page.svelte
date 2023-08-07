@@ -40,7 +40,22 @@
         </tr>
       </thead>
       <tbody>
-        {#each recurringEvents.filter((event) => !!event.rr) as event}
+        {#each recurringEvents.filter((event) => {
+          if (!event.rr) return false; //  no rule
+          if (!event.start) return false; // no start time for these events
+          if (!event.rr.after) return false; // no more recurring times for this event
+          if (!event.start.dateTime && !event.start.date) return false; // no start date or time for these events
+
+          //** @type {Date} */
+          let start;
+          if (event.start.dateTime) {
+            start = event.rr.after(new Date(event.start.dateTime));
+          } else if (event.start.date) {
+            start = event.rr.after(new Date(event.start.date));
+          }
+          if (!start) return false; // there is no found upcoming date, so remove the event from the list
+          return true;
+        }) as event}
           <tr on:click={() => goto(`/events/calendar/primary/event/${event.id}`)}>
             <td>
               <a href="/events/calendar/primary/event/{event.id}">{event.summary}</a>
@@ -50,31 +65,50 @@
             </td>
             <td>
               {#if event.start?.dateTime && event.rr}
-                {formatISODate(event.rr.after(new Date(event.start.dateTime)).toISOString())}
-                {@const time = formatISODate(
-                  event.start?.dateTime,
-                  false,
-                  false,
-                  true,
-                  false,
-                  false
-                )}
-                {#if time}
-                  at {time}
+                {@const eventStartDate = event.rr.after(new Date(event.start.dateTime))}
+                {#if eventStartDate}
+                  {formatISODate(eventStartDate.toISOString())}
+                  {@const time = formatISODate(
+                    event.start?.dateTime,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false
+                  )}
+                  {#if time}
+                    at {time}
+                  {/if}
                 {/if}
               {:else if event.start?.date && event.rr}
-                {formatISODate(event.rr.after(new Date(event.start.date)).toISOString())}
+                {@const eventStartDate = event.rr.after(new Date(event.start.date))}
+                {#if eventStartDate}
+                  {formatISODate(eventStartDate.toISOString())}
+                {/if}
               {/if}
             </td>
             <td>
               {#if event.end?.dateTime && event.rr}
-                {formatISODate(event.rr.after(new Date(event.end.dateTime)).toISOString())}
-                {@const time = formatISODate(event.end?.dateTime, false, false, true, false, false)}
-                {#if time}
-                  at {time}
+                {@const eventDate = event.rr.after(new Date(event.end.dateTime))}
+                {#if eventDate}
+                  {formatISODate(eventDate.toISOString())}
+                  {@const time = formatISODate(
+                    event.end?.dateTime,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false
+                  )}
+                  {#if time}
+                    at {time}
+                  {/if}
                 {/if}
               {:else if event.end?.date && event.rr}
-                {formatISODate(event.rr.after(new Date(event.end.date)).toISOString())}
+                {@const eventDate = event.rr.after(new Date(event.end.date))}
+                {#if eventDate}
+                  {formatISODate(eventDate.toISOString())}
+                {/if}
               {/if}
             </td>
           </tr>
