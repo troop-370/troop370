@@ -2,6 +2,8 @@ import { error, type Load } from '@sveltejs/kit';
 import z from 'zod';
 import type { Actions } from './$types';
 
+export const ssr = false;
+
 export const load: Load = async ({ parent }) => {
   const { session } = await parent();
   const accessToken = session.constantContactAccessToken;

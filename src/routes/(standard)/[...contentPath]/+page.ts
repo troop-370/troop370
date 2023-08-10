@@ -1,8 +1,8 @@
 import { graphql } from '$houdini';
 import { error, redirect } from '@sveltejs/kit';
-import type { AfterLoadEvent, BeforeLoadEvent, ContentPageVariablesType } from './$houdini';
+import type { AfterLoadEvent, BeforeLoadEvent, ContentPageVariables } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query ContentPage($slug: String!) {
     contentBySlugPublic(slug: $slug) {
       _id
@@ -22,7 +22,7 @@ export const houdini_load = graphql`
   }
 `;
 
-export const beforeLoad = async ({ params, parent }: BeforeLoadEvent) => {
+export const _houdini_beforeLoad = async ({ params, parent }: BeforeLoadEvent) => {
   const { redirects } = await parent();
 
   const foundRedirect = redirects.find((redirect) => {
@@ -39,13 +39,13 @@ export const beforeLoad = async ({ params, parent }: BeforeLoadEvent) => {
 
 // This is the function for the AllItems query.
 // Query variable functions must be named <QueryName>Variables.
-export const ContentPageVariables: ContentPageVariablesType = ({ params }) => {
+export const _ContentPageVariables: ContentPageVariables = ({ params }) => {
   return {
     slug: params.contentPath.endsWith('/') ? params.contentPath.slice(0, -1) : params.contentPath,
   };
 };
 
-export async function afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (!data.ContentPage.contentBySlugPublic) {
     throw error(404);
   }

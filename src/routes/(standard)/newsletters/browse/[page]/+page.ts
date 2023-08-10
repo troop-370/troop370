@@ -1,8 +1,8 @@
 import { graphql } from '$houdini';
 import { error, redirect } from '@sveltejs/kit';
-import type { AfterLoadEvent, NewslettersVariablesType } from './$houdini';
+import type { AfterLoadEvent, NewslettersVariables } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query Newsletters($limit: Int!, $page: Int, $sort: JSON, $filter: JSON) {
     newslettersPublic(limit: $limit, page: $page, sort: $sort, filter: $filter) {
       docs {
@@ -21,7 +21,7 @@ export const houdini_load = graphql`
 
 // This is the function for the AllItems query.
 // Query variable functions must be named <QueryName>Variables.
-export const NewslettersVariables: NewslettersVariablesType = ({ params }) => {
+export const _NewslettersVariables: NewslettersVariables = ({ params }) => {
   return {
     limit: 10,
     page: parseInt(params.page),
@@ -31,7 +31,7 @@ export const NewslettersVariables: NewslettersVariablesType = ({ params }) => {
 };
 
 // check for presence of data before allowing page to load
-export async function afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (!data.Newsletters.newslettersPublic) {
     throw error(404);
   }

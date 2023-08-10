@@ -1,8 +1,8 @@
 import { graphql } from '$houdini';
 import { redirect } from '@sveltejs/kit';
-import type { AfterLoadEvent, StandaloneEmailVariablesType } from './$houdini';
+import type { AfterLoadEvent, StandaloneEmailVariables } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query StandaloneEmail($_id: ObjectID!) {
     standaloneEmailPublic(_id: $_id) {
       _id
@@ -17,13 +17,13 @@ export const houdini_load = graphql`
 
 // This is the function for the AllItems query.
 // Query variable functions must be named <QueryName>Variables.
-export const StandaloneEmailVariables: StandaloneEmailVariablesType = ({ params }) => {
+export const _StandaloneEmailVariables: StandaloneEmailVariables = ({ params }) => {
   return {
     _id: params._id,
   };
 };
 
-export async function afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (data.StandaloneEmail.standaloneEmailPublic) {
     const { session } = await event.parent();
     if (session.authenticated !== true) {
