@@ -23,6 +23,7 @@
       .array()
       .default([]),
     show_table_of_contents: z.boolean().default(false),
+    toc_h3_enabled: z.boolean().default(false),
     center_text: z.boolean().default(false),
     timestamps: z
       .object({

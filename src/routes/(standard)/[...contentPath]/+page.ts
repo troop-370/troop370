@@ -17,6 +17,7 @@ export const houdini_load = graphql`
         path
       }
       show_table_of_contents
+      toc_h3_enabled
       center_text
     }
   }

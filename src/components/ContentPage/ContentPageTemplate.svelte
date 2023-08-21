@@ -59,7 +59,12 @@
         <h2>Table of contents</h2>
         {#each toc as { title, level, slug }}
           {#if level === 2}
-            <div>
+            <div class="toc-h2">
+              <a href="#{slug}">{title}</a>
+            </div>
+          {/if}
+          {#if data.toc_h3_enabled && level === 3}
+            <div class="toc-h3">
               <a href="#{slug}">{title}</a>
             </div>
           {/if}
@@ -69,6 +74,8 @@
     {@html bodyMD}
   </div>
 </article>
+
+{JSON.stringify(data)}
 
 <style>
   article #main-content aside {
@@ -92,6 +99,10 @@
 
   article #main-content aside h2 {
     margin: 6px 0 12px 0;
+  }
+
+  .toc-h3 {
+    margin-left: 20px;
   }
 
   .alert {

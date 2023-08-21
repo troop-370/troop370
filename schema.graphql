@@ -44,6 +44,7 @@ type Billing {
 
 type BillingFeatures {
   allowDiskUse: Boolean!
+  useCustomIntegrations: Boolean!
 }
 
 type Collection {
@@ -112,11 +113,18 @@ type CollectionTimestamps {
 }
 
 type Configuration {
+  apps: ConfigurationApps!
   collection(name: String!): ConfigurationCollection
   collections: [ConfigurationCollection]
   dashboard: ConfigurationDashboard!
   navigation: ConfigurationNavigation!
   security: ConfigurationSecurity!
+  void: Void
+}
+
+type ConfigurationApps {
+  photos: ConfigurationPhotosApp!
+  profiles: ConfigurationProfilesApp!
   void: Void
 }
 
@@ -129,6 +137,11 @@ type ConfigurationCollection {
   canCreateAndGet: Boolean
   canPublish: Boolean
   generationOptions: ConfigurationCollectionGenerationOptions
+
+  """
+  Whether the body field in the schema definition is a rich text (tiptap) field.
+  """
+  hasRichTextBody: Boolean!
   name: String!
   pluralName: String!
   raw: JSON!
@@ -239,6 +252,50 @@ input ConfigurationNavigationSubGroupItemsInput {
   uuid: String!
 }
 
+type ConfigurationPhotosApp {
+  defaultFieldDescriptions: ConfigurationPhotosAppFieldDescriptions!
+  fieldDescriptions: ConfigurationPhotosAppFieldDescriptions!
+}
+
+type ConfigurationPhotosAppFieldDescriptions {
+  name: String!
+  note: String!
+  requireAuth: String!
+  source: String!
+  tags: String!
+}
+
+input ConfigurationPhotosAppFieldDescriptionsInput {
+  name: String!
+  note: String!
+  requireAuth: String!
+  source: String!
+  tags: String!
+}
+
+type ConfigurationProfilesApp {
+  defaultFieldDescriptions: ConfigurationProfilesAppFieldDescriptions!
+  fieldDescriptions: ConfigurationProfilesAppFieldDescriptions!
+}
+
+type ConfigurationProfilesAppFieldDescriptions {
+  biography: String!
+  email: String!
+  name: String!
+  phone: String!
+  title: String!
+  twitter: String!
+}
+
+input ConfigurationProfilesAppFieldDescriptionsInput {
+  biography: String
+  email: String
+  name: String
+  phone: String
+  title: String
+  twitter: String
+}
+
 type ConfigurationSecurity {
   introspection: Boolean!
   secrets: ConfigurationSecuritySecrets!
@@ -255,13 +312,18 @@ type ConfigurationSecuritySecretsFathom {
 }
 
 type ConfigurationSecurityToken {
+  _id: ObjectID!
   expires: String!
   name: String!
   scope: ConfigurationSecurityTokenScope!
-  token: String!
+  user_id: String
 }
 
 type ConfigurationSecurityTokenScope {
+  admin: Boolean
+}
+
+input ConfigurationSecurityTokenScopeInput {
   admin: Boolean
 }
 
@@ -284,6 +346,7 @@ type Content {
   slug: String!
   stage: Float
   timestamps: PublishableCollectionTimestamps
+  toc_h3_enabled: Boolean
   yState: String
 }
 
@@ -299,6 +362,7 @@ input ContentModifyInput {
   show_table_of_contents: Boolean
   slug: String
   stage: Float
+  toc_h3_enabled: Boolean
   yState: String
 }
 
@@ -311,6 +375,67 @@ input ContentModifyInputQuick_links {
 type ContentQuick_links {
   label: String
   path: String
+}
+
+type CristataEvent {
+  _id: ObjectID!
+  archived: Boolean!
+  at: Date!
+  document: JSON
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String!
+  people: CollectionPeople
+  reason: String!
+  timestamps: CollectionTimestamps
+  webhook: JSON
+  yState: String
+}
+
+input CristataEventModifyInput {
+  void: Void
+  yState: String
+}
+
+type CristataWebhook {
+  _id: ObjectID!
+  archived: Boolean!
+  collections: [String]!
+  filters: [CristataWebhookFilters]
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String!
+  people: CollectionPeople
+  timestamps: CollectionTimestamps
+  triggers: [String]!
+  url: String!
+  verb: String!
+  yState: String
+}
+
+type CristataWebhookFilters {
+  condition: String!
+  key: String!
+  value: String!
+}
+
+input CristataWebhookModifyInput {
+  collections: [String]
+  filters: [CristataWebhookModifyInputFilters]
+  name: String
+  triggers: [String]
+  url: String
+  verb: String
+  yState: String
+}
+
+input CristataWebhookModifyInputFilters {
+  condition: String
+  key: String
+  value: String
+  yState: String
 }
 
 """ISO date string scalar type"""
@@ -400,7 +525,7 @@ type Mutation {
   contentClone(_id: ObjectID!): Content
 
   """Create a new Content document."""
-  contentCreate(alert: String, aliases: [String], body: String, center_text: Boolean, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String, stage: Float): Content
+  contentCreate(alert: String, aliases: [String], body: String, center_text: Boolean, dual_columns: Boolean, enable_password_protection: Boolean, name: String!, show_table_of_contents: Boolean, slug: String, stage: Float, toc_h3_enabled: Boolean): Content
 
   """Deletes a Content document."""
   contentDelete(_id: ObjectID!): Void
@@ -434,6 +559,21 @@ type Mutation {
   be used.
   """
   contentWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Content
+
+  """
+  Clone an existing CristataWebhook document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  cristataWebhookClone(_id: ObjectID!): CristataWebhook
+
+  """Create a new CristataWebhook document."""
+  cristataWebhookCreate(collections: [String], name: String!, triggers: [String], url: String!, verb: String!): CristataWebhook
+
+  """Deletes a CristataWebhook document."""
+  cristataWebhookDelete(_id: ObjectID!): Void
+
+  """Modify an existing CristataWebhook document."""
+  cristataWebhookModify(_id: ObjectID!, input: CristataWebhookModifyInput!): CristataWebhook
   deleteCollection(name: String!): Void
 
   """
@@ -513,6 +653,14 @@ type Mutation {
   """Create a new Photo document."""
   photoCreate(file_type: String!, height: Int!, json: JSON, legacy_caption: String, legacy_thumbnail_id: String, name: String!, note: String, require_auth: Boolean, size_bytes: Int!, tags: [String], uuid: String!, width: Int!): Photo
 
+  """
+  Set whether an existing Photo document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden Photo documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  photoHide(_id: ObjectID!, hide: Boolean): Photo
+
   """Modify an existing Photo document."""
   photoModify(_id: ObjectID!, input: PhotoModifyInput!): Photo
 
@@ -571,8 +719,18 @@ type Mutation {
   System groups that are provided in the query are removed upon receipt.
   """
   setConfigurationNavigationSub(input: [ConfigurationNavigationSubGroupInput]!, key: String!): [ConfigurationNavigationSubGroup]!
+  setPhotosAppFieldDescriptions(input: ConfigurationPhotosAppFieldDescriptionsInput!): Void
+  setProfilesAppFieldDescriptions(input: ConfigurationProfilesAppFieldDescriptionsInput!): Void
   setRawConfigurationCollection(name: String!, raw: JSON): JSON
   setSecret(key: String!, value: String!): String!
+
+  """
+  Is no _id parameter is specified, a new token will be created from the parameters.
+  Specify the token _id to update an existing token.
+  Upon creation of a new token, the token will be returned.
+  With existing token updates, nothing will be returned.
+  """
+  setToken(_id: ObjectID, expires: String!, name: String!, scope: ConfigurationSecurityTokenScopeInput!, user_id: String!): String
 
   """
   Set whether an existing StandaloneEmail document is archived.
@@ -672,18 +830,13 @@ type Mutation {
   teamWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Team
 
   """
-  Set whether an existing User document is archived.
-  This mutation sets archived: true by default.
-  Archived User documents should not be presented to clients
-  unless they explicitly request to view archived items.
-  """
-  userArchive(_id: ObjectID!, archive: Boolean): User
-
-  """
   Clone an existing User document.
   Certain fields are removed from the document (_id, slug, and any that start with __)
   """
   userClone(_id: ObjectID!): User
+
+  """Sets the action access config for the User collection."""
+  userCollectionSetActionAccess(actionAccess: UserCollectionActionAccessInput!): UserCollectionActionAccess
 
   """Create a new User document."""
   userCreate(biography: String, current_title: String, email: String, flags: [String], github_id: Int, group: Float, last_magic_code: String, methods: [String], name: String, phone: Float, photo: String, retired: Boolean, slug: String, twitter: String, username: String!): User
@@ -693,25 +846,6 @@ type Mutation {
   This mutation deactivates by default.
   """
   userDeactivate(_id: ObjectID!, deactivate: Boolean): User
-
-  """Deletes a User document."""
-  userDelete(_id: ObjectID!): Void
-
-  """
-  Set whether an existing User document is hidden.
-  This mutation sets hidden: true by default.
-  Hidden User documents should not be presented to clients;
-  this is analogous to moving the document to a deleted items folder
-  """
-  userHide(_id: ObjectID!, hide: Boolean): User
-
-  """
-  Set whether an existing User document is locked.
-  This mutation sets locked: true by default.
-  Locked User documents should only be editable by the server
-  and by admins.
-  """
-  userLock(_id: ObjectID!, lock: Boolean): User
 
   """
   Migrate a user without a local account.
@@ -729,14 +863,6 @@ type Mutation {
 
   """Resend an invitation for a user with a temporary password."""
   userResendInvite(_id: ObjectID!): User
-
-  """
-  Add a watcher to a User document.
-  This mutation adds the watcher by default. If a user _id is
-  not specified, for the watcher, the currently authenticated user will
-  be used.
-  """
-  userWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): User
 
   """
   Set whether an existing WebConfig document is archived.
@@ -792,6 +918,7 @@ type MutationBilling {
 
 type MutationBillingFeatures {
   allowDiskUse(allowDiskUse: Boolean!): Boolean!
+  useCustomIntegrations(useCustomIntegrations: Boolean!): Boolean!
 }
 
 type Newsletter {
@@ -873,6 +1000,32 @@ type PagedCollectionActivity {
 
 type PagedContent {
   docs: [Content]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedCristataEvent {
+  docs: [CristataEvent]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedCristataWebhook {
+  docs: [CristataWebhook]!
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -1212,6 +1365,7 @@ type PrunedContent {
   show_table_of_contents: Boolean
   slug: String!
   timestamps: PrunedContentTimestamps
+  toc_h3_enabled: Boolean
 }
 
 type PrunedContentQuick_links {
@@ -1393,6 +1547,24 @@ type Query {
   If _id is omitted, the API will return all Content documents.
   """
   contentsPublic(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedPrunedContent
+
+  """Get a CristataEvent document by _id."""
+  cristataEvent(_id: ObjectID!): CristataEvent
+
+  """
+  Get a set of CristataEvent documents by _id.
+  If _id is omitted, the API will return all CristataEvent documents.
+  """
+  cristataEvents(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedCristataEvent
+
+  """Get a CristataWebhook document by _id."""
+  cristataWebhook(_id: ObjectID!): CristataWebhook
+
+  """
+  Get a set of CristataWebhook documents by _id.
+  If _id is omitted, the API will return all CristataWebhook documents.
+  """
+  cristataWebhooks(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedCristataWebhook
 
   """
   Get an authenticated URL to the fathom analytics dashboard.
@@ -1710,6 +1882,30 @@ type User {
   twitter: String
   username: String
   yState: String
+}
+
+type UserCollectionActionAccess {
+  create: UserCollectionActionAccessObject
+  deactivate: UserCollectionActionAccessObject
+  get: UserCollectionActionAccessObject
+  modify: UserCollectionActionAccessObject
+}
+
+input UserCollectionActionAccessInput {
+  create: UserCollectionActionAccessObjectInput
+  deactivate: UserCollectionActionAccessObjectInput
+  get: UserCollectionActionAccessObjectInput
+  modify: UserCollectionActionAccessObjectInput
+}
+
+type UserCollectionActionAccessObject {
+  teams: [String!]
+  users: [String!]
+}
+
+input UserCollectionActionAccessObjectInput {
+  teams: [String!]
+  users: [String!]
 }
 
 type UserConstantcontact {
