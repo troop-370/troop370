@@ -21,6 +21,9 @@
     <Button variant="outlined" style="margin-top: 20px;" href="/about">
       <Label>About us</Label>
     </Button>
+    <Button variant="outlined" style="margin-top: 20px;" href="/join">
+      <Label>Join</Label>
+    </Button>
   </div>
 </section>
 
