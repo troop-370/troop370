@@ -29,6 +29,49 @@
       scrolled = true;
     }
   });
+
+  function processGroup(group: NonNullable<NonNullable<typeof groups>[0]>) {
+    if (group.label === 'General Applications') {
+      return {
+        ...group,
+        documents: [
+          ...group.documents
+            .filter(notEmpty)
+            .filter(
+              (doc) =>
+                doc.name !== 'Merit Badge Counselor Application' &&
+                doc.name !== 'Youth Registration Instructions' &&
+                doc.name !== 'Adult Registration Instructions'
+            ),
+          {
+            name: 'Merit Badge Counselor Application',
+            file_type: 'url',
+            size_bytes: 0,
+            _id: 'https://www.atlantabsa.org/mbcounselor',
+          },
+          // {
+          //   name: 'Health Form (Annotated)',
+          //   file_type: 'url',
+          //   size_bytes: 0,
+          //   _id: 'https://troop370atlanta.org/healthform',
+          // },
+          {
+            name: 'Youth Registration Instructions',
+            file_type: 'url',
+            size_bytes: 0,
+            _id: 'https://troop370atlanta.org/join',
+          },
+          {
+            name: 'Adult Registration Instructions',
+            file_type: 'url',
+            size_bytes: 0,
+            _id: 'https://troop370atlanta.org/join',
+          },
+        ],
+      };
+    }
+    return group;
+  }
 </script>
 
 <Banner>
@@ -37,7 +80,7 @@
 
 <div class="cols">
   {#if groups}
-    {#each groups.filter(notEmpty) as group}
+    {#each groups.filter(notEmpty).map(processGroup) as group}
       <div class="group">
         <h2>{group.label}</h2>
         <table>
@@ -52,26 +95,43 @@
             {#each group.documents.filter(notEmpty) as doc}
               {@const slug = slugger.slug(doc.name || doc._id)}
               <tr
-                on:click={() => goto(`https://server.cristata.app/filestore/troop-370/${doc._id}`)}
+                on:click={() =>
+                  goto(
+                    doc.file_type === 'url'
+                      ? doc._id
+                      : `https://server.cristata.app/filestore/troop-370/${doc._id}`
+                  )}
                 id={slug}
                 class:current={$page.url.hash.slice(1) === slug}
               >
                 <td align="left" style="width: 100%; overflow: hidden; text-overflow: ellipsis;">
-                  <a href="https://server.cristata.app/filestore/troop-370/{doc._id}">
+                  <a
+                    href={doc.file_type === 'url'
+                      ? doc._id
+                      : `https://server.cristata.app/filestore/troop-370/${doc._id}`}
+                  >
                     {doc.name}
                   </a>
                 </td>
-                <td align="left" style="width: 18px">{mime.extension(doc.file_type)}</td>
-                {#if doc.size_bytes / 1000 < 1000}
+                <td align="left" style="width: 18px">
+                  {#if doc.file_type === 'url'}
+                    url
+                  {:else}
+                    {mime.extension(doc.file_type)}
+                  {/if}
+                </td>
+                {#if doc.size_bytes === 0}
+                  <td align="left" style="width: 22px" />
+                {:else if doc.size_bytes / 1000 < 1000}
                   <td align="left" style="width: 22px">{Math.round(doc.size_bytes / 1000)} kB</td>
                 {:else if doc.size_bytes / 1000000 < 1000}
                   <td align="left" style="width: 22px">
                     {Math.round(doc.size_bytes / 1000000)} MB
                   </td>
                 {:else}
-                  <td align="left" style="width: 22px"
-                    >{Math.round(doc.size_bytes / 1000000000)} GB</td
-                  >
+                  <td align="left" style="width: 22px">
+                    {Math.round(doc.size_bytes / 1000000000)} GB
+                  </td>
                 {/if}
               </tr>
             {/each}
