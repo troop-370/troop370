@@ -73,4 +73,22 @@
   .page-header-banner :global(a:focus-visible:not(.mdc-button)) {
     box-shadow: 0 0 0 2px var(--color-neutral-30);
   }
+
+  @media print {
+    .page-header-banner {
+      background-color: transparent;
+      padding: 20px;
+      color: black;
+    }
+    .page-header-banner :global(h1) {
+      font-size: 1.75rem;
+      color: black;
+    }
+    .page-header-banner :global(p) {
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  }
 </style>

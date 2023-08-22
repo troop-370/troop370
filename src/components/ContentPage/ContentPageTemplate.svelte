@@ -69,13 +69,17 @@
             </div>
           {/if}
         {/each}
+
+        <div class="print-button">
+          <Button variant="outlined" on:click={() => window.print()}>
+            <Label>Print this page</Label>
+          </Button>
+        </div>
       </aside>
     {/if}
     {@html bodyMD}
   </div>
 </article>
-
-{JSON.stringify(data)}
 
 <style>
   article #main-content aside {
@@ -294,5 +298,64 @@
   #main-content :global(th:first-of-type),
   #main-content :global(td:first-of-type) {
     padding-left: 16px;
+  }
+
+  .print-button {
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+  }
+
+  .print-button > :global(*) {
+    flex-grow: 1;
+  }
+
+  @media print {
+    #main-content {
+      padding-top: 0;
+    }
+
+    #main-content :global(p) {
+      margin-bottom: 8px;
+    }
+
+    #main-content :global(p),
+    #main-content :global(span),
+    #main-content :global(ul),
+    #main-content :global(ol) {
+      font-size: 14px;
+    }
+
+    #main-content :global(h2) {
+      padding-top: 0.5em;
+      font-size: 1.4rem;
+      margin-bottom: 0.5em;
+    }
+    #main-content :global(h2::before) {
+      content: none;
+    }
+
+    #main-content :global(h3) {
+      font-size: 1.1rem;
+    }
+
+    article #main-content aside {
+      display: none;
+    }
+
+    #main-content :global(tr) {
+      font-size: 13px;
+      height: 32px;
+    }
+
+    #main-content :global(th),
+    #main-content :global(td) {
+      padding-right: 16px;
+    }
+
+    #main-content :global(th:first-of-type),
+    #main-content :global(td:first-of-type) {
+      padding-left: 8px;
+    }
   }
 </style>
