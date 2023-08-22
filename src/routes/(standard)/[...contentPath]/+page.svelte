@@ -11,7 +11,7 @@
 </script>
 
 {#if pageData}
-  <ContentPageTemplate data={pageData} />
+  <ContentPageTemplate data={pageData} authStrings={data.authStrings} />
 {:else if $ContentPage.errors}
   Something went wrong
 {/if}

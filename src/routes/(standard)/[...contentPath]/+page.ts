@@ -51,10 +51,15 @@ export async function afterLoad({ data, event }: AfterLoadEvent) {
     throw error(404);
   }
 
+  const { session } = await event.parent();
+
   if (data.ContentPage.contentBySlugPublic?.enable_password_protection) {
-    const { session } = await event.parent();
     if (session.authenticated !== true) {
       throw redirect(302, `/basic-login?from=${encodeURIComponent(event.url.href)}`);
     }
   }
+
+  return {
+    authStrings: session.authStrings,
+  };
 }

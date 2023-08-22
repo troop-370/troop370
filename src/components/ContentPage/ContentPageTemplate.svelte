@@ -5,17 +5,32 @@
   import type { ContentPage$result } from '$houdini';
   import { Markdown } from '$utils';
   import { MDCRipple } from '@material/ripple';
+  import Button, { Label } from '@smui/button';
+  import type { AuthStrings } from 'src/routes/(standard)/+layout.server';
   import { afterUpdate } from 'svelte';
 
   export let data: NonNullable<ContentPage$result['contentBySlugPublic']>;
+  export let authStrings: AuthStrings | undefined = undefined;
 
   $: quickLinks =
     data.quick_links?.filter(
       (ql): ql is NonNullable<Required<typeof ql>> => !!ql && !!ql.label && !!ql.path
     ) || [];
 
-  $: [headingMD, bodyMD, toc] = Markdown.parse(data.body);
+  $: [headingMD, _bodyMD, toc] = Markdown.parse(data.body);
   $: [, alertMD] = data?.alert ? Markdown.parse(data.alert) : [null, '', []];
+
+  $: bodyMD = (() => {
+    let bodyMD = _bodyMD;
+
+    if (authStrings) {
+      Object.entries(authStrings).forEach(([key, value]) => {
+        bodyMD = bodyMD.replaceAll(`{{${key}}}`, value);
+      });
+    }
+
+    return bodyMD;
+  })();
 
   $: columns = data.dual_columns ? 2 : 1;
 
