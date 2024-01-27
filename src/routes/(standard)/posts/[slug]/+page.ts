@@ -20,7 +20,7 @@ export const _PostSlugVariables: PostSlugVariables = ({ params }) => {
   };
 };
 
-export async function _afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (data.PostSlug.postBySlugPublic?.timestamps?.published_at) {
     const date = new Date(data.PostSlug.postBySlugPublic.timestamps.published_at);
     const yyyy = date.getUTCFullYear();
