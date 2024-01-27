@@ -1,18 +1,12 @@
 <script lang="ts">
+  import type { ApiTypes } from '$api';
   import { browser } from '$app/environment';
+  import { PUBLIC_API_URL } from '$env/static/public';
   import { Label } from '@smui/button';
   import Button from '@smui/button/src/Button.svelte';
   import { afterUpdate } from 'svelte';
 
-  export let announcements: {
-    title: string | null;
-    subtitle: string | null;
-    href: string | null;
-    href_text: string | null;
-    photo: {
-      href: string | null;
-    } | null;
-  }[];
+  export let announcements: ApiTypes['schemas']['NavigationAnnouncementCardComponent'][];
 
   let flickityElem: HTMLDivElement;
   let flickity: Flickity | undefined = undefined;
@@ -35,13 +29,17 @@
 
 <div class="main-carousel" bind:this={flickityElem}>
   {#each announcements as annoucement}
-    <div class="carousel-cell" style="background-image:url('{annoucement.photo?.href}');">
+    <div
+      class="carousel-cell"
+      style="background-image:url('{PUBLIC_API_URL.replace('/api', '')}{annoucement.background_photo
+        ?.data?.attributes?.url}');"
+    >
       <div class="carousel-text-card ripple-dark-bg ripple-mobile">
         <div>
           <h2 class="carousel-title">{annoucement.title}</h2>
           <p class="carousel-info">{annoucement.subtitle}</p>
-          <Button href={annoucement.href || undefined} variant="outlined" class="carousel-button">
-            <Label>{annoucement.href_text}</Label>
+          <Button href={annoucement.link} variant="outlined" class="carousel-button">
+            <Label>{annoucement.link_text}</Label>
           </Button>
         </div>
       </div>

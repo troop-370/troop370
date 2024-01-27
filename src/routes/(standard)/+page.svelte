@@ -5,8 +5,7 @@
   import Button, { Label } from '@smui/button';
   import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: ({ Annoucements } = data);
+  export let data;
 </script>
 
 <section class="welcome">
@@ -29,9 +28,7 @@
 
 <section class="carousel">
   <div>
-    <MainCarousel
-      announcements={$Annoucements.data?.webConfigAnnouncementsPublic?.filter(notEmpty) || []}
-    />
+    <MainCarousel announcements={data.announcementCards.filter(notEmpty) || []} />
   </div>
 </section>
 

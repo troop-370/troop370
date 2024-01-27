@@ -962,8 +962,6 @@ export interface components {
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
-      /** Format: date-time */
-      publishedAt?: string;
       createdBy?: {
         data?: {
           id?: number;
@@ -1246,8 +1244,6 @@ export interface components {
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
-      /** Format: date-time */
-      publishedAt?: string;
       createdBy?: {
         data?: {
           id?: number;
@@ -1577,7 +1573,7 @@ export interface components {
     };
     HomePageRequest: {
       data: {
-        announcement_cards?: components["schemas"]["NavigationAnnouncementCardComponent"][];
+        announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
       };
     };
     HomePageListResponseDataItem: {
@@ -1596,13 +1592,11 @@ export interface components {
       };
     };
     HomePage: {
-      announcement_cards?: components["schemas"]["NavigationAnnouncementCardComponent"][];
+      announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
-      /** Format: date-time */
-      publishedAt?: string;
       createdBy?: {
         data?: {
           id?: number;
@@ -1650,8 +1644,6 @@ export interface components {
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
-      /** Format: date-time */
-      publishedAt?: string;
       createdBy?: {
         data?: {
           id?: number;
