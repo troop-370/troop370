@@ -1,15 +1,15 @@
 <script lang="ts">
+  import type { ApiTypes } from '$api';
   import { browser } from '$app/environment';
   import Banner from '$components/Banner.svelte';
   import OutlinedButton from '$components/OutlinedButton.svelte';
-  import type { ContentPage$result } from '$houdini';
   import { Markdown } from '$utils';
   import { MDCRipple } from '@material/ripple';
   import Button, { Label } from '@smui/button';
-  import type { AuthStrings } from 'src/routes/(standard)/+layout.server';
   import { afterUpdate } from 'svelte';
+  import type { AuthStrings } from '../../routes/(standard)/+layout.server';
 
-  export let data: NonNullable<ContentPage$result['contentBySlugPublic']>;
+  export let data: ApiTypes['schemas']['Page'];
   export let authStrings: AuthStrings | undefined = undefined;
 
   $: quickLinks =
@@ -17,7 +17,7 @@
       (ql): ql is NonNullable<Required<typeof ql>> => !!ql && !!ql.label && !!ql.path
     ) || [];
 
-  $: [headingMD, _bodyMD, toc] = Markdown.parse(data.body);
+  $: [headingMD, _bodyMD, toc] = Markdown.parse(data.body || '');
   $: [, alertMD] = data?.alert ? Markdown.parse(data.alert) : [null, '', []];
 
   $: bodyMD = (() => {
@@ -49,7 +49,7 @@
     {#if headingMD}
       {@html headingMD}
     {:else}
-      {@html Markdown.parse(`# ${data.name}`)[0]}
+      {@html Markdown.parse(`# ${data.title}`)[0]}
     {/if}
     {#if quickLinks && quickLinks.length > 0}
       <div class="quick-links">
