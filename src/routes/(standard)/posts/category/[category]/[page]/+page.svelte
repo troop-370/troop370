@@ -37,11 +37,15 @@
     {#if $Posts.data?.postsPublic?.docs}
       {#each $Posts.data.postsPublic.docs as post}
         {#if post}
+          {@const date = post.timestamps ? new Date(post.timestamps.published_at) : undefined}
+          {@const datePath = date
+            ? `/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDay() + 1}`
+            : ''}
           <PostCard
             name={post.name}
-            href="/posts/{post.slug}"
+            href="/posts{datePath}/{post.slug}"
             authors={(post.submitted_by || []).filter(notEmpty)}
-            date={post.timestamps ? new Date(post.timestamps.published_at) : undefined}
+            {date}
             body={post.body}
             buttonText={post.button_text}
             hasPassword={post.enable_password_protection}
