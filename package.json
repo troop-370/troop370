@@ -11,7 +11,8 @@
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
     "prepare": "npm run smui-theme",
-    "smui-theme": "smui-theme compile static/smui.css -i src/theme"
+    "smui-theme": "smui-theme compile static/smui.css -i src/theme",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@smui-extra/accordion": "^7.0.0-beta.0",
@@ -62,6 +63,7 @@
     "luxon": "^3.1.0",
     "marked": "^4.2.2",
     "nprogress": "^0.2.0",
+    "patch-package": "^8.0.0",
     "rrule": "^2.7.1",
     "svelte-kit-cookie-session": "^3.2.2",
     "xmldom": "^0.6.0",

@@ -1,0 +1,97 @@
+diff --git a/node_modules/@cocreators-ee/apity/dist/fetcher.js b/node_modules/@cocreators-ee/apity/dist/fetcher.js
+index 8399670..26f86b8 100644
+--- a/node_modules/@cocreators-ee/apity/dist/fetcher.js
++++ b/node_modules/@cocreators-ee/apity/dist/fetcher.js
+@@ -37,11 +37,37 @@ function getQuery(method, payload, query) {
+             delete payload[key];
+         });
+     }
++    // support filters from strapi endpoints
++    else if (payload.filters) {
++        const { filters, ...rest } = payload;
++        queryObj = {  ...rest };
++        Object.entries(flattenObj(filters)).forEach(([key, value]) => {
++            queryObj[convertDotsToBrackets(`filters.${key}`)] = value
++        })
++    }
+     else {
+         queryObj = { ...payload };
+     }
+     return queryString(queryObj);
+ }
++
++function isPlainObj(o) {
++    return o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf")
++}
++
++function flattenObj(obj, keys=[]) {
++    return Object.keys(obj).reduce((acc, key) => {
++        return Object.assign(acc, isPlainObj(obj[key]) 
++            ? flattenObj(obj[key], keys.concat(key))
++            : {[keys.concat(key).join(".")]: obj[key]}
++        )
++    }, {})
++}
++
++function convertDotsToBrackets(str) {
++    return str.replace(/\.(.+?)(?=\.|$)/g, (m, s) => `[${s}]`)
++}
++
+ function getHeaders(body, init) {
+     const headers = new Headers(init);
+     if (body !== undefined && !headers.has('Content-Type')) {
+diff --git a/node_modules/@cocreators-ee/apity/dist/svelte/fetcher.js b/node_modules/@cocreators-ee/apity/dist/svelte/fetcher.js
+index 6a60978..c682e6e 100644
+--- a/node_modules/@cocreators-ee/apity/dist/svelte/fetcher.js
++++ b/node_modules/@cocreators-ee/apity/dist/svelte/fetcher.js
+@@ -6,7 +6,7 @@ async function getResponseBody(response) {
+     if (response.status === 204) {
+         return undefined;
+     }
+-    const contentType = response.headers.get('content-type');
++    const contentType = response.headers.get('content-type')?.split(';')?.[0]; // remove the encoding information
+     if (contentType && JSON_CONTENT_TYPES.includes(contentType)) {
+         return await response.json();
+     }
+@@ -23,6 +23,7 @@ async function getResponseBody(response) {
+ }
+ async function fetchAndParse(request) {
+     const { url, init } = getFetchParams(request);
++    console.log(url)
+     try {
+         const response = await request.realFetch(url, init);
+         try {
+diff --git a/node_modules/@cocreators-ee/apity/dist/svelte/types.d.ts b/node_modules/@cocreators-ee/apity/dist/svelte/types.d.ts
+index b32f279..d26408c 100644
+--- a/node_modules/@cocreators-ee/apity/dist/svelte/types.d.ts
++++ b/node_modules/@cocreators-ee/apity/dist/svelte/types.d.ts
+@@ -29,4 +29,5 @@ export type SvelteCreateFetch<M, OP> = M extends 'post' | 'put' | 'patch' | 'del
+ }> : _SvelteCreateFetch<OP> : _SvelteCreateFetch<OP>;
+ export type SvelteFetchArgType<F> = F extends SvelteTypedWrappedFetch<infer OP> ? OpArgType<OP> : never;
+ export type SvelteFetchReturnType<F> = F extends SvelteTypedWrappedFetch<infer OP> ? OpReturnType<OP> : never;
+-export {};
++export { };
++
+diff --git a/node_modules/@cocreators-ee/apity/dist/types.d.ts b/node_modules/@cocreators-ee/apity/dist/types.d.ts
+index 7acfd3b..87527cc 100644
+--- a/node_modules/@cocreators-ee/apity/dist/types.d.ts
++++ b/node_modules/@cocreators-ee/apity/dist/types.d.ts
+@@ -17,7 +17,10 @@ export type OpArgType<OP> = OP extends {
+             'application/json': infer RB;
+         };
+     };
+-} ? P & Q & (B extends Record<string, unknown> ? B[keyof B] : unknown) & RB : Record<string, never>;
++} ? P & Omit<Q, 'filters'> & (B extends Record<string, unknown> ? B[keyof B] : unknown) & RB & StrapiFilters : Record<string, never>;
++type StrapiFilters = {
++    filters?: Record<string, unknown>;
++};
+ type OpResponseTypes<OP> = OP extends {
+     responses: infer R;
+ } ? {
+@@ -129,4 +132,5 @@ type TextContentType = {
+         'text/xml': any;
+     };
+ };
+-export {};
++export { };
++
