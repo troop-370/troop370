@@ -1,16 +1,13 @@
 <script lang="ts">
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import TopNav from '$components/TopNavigation/TopNav.svelte';
-  import { title } from '$stores/title';
-  import { afterUpdate, onMount } from 'svelte';
-  import type { LayoutData } from './$houdini';
-  import NProgress from 'nprogress';
-  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { scrollTop } from '$stores/scrollTop';
+  import { title } from '$stores/title';
+  import NProgress from 'nprogress';
+  import { afterUpdate, onMount } from 'svelte';
 
-  export let data: LayoutData;
-  $: ({ TenantDetails } = data);
-  $: navConfig = JSON.parse($TenantDetails.data?.webConfigPublic?.config || '{}');
+  export let data;
 
   // keep track of the page path
   export let path: string = $page.url.pathname;
@@ -60,7 +57,7 @@
 <div id="global-wrapper">
   {#if (path.indexOf('/email') !== 0 || path.indexOf('/emails') === 0) && path.indexOf('/basic-login') !== 0 && $page.url.searchParams.get('hideNav') !== '1'}
     <TopNav
-      groups={navConfig.group}
+      groups={data.navConfig}
       hideShadow={$page.url.pathname.slice(0, 14) === '/pay/pinestraw'}
     />
   {/if}

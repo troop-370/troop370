@@ -6,7 +6,7 @@ export type { NavigationGroup, NavigationGroupItem };
 interface NavigationGroup {
   label: string;
   items: NavigationGroupItem[];
-  show_horizontal_nav?: boolean;
+  show_in_horizontal_nav?: boolean;
 }
 
 interface NavigationGroupItem {

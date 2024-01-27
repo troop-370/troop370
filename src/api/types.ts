@@ -1626,7 +1626,7 @@ export interface components {
     };
     NavigationRequest: {
       data: {
-        nav_groups?: components["schemas"]["NavigationNavigationGroupComponent"][];
+        nav_groups: components["schemas"]["NavigationNavigationGroupComponent"][];
       };
     };
     NavigationListResponseDataItem: {
@@ -1645,7 +1645,7 @@ export interface components {
       };
     };
     Navigation: {
-      nav_groups?: components["schemas"]["NavigationNavigationGroupComponent"][];
+      nav_groups: components["schemas"]["NavigationNavigationGroupComponent"][];
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
