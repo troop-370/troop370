@@ -441,6 +441,81 @@ input CristataWebhookModifyInputFilters {
 """ISO date string scalar type"""
 scalar Date
 
+"""Encrypted string scalar type"""
+scalar EncryptedString
+
+type ExternalAccount {
+  _id: ObjectID!
+  archived: Boolean!
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  mfa: [ExternalAccountMfa]
+  name: String!
+  password: EncryptedString!
+  people: CollectionPeople
+  timestamps: CollectionTimestamps
+  username: String!
+  website: String!
+  yState: String
+}
+
+type ExternalAccountCollectionActionAccess {
+  create: ExternalAccountCollectionActionAccessObject
+  delete: ExternalAccountCollectionActionAccessObject
+  get: ExternalAccountCollectionActionAccessObject
+  modify: ExternalAccountCollectionActionAccessObject
+}
+
+input ExternalAccountCollectionActionAccessInput {
+  create: ExternalAccountCollectionActionAccessObjectInput
+  delete: ExternalAccountCollectionActionAccessObjectInput
+  get: ExternalAccountCollectionActionAccessObjectInput
+  modify: ExternalAccountCollectionActionAccessObjectInput
+}
+
+type ExternalAccountCollectionActionAccessObject {
+  teams: [String!]
+  users: [String!]
+}
+
+input ExternalAccountCollectionActionAccessObjectInput {
+  teams: [String!]
+  users: [String!]
+}
+
+type ExternalAccountMfa {
+  algorithm: String!
+  counter: Int!
+  digits: Int!
+  issuer: String!
+  period: Int!
+  secret: EncryptedString!
+  type: String!
+  user: String!
+}
+
+input ExternalAccountModifyInput {
+  mfa: [ExternalAccountModifyInputMfa]
+  name: String
+  password: EncryptedString
+  username: String
+  website: String
+  yState: String
+}
+
+input ExternalAccountModifyInputMfa {
+  algorithm: String
+  counter: Int
+  digits: Int
+  issuer: String
+  period: Int
+  secret: EncryptedString
+  type: String
+  user: String
+  yState: String
+}
+
 type File {
   _id: ObjectID!
   archived: Boolean!
@@ -575,6 +650,24 @@ type Mutation {
   """Modify an existing CristataWebhook document."""
   cristataWebhookModify(_id: ObjectID!, input: CristataWebhookModifyInput!): CristataWebhook
   deleteCollection(name: String!): Void
+
+  """
+  Clone an existing ExternalAccount document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  externalAccountClone(_id: ObjectID!): ExternalAccount
+
+  """Sets the action access config for the ExternalAccount collection."""
+  externalAccountCollectionSetActionAccess(actionAccess: ExternalAccountCollectionActionAccessInput!): ExternalAccountCollectionActionAccess
+
+  """Create a new ExternalAccount document."""
+  externalAccountCreate(name: String!, password: EncryptedString!, username: String!, website: String!): ExternalAccount
+
+  """Deletes a ExternalAccount document."""
+  externalAccountDelete(_id: ObjectID!): Void
+
+  """Modify an existing ExternalAccount document."""
+  externalAccountModify(_id: ObjectID!, input: ExternalAccountModifyInput!): ExternalAccount
 
   """
   Clone an existing File document.
@@ -830,6 +923,53 @@ type Mutation {
   teamWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): Team
 
   """
+  Set whether an existing TempTest document is archived.
+  This mutation sets archived: true by default.
+  Archived TempTest documents should not be presented to clients
+  unless they explicitly request to view archived items.
+  """
+  tempTestArchive(_id: ObjectID!, archive: Boolean): TempTest
+
+  """
+  Clone an existing TempTest document.
+  Certain fields are removed from the document (_id, slug, and any that start with __)
+  """
+  tempTestClone(_id: ObjectID!): TempTest
+
+  """Create a new TempTest document."""
+  tempTestCreate(body: String, name: String!): TempTest
+
+  """Deletes a TempTest document."""
+  tempTestDelete(_id: ObjectID!): Void
+
+  """
+  Set whether an existing TempTest document is hidden.
+  This mutation sets hidden: true by default.
+  Hidden TempTest documents should not be presented to clients;
+  this is analogous to moving the document to a deleted items folder
+  """
+  tempTestHide(_id: ObjectID!, hide: Boolean): TempTest
+
+  """
+  Set whether an existing TempTest document is locked.
+  This mutation sets locked: true by default.
+  Locked TempTest documents should only be editable by the server
+  and by admins.
+  """
+  tempTestLock(_id: ObjectID!, lock: Boolean): TempTest
+
+  """Modify an existing TempTest document."""
+  tempTestModify(_id: ObjectID!, input: TempTestModifyInput!): TempTest
+
+  """
+  Add a watcher to a TempTest document.
+  This mutation adds the watcher by default. If a user _id is
+  not specified, for the watcher, the currently authenticated user will
+  be used.
+  """
+  tempTestWatch(_id: ObjectID!, watch: Boolean, watcher: ObjectID): TempTest
+
+  """
   Clone an existing User document.
   Certain fields are removed from the document (_id, slug, and any that start with __)
   """
@@ -1037,6 +1177,19 @@ type PagedCristataWebhook {
   totalPages: Int
 }
 
+type PagedExternalAccount {
+  docs: [ExternalAccount]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
 type PagedFile {
   docs: [File]!
   hasNextPage: Boolean
@@ -1182,6 +1335,19 @@ type PagedStandaloneEmail {
 
 type PagedTeam {
   docs: [Team]!
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PagedTempTest {
+  docs: [TempTest]!
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -1566,6 +1732,15 @@ type Query {
   """
   cristataWebhooks(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedCristataWebhook
 
+  """Get a ExternalAccount document by _id."""
+  externalAccount(_id: ObjectID!): ExternalAccount
+
+  """
+  Get a set of ExternalAccount documents by _id.
+  If _id is omitted, the API will return all ExternalAccount documents.
+  """
+  externalAccounts(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedExternalAccount
+
   """
   Get an authenticated URL to the fathom analytics dashboard.
   Only administrators can use this query.
@@ -1704,6 +1879,21 @@ type Query {
   """
   teams(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedTeam
 
+  """Get a TempTest document by _id."""
+  tempTest(_id: ObjectID!): TempTest
+
+  """
+  Get the permissions of the currently authenticated user for the
+  TempTest collection.
+  """
+  tempTestActionAccess(_id: ObjectID): CollectionActionAccess
+
+  """
+  Get a set of TempTest documents by _id.
+  If _id is omitted, the API will return all TempTest documents.
+  """
+  tempTests(_ids: [ObjectID], filter: JSON, limit: Int!, offset: Int, page: Int, sort: JSON): PagedTempTest
+
   """Get some details about the tenant."""
   tenant: TenantDetails
 
@@ -1838,6 +2028,25 @@ input TeamModifyInput {
   name: String
   organizers: [ObjectID]
   slug: String
+  yState: String
+}
+
+type TempTest {
+  _id: ObjectID!
+  archived: Boolean!
+  body: String
+  hidden: Boolean!
+  history: [CollectionHistory]
+  locked: Boolean!
+  name: String!
+  people: CollectionPeople
+  timestamps: CollectionTimestamps
+  yState: String
+}
+
+input TempTestModifyInput {
+  body: String
+  name: String
   yState: String
 }
 
@@ -1998,6 +2207,7 @@ type WebConfigAnnouncementsPublic {
 type WebConfigFormsDocumentsPublic {
   documents: [File]!
   label: String!
+  urls: [JSON]!
 }
 
 input WebConfigModifyInput {

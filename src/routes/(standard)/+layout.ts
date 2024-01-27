@@ -3,7 +3,7 @@ import { notEmpty } from '$utils';
 import { z } from 'zod';
 import type { AfterLoadData, LayoutLoadEvent } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query TenantDetails {
     tenant {
       name
@@ -20,7 +20,7 @@ export const houdini_load = graphql`
   }
 `;
 
-export async function afterLoad({ data, event }: { data: AfterLoadData; event: LayoutLoadEvent }) {
+export async function _afterLoad({ data, event }: { data: AfterLoadData; event: LayoutLoadEvent }) {
   if (data.TenantDetails.redirectsConfig?.config) {
     try {
       const redirects = redirectsConfigSchema.parse(
@@ -35,7 +35,7 @@ export async function afterLoad({ data, event }: { data: AfterLoadData; event: L
   return { ...event.data, redirects: [] };
 }
 
-const redirectsConfigSchema = z
+const _redirectsConfigSchema = z
   .object({
     from: z.string(),
     to: z.string(),

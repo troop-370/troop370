@@ -15,6 +15,7 @@ const config = {
       $stores: './src/stores',
       $components: './src/components',
       $pm: './src/pm',
+      $api: './src/api',
     },
   },
 };

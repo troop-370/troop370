@@ -1,8 +1,8 @@
 import { graphql } from '$houdini';
 import { error, redirect } from '@sveltejs/kit';
-import type { AfterLoadEvent, StandaloneEmailsVariablesType } from './$houdini';
+import type { AfterLoadEvent, StandaloneEmailsVariables } from './$houdini';
 
-export const houdini_load = graphql`
+export const _houdini_load = graphql`
   query StandaloneEmails($limit: Int!, $page: Int, $sort: JSON, $filter: JSON) {
     standaloneEmailsPublic(limit: $limit, page: $page, sort: $sort, filter: $filter) {
       docs {
@@ -21,7 +21,7 @@ export const houdini_load = graphql`
 
 // This is the function for the AllItems query.
 // Query variable functions must be named <QueryName>Variables.
-export const StandaloneEmailsVariables: StandaloneEmailsVariablesType = ({ params }) => {
+export const _StandaloneEmailsVariables: StandaloneEmailsVariables = ({ params }) => {
   return {
     limit: 10,
     page: parseInt(params.page),
@@ -31,7 +31,7 @@ export const StandaloneEmailsVariables: StandaloneEmailsVariablesType = ({ param
 };
 
 // check for presence of data before allowing page to load
-export async function afterLoad({ data, event }: AfterLoadEvent) {
+export async function _afterLoad({ data, event }: AfterLoadEvent) {
   if (!data.StandaloneEmails.standaloneEmailsPublic) {
     throw error(404);
   }
