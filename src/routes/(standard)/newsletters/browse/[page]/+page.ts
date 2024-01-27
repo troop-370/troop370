@@ -31,7 +31,7 @@ export const _NewslettersVariables: NewslettersVariables = ({ params }) => {
 };
 
 // check for presence of data before allowing page to load
-export async function _afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (!data.Newsletters.newslettersPublic) {
     throw error(404);
   }

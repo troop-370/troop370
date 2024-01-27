@@ -23,7 +23,7 @@ export const _StandaloneEmailVariables: StandaloneEmailVariables = ({ params }) 
   };
 };
 
-export async function _afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (data.StandaloneEmail.standaloneEmailPublic) {
     const { session } = await event.parent();
     if (session.authenticated !== true) {
