@@ -31,8 +31,7 @@
   {#each announcements as annoucement}
     <div
       class="carousel-cell"
-      style="background-image:url('{PUBLIC_API_URL.replace('/api', '')}{annoucement.background_photo
-        ?.data?.attributes?.url}');"
+      style="background-image:url('{annoucement.background_photo?.data?.attributes?.url}');"
     >
       <div class="carousel-text-card ripple-dark-bg ripple-mobile">
         <div>
