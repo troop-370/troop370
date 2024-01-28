@@ -1,4 +1,5 @@
 export { Markdown } from './Markdown';
+export { MarkdownToStrapi } from './MarkdownToStrapi';
 export { capitalize } from './capitalize';
 export { findLastIndex } from './findLastIndex';
 export { formatISODate } from './formatISODate';

@@ -1,0 +1,15 @@
+diff --git a/node_modules/blocks-html-renderer/dist/index.mjs b/node_modules/blocks-html-renderer/dist/index.mjs
+index 4ce182d..baa1999 100644
+--- a/node_modules/blocks-html-renderer/dist/index.mjs
++++ b/node_modules/blocks-html-renderer/dist/index.mjs
+@@ -68,8 +68,9 @@ var renderBlock = (block) => {
+     } else if (block2.type === "list") {
+       if (block2.format === "ordered") {
+         html += `<ol>${renderChildren(block2.children)}</ol>`;
++      } else {
++        html += `<ul>${renderChildren(block2.children)}</ul>`;
+       }
+-      html += `<ul>${renderChildren(block2.children)}</ul>`;
+     } else if (block2.type === "list-item") {
+       html += `<li>${renderChildren(block2.children)}</li>`;
+     } else if (block2.type === "image") {
