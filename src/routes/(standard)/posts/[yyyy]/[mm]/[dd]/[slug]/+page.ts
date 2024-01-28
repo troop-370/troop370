@@ -39,7 +39,7 @@ export const _PostVariables: PostVariables = ({ params }) => {
   };
 };
 
-export async function _houdini_houdini_afterLoad({ data, event }: AfterLoadEvent) {
+export async function _houdini_afterLoad({ data, event }: AfterLoadEvent) {
   if (data.Post.postBySlugPublic?.enable_password_protection) {
     const { session } = await event.parent();
     if (session.authenticated !== true) {
