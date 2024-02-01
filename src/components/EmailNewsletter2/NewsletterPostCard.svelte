@@ -3,34 +3,19 @@
   import { Link } from '$pm/render/Link';
   import { isJSON } from '$utils/isJSON';
   import Renderer from '@cristata/prosemirror-to-html-js';
+  import { renderBlock, type Node } from 'blocks-html-renderer';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
   import { CardTable } from '.';
 
   export let name: string | undefined = undefined;
   export let description: string | undefined = undefined;
-  export let body: string;
-  export let type: 'markdown' | 'prosemirror';
+  export let body: Node[];
 
-  let processedHtml = body;
+  let processedHtml = `<code>JSON.stringify(body)</code>`;
   $: {
     if (DOMParser) {
-      let html: string | undefined = undefined;
-
-      if (type === 'markdown') {
-        marked.setOptions(marked.getDefaults());
-        html = marked.parse(body);
-      }
-
-      if (type === 'prosemirror') {
-        const renderer = new Renderer.Renderer();
-        renderer.addMark(Link);
-        renderer.addNode(HardBreak);
-        html = renderer.render({
-          type: 'doc',
-          content: isJSON(body) ? JSON.parse(body) : [],
-        });
-      }
+      const html = renderBlock(body);
 
       if (html) {
         const dom = new DOMParser().parseFromString(html, 'text/html');
@@ -63,9 +48,9 @@
           }
         });
 
-        processedHtml = dom.toString() || html || body || '';
+        processedHtml = dom.toString() || html || '';
       } else {
-        processedHtml = html || body || '';
+        processedHtml = html || '';
       }
     }
   }

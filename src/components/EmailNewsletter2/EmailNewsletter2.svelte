@@ -1,20 +1,20 @@
 <script lang="ts">
-  import type { Newsletter$result } from '$houdini';
+  import type { ApiTypes } from '$api';
   import { formatISODate, notEmpty } from '$utils';
   import {
     BackgroundTable,
+    CalendarMonth,
     CardTable,
     ContainerTable,
     HeaderTable,
     MainTable,
     NewsletterMiniPostCard,
+    NewsletterPinnedPostCard,
     NewsletterPostCard,
     ResourceRow,
-    CalendarMonth,
-    NewsletterPinnedPostCard,
   } from '.';
 
-  export let newsletter: NonNullable<Newsletter$result['newsletterPublic']>;
+  export let newsletter: ApiTypes['manualSchemas']['Newsletter'];
   export let element: HTMLHtmlElement | undefined = undefined;
 </script>
 
@@ -77,9 +77,7 @@
                             "
                         >
                           {formatISODate(
-                            new Date(
-                              newsletter.timestamps?.published_at || new Date()
-                            ).toISOString(),
+                            new Date(newsletter.publishedAt || new Date()).toISOString(),
                             false,
                             true,
                             false
@@ -93,75 +91,77 @@
             </HeaderTable>
           </td>
         </tr>
-        {#if newsletter.pinned_mini_posts && newsletter.pinned_mini_posts.filter(notEmpty).length > 0}
-          {#each newsletter.pinned_mini_posts.filter(notEmpty) as post}
+        {#if newsletter.version2?.pinned_mini_posts?.data && newsletter.version2.pinned_mini_posts.data.filter(notEmpty).length > 0}
+          {#each newsletter.version2.pinned_mini_posts.data.filter(notEmpty) as { attributes: post }}
             <tr>
               <td>
                 <NewsletterPinnedPostCard
-                  name={post.name}
-                  description={post.description}
-                  slug={post.slug}
-                  buttonText={post.button_text}
+                  name={post?.title || ''}
+                  description={post?.subtitle || ''}
+                  slug={post?.slug || ''}
+                  buttonText={post?.button_text || ''}
                 />
               </td>
             </tr>
           {/each}
         {/if}
-        {#if newsletter.announcements && newsletter.announcements.filter(notEmpty).length > 0}
-          {#each newsletter.announcements.filter(notEmpty) as post}
+        {#if newsletter.version2?.posts?.data && newsletter.version2.posts.data.filter(notEmpty).length > 0}
+          {#each newsletter.version2.posts.data
+            .filter(notEmpty)
+            .map((post) => post.attributes)
+            .filter(notEmpty) as post}
             <tr>
               <td>
                 <NewsletterPostCard
-                  name={post.name}
-                  description={post.description}
+                  name={post.title}
+                  description={post.subtitle}
                   body={post.body}
-                  type={post.legacy_markdown === true ? 'markdown' : 'prosemirror'}
                 />
               </td>
             </tr>
           {/each}
         {/if}
-        {#if new Date(newsletter.timestamps?.published_at || new Date()) < new Date()}
+        {#if new Date(newsletter.publishedAt || new Date()) < new Date()}
           <NewsletterMiniPostCard
             label={'Advancement'}
-            posts={newsletter.advancement_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.advancement_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Camping'}
-            posts={newsletter.camping_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.camping_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'High Adventure'}
-            posts={newsletter.high_adventure_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.high_adventure_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Fundraisers'}
-            posts={newsletter.fundraiser_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.fundraiser_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Service Opportunities'}
-            posts={newsletter.service_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.service_mini_posts?.data?.filter(notEmpty) || []}
           />
         {:else}
           <NewsletterMiniPostCard
             label={'Camping'}
-            posts={newsletter.camping_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.camping_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Fundraisers'}
-            posts={newsletter.fundraiser_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.fundraiser_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Service Opportunities'}
-            posts={newsletter.service_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.service_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Advancement'}
-            posts={newsletter.advancement_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.advancement_mini_posts?.data?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'High Adventure'}
-            posts={newsletter.high_adventure_mini_posts?.filter(notEmpty) || []}
+            posts={newsletter.version2?.high_adventure_mini_posts?.data?.filter(notEmpty) || []}
           />
         {/if}
         {#if newsletter.manual_calendar && newsletter.manual_calendar.filter(notEmpty).length > 0}
@@ -230,7 +230,7 @@
                         <a href="https://troop370atlanta.org/events">Troop Events</a>
                         <a href="https://troop370atlanta.org/members/calendar">Basic Calendar</a>
                       </ResourceRow>
-                      {#if new Date(newsletter.timestamps?.published_at || new Date()) < new Date('2022-07-21')}
+                      {#if new Date(newsletter.publishedAt || new Date()) < new Date('2022-07-21')}
                         <ResourceRow label="Submit Annoucements">
                           <p>
                             Submit your announcement for the weekly email, website, or reminder

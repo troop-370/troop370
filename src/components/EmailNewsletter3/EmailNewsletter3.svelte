@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { Newsletter$result } from '$houdini';
+  import type { ApiTypes } from '$api';
   import { formatISODate, notEmpty } from '$utils';
+  import type { Node } from 'blocks-html-renderer';
   import {
     BackgroundTable,
     CalendarMonth,
@@ -14,8 +15,10 @@
   } from '.';
   import NavTable from './NavTable.svelte';
 
-  export let newsletter: NonNullable<Newsletter$result['newsletterPublic']>;
+  export let newsletter: ApiTypes['manualSchemas']['Newsletter'];
   export let element: HTMLHtmlElement | undefined = undefined;
+
+  const blankBody: Node[] = [];
 </script>
 
 <html id="newsletter-doc" lang="en-us" bind:this={element}>
@@ -78,7 +81,7 @@
       <tr>
         <td class="trouble">
           Having trouble viewing this email?
-          <a href="https://troop370atlanta.org/newsletters/{newsletter._id}?hideNav=1">
+          <a href="https://troop370atlanta.org/newsletters/{newsletter.object_id}?hideNav=1">
             Click here to view it online
           </a>.
         </td>
@@ -128,7 +131,7 @@
                           "
                       >
                         {formatISODate(
-                          new Date(newsletter.timestamps?.published_at || new Date()).toISOString(),
+                          new Date(newsletter.publishedAt || new Date()).toISOString(),
                           false,
                           true,
                           false
@@ -148,33 +151,34 @@
             <tr>
               <td align="center" style="padding: 0 20px;">
                 <MainTable>
-                  {#if newsletter.pinned_mini_posts && newsletter.pinned_mini_posts.filter(notEmpty).length > 0}
-                    {#each newsletter.pinned_mini_posts.filter(notEmpty) as post, index}
+                  {#if newsletter.version3?.pinned_mini_posts?.data && newsletter.version3.pinned_mini_posts.data.filter(notEmpty).length > 0}
+                    {#each newsletter.version3.pinned_mini_posts.data.filter(notEmpty) as { attributes: post }, index}
                       <tr>
                         <td>
                           <NewsletterPinnedPostCard
-                            name={post.name}
-                            description={post.description}
-                            slug={post.slug}
-                            buttonText={post.button_text}
+                            name={post?.title || ''}
+                            description={post?.subtitle || ''}
+                            slug={post?.slug}
+                            buttonText={post?.button_text || 'Read more'}
                             number={index + 1}
-                            category={post.categories[0] || ''}
+                            category={post?.category?.data?.attributes?.value || ''}
                           />
                         </td>
                       </tr>
                     {/each}
                   {/if}
-                  {#if newsletter.announcements && newsletter.announcements.filter(notEmpty).length > 0}
-                    {#each newsletter.announcements.filter(notEmpty) as post, index}
+                  {#if newsletter.version3?.announcements?.data && newsletter.version3.announcements.data.filter(notEmpty).length > 0}
+                    {#each newsletter.version3.announcements.data.filter(notEmpty) as { attributes: post }, index}
                       <tr>
                         <td>
                           <NewsletterPostCard
-                            name={post.name}
-                            description={post.description}
-                            body={post.body}
-                            type={post.legacy_markdown === true ? 'markdown' : 'prosemirror'}
-                            number={index + 1 + (newsletter.pinned_mini_posts?.length || 0)}
-                            category={post.categories[0] || ''}
+                            name={post?.title || ''}
+                            description={post?.subtitle || ''}
+                            body={post?.body || blankBody}
+                            number={index +
+                              1 +
+                              (newsletter.version3?.pinned_mini_posts?.data?.length || 0)}
+                            category={post?.category?.data?.attributes?.value || ''}
                           />
                         </td>
                       </tr>
@@ -182,10 +186,20 @@
                   {/if}
                   <NewsletterMiniPostCard
                     label={'Past announcements'}
-                    posts={newsletter.past_announcements?.filter(notEmpty) || []}
+                    posts={newsletter.version3?.past_announcements?.data
+                      ?.filter(notEmpty)
+                      ?.map((post) => {
+                        return {
+                          name: post.attributes?.title || '',
+                          description: post.attributes?.subtitle || '',
+                          slug: post.attributes?.slug,
+                          button_text: post.attributes?.button_text || 'Read more',
+                          categories: [post.attributes?.category?.data?.attributes?.value || null],
+                        };
+                      }) || []}
                     numberStart={1 +
-                      (newsletter.pinned_mini_posts?.length || 0) +
-                      (newsletter.announcements?.length || 0)}
+                      (newsletter.version3?.pinned_mini_posts?.data?.length || 0) +
+                      (newsletter.version3?.announcements?.data?.length || 0)}
                   />
                   {#if newsletter.manual_calendar && newsletter.manual_calendar.filter(notEmpty).length > 0}
                     <tr>
@@ -193,8 +207,8 @@
                         <h2 class="section-title">
                           <Number
                             number={1 +
-                              (newsletter.pinned_mini_posts?.length || 0) +
-                              (newsletter.announcements?.length || 0) +
+                              (newsletter.version3?.pinned_mini_posts?.data?.length || 0) +
+                              (newsletter.version3?.announcements?.data?.length || 0) +
                               1}
                             category="meeting"
                           />
@@ -248,8 +262,8 @@
                       <h2 class="section-title">
                         <Number
                           number={1 +
-                            (newsletter.pinned_mini_posts?.length || 0) +
-                            (newsletter.announcements?.length || 0) +
+                            (newsletter.version3?.pinned_mini_posts?.data?.length || 0) +
+                            (newsletter.version3?.announcements?.data?.length || 0) +
                             (newsletter.manual_calendar &&
                             newsletter.manual_calendar.filter(notEmpty).length > 0
                               ? 1

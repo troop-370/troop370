@@ -34,6 +34,15 @@ export interface paths {
     put: operations["put/navigation"];
     delete: operations["delete/navigation"];
   };
+  "/newsletters": {
+    get: operations["get/newsletters"];
+    post: operations["post/newsletters"];
+  };
+  "/newsletters/{id}": {
+    get: operations["get/newsletters/{id}"];
+    put: operations["put/newsletters/{id}"];
+    delete: operations["delete/newsletters/{id}"];
+  };
   "/pages": {
     get: operations["get/pages"];
     post: operations["post/pages"];
@@ -1218,7 +1227,6 @@ export interface components {
     };
     FormsAndDocumentsPageRequest: {
       data: {
-        groups: (components["schemas"]["NavigationAnnouncementCardComponent"] | components["schemas"]["NavigationNavigationGroupComponent"] | components["schemas"]["NavigationNavigationItemComponent"])[];
         file_group?: components["schemas"]["TablesFileDetailsComponent"][];
       };
     };
@@ -1238,7 +1246,6 @@ export interface components {
       };
     };
     FormsAndDocumentsPage: {
-      groups: (components["schemas"]["NavigationAnnouncementCardComponent"] | components["schemas"]["NavigationNavigationGroupComponent"] | components["schemas"]["NavigationNavigationItemComponent"])[];
       file_group?: components["schemas"]["TablesFileDetailsComponent"][];
       /** Format: date-time */
       createdAt?: string;
@@ -1263,6 +1270,285 @@ export interface components {
     };
     FormsAndDocumentsPageResponse: {
       data?: components["schemas"]["FormsAndDocumentsPageResponseDataObject"];
+      meta?: Record<string, never>;
+    };
+    TablesFileDetailsComponent: {
+      id?: number;
+      label?: string;
+      documents?: {
+        data?: {
+            id?: number;
+            attributes?: {
+              name?: string;
+              alternativeText?: string;
+              caption?: string;
+              width?: number;
+              height?: number;
+              formats?: unknown;
+              hash?: string;
+              ext?: string;
+              mime?: string;
+              /** Format: float */
+              size?: number;
+              url?: string;
+              previewUrl?: string;
+              provider?: string;
+              provider_metadata?: unknown;
+              related?: {
+                data?: {
+                    id?: number;
+                    attributes?: Record<string, never>;
+                  }[];
+              };
+              folder?: {
+                data?: {
+                  id?: number;
+                  attributes?: {
+                    name?: string;
+                    pathId?: number;
+                    parent?: {
+                      data?: {
+                        id?: number;
+                        attributes?: Record<string, never>;
+                      };
+                    };
+                    children?: {
+                      data?: {
+                          id?: number;
+                          attributes?: Record<string, never>;
+                        }[];
+                    };
+                    files?: {
+                      data?: {
+                          id?: number;
+                          attributes?: {
+                            name?: string;
+                            alternativeText?: string;
+                            caption?: string;
+                            width?: number;
+                            height?: number;
+                            formats?: unknown;
+                            hash?: string;
+                            ext?: string;
+                            mime?: string;
+                            /** Format: float */
+                            size?: number;
+                            url?: string;
+                            previewUrl?: string;
+                            provider?: string;
+                            provider_metadata?: unknown;
+                            related?: {
+                              data?: {
+                                  id?: number;
+                                  attributes?: Record<string, never>;
+                                }[];
+                            };
+                            folder?: {
+                              data?: {
+                                id?: number;
+                                attributes?: Record<string, never>;
+                              };
+                            };
+                            folderPath?: string;
+                            /** Format: date-time */
+                            createdAt?: string;
+                            /** Format: date-time */
+                            updatedAt?: string;
+                            createdBy?: {
+                              data?: {
+                                id?: number;
+                                attributes?: {
+                                  firstname?: string;
+                                  lastname?: string;
+                                  username?: string;
+                                  /** Format: email */
+                                  email?: string;
+                                  resetPasswordToken?: string;
+                                  registrationToken?: string;
+                                  isActive?: boolean;
+                                  roles?: {
+                                    data?: {
+                                        id?: number;
+                                        attributes?: {
+                                          name?: string;
+                                          code?: string;
+                                          description?: string;
+                                          users?: {
+                                            data?: {
+                                                id?: number;
+                                                attributes?: Record<string, never>;
+                                              }[];
+                                          };
+                                          permissions?: {
+                                            data?: {
+                                                id?: number;
+                                                attributes?: {
+                                                  action?: string;
+                                                  actionParameters?: unknown;
+                                                  subject?: string;
+                                                  properties?: unknown;
+                                                  conditions?: unknown;
+                                                  role?: {
+                                                    data?: {
+                                                      id?: number;
+                                                      attributes?: Record<string, never>;
+                                                    };
+                                                  };
+                                                  /** Format: date-time */
+                                                  createdAt?: string;
+                                                  /** Format: date-time */
+                                                  updatedAt?: string;
+                                                  createdBy?: {
+                                                    data?: {
+                                                      id?: number;
+                                                      attributes?: Record<string, never>;
+                                                    };
+                                                  };
+                                                  updatedBy?: {
+                                                    data?: {
+                                                      id?: number;
+                                                      attributes?: Record<string, never>;
+                                                    };
+                                                  };
+                                                };
+                                              }[];
+                                          };
+                                          /** Format: date-time */
+                                          createdAt?: string;
+                                          /** Format: date-time */
+                                          updatedAt?: string;
+                                          createdBy?: {
+                                            data?: {
+                                              id?: number;
+                                              attributes?: Record<string, never>;
+                                            };
+                                          };
+                                          updatedBy?: {
+                                            data?: {
+                                              id?: number;
+                                              attributes?: Record<string, never>;
+                                            };
+                                          };
+                                        };
+                                      }[];
+                                  };
+                                  blocked?: boolean;
+                                  preferedLanguage?: string;
+                                  /** Format: date-time */
+                                  createdAt?: string;
+                                  /** Format: date-time */
+                                  updatedAt?: string;
+                                  createdBy?: {
+                                    data?: {
+                                      id?: number;
+                                      attributes?: Record<string, never>;
+                                    };
+                                  };
+                                  updatedBy?: {
+                                    data?: {
+                                      id?: number;
+                                      attributes?: Record<string, never>;
+                                    };
+                                  };
+                                };
+                              };
+                            };
+                            updatedBy?: {
+                              data?: {
+                                id?: number;
+                                attributes?: Record<string, never>;
+                              };
+                            };
+                          };
+                        }[];
+                    };
+                    path?: string;
+                    /** Format: date-time */
+                    createdAt?: string;
+                    /** Format: date-time */
+                    updatedAt?: string;
+                    createdBy?: {
+                      data?: {
+                        id?: number;
+                        attributes?: Record<string, never>;
+                      };
+                    };
+                    updatedBy?: {
+                      data?: {
+                        id?: number;
+                        attributes?: Record<string, never>;
+                      };
+                    };
+                  };
+                };
+              };
+              folderPath?: string;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              createdBy?: {
+                data?: {
+                  id?: number;
+                  attributes?: Record<string, never>;
+                };
+              };
+              updatedBy?: {
+                data?: {
+                  id?: number;
+                  attributes?: Record<string, never>;
+                };
+              };
+            };
+          }[];
+      };
+      manual?: unknown;
+    };
+    HomePageRequest: {
+      data: {
+        announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
+      };
+    };
+    HomePageListResponseDataItem: {
+      id?: number;
+      attributes?: components["schemas"]["HomePage"];
+    };
+    HomePageListResponse: {
+      data?: components["schemas"]["HomePageListResponseDataItem"][];
+      meta?: {
+        pagination?: {
+          page?: number;
+          pageSize?: number;
+          pageCount?: number;
+          total?: number;
+        };
+      };
+    };
+    HomePage: {
+      announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      createdBy?: {
+        data?: {
+          id?: number;
+          attributes?: Record<string, never>;
+        };
+      };
+      updatedBy?: {
+        data?: {
+          id?: number;
+          attributes?: Record<string, never>;
+        };
+      };
+    };
+    HomePageResponseDataObject: {
+      id?: number;
+      attributes?: components["schemas"]["HomePage"];
+    };
+    HomePageResponse: {
+      data?: components["schemas"]["HomePageResponseDataObject"];
       meta?: Record<string, never>;
     };
     NavigationAnnouncementCardComponent: {
@@ -1499,125 +1785,6 @@ export interface components {
         };
       };
     };
-    NavigationNavigationItemComponent: {
-      id?: number;
-      __component?: string;
-      label?: string;
-      path?: string;
-    };
-    NavigationNavigationGroupComponent: {
-      id?: number;
-      label?: string;
-      show_in_horizontal_nav?: boolean;
-      items?: {
-          id?: number;
-          label?: string;
-          path?: string;
-        }[];
-    };
-    TablesFileDetailsComponent: {
-      id?: number;
-      label?: string;
-      documents?: {
-        data?: {
-            id?: number;
-            attributes?: {
-              name?: string;
-              alternativeText?: string;
-              caption?: string;
-              width?: number;
-              height?: number;
-              formats?: unknown;
-              hash?: string;
-              ext?: string;
-              mime?: string;
-              /** Format: float */
-              size?: number;
-              url?: string;
-              previewUrl?: string;
-              provider?: string;
-              provider_metadata?: unknown;
-              related?: {
-                data?: {
-                    id?: number;
-                    attributes?: Record<string, never>;
-                  }[];
-              };
-              folder?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-              folderPath?: string;
-              /** Format: date-time */
-              createdAt?: string;
-              /** Format: date-time */
-              updatedAt?: string;
-              createdBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-              updatedBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-            };
-          }[];
-      };
-      manual?: unknown;
-    };
-    HomePageRequest: {
-      data: {
-        announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
-      };
-    };
-    HomePageListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["HomePage"];
-    };
-    HomePageListResponse: {
-      data?: components["schemas"]["HomePageListResponseDataItem"][];
-      meta?: {
-        pagination?: {
-          page?: number;
-          pageSize?: number;
-          pageCount?: number;
-          total?: number;
-        };
-      };
-    };
-    HomePage: {
-      announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
-      /** Format: date-time */
-      createdAt?: string;
-      /** Format: date-time */
-      updatedAt?: string;
-      createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
-      };
-      updatedBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
-      };
-    };
-    HomePageResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["HomePage"];
-    };
-    HomePageResponse: {
-      data?: components["schemas"]["HomePageResponseDataObject"];
-      meta?: Record<string, never>;
-    };
     NavigationRequest: {
       data: {
         nav_groups: components["schemas"]["NavigationNavigationGroupComponent"][];
@@ -1757,6 +1924,314 @@ export interface components {
     NavigationResponse: {
       data?: components["schemas"]["NavigationResponseDataObject"];
       meta?: Record<string, never>;
+    };
+    NavigationNavigationGroupComponent: {
+      id?: number;
+      label?: string;
+      show_in_horizontal_nav?: boolean;
+      items?: {
+          id?: number;
+          label?: string;
+          path?: string;
+        }[];
+    };
+    NewsletterRequest: {
+      data: {
+        version3?: components["schemas"]["EmailAnnouncementsV3Component"];
+        version2?: components["schemas"]["EmailAnnouncementsV2Component"];
+        name: string;
+        manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
+        object_id?: string;
+      };
+    };
+    NewsletterListResponseDataItem: {
+      id?: number;
+      attributes?: components["schemas"]["Newsletter"];
+    };
+    NewsletterListResponse: {
+      data?: components["schemas"]["NewsletterListResponseDataItem"][];
+      meta?: {
+        pagination?: {
+          page?: number;
+          pageSize?: number;
+          pageCount?: number;
+          total?: number;
+        };
+      };
+    };
+    Newsletter: {
+      version3?: components["schemas"]["EmailAnnouncementsV3Component"];
+      version2?: components["schemas"]["EmailAnnouncementsV2Component"];
+      name: string;
+      manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
+      object_id?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
+      createdBy?: {
+        data?: {
+          id?: number;
+          attributes?: Record<string, never>;
+        };
+      };
+      updatedBy?: {
+        data?: {
+          id?: number;
+          attributes?: Record<string, never>;
+        };
+      };
+    };
+    NewsletterResponseDataObject: {
+      id?: number;
+      attributes?: components["schemas"]["Newsletter"];
+    };
+    NewsletterResponse: {
+      data?: components["schemas"]["NewsletterResponseDataObject"];
+      meta?: Record<string, never>;
+    };
+    EmailAnnouncementsV3Component: {
+      id?: number;
+      pinned_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: {
+              title?: string;
+              subtitle?: string;
+              body?: unknown;
+              enable_password_protection?: boolean;
+              button_text?: string;
+              category?: {
+                data?: {
+                  id?: number;
+                  attributes?: {
+                    label?: string;
+                    value?: string;
+                    /** Format: date-time */
+                    createdAt?: string;
+                    /** Format: date-time */
+                    updatedAt?: string;
+                    createdBy?: {
+                      data?: {
+                        id?: number;
+                        attributes?: {
+                          firstname?: string;
+                          lastname?: string;
+                          username?: string;
+                          /** Format: email */
+                          email?: string;
+                          resetPasswordToken?: string;
+                          registrationToken?: string;
+                          isActive?: boolean;
+                          roles?: {
+                            data?: {
+                                id?: number;
+                                attributes?: {
+                                  name?: string;
+                                  code?: string;
+                                  description?: string;
+                                  users?: {
+                                    data?: {
+                                        id?: number;
+                                        attributes?: Record<string, never>;
+                                      }[];
+                                  };
+                                  permissions?: {
+                                    data?: {
+                                        id?: number;
+                                        attributes?: {
+                                          action?: string;
+                                          actionParameters?: unknown;
+                                          subject?: string;
+                                          properties?: unknown;
+                                          conditions?: unknown;
+                                          role?: {
+                                            data?: {
+                                              id?: number;
+                                              attributes?: Record<string, never>;
+                                            };
+                                          };
+                                          /** Format: date-time */
+                                          createdAt?: string;
+                                          /** Format: date-time */
+                                          updatedAt?: string;
+                                          createdBy?: {
+                                            data?: {
+                                              id?: number;
+                                              attributes?: Record<string, never>;
+                                            };
+                                          };
+                                          updatedBy?: {
+                                            data?: {
+                                              id?: number;
+                                              attributes?: Record<string, never>;
+                                            };
+                                          };
+                                        };
+                                      }[];
+                                  };
+                                  /** Format: date-time */
+                                  createdAt?: string;
+                                  /** Format: date-time */
+                                  updatedAt?: string;
+                                  createdBy?: {
+                                    data?: {
+                                      id?: number;
+                                      attributes?: Record<string, never>;
+                                    };
+                                  };
+                                  updatedBy?: {
+                                    data?: {
+                                      id?: number;
+                                      attributes?: Record<string, never>;
+                                    };
+                                  };
+                                };
+                              }[];
+                          };
+                          blocked?: boolean;
+                          preferedLanguage?: string;
+                          /** Format: date-time */
+                          createdAt?: string;
+                          /** Format: date-time */
+                          updatedAt?: string;
+                          createdBy?: {
+                            data?: {
+                              id?: number;
+                              attributes?: Record<string, never>;
+                            };
+                          };
+                          updatedBy?: {
+                            data?: {
+                              id?: number;
+                              attributes?: Record<string, never>;
+                            };
+                          };
+                        };
+                      };
+                    };
+                    updatedBy?: {
+                      data?: {
+                        id?: number;
+                        attributes?: Record<string, never>;
+                      };
+                    };
+                  };
+                };
+              };
+              slug?: string;
+              tags?: {
+                data?: {
+                    id?: number;
+                    attributes?: {
+                      label?: string;
+                      value?: string;
+                      /** Format: date-time */
+                      createdAt?: string;
+                      /** Format: date-time */
+                      updatedAt?: string;
+                      createdBy?: {
+                        data?: {
+                          id?: number;
+                          attributes?: Record<string, never>;
+                        };
+                      };
+                      updatedBy?: {
+                        data?: {
+                          id?: number;
+                          attributes?: Record<string, never>;
+                        };
+                      };
+                    };
+                  }[];
+              };
+              relationLabel?: string;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                data?: {
+                  id?: number;
+                  attributes?: Record<string, never>;
+                };
+              };
+              updatedBy?: {
+                data?: {
+                  id?: number;
+                  attributes?: Record<string, never>;
+                };
+              };
+            };
+          }[];
+      };
+      announcements?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      past_announcements?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+    };
+    EmailAnnouncementsV2Component: {
+      id?: number;
+      pinned_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      fundraiser_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      camping_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      service_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      advancement_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+      high_adventure_mini_posts?: {
+        data?: {
+            id?: number;
+            attributes?: Record<string, never>;
+          }[];
+      };
+    };
+    EmailManualCalendarMonthComponent: {
+      id?: number;
+      __component?: string;
+      month?: string;
+      events?: string;
     };
     PageRequest: {
       data: {
@@ -1936,6 +2411,7 @@ export interface components {
         category?: number | string;
         slug: string;
         tags?: (number | string)[];
+        relationLabel?: string;
       };
     };
     PostListResponseDataItem: {
@@ -2103,6 +2579,7 @@ export interface components {
             };
           }[];
       };
+      relationLabel?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -3338,6 +3815,255 @@ export interface operations {
     };
   };
   "delete/navigation": {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": number;
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "get/newsletters": {
+    parameters: {
+      query?: {
+        /** @description Sort by attributes ascending (asc) or descending (desc) */
+        sort?: string;
+        /** @description Return page/pageSize (default: true) */
+        "pagination[withCount]"?: boolean;
+        /** @description Page number (default: 0) */
+        "pagination[page]"?: number;
+        /** @description Page size (default: 25) */
+        "pagination[pageSize]"?: number;
+        /** @description Offset value (default: 0) */
+        "pagination[start]"?: number;
+        /** @description Number of entities to return (default: 25) */
+        "pagination[limit]"?: number;
+        /** @description Fields to return (ex: title,author) */
+        fields?: string;
+        /** @description Relations to return */
+        populate?: string;
+        /** @description Filters to apply */
+        filters?: Record<string, never>;
+        /** @description Locale to apply */
+        locale?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterListResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "post/newsletters": {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewsletterRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "get/newsletters/{id}": {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "put/newsletters/{id}": {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewsletterRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "delete/newsletters/{id}": {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {

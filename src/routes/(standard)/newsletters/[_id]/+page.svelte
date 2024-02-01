@@ -8,8 +8,7 @@
   import type { PageData } from './$houdini';
 
   export let data: PageData;
-  $: ({ Newsletter } = data);
-  $: newsletter = $Newsletter.data?.newsletterPublic;
+  $: newsletter = data.newsletter;
 
   let newsletterElement: HTMLHtmlElement;
 
@@ -147,7 +146,7 @@
       </Button>
     {/if}
   </div>
-  {#if new Date(newsletter.timestamps?.published_at || new Date()) > new Date('2023-01-01')}
+  {#if new Date(newsletter.publishedAt || new Date()) > new Date('2023-01-01')}
     <EmailNewsletter3 {newsletter} bind:element={newsletterElement} />
   {:else}
     <EmailNewsletter2 {newsletter} bind:element={newsletterElement} />

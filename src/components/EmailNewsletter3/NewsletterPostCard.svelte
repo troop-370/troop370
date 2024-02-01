@@ -1,41 +1,22 @@
 <script lang="ts">
-  import { HardBreak } from '$pm/render/HardBreak';
-  import { Newsletter3Link } from '$pm/render/Newsletter3Link';
   import { capitalize } from '$utils';
-  import { isJSON } from '$utils/isJSON';
-  import Renderer from '@cristata/prosemirror-to-html-js';
+  import { renderBlock, type Node } from 'blocks-html-renderer';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
   import { Number } from '.';
 
   export let name: string | undefined = undefined;
   export let description: string | undefined = undefined;
-  export let body: string;
-  export let type: 'markdown' | 'prosemirror';
+  export let body: Node[];
   export let number: number;
   export let category: string;
 
-  let processedHtml = body;
+  let processedHtml = `<code>JSON.stringify(body)</code>`;
   $: {
     if (DOMParser) {
-      let html: string | undefined = undefined;
+      const html = renderBlock(body);
 
-      if (type === 'markdown') {
-        marked.setOptions(marked.getDefaults());
-        html = marked.parse(body);
-      }
-
-      if (type === 'prosemirror') {
-        const renderer = new Renderer.Renderer();
-        renderer.addMark(Newsletter3Link);
-        renderer.addNode(HardBreak);
-        html = renderer.render({
-          type: 'doc',
-          content: isJSON(body) ? JSON.parse(body) : [],
-        });
-      }
-
-      if (html && type === 'markdown') {
+      if (html) {
         const dom = new DOMParser().parseFromString(html, 'text/html');
 
         /**
@@ -66,9 +47,9 @@
           }
         });
 
-        processedHtml = dom.toString() || html || body || '';
+        processedHtml = dom.toString() || html || '';
       } else {
-        processedHtml = html || body || '';
+        processedHtml = html || '';
       }
     }
   }
