@@ -1,37 +1,21 @@
 <script lang="ts">
   import { formatISODate, listOxford } from '$utils';
-  import { isJSON } from '$utils/isJSON';
-  import Renderer from '@cristata/prosemirror-to-html-js';
   import Button, { Icon } from '@smui/button';
+  import { renderBlock, type Node } from 'blocks-html-renderer';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
-
-  const renderer = new Renderer.Renderer();
 
   export let name: string;
   export let href: string;
   export let authors: string[];
   export let date: Date | undefined = undefined;
-  export let body: string;
+  export let body: Node[];
   export let buttonText = 'Read more';
   export let hasPassword = false;
-  export let type: 'markdown' | 'prosemirror';
 
   let previewText = body.slice(0, 200) + '…';
   if (DOMParser) {
-    let html: string | undefined = undefined;
-
-    if (type === 'markdown') {
-      marked.setOptions(marked.getDefaults());
-      html = marked.parse(body);
-    }
-
-    if (type === 'prosemirror') {
-      html = renderer.render({
-        type: 'doc',
-        content: isJSON(body) ? JSON.parse(body) : [],
-      });
-    }
+    const html = renderBlock(body.filter((node) => node.type === 'paragraph'));
 
     if (html) {
       const dom = new DOMParser().parseFromString(html, 'text/html');
@@ -43,9 +27,9 @@
         }
       });
 
-      previewText = _text.slice(0, 200) + '…' || body.slice(0, 200) + '…' || '';
+      previewText = _text.slice(0, 200) + '…' || '';
     } else {
-      previewText = body.slice(0, 200) + '…' || '';
+      previewText = '';
     }
   }
 </script>

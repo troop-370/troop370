@@ -5,12 +5,9 @@
   import { title } from '$stores/title';
   import { notEmpty } from '$utils';
   import Button from '@smui/button/src/Button.svelte';
-  import Ripple from '@smui/ripple';
-  import type { PageData } from './$houdini';
   import CategoriesList from './CategoriesList.svelte';
 
-  export let data: PageData;
-  $: ({ Posts } = data);
+  export let data;
 
   title.set('Posts');
 
@@ -34,12 +31,19 @@
         <a href="/posts">Show all posts</a>
       </div>
     {/if}
-    {#if $Posts.data?.postsPublic?.docs}
-      {#each $Posts.data.postsPublic.docs as post}
+    {#if data.posts.docs}
+      {#each data.posts.docs as post}
         {#if post}
-          {@const date = post.timestamps ? new Date(post.timestamps.published_at) : undefined}
-          {@const datePath = date
-            ? `/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDay() + 1}`
+          {@const date = post.timestamps.published_at
+            ? new Date(post.timestamps.published_at)
+            : undefined}
+          {@const shortDate = post.timestamps.short_published_at
+            ? new Date(post.timestamps.short_published_at)
+            : undefined}
+          {@const datePath = shortDate
+            ? `/${shortDate.getUTCFullYear()}/${
+                shortDate.getUTCMonth() + 1
+              }/${shortDate.getUTCDate()}`
             : ''}
           <PostCard
             name={post.name}
@@ -49,13 +53,12 @@
             body={post.body}
             buttonText={post.button_text}
             hasPassword={post.enable_password_protection}
-            type={post.legacy_markdown ? 'markdown' : 'prosemirror'}
           />
         {/if}
       {/each}
     {/if}
     <div class="nav">
-      {#if $Posts.data?.postsPublic?.hasPrevPage}
+      {#if data.posts.hasPrevPage}
         <Button
           variant="outlined"
           href="/posts/category/{$page.params.category}/{parseInt($page.params.page) - 1}"
@@ -63,7 +66,7 @@
           Previous page
         </Button>
       {/if}
-      {#if $Posts.data?.postsPublic?.hasNextPage}
+      {#if data.posts.hasNextPage}
         <Button
           variant="outlined"
           href="/posts/category/{$page.params.category}/{parseInt($page.params.page) + 1}"

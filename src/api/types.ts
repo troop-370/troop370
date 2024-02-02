@@ -2148,6 +2148,8 @@ export interface components {
                   }[];
               };
               relationLabel?: string;
+              /** Format: date */
+              shortPublishedAt?: string;
               /** Format: date-time */
               createdAt?: string;
               /** Format: date-time */
@@ -2412,6 +2414,8 @@ export interface components {
         slug: string;
         tags?: (number | string)[];
         relationLabel?: string;
+        /** Format: date */
+        shortPublishedAt?: string;
       };
     };
     PostListResponseDataItem: {
@@ -2580,6 +2584,8 @@ export interface components {
           }[];
       };
       relationLabel?: string;
+      /** Format: date */
+      shortPublishedAt?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
