@@ -6,6 +6,7 @@ const getContentPages = apity.path('/pages').method('get').create();
 
 export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
   const { redirects, session } = await parent();
+  const previewId = url.searchParams.get('previewId');
 
   // check for redirects
   const foundRedirect = redirects.find((redirect) => {
@@ -25,7 +26,11 @@ export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
 
   // get the page with the matching path
   const { result } = getContentPages(
-    { filters: { path: { $eq: matchPath } }, populate: 'quick_links' },
+    {
+      filters: { path: matchPath, previewId },
+      publicationState: previewId ? 'preview' : 'live',
+      populate: 'quick_links',
+    },
     fetch
   );
   const resolved = await result;

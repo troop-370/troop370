@@ -7,6 +7,8 @@ import type { PageServerLoad } from './$types';
 const getPosts = apity.path('/posts').method('get').create();
 
 export const load: PageServerLoad = async ({ params, parent, url }) => {
+  const previewId = url.searchParams.get('previewId');
+
   const date = new Date(`${params.yyyy}/${params.mm}/${params.dd}`);
   date.setUTCHours(0, 0, 0, 0);
   const shortDate = date.toISOString().split('T')[0];
@@ -14,8 +16,9 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   const { result } = getPosts(
     {
       sort: 'shortPublishedAt:desc',
-      filters: { slug: params.slug, shortPublishedAt: shortDate },
+      filters: { slug: params.slug, shortPublishedAt: shortDate, previewId },
       populate: 'category, tags',
+      publicationState: previewId ? 'preview' : 'live',
     },
     fetch
   );

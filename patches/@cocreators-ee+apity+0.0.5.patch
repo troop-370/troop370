@@ -73,7 +73,7 @@ index b32f279..d26408c 100644
 +export { };
 +
 diff --git a/node_modules/@cocreators-ee/apity/dist/types.d.ts b/node_modules/@cocreators-ee/apity/dist/types.d.ts
-index 7acfd3b..87527cc 100644
+index 7acfd3b..a148d19 100644
 --- a/node_modules/@cocreators-ee/apity/dist/types.d.ts
 +++ b/node_modules/@cocreators-ee/apity/dist/types.d.ts
 @@ -17,7 +17,10 @@ export type OpArgType<OP> = OP extends {
@@ -81,7 +81,7 @@ index 7acfd3b..87527cc 100644
          };
      };
 -} ? P & Q & (B extends Record<string, unknown> ? B[keyof B] : unknown) & RB : Record<string, never>;
-+} ? P & Omit<Q, 'filters'> & (B extends Record<string, unknown> ? B[keyof B] : unknown) & RB & StrapiFilters : Record<string, never>;
++} ? P & Omit<Q, 'filters'> & (B extends Record<string, unknown> ? B[keyof B] : unknown) & RB & StrapiFilters & { publicationState?: 'preview' | 'live' } : Record<string, never>;
 +type StrapiFilters = {
 +    filters?: Record<string, unknown>;
 +};

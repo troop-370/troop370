@@ -5,10 +5,13 @@ import type { PageServerLoad } from './$types';
 const getEmailNewsletters = apity.path('/newsletters').method('get').create();
 
 export const load: PageServerLoad = async ({ params, parent, url }) => {
+  const previewId = url.searchParams.get('previewId');
+
   // get the page with the matching path
   const { result } = getEmailNewsletters(
     {
-      filters: { object_id: { $eq: params._id } },
+      filters: { object_id: params._id, previewId },
+      publicationState: previewId ? 'preview' : 'live',
       populate:
         'version2, version3.pinned_mini_posts, version3.announcements, version3.past_announcements',
     },
