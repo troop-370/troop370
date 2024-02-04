@@ -2167,6 +2167,7 @@ export interface components {
               /** Format: date */
               shortPublishedAt?: string;
               previewId?: string;
+              submitted_by?: string;
               /** Format: date-time */
               createdAt?: string;
               /** Format: date-time */
@@ -2437,6 +2438,7 @@ export interface components {
         /** Format: date */
         shortPublishedAt?: string;
         previewId?: string;
+        submitted_by: string;
       };
     };
     PostListResponseDataItem: {
@@ -2609,6 +2611,7 @@ export interface components {
       /** Format: date */
       shortPublishedAt?: string;
       previewId?: string;
+      submitted_by: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */

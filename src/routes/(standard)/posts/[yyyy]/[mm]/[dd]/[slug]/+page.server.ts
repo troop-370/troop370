@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
     timestamps: {
       published_at: post.publishedAt,
     },
-    submitted_by: [],
+    submitted_by: post.submitted_by?.split(';').map((name) => name.trim()) || [],
     name: post.title,
     body: addRippleDiv(parseBody(post.body as Node[])),
     enable_password_protection: post.enable_password_protection,

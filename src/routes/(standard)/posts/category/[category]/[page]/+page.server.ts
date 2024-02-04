@@ -31,7 +31,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
           published_at: d.publishedAt,
           short_published_at: d.shortPublishedAt,
         },
-        submitted_by: ['IDK'],
+        submitted_by: d.submitted_by?.split(';').map((name) => name.trim()) || [],
         name: d.title,
         body: d.body as Node[],
         button_text: d.button_text || 'Read more',
