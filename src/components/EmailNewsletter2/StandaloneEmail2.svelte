@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { StandaloneEmail$result } from '$houdini';
+  import type { ApiTypes } from '$api';
   import { formatISODate } from '$utils';
   import {
     BackgroundTable,
@@ -10,7 +10,7 @@
     NewsletterPostCard,
   } from '.';
 
-  export let email: NonNullable<StandaloneEmail$result['standaloneEmailPublic']>;
+  export let email: ApiTypes['manualSchemas']['StandaloneEmail'];
   export let element: HTMLHtmlElement | undefined = undefined;
 </script>
 
@@ -93,10 +93,7 @@
         </tr>
         <tr>
           <td>
-            <NewsletterPostCard
-              body={email.body}
-              type={email.legacy_markdown === true ? 'markdown' : 'prosemirror'}
-            />
+            <NewsletterPostCard body={email.body} />
           </td>
         </tr>
         <tr>

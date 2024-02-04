@@ -70,6 +70,15 @@ export interface paths {
     put: operations["put/redirects/{id}"];
     delete: operations["delete/redirects/{id}"];
   };
+  "/standalone-emails": {
+    get: operations["get/standalone-emails"];
+    post: operations["post/standalone-emails"];
+  };
+  "/standalone-emails/{id}": {
+    get: operations["get/standalone-emails/{id}"];
+    put: operations["put/standalone-emails/{id}"];
+    delete: operations["delete/standalone-emails/{id}"];
+  };
   "/tags": {
     get: operations["get/tags"];
     post: operations["post/tags"];
@@ -1942,6 +1951,9 @@ export interface components {
         name: string;
         manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
         object_id?: string;
+        /** Format: date */
+        shortPublishedAt?: string;
+        previewId?: string;
       };
     };
     NewsletterListResponseDataItem: {
@@ -1965,6 +1977,9 @@ export interface components {
       name: string;
       manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
       object_id?: string;
+      /** Format: date */
+      shortPublishedAt?: string;
+      previewId?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -2148,8 +2163,10 @@ export interface components {
                   }[];
               };
               relationLabel?: string;
+              object_id?: string;
               /** Format: date */
               shortPublishedAt?: string;
+              previewId?: string;
               /** Format: date-time */
               createdAt?: string;
               /** Format: date-time */
@@ -2248,6 +2265,7 @@ export interface components {
         center_text?: boolean;
         show_table_of_contents?: boolean;
         cristata_id?: string;
+        previewId?: string;
       };
     };
     PageListResponseDataItem: {
@@ -2277,6 +2295,7 @@ export interface components {
       center_text?: boolean;
       show_table_of_contents?: boolean;
       cristata_id?: string;
+      previewId?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -2414,8 +2433,10 @@ export interface components {
         slug: string;
         tags?: (number | string)[];
         relationLabel?: string;
+        object_id?: string;
         /** Format: date */
         shortPublishedAt?: string;
+        previewId?: string;
       };
     };
     PostListResponseDataItem: {
@@ -2584,8 +2605,10 @@ export interface components {
           }[];
       };
       relationLabel?: string;
+      object_id?: string;
       /** Format: date */
       shortPublishedAt?: string;
+      previewId?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -2753,6 +2776,164 @@ export interface components {
     };
     RedirectResponse: {
       data?: components["schemas"]["RedirectResponseDataObject"];
+      meta?: Record<string, never>;
+    };
+    StandaloneEmailRequest: {
+      data: {
+        name: string;
+        sender_name: string;
+        /** Format: date */
+        header_date: string;
+        body: unknown;
+        object_id?: string;
+        /** Format: date */
+        shortPublishedAt?: string;
+        previewId?: string;
+      };
+    };
+    StandaloneEmailListResponseDataItem: {
+      id?: number;
+      attributes?: components["schemas"]["StandaloneEmail"];
+    };
+    StandaloneEmailListResponse: {
+      data?: components["schemas"]["StandaloneEmailListResponseDataItem"][];
+      meta?: {
+        pagination?: {
+          page?: number;
+          pageSize?: number;
+          pageCount?: number;
+          total?: number;
+        };
+      };
+    };
+    StandaloneEmail: {
+      name: string;
+      sender_name: string;
+      /** Format: date */
+      header_date: string;
+      body: unknown;
+      object_id?: string;
+      /** Format: date */
+      shortPublishedAt?: string;
+      previewId?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
+      createdBy?: {
+        data?: {
+          id?: number;
+          attributes?: {
+            firstname?: string;
+            lastname?: string;
+            username?: string;
+            /** Format: email */
+            email?: string;
+            resetPasswordToken?: string;
+            registrationToken?: string;
+            isActive?: boolean;
+            roles?: {
+              data?: {
+                  id?: number;
+                  attributes?: {
+                    name?: string;
+                    code?: string;
+                    description?: string;
+                    users?: {
+                      data?: {
+                          id?: number;
+                          attributes?: Record<string, never>;
+                        }[];
+                    };
+                    permissions?: {
+                      data?: {
+                          id?: number;
+                          attributes?: {
+                            action?: string;
+                            actionParameters?: unknown;
+                            subject?: string;
+                            properties?: unknown;
+                            conditions?: unknown;
+                            role?: {
+                              data?: {
+                                id?: number;
+                                attributes?: Record<string, never>;
+                              };
+                            };
+                            /** Format: date-time */
+                            createdAt?: string;
+                            /** Format: date-time */
+                            updatedAt?: string;
+                            createdBy?: {
+                              data?: {
+                                id?: number;
+                                attributes?: Record<string, never>;
+                              };
+                            };
+                            updatedBy?: {
+                              data?: {
+                                id?: number;
+                                attributes?: Record<string, never>;
+                              };
+                            };
+                          };
+                        }[];
+                    };
+                    /** Format: date-time */
+                    createdAt?: string;
+                    /** Format: date-time */
+                    updatedAt?: string;
+                    createdBy?: {
+                      data?: {
+                        id?: number;
+                        attributes?: Record<string, never>;
+                      };
+                    };
+                    updatedBy?: {
+                      data?: {
+                        id?: number;
+                        attributes?: Record<string, never>;
+                      };
+                    };
+                  };
+                }[];
+            };
+            blocked?: boolean;
+            preferedLanguage?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            createdBy?: {
+              data?: {
+                id?: number;
+                attributes?: Record<string, never>;
+              };
+            };
+            updatedBy?: {
+              data?: {
+                id?: number;
+                attributes?: Record<string, never>;
+              };
+            };
+          };
+        };
+      };
+      updatedBy?: {
+        data?: {
+          id?: number;
+          attributes?: Record<string, never>;
+        };
+      };
+    };
+    StandaloneEmailResponseDataObject: {
+      id?: number;
+      attributes?: components["schemas"]["StandaloneEmail"];
+    };
+    StandaloneEmailResponse: {
+      data?: components["schemas"]["StandaloneEmailResponseDataObject"];
       meta?: Record<string, never>;
     };
     TagRequest: {
@@ -4812,6 +4993,255 @@ export interface operations {
     };
   };
   "delete/redirects/{id}": {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": number;
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "get/standalone-emails": {
+    parameters: {
+      query?: {
+        /** @description Sort by attributes ascending (asc) or descending (desc) */
+        sort?: string;
+        /** @description Return page/pageSize (default: true) */
+        "pagination[withCount]"?: boolean;
+        /** @description Page number (default: 0) */
+        "pagination[page]"?: number;
+        /** @description Page size (default: 25) */
+        "pagination[pageSize]"?: number;
+        /** @description Offset value (default: 0) */
+        "pagination[start]"?: number;
+        /** @description Number of entities to return (default: 25) */
+        "pagination[limit]"?: number;
+        /** @description Fields to return (ex: title,author) */
+        fields?: string;
+        /** @description Relations to return */
+        populate?: string;
+        /** @description Filters to apply */
+        filters?: Record<string, never>;
+        /** @description Locale to apply */
+        locale?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StandaloneEmailListResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "post/standalone-emails": {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StandaloneEmailRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StandaloneEmailResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "get/standalone-emails/{id}": {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StandaloneEmailResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "put/standalone-emails/{id}": {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StandaloneEmailRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StandaloneEmailResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  "delete/standalone-emails/{id}": {
     parameters: {
       path: {
         id: number;
