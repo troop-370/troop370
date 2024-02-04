@@ -56,13 +56,13 @@
           // },
           {
             name: 'Youth Registration Instructions',
-            mime: 'url',
+            ext: 'url',
             size: 0,
             url: 'https://troop370atlanta.org/join',
           },
           {
             name: 'Adult Registration Instructions',
-            mime: 'url',
+            ext: 'url',
             size: 0,
             url: 'https://troop370atlanta.org/join',
           },
@@ -95,9 +95,13 @@
           </thead>
           <tbody>
             {#each group.documents.filter(notEmpty) as doc}
-              {@const name = doc.name?.split('.').slice(0, -1).join('.') || ''}
+              {@const name =
+                doc.alternativeText ||
+                doc.name?.split('.').slice(0, -1).join('.') ||
+                doc.name ||
+                ''}
               {@const slug = slugger.slug(name)}
-              {@const size_bytes = doc.size || 0}
+              {@const size_bytes = doc.size * 1000 || 0}
               {@const url = doc.url
                 ? doc.url.startsWith('/')
                   ? `${PUBLIC_API_URL.replace('/api', '')}${doc.url}`
