@@ -1,30 +1,9 @@
 <script lang="ts">
   import Banner from '$components/Banner.svelte';
-  import Card, { Content, Media, PrimaryAction } from '@smui/card';
-  import { z } from 'zod';
-  import type { PageData } from './$houdini';
+  import { PUBLIC_API_URL } from '$env/static/public';
+  import Card, { Content, PrimaryAction } from '@smui/card';
 
-  export let data: PageData;
-  $: ({ EventsPageConfig } = data);
-
-  const eventCardSchema = z
-    .object({
-      label: z.string().nullable(),
-      caption: z.string().nullable(),
-      path: z.string().nullable(),
-      photo_src: z.string().optional().nullable(),
-    })
-    .array();
-
-  $: cards = (() => {
-    if ($EventsPageConfig.data?.webConfigPublic?.config) {
-      const res = eventCardSchema.safeParse(
-        JSON.parse($EventsPageConfig.data.webConfigPublic.config)?.items
-      );
-      if (res.success) return res.data;
-      console.error(res.error);
-    }
-  })();
+  export let data;
 </script>
 
 <Banner>
@@ -35,17 +14,19 @@
   </p>
 </Banner>
 
-{#if cards}
+{#if data.eventCards}
   <div class="grid">
-    {#each cards as card}
+    {#each data.eventCards as card}
+      {@const photoUrl = card.photo?.data?.attributes?.url}
+      {@const src = photoUrl
+        ? photoUrl.startsWith('/')
+          ? `${PUBLIC_API_URL.replace('/api', '')}${photoUrl}`
+          : photoUrl
+        : 'https://troop370atlanta.org/photos/backgrounds/bright-daytime-winter.jpg'}
       <a href={card.path || './'}>
         <Card>
           <PrimaryAction>
-            <img
-              alt=""
-              src={card.photo_src ||
-                'https://troop370atlanta.org/photos/backgrounds/bright-daytime-winter.jpg'}
-            />
+            <img alt="" {src} />
             <Content>
               <h2>{card.label}</h2>
               <p>{card.caption}</p>
