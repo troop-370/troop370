@@ -3,7 +3,7 @@ import type { NavigationGroup, NavigationGroupItem } from '$components/TopNaviga
 import { PROTECTED_PAGE_PASSWORD } from '$env/static/private';
 import { notEmpty, parseDoc } from '$utils';
 import { error } from '@sveltejs/kit';
-import type { LayoutServerLoad } from './$houdini';
+import type { LayoutServerLoad } from './$types';
 
 const getRedirects = apity.path('/redirects').method('get').create();
 const getNavigation = apity.path('/navigation').method('get').create();

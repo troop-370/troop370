@@ -5,9 +5,8 @@
   import { EmailNewsletter3 } from '$components/EmailNewsletter3';
   import { hasKey } from '$utils';
   import Button, { Icon, Label } from '@smui/button';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
+  export let data;
   $: newsletter = data.newsletter;
 
   let newsletterElement: HTMLHtmlElement;

@@ -10,7 +10,6 @@ const config = {
   kit: {
     adapter: adapter(),
     alias: {
-      $houdini: './$houdini',
       $utils: './src/utils',
       $stores: './src/stores',
       $components: './src/components',

@@ -3,7 +3,6 @@
   import PhotoCarousel from '$components/PhotoCarousel.svelte';
   import { notEmpty } from '$utils';
   import Button, { Label } from '@smui/button';
-  import type { PageData } from './$houdini';
 
   export let data;
 </script>

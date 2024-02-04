@@ -4,9 +4,8 @@
   import NewsletterCard from '$components/NewsletterCard.svelte';
   import { title } from '$stores/title';
   import Button from '@smui/button/src/Button.svelte';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
+  export let data;
 
   title.set('Newsletter Archive');
 
