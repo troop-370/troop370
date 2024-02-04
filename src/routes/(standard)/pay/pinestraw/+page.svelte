@@ -18,7 +18,7 @@
 
   let active = 'Pine Straw';
 
-  $: [, _bodyMD] = Markdown.parse(data.page.body || '');
+  $: [, _bodyMD] = Markdown.parse(data.page?.body || '');
 
   $: bodyMD = (() => {
     let bodyMD = _bodyMD;

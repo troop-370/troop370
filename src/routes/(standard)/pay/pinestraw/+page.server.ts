@@ -18,10 +18,7 @@ export const load: PageServerLoad = async ({ fetch, parent, url }) => {
     fetch
   );
   const resolved = await result;
-  if (!resolved.ok) throw error(resolved.status, 'server error');
-  if (!resolved.data.data || resolved.data.data.length < 1) throw error(404, 'not found');
-  if (!resolved.data.data[0].attributes) throw error(404, 'missing');
-  const page = resolved.data.data[0].attributes;
+  const page = resolved?.data?.data?.[0]?.attributes;
 
   return {
     page: page,
