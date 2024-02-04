@@ -105,5 +105,4 @@ function addRippleDiv(body: string) {
       ' class="mdc-button">',
       ' class="mdc-button"><span class="mdc-button__ripple"></span>'
     );
-  console.log(body);
 }

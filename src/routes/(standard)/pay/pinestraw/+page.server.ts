@@ -23,8 +23,6 @@ export const load: PageServerLoad = async ({ fetch, parent, url }) => {
   if (!resolved.data.data[0].attributes) throw error(404, 'missing');
   const page = resolved.data.data[0].attributes;
 
-  console.log(page);
-
   return {
     page: page,
     authStrings: session.authStrings,

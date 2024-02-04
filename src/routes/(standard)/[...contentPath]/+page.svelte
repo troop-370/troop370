@@ -5,8 +5,6 @@
   export let data;
 
   $: title.set(data.page.title);
-
-  $: console.log(data.page.quick_links);
 </script>
 
 {#if data.page}

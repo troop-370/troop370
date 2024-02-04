@@ -15,7 +15,5 @@ export const load: PageServerLoad = async ({ params, url }) => {
   const eventCards = resolved.data.data.attributes?.nav_items;
   if (!eventCards) throw error(404, 'items not found');
 
-  console.log(eventCards[0].photo?.data?.attributes?.url);
-
   return { eventCards };
 };

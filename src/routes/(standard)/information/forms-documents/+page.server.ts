@@ -16,7 +16,5 @@ export const load: PageServerLoad = async ({ params, url }) => {
   const fileGroups = resolved.data.data.attributes?.file_group;
   if (!fileGroups) throw error(404, 'file groups not found');
 
-  console.log(fileGroups);
-
   return { fileGroups };
 };
