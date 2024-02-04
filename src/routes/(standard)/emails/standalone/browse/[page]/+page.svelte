@@ -4,10 +4,8 @@
   import NewsletterCard from '$components/NewsletterCard.svelte';
   import { title } from '$stores/title';
   import Button from '@smui/button/src/Button.svelte';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: ({ StandaloneEmails } = data);
+  export let data;
 
   title.set('Standalone Email Archive');
 
@@ -22,24 +20,26 @@
 
 <div class="grid">
   <div>
-    {#if $StandaloneEmails.data?.standaloneEmailsPublic?.docs}
-      {#each $StandaloneEmails.data.standaloneEmailsPublic.docs as email}
+    {#if data.standaloneEmails.docs}
+      {#each data.standaloneEmails.docs as email}
         {#if email}
           <NewsletterCard
             name={email.name}
             href="/emails/standalone/{email._id}"
-            date={email.timestamps ? new Date(email.timestamps.published_at) : undefined}
+            date={email.timestamps.published_at
+              ? new Date(email.timestamps.published_at)
+              : undefined}
           />
         {/if}
       {/each}
     {/if}
     <div class="nav">
-      {#if $StandaloneEmails.data?.standaloneEmailsPublic?.hasPrevPage}
+      {#if data.standaloneEmails.hasPrevPage}
         <Button variant="outlined" href="/newsletters/browse/{parseInt($page.params.page) - 1}">
           Previous page
         </Button>
       {/if}
-      {#if $StandaloneEmails.data?.standaloneEmailsPublic?.hasNextPage}
+      {#if data.standaloneEmails.hasNextPage}
         <Button variant="outlined" href="/newsletters/browse/{parseInt($page.params.page) + 1}">
           Next page
         </Button>

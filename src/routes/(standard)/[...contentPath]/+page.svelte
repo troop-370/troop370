@@ -1,17 +1,12 @@
 <script lang="ts">
   import { ContentPageTemplate } from '$components/ContentPage';
   import { title } from '$stores/title';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: ({ ContentPage } = data);
-  $: pageData = $ContentPage.data?.contentBySlugPublic;
+  export let data;
 
-  $: title.set(pageData?.name);
+  $: title.set(data.page.title);
 </script>
 
-{#if pageData}
-  <ContentPageTemplate data={pageData} authStrings={data.authStrings} />
-{:else if $ContentPage.errors}
-  Something went wrong
+{#if data.page}
+  <ContentPageTemplate data={data.page} authStrings={data.authStrings} />
 {/if}

@@ -6,18 +6,13 @@
   import { MDCRipple } from '@material/ripple';
   import { marked } from 'marked';
   import { afterUpdate } from 'svelte';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: ({ Post, html } = data);
-  $: post = $Post.data?.postBySlugPublic;
+  export let data;
 
-  $: {
-    if (post) title.set(post.name);
-  }
+  $: if (data.post) title.set(data.post.name);
 
   afterUpdate(() => {
-    if (browser && html) {
+    if (browser && data.post.body) {
       const buttonElems = document.querySelectorAll('.mdc-button');
       buttonElems.forEach((buttonElem) => {
         MDCRipple.attachTo(buttonElem);
@@ -26,25 +21,27 @@
   });
 </script>
 
-{#if post}
+{#if data.post}
   <article>
     <Banner>
-      <h1>{@html marked.parseInline(post.name)}</h1>
-      <p>{@html marked.parseInline(post.description)}</p>
+      <h1>{@html marked.parseInline(data.post.name)}</h1>
+      {#if data.post.description}
+        <p>{@html marked.parseInline(data.post.description)}</p>
+      {/if}
     </Banner>
 
     <div id="main-content">
       <p class="meta">
         Posted
-        {#if post.submitted_by && post.submitted_by.filter(notEmpty).length > 0}
-          by {listOxford(post.submitted_by.filter(notEmpty))}
+        {#if data.post.submitted_by && data.post.submitted_by.filter(notEmpty).length > 0}
+          by {listOxford(data.post.submitted_by.filter(notEmpty))}
         {/if}
-        {#if post.timestamps?.published_at}
-          on {formatISODate(post.timestamps.published_at, true, true, false)}
+        {#if data.post.timestamps?.published_at}
+          on {formatISODate(data.post.timestamps.published_at, true, true, false)}
         {/if}
       </p>
 
-      {@html html}
+      {@html data.post.body}
     </div>
   </article>
 {/if}
@@ -95,5 +92,9 @@
   }
   article :global(a:focus-visible:not(.mdc-button)) {
     box-shadow: 0 0 0 2px var(--color-primary);
+  }
+
+  article :global(img) {
+    width: 100%;
   }
 </style>

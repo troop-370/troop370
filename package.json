@@ -11,7 +11,8 @@
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
     "prepare": "npm run smui-theme",
-    "smui-theme": "smui-theme compile static/smui.css -i src/theme"
+    "smui-theme": "smui-theme compile static/smui.css -i src/theme",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@smui-extra/accordion": "^7.0.0-beta.0",
@@ -42,8 +43,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "graphql": "^15.8.0",
-    "houdini": "^0.18.0",
-    "houdini-svelte": "^0.18.0",
     "prettier": "^2.6.2",
     "prettier-plugin-svelte": "^2.7.0",
     "smui-theme": "^7.0.0-beta.0",
@@ -58,10 +57,12 @@
   "dependencies": {
     "@cocreators-ee/apity": "^0.0.5",
     "@cristata/prosemirror-to-html-js": "^3.1.0",
+    "blocks-html-renderer": "^1.0.4",
     "css-inliner": "^2.0.0",
     "luxon": "^3.1.0",
     "marked": "^4.2.2",
     "nprogress": "^0.2.0",
+    "patch-package": "^8.0.0",
     "rrule": "^2.7.1",
     "svelte-kit-cookie-session": "^3.2.2",
     "xmldom": "^0.6.0",

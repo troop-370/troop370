@@ -1,18 +1,18 @@
 <script lang="ts">
+  import type { ApiTypes } from '$api';
   import { notEmpty } from '$utils';
   import { marked } from 'marked';
   import { CardTable, ContainerTable } from '.';
 
   export let label: string;
-  export let posts: {
-    name: string;
-    description: string;
-    button_text: string;
-    slug: string | null | undefined;
-  }[];
+  export let posts: NonNullable<
+    NonNullable<ApiTypes['manualSchemas']['Newsletter']['version2']>['fundraiser_mini_posts']
+  >['data'];
+
+  $: _posts = (posts || []).map(({ attributes }) => attributes).filter(notEmpty);
 </script>
 
-{#if posts.filter(notEmpty).length > 0}
+{#if _posts.length > 0}
   <tr>
     <td>
       <CardTable>
@@ -24,15 +24,17 @@
                   <h2>{label}</h2>
                 </td>
               </tr>
-              {#each posts as post}
+              {#each _posts as post}
                 <tr>
                   <td>
-                    <h3>{@html marked.parseInline(post.name)}</h3>
-                    <p>{@html marked.parseInline(post.description)}</p>
+                    <h3>{@html marked.parseInline(post.title || '')}</h3>
+                    <p>{@html marked.parseInline(post.subtitle || '')}</p>
                   </td>
-                  <td class="button-td" width={124}>
-                    <a href="https://troop370atlanta.org/posts/{post.slug}">{post.button_text}</a>
-                  </td>
+                  {#if post.slug}
+                    <td class="button-td" width={124}>
+                      <a href="https://troop370atlanta.org/posts/{post.slug}">{post.button_text}</a>
+                    </td>
+                  {/if}
                 </tr>
               {/each}
             </ContainerTable>

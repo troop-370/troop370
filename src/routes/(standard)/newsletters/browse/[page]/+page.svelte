@@ -2,14 +2,10 @@
   import { page } from '$app/stores';
   import Banner from '$components/Banner.svelte';
   import NewsletterCard from '$components/NewsletterCard.svelte';
-  import PostCard from '$components/PostCard.svelte';
   import { title } from '$stores/title';
-  import { notEmpty } from '$utils';
   import Button from '@smui/button/src/Button.svelte';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: ({ Newsletters } = data);
+  export let data;
 
   title.set('Newsletter Archive');
 
@@ -24,24 +20,26 @@
 
 <div class="grid">
   <div>
-    {#if $Newsletters.data?.newslettersPublic?.docs}
-      {#each $Newsletters.data.newslettersPublic.docs as newsletter}
+    {#if data.newsletters.docs}
+      {#each data.newsletters.docs as newsletter}
         {#if newsletter}
           <NewsletterCard
             name={newsletter.name}
             href="/newsletters/{newsletter._id}"
-            date={newsletter.timestamps ? new Date(newsletter.timestamps.published_at) : undefined}
+            date={newsletter.timestamps?.published_at
+              ? new Date(newsletter.timestamps.published_at)
+              : undefined}
           />
         {/if}
       {/each}
     {/if}
     <div class="nav">
-      {#if $Newsletters.data?.newslettersPublic?.hasPrevPage}
+      {#if data.newsletters.hasPrevPage}
         <Button variant="outlined" href="/newsletters/browse/{parseInt($page.params.page) - 1}">
           Previous page
         </Button>
       {/if}
-      {#if $Newsletters.data?.newslettersPublic?.hasNextPage}
+      {#if data.newsletters.hasNextPage}
         <Button variant="outlined" href="/newsletters/browse/{parseInt($page.params.page) + 1}">
           Next page
         </Button>

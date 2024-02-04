@@ -1,0 +1,51 @@
+diff --git a/node_modules/@cocreators-ee/apity/dist/fetcher.js b/node_modules/@cocreators-ee/apity/dist/fetcher.js
+index 8399670..6b5c289 100644
+--- a/node_modules/@cocreators-ee/apity/dist/fetcher.js
++++ b/node_modules/@cocreators-ee/apity/dist/fetcher.js
+@@ -37,11 +37,37 @@ function getQuery(method, payload, query) {
+             delete payload[key];
+         });
+     }
++    // support filters from strapi endpoints
++    else if (payload.filters) {
++        const { filters, ...rest } = payload;
++        queryObj = {  ...rest };
++        Object.entries(flattenObj(filters)).forEach(([key, value]) => {
++            queryObj[convertDotsToBrackets(`filters.${key}`)] = value
++        })
++    }
+     else {
+         queryObj = { ...payload };
+     }
+     return queryString(queryObj);
+ }
++
++function isPlainObj(o) {
++    return o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf")
++}
++
++function flattenObj(obj, keys=[]) {
++    return Object.keys(obj).reduce((acc, key) => {
++        return Object.assign(acc, isPlainObj(obj[key]) 
++            ? flattenObj(obj[key], keys.concat(key))
++            : {[keys.concat(key).join(".")]: obj[key]}
++        )
++    }, {})
++}
++
++function convertDotsToBrackets(str) {
++    return str.replace(/\.(.+?)(?=\.|$)/g, (m, s) => `[${s}]`)
++}
++
+ function getHeaders(body, init) {
+     const headers = new Headers(init);
+     if (body !== undefined && !headers.has('Content-Type')) {
+@@ -83,7 +109,7 @@ export function getFetchParams(request) {
+     return { url, init };
+ }
+ async function getResponseData(response) {
+-    const contentType = response.headers.get('content-type');
++    const contentType = response.headers.get('content-type')?.split(';')?.[0]; // remove the encoding information;
+     if (response.status === 204) {
+         return undefined;
+     }

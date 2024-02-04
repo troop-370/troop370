@@ -3,11 +3,8 @@
   import { page } from '$app/stores';
   import { StandaloneEmail2 } from '$components/EmailNewsletter2';
   import Button, { Icon, Label } from '@smui/button';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: ({ StandaloneEmail } = data);
-  $: email = $StandaloneEmail.data?.standaloneEmailPublic;
+  export let data;
 
   let emailElement: HTMLHtmlElement;
 
@@ -61,14 +58,14 @@
       })
       .then(async (res) => {
         const text = await res.text();
-        if (email?.name) sessionStorage.setItem('email.subject', email.name);
+        sessionStorage.setItem('email.subject', data.email.name);
         sessionStorage.setItem('email.body', text);
         goto('/email/secure/send');
       });
   };
 </script>
 
-{#if email}
+{#if data.email}
   <div>
     <Button on:click={() => window.print()} variant="outlined">
       <Icon class="material-icons">printer</Icon>
@@ -93,7 +90,7 @@
       </Button>
     {/if}
   </div>
-  <StandaloneEmail2 {email} bind:element={emailElement} />
+  <StandaloneEmail2 email={data.email} bind:element={emailElement} />
 {/if}
 
 <style>
