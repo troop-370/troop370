@@ -1,5 +1,6 @@
 import type { Node } from 'blocks-html-renderer';
 import { Renderer, marked } from 'marked';
+import { notEmpty } from './notEmpty';
 
 class MarkDown {
   #options: marked.MarkedOptions = {
@@ -31,11 +32,13 @@ class MarkDown {
   parse(md: string) {
     this.configure();
     const tokens = marked.lexer(md);
-    const converted = tokens
-      .flatMap(convertToBlock)
-      .filter((block): block is Node => JSON.stringify(block) !== JSON.stringify({}));
+    const converted = tokens.flatMap(convertToBlock).filter(notPlainObj);
     return converted;
   }
+}
+
+function notPlainObj(block: {}): block is Node {
+  return block && JSON.stringify(block) !== JSON.stringify({});
 }
 
 /**
@@ -49,26 +52,40 @@ function convertToBlock(token: marked.Tokens.Generic, merge: {} = {}): {}[] {
 
   if (token.type === 'heading') {
     return [
-      { type: 'heading', level: token.depth, children: token.tokens?.flatMap(convertToBlock) },
+      {
+        type: 'heading',
+        level: token.depth,
+        children: token.tokens?.flatMap(convertToBlock).filter(notPlainObj),
+      },
     ];
   }
 
   if (token.type === 'paragraph') {
-    return [{ type: 'paragraph', children: token.tokens?.flatMap(convertToBlock) }];
+    const children = token.tokens?.flatMap(convertToBlock).filter(notPlainObj);
+    return [
+      {
+        type: 'paragraph',
+        children: children && children.length > 0 ? children : [{ type: 'text', text: '' }],
+      },
+    ];
   }
 
   if (token.type === 'strong') {
-    return (token.tokens || []).flatMap((t) => convertToBlock(t, { bold: true, ...merge }));
+    return (token.tokens || [])
+      .flatMap((t) => convertToBlock(t, { bold: true, ...merge }))
+      .filter(notPlainObj);
   }
 
   if (token.type === 'em') {
-    return (token.tokens || []).flatMap((t) => convertToBlock(t, { italic: true, ...merge }));
+    return (token.tokens || [])
+      .flatMap((t) => convertToBlock(t, { italic: true, ...merge }))
+      .filter(notPlainObj);
   }
 
   if (token.type === 'del') {
-    return (token.tokens || []).flatMap((t) =>
-      convertToBlock(t, { strikethrough: true, ...merge })
-    );
+    return (token.tokens || [])
+      .flatMap((t) => convertToBlock(t, { strikethrough: true, ...merge }))
+      .filter(notPlainObj);
   }
 
   // there is no underline option here since markdown does not support underlines
@@ -88,13 +105,16 @@ function convertToBlock(token: marked.Tokens.Generic, merge: {} = {}): {}[] {
         url: token.href,
         children: (token.tokens || [])
           .flatMap(convertToBlock)
-          .map((block) => ({ ...block, ...merge })),
+          .map((block) => ({ ...block, ...merge }))
+          .filter(notPlainObj),
       },
     ];
   }
 
+  // blockquotes can only have inline text :(
+  // so we just remove blockquotes
   if (token.type === 'blockquote') {
-    return [{ type: 'quote', children: token.tokens?.flatMap(convertToBlock) }];
+    return (token.tokens || []).flatMap(convertToBlock).filter(notEmpty).filter(notPlainObj);
   }
 
   if (token.type === 'code') {
@@ -102,24 +122,40 @@ function convertToBlock(token: marked.Tokens.Generic, merge: {} = {}): {}[] {
   }
 
   if (token.type === 'list' && token.ordered === true) {
-    return [{ type: 'list', format: 'ordered', children: token.items?.flatMap(convertToBlock) }];
+    return [
+      {
+        type: 'list',
+        format: 'ordered',
+        children: token.items?.flatMap(convertToBlock).filter(notPlainObj),
+      },
+    ];
   }
 
   if (token.type === 'list' && token.ordered === false) {
-    return [{ type: 'list', format: 'unordered', children: token.items?.flatMap(convertToBlock) }];
+    return [
+      {
+        type: 'list',
+        format: 'unordered',
+        children: token.items?.flatMap(convertToBlock).filter(notPlainObj),
+      },
+    ];
   }
 
   if (token.type === 'list_item') {
     return [
       {
         type: 'list-item',
-        // @ts-expect-error it exists
-        children: token.tokens?.flatMap((token) => token.tokens?.flatMap(convertToBlock)),
+        children: token.tokens
+          // @ts-expect-error it exists
+          ?.flatMap((token) => token.tokens?.flatMap(convertToBlock).filter(notPlainObj))
+          .filter(notPlainObj),
       },
     ];
   }
 
   if (token.type === 'image') {
+    // we should not have any photos in the data we are importing
+    return [{}];
     return [
       {
         type: 'image',

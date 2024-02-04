@@ -22,20 +22,22 @@ function convertProsemirrorToBlock(node: ProsemirrorDocNode): {}[] {
   }
 
   if (node.type === 'heading') {
+    const children = node.content?.flatMap(convertProsemirrorToBlock).filter(notEmpty);
     return [
       {
         type: 'heading',
         level: node.attrs?.level || 1,
-        children: node.content?.flatMap(convertProsemirrorToBlock).filter(notEmpty) || [],
+        children: children && children.length > 0 ? children : [{ type: 'text', text: '' }],
       },
     ];
   }
 
   if (node.type === 'paragraph') {
+    const children = node.content?.flatMap(convertProsemirrorToBlock).filter(notEmpty);
     return [
       {
         type: 'paragraph',
-        children: node.content?.flatMap(convertProsemirrorToBlock).filter(notEmpty) || [],
+        children: children && children.length > 0 ? children : [{ type: 'text', text: '' }],
       },
     ];
   }
