@@ -4,18 +4,15 @@
   import { title } from '$stores/title';
   import { formatISODate, listOxford, notEmpty } from '$utils';
   import { MDCRipple } from '@material/ripple';
-  import { renderBlock } from 'blocks-html-renderer';
   import { marked } from 'marked';
   import { afterUpdate } from 'svelte';
-  import type { PageData } from './$houdini';
 
-  export let data: PageData;
-  $: html = renderBlock(data.post.body);
+  export let data;
 
   $: if (data.post) title.set(data.post.name);
 
   afterUpdate(() => {
-    if (browser && html) {
+    if (browser && data.post.body) {
       const buttonElems = document.querySelectorAll('.mdc-button');
       buttonElems.forEach((buttonElem) => {
         MDCRipple.attachTo(buttonElem);
@@ -44,7 +41,7 @@
         {/if}
       </p>
 
-      {@html html}
+      {@html data.post.body}
     </div>
   </article>
 {/if}
