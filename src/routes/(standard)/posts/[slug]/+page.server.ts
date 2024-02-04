@@ -6,7 +6,6 @@ const getPosts = apity.path('/posts').method('get').create();
 
 export const load: PageServerLoad = async ({ params, url }) => {
   const previewId = url.searchParams.get('previewId');
-  console.log(previewId);
 
   const { result } = getPosts(
     {
@@ -26,6 +25,10 @@ export const load: PageServerLoad = async ({ params, url }) => {
     const mm = date.getUTCMonth() + 1;
     const dd = date.getUTCDate();
     throw redirect(307, `/posts/${yyyy}/${mm}/${dd}/${params.slug}?${url.searchParams}`);
+  }
+
+  if (previewId) {
+    throw redirect(307, `/posts/0001/01/01/${params.slug}?${url.searchParams}`);
   }
 
   throw error(500, 'missing published date');

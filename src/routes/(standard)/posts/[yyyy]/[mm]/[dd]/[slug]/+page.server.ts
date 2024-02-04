@@ -9,14 +9,18 @@ const getPosts = apity.path('/posts').method('get').create();
 export const load: PageServerLoad = async ({ params, parent, url }) => {
   const previewId = url.searchParams.get('previewId');
 
-  const date = new Date(`${params.yyyy}/${params.mm}/${params.dd}`);
+  const date = new Date(`${params.yyyy}-${params.mm}-${params.dd}`);
   date.setUTCHours(0, 0, 0, 0);
   const shortDate = date.toISOString().split('T')[0];
 
   const { result } = getPosts(
     {
       sort: 'shortPublishedAt:desc',
-      filters: { slug: params.slug, shortPublishedAt: shortDate, previewId },
+      filters: {
+        slug: params.slug,
+        shortPublishedAt: previewId ? undefined : shortDate,
+        previewId,
+      },
       populate: 'category, tags',
       publicationState: previewId ? 'preview' : 'live',
     },
