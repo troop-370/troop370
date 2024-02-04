@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   const { result } = getPosts(
     {
       sort: 'shortPublishedAt:desc',
+      'pagination[page]': params.page,
       filters:
         params.category !== 'all' ? { category: { value: { $eq: params.category } } } : undefined,
       populate: 'category',

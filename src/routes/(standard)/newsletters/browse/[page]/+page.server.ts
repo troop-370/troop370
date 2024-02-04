@@ -13,7 +13,10 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   }
 
   // get the newsletters
-  const { result } = getEmailNewsletters({}, fetch);
+  const { result } = getEmailNewsletters(
+    { sort: 'shortPublishedAt:desc', 'pagination[page]': params.page },
+    fetch
+  );
   const resolved = await result;
   if (!resolved.ok) throw error(resolved.status, 'server error');
   if (!resolved.data.data) throw error(404, 'not found');

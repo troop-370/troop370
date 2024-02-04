@@ -6,7 +6,10 @@ import type { PageServerLoad } from './$types';
 const getStandaloneEmails = apity.path('/standalone-emails').method('get').create();
 
 export const load: PageServerLoad = async ({ params }) => {
-  const { result } = getStandaloneEmails({ sort: 'shortPublishedAt:desc' }, fetch);
+  const { result } = getStandaloneEmails(
+    { sort: 'shortPublishedAt:desc', 'pagination[page]': params.page },
+    fetch
+  );
   const resolved = await result;
   if (!resolved.ok) throw error(resolved.status, 'server error');
   if (!resolved.data.data) throw error(404, 'not found');
