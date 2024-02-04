@@ -51,7 +51,7 @@
     checkoutAddress: '#!/~/checkoutAddress',
     checkoutDelivery: '#!/~/checkoutDelivery',
     checkoutPD: '#!/~/checkoutPD',
-    accountSettings: '#!/~/accountSettings',
+    accountSettings: '#!/~/account',
     accountChangeEmail: '#!/~/account/change-email=true',
     orderConfirmationPrefix: '#!/~/orderConfirmation/orderId=',
   };
