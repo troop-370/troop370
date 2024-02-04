@@ -3,17 +3,15 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Banner from '$components/Banner.svelte';
+  import { PUBLIC_API_URL } from '$env/static/public';
   import { notEmpty } from '$utils';
   import { Slugger } from 'marked';
   import mime from 'mime-types';
   import { afterUpdate } from 'svelte';
-  import type { PageData } from './$houdini';
 
   const slugger = new Slugger();
 
-  export let data: PageData;
-  $: ({ FormsDocumentsPageConfig } = data);
-  $: groups = $FormsDocumentsPageConfig.data?.webConfigFormsDocumentsPublic;
+  export let data;
 
   let scrolled = false;
   afterUpdate(() => {
@@ -30,12 +28,13 @@
     }
   });
 
-  function processGroup(group: NonNullable<NonNullable<typeof groups>[0]>) {
+  function processGroup(group: NonNullable<NonNullable<typeof data.fileGroups>[0]>) {
     if (group.label === 'General Applications') {
       return {
         ...group,
         documents: [
-          ...group.documents
+          ...(group.documents?.data || [])
+            .map((d) => d.attributes)
             .filter(notEmpty)
             .filter(
               (doc) =>
@@ -45,32 +44,35 @@
             ),
           {
             name: 'Merit Badge Counselor Application',
-            file_type: 'url',
-            size_bytes: 0,
-            _id: 'https://www.atlantabsa.org/mbcounselor',
+            ext: 'url',
+            size: 0,
+            url: 'https://www.atlantabsa.org/mbcounselor',
           },
           // {
           //   name: 'Health Form (Annotated)',
-          //   file_type: 'url',
-          //   size_bytes: 0,
+          //   mime: 'url',
+          //   size: 0,
           //   _id: 'https://troop370atlanta.org/healthform',
           // },
           {
             name: 'Youth Registration Instructions',
-            file_type: 'url',
-            size_bytes: 0,
-            _id: 'https://troop370atlanta.org/join',
+            mime: 'url',
+            size: 0,
+            url: 'https://troop370atlanta.org/join',
           },
           {
             name: 'Adult Registration Instructions',
-            file_type: 'url',
-            size_bytes: 0,
-            _id: 'https://troop370atlanta.org/join',
+            mime: 'url',
+            size: 0,
+            url: 'https://troop370atlanta.org/join',
           },
         ],
       };
     }
-    return group;
+    return {
+      ...group,
+      documents: (group.documents?.data || []).map((d) => d.attributes).filter(notEmpty),
+    };
   }
 </script>
 
@@ -79,8 +81,8 @@
 </Banner>
 
 <div class="cols">
-  {#if groups}
-    {#each groups.filter(notEmpty).map(processGroup) as group}
+  {#if data.fileGroups}
+    {#each data.fileGroups.filter(notEmpty).map(processGroup) as group}
       <div class="group">
         <h2>{group.label}</h2>
         <table>
@@ -93,44 +95,42 @@
           </thead>
           <tbody>
             {#each group.documents.filter(notEmpty) as doc}
-              {@const slug = slugger.slug(doc.name || doc._id)}
+              {@const name = doc.name?.split('.').slice(0, -1).join('.') || ''}
+              {@const slug = slugger.slug(name)}
+              {@const size_bytes = doc.size || 0}
+              {@const url = doc.url
+                ? doc.url.startsWith('/')
+                  ? `${PUBLIC_API_URL.replace('/api', '')}${doc.url}`
+                  : doc.url
+                : ''}
               <tr
-                on:click={() =>
-                  goto(
-                    doc.file_type === 'url'
-                      ? doc._id
-                      : `https://server.cristata.app/filestore/troop-370/${doc._id}`
-                  )}
+                on:click={() => goto(url)}
                 id={slug}
                 class:current={$page.url.hash.slice(1) === slug}
               >
                 <td align="left" style="width: 100%; overflow: hidden; text-overflow: ellipsis;">
-                  <a
-                    href={doc.file_type === 'url'
-                      ? doc._id
-                      : `https://server.cristata.app/filestore/troop-370/${doc._id}`}
-                  >
-                    {doc.name}
+                  <a href={url}>
+                    {name}
                   </a>
                 </td>
                 <td align="left" style="width: 18px">
-                  {#if doc.file_type === 'url'}
+                  {#if doc.ext === 'url'}
                     url
                   {:else}
-                    {mime.extension(doc.file_type)}
+                    {doc.ext?.slice(1) || mime.extension(doc.mime || '')}
                   {/if}
                 </td>
-                {#if doc.size_bytes === 0}
+                {#if size_bytes === 0}
                   <td align="left" style="width: 22px" />
-                {:else if doc.size_bytes / 1000 < 1000}
-                  <td align="left" style="width: 22px">{Math.round(doc.size_bytes / 1000)} kB</td>
-                {:else if doc.size_bytes / 1000000 < 1000}
+                {:else if size_bytes / 1000 < 1000}
+                  <td align="left" style="width: 22px">{Math.round(size_bytes / 1000)} kB</td>
+                {:else if size_bytes / 1000000 < 1000}
                   <td align="left" style="width: 22px">
-                    {Math.round(doc.size_bytes / 1000000)} MB
+                    {Math.round(size_bytes / 1000000)} MB
                   </td>
                 {:else}
                   <td align="left" style="width: 22px">
-                    {Math.round(doc.size_bytes / 1000000000)} GB
+                    {Math.round(size_bytes / 1000000000)} GB
                   </td>
                 {/if}
               </tr>
