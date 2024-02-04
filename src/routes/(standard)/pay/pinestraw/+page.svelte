@@ -10,19 +10,27 @@
   import Tab, { Label } from '@smui/tab';
   import TabBar from '@smui/tab-bar';
   import { afterUpdate, onDestroy, onMount } from 'svelte';
-  import type { PageData } from './$houdini';
   import { mountStore } from './mountStore';
 
-  export let data: PageData;
-  $: ({ PinestrawContentPage } = data);
-  $: pineStrawData = $PinestrawContentPage?.data?.contentPublic;
-  $: [headingMD, bodyMD, toc] = pineStrawData?.body
-    ? Markdown.parse(pineStrawData.body)
-    : [null, '', []];
+  export let data;
 
   title.set('Pine Straw Store');
 
   let active = 'Pine Straw';
+
+  $: [, _bodyMD] = Markdown.parse(data.page.body || '');
+
+  $: bodyMD = (() => {
+    let bodyMD = _bodyMD;
+
+    if (data.authStrings) {
+      Object.entries(data.authStrings).forEach(([key, value]) => {
+        bodyMD = bodyMD.replaceAll(`{{${key}}}`, value);
+      });
+    }
+
+    return bodyMD;
+  })();
 
   onMount(() => {
     mountStore('store-browser', '37484300');
