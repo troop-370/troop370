@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
-  import { formatISODate } from '$utils';
+  import { formatISODate, withoutImageNodes } from '$utils';
   import {
     BackgroundTable,
     CardTable,
@@ -93,7 +93,7 @@
         </tr>
         <tr>
           <td>
-            <NewsletterPostCard body={email.body} />
+            <NewsletterPostCard body={withoutImageNodes(email.body)} />
           </td>
         </tr>
         <tr>

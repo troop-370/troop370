@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
-  import { formatISODate, notEmpty } from '$utils';
+  import { formatISODate, notEmpty, withoutImageNodes } from '$utils';
   import type { Node } from 'blocks-html-renderer';
   import {
     BackgroundTable,
@@ -174,7 +174,7 @@
                           <NewsletterPostCard
                             name={post?.title || ''}
                             description={post?.subtitle || ''}
-                            body={post?.body || blankBody}
+                            body={withoutImageNodes(post?.body || blankBody)}
                             number={index +
                               1 +
                               (newsletter.version3?.pinned_mini_posts?.data?.length || 0)}

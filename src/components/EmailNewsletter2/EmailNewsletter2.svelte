@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
-  import { formatISODate, notEmpty } from '$utils';
+  import { formatISODate, notEmpty, withoutImageNodes } from '$utils';
   import {
     BackgroundTable,
     CalendarMonth,
@@ -115,7 +115,7 @@
                 <NewsletterPostCard
                   name={post.title}
                   description={post.subtitle}
-                  body={post.body}
+                  body={withoutImageNodes(post.body)}
                 />
               </td>
             </tr>

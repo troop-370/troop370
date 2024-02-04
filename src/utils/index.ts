@@ -8,3 +8,4 @@ export { listOxford } from './listOxford';
 export { notEmpty } from './notEmpty';
 export { parseDoc } from './parseDoc';
 export { replaceLast } from './replaceLast';
+export { withoutImageNodes } from './withoutImageNodes';
