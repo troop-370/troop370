@@ -13,7 +13,17 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
       filters: { object_id: params._id, previewId },
       publicationState: previewId ? 'preview' : 'live',
       populate:
-        'version2, version3.pinned_mini_posts, version3.announcements, version3.past_announcements',
+        'version3.pinned_mini_posts, version3.pinned_mini_posts.category, ' +
+        'version3.announcements, version3.announcements.category, ' +
+        'version3.past_announcements, version3.past_announcements.category, ' +
+        'version2.pinned_mini_posts, version2.pinned_mini_posts.category, ' +
+        'version2.posts, version2.posts.category, ' +
+        'version2.fundraiser_mini_posts, version2.fundraiser_mini_posts.category, ' +
+        'version2.camping_mini_posts, version2.camping_mini_posts.category, ' +
+        'version2.service_mini_posts, version2.service_mini_posts.category, ' +
+        'version2.advancement_mini_posts, version2.advancement_mini_posts.category, ' +
+        'version2.high_adventure_mini_posts, version2.high_adventure_mini_posts.category, ' +
+        'manual_calendar',
     },
     fetch
   );
