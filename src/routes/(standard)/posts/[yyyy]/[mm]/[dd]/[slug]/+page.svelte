@@ -93,4 +93,8 @@
   article :global(a:focus-visible:not(.mdc-button)) {
     box-shadow: 0 0 0 2px var(--color-primary);
   }
+
+  article :global(img) {
+    width: 100%;
+  }
 </style>
