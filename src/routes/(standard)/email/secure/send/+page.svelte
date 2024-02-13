@@ -47,7 +47,7 @@
       method: 'POST',
       body: searchParams,
     }).then(async (res) => {
-      const redirect = (await res.json()).data;
+      const redirect = (await res.json()).data?.[0];
       sendLoading = false;
       goto(redirect);
     });
