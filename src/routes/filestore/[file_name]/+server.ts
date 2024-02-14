@@ -37,8 +37,6 @@ export const GET: RequestHandler = async ({ params, locals, url }) => {
       (await eventPhotoNames).includes(fileName) ||
       (await announcmenetPhotoNames).includes(fileName);
 
-    console.log(announcmenetPhotoNames);
-
     // require authentication to refresh the signed URL
     if (skipAuth !== true && locals.session.data.authenticated !== true) {
       return Response.redirect(
