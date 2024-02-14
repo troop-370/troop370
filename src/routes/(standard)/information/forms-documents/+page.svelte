@@ -3,7 +3,11 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Banner from '$components/Banner.svelte';
-  import { PUBLIC_API_URL } from '$env/static/public';
+  import {
+    PUBLIC_API_URL,
+    PUBLIC_NEW_FILESTORE_PATH,
+    PUBLIC_OLD_FILESTORE_PATH,
+  } from '$env/static/public';
   import { notEmpty } from '$utils';
   import { Slugger } from 'marked';
   import mime from 'mime-types';
@@ -105,7 +109,7 @@
               {@const url = doc.url
                 ? doc.url.startsWith('/')
                   ? `${PUBLIC_API_URL.replace('/api', '')}${doc.url}`
-                  : doc.url
+                  : doc.url.replace(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH)
                 : ''}
               <tr
                 on:click={() => goto(url)}

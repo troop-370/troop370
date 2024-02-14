@@ -1,10 +1,14 @@
 import { apity } from '$api';
 import { AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET, AWS_BUCKET, AWS_REGION } from '$env/static/private';
+import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
+import { notEmpty } from '$utils';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import type { RequestHandler } from './$types';
 
 const getFiles = apity.path('/upload/files').method('get').create();
+const getEventsPageConfig = apity.path('/events-page').method('get').create();
+const getHomePageConfig = apity.path('/home-page').method('get').create();
 
 export const GET: RequestHandler = async ({ params, locals, url }) => {
   const fileName = params.file_name;
@@ -26,8 +30,17 @@ export const GET: RequestHandler = async ({ params, locals, url }) => {
   // if AWS gives a forbidden error, then either the signed URL has expired
   // or the file does not exist
   if (response.status === 403) {
+    // skip auth for photos used as backgrounds on select pages
+    const eventPhotoNames = getEventsPagePhotoNames();
+    const announcmenetPhotoNames = getHomePagePhotoNames();
+    const skipAuth =
+      (await eventPhotoNames).includes(fileName) ||
+      (await announcmenetPhotoNames).includes(fileName);
+
+    console.log(announcmenetPhotoNames);
+
     // require authentication to refresh the signed URL
-    if (locals.session.data.authenticated !== true) {
+    if (skipAuth !== true && locals.session.data.authenticated !== true) {
       return Response.redirect(
         `${url.origin}/basic-login?from=${encodeURIComponent(url.href)}`,
         302
@@ -63,3 +76,39 @@ export const GET: RequestHandler = async ({ params, locals, url }) => {
 
   return new Response(null, { status: 403 });
 };
+
+async function getEventsPagePhotoNames() {
+  const { result } = getEventsPageConfig({ populate: 'nav_items.photo' }, fetch);
+  const resolved = await result;
+  if (!resolved.ok) return [];
+  if (!resolved.data.data) return [];
+
+  const cards = resolved.data.data.attributes?.nav_items;
+  if (!cards) return [];
+
+  const photoNames = cards
+    .map((card) => card.photo?.data?.attributes?.url)
+    .filter(notEmpty)
+    .map((url) =>
+      url.replace(PUBLIC_OLD_FILESTORE_PATH + '/', '').replace(PUBLIC_NEW_FILESTORE_PATH + '/', '')
+    );
+  return photoNames;
+}
+
+async function getHomePagePhotoNames() {
+  const { result } = getHomePageConfig({ populate: 'announcement_cards.background_photo' }, fetch);
+  const resolved = await result;
+  if (!resolved.ok) return [];
+  if (!resolved.data.data) return [];
+
+  const cards = resolved.data.data.attributes?.announcement_cards;
+  if (!cards) return [];
+
+  const photoNames = cards
+    .map((card) => card.background_photo?.data?.attributes?.url)
+    .filter(notEmpty)
+    .map((url) =>
+      url.replace(PUBLIC_OLD_FILESTORE_PATH + '/', '').replace(PUBLIC_NEW_FILESTORE_PATH + '/', '')
+    );
+  return photoNames;
+}

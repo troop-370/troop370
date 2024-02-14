@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
   import { capitalize } from '$utils';
   import { renderBlock, type Node } from 'blocks-html-renderer';
   import { marked } from 'marked';
@@ -52,6 +53,8 @@
         processedHtml = html || '';
       }
     }
+
+    processedHtml = processedHtml.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
   }
 </script>
 

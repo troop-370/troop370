@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
   import { HardBreak } from '$pm/render/HardBreak';
   import { Link } from '$pm/render/Link';
   import { isJSON } from '$utils/isJSON';
@@ -53,6 +54,8 @@
         processedHtml = html || '';
       }
     }
+
+    processedHtml = processedHtml.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
   }
 </script>
 

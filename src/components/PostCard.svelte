@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
   import { formatISODate, listOxford } from '$utils';
   import Button, { Icon } from '@smui/button';
   import { renderBlock, type Node } from 'blocks-html-renderer';
@@ -31,6 +32,8 @@
     } else {
       previewText = '';
     }
+
+    previewText = previewText.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
   }
 </script>
 

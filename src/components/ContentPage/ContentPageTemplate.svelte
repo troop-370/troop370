@@ -3,6 +3,7 @@
   import { browser } from '$app/environment';
   import Banner from '$components/Banner.svelte';
   import OutlinedButton from '$components/OutlinedButton.svelte';
+  import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
   import { Markdown } from '$utils';
   import { MDCRipple } from '@material/ripple';
   import Button, { Label } from '@smui/button';
@@ -28,6 +29,8 @@
         bodyMD = bodyMD.replaceAll(`{{${key}}}`, value);
       });
     }
+
+    bodyMD = bodyMD.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
 
     return bodyMD;
   })();

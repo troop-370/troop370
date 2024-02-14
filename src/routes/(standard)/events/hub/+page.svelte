@@ -1,6 +1,10 @@
 <script lang="ts">
   import Banner from '$components/Banner.svelte';
-  import { PUBLIC_API_URL } from '$env/static/public';
+  import {
+    PUBLIC_API_URL,
+    PUBLIC_NEW_FILESTORE_PATH,
+    PUBLIC_OLD_FILESTORE_PATH,
+  } from '$env/static/public';
   import Card, { Content, PrimaryAction } from '@smui/card';
 
   export let data;
@@ -21,7 +25,7 @@
       {@const src = photoUrl
         ? photoUrl.startsWith('/')
           ? `${PUBLIC_API_URL.replace('/api', '')}${photoUrl}`
-          : photoUrl
+          : photoUrl.replace(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH)
         : 'https://troop370atlanta.org/photos/backgrounds/bright-daytime-winter.jpg'}
       <a href={card.path || './'}>
         <Card>

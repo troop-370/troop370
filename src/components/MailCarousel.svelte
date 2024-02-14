@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
   import { browser } from '$app/environment';
-  import { PUBLIC_API_URL } from '$env/static/public';
+  import {
+    PUBLIC_API_URL,
+    PUBLIC_NEW_FILESTORE_PATH,
+    PUBLIC_OLD_FILESTORE_PATH,
+  } from '$env/static/public';
   import { Label } from '@smui/button';
   import Button from '@smui/button/src/Button.svelte';
   import { afterUpdate } from 'svelte';
@@ -31,7 +35,10 @@
   {#each announcements as annoucement}
     <div
       class="carousel-cell"
-      style="background-image:url('{annoucement.background_photo?.data?.attributes?.url}');"
+      style="background-image:url('{annoucement.background_photo?.data?.attributes?.url?.replace(
+        PUBLIC_OLD_FILESTORE_PATH,
+        PUBLIC_NEW_FILESTORE_PATH
+      )}');"
     >
       <div class="carousel-text-card ripple-dark-bg ripple-mobile">
         <div>
