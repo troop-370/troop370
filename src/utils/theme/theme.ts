@@ -48,10 +48,9 @@ const themeColors = {
 };
 
 const themeFonts = {
-  headline: 'Adamant BG',
-  body: 'Georgia',
-  detail: 'Lato',
-  wordmark: 'Adobe Thai',
+  headline: 'ibm plex sans, Roboto, sans-serif',
+  body: 'var(--font-detail)',
+  detail: 'Roboto, sans-serif',
 };
 
 const theme = (mode: 'light' | 'dark' = 'light') => ({
@@ -135,3 +134,4 @@ export type colorType =
 export type themeType = ReturnType<typeof theme>;
 
 export { theme };
+

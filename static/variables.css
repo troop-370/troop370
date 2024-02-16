@@ -1,8 +1,4 @@
 :root {
-  --font-headline: ibm plex sans, Roboto, sans-serif;
-  --font-body: var(--font-detail);
-  --font-detail: Roboto, sans-serif;
-
   --color-neutral-0: #ffffff;
   --color-neutral-10: #faf9f8;
   --color-neutral-20: #f3f2f1;
