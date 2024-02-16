@@ -1,6 +1,8 @@
 export { Markdown } from './Markdown';
 export { MarkdownToStrapi } from './MarkdownToStrapi';
+export { camelToDashCase } from './camelToDashCase';
 export { capitalize } from './capitalize';
+export { debounce } from './debounce';
 export { findLastIndex } from './findLastIndex';
 export { formatISODate } from './formatISODate';
 export { hasKey } from './hasKey';

@@ -1,0 +1,1437 @@
+diff --git a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte
+index e089e13..a01a3ff 100644
+--- a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte
++++ b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte
+@@ -1,173 +1,190 @@
+-<script >import { createEventDispatcher, tick } from "svelte";
+-import { get_current_component, onMount } from "svelte/internal";
+-import { createEventForwarder, externalMouseEvents, uid } from "../internal";
+-import ComboBoxItem from "./ComboBoxItem.svelte";
+-import Button from "../Button/Button.svelte";
+-import TextBox from "../TextBox/TextBox.svelte";
+-import TextBoxButton from "../TextBox/TextBoxButton.svelte";
+-/** Determines which specified item is selected. Correspond's to a given item's `value` key. */
+-export let value = undefined;
+-/** Current value of the ComboBox's search box. Only applicable if `searchable` is set to `true`. */
+-export let searchValue = undefined;
+-/** The initial placeholder text displayed if no item is currently selected. */
+-export let placeholder = "";
+-/** Array of objects representing the dropdown items. */
+-export let items = [];
+-/** Determines if the ComboBox can be searched. */
+-export let editable = false;
+-/** Specifies whether the combobox is disabled. */
+-export let disabled = false;
+-/** The current visibility state of the dropdown menu. */
+-export let open = false;
+-/** Specifies a custom class name for the outer combobox container. */
+-let className = "";
+-export { className as class };
+-/** Obtains a bound DOM reference to the ComboBox's value input element. */
+-export let inputElement = null;
+-/** Obtains a bound DOM reference to the ComboBox's searchbox input element. Only applicable if `searchable` is set to `true`. */
+-export let searchInputElement = null;
+-/** Obtains a bound DOM reference to the ComboBox's outer container element. */
+-export let containerElement = null;
+-/** Obtains a bound DOM reference to the ComboBox's menu dropdown list element. */
+-export let menuElement = null;
+-/** Obtains a bound DOM reference to the ComboBox's trigger button element. */
+-export let buttonElement = null;
+-const forwardEvents = createEventForwarder(get_current_component(), [
+-    "open",
+-    "close",
+-    "select",
+-    "change",
+-    "input",
+-    "beforeinput",
+-    "keydown"
+-]);
+-const dispatch = createEventDispatcher();
+-const buttonId = uid("fds-combo-box-button-");
+-const dropdownId = uid("fds-combo-box-dropdown-");
+-$: selectableItems = items.filter(item => !item.disabled);
+-$: selection = items.find(i => i.value === value);
+-$: if (menuElement && menuElement.children.length > 0 && !editable) {
++<script>
++  import { createEventDispatcher, tick } from 'svelte';
++  import { get_current_component, onMount } from 'svelte/internal';
++  import Button from '../Button/Button.svelte';
++  import TextBox from '../TextBox/TextBox.svelte';
++  import TextBoxButton from '../TextBox/TextBoxButton.svelte';
++  import { createEventForwarder, externalMouseEvents, uid } from '../internal';
++  import ComboBoxItem from './ComboBoxItem.svelte';
++  /** Determines which specified item is selected. Correspond's to a given item's `value` key. */
++  export let value = undefined;
++  /** Current value of the ComboBox's search box. Only applicable if `searchable` is set to `true`. */
++  export let searchValue = undefined;
++  /** The initial placeholder text displayed if no item is currently selected. */
++  export let placeholder = '';
++  /** Array of objects representing the dropdown items. */
++  export let items = [];
++  /** Determines if the ComboBox can be searched. */
++  export let editable = false;
++  /** Disables selecting the first match upon searching */
++  export let disableAutoSelectFromSearch = false;
++  /** Opens the options when the editable combobox text input is selected */
++  export let openOnFocus = false;
++  /** Specifies whether the combobox is disabled. */
++  export let disabled = false;
++  /** The current visibility state of the dropdown menu. */
++  export let open = false;
++  /** Specifies a custom class name for the outer combobox container. */
++  let className = '';
++  export { className as class };
++  /** Obtains a bound DOM reference to the ComboBox's value input element. */
++  export let inputElement = null;
++  /** Obtains a bound DOM reference to the ComboBox's searchbox input element. Only applicable if `searchable` is set to `true`. */
++  export let searchInputElement = null;
++  /** Obtains a bound DOM reference to the ComboBox's outer container element. */
++  export let containerElement = null;
++  /** Obtains a bound DOM reference to the ComboBox's menu dropdown list element. */
++  export let menuElement = null;
++  /** Obtains a bound DOM reference to the ComboBox's trigger button element. */
++  export let buttonElement = null;
++	export let noItemsMessage = '';
++  const forwardEvents = createEventForwarder(get_current_component(), [
++    'open',
++    'close',
++    'select',
++    'change',
++    'input',
++    'beforeinput',
++    'keydown',
++  ]);
++  const dispatch = createEventDispatcher();
++  const buttonId = uid('fds-combo-box-button-');
++  const dropdownId = uid('fds-combo-box-dropdown-');
++  $: selectableItems = items.filter((item) => !item.disabled);
++  $: selection = items.find((i) => i.value === value);
++  $: if (menuElement && menuElement.children.length > 0 && !editable) {
+     if (selection) {
+-        menuElement.children[items.indexOf(selection)].focus();
++      menuElement.children[items.indexOf(selection)].focus();
++    } else {
++      menuElement.children[0].focus();
+     }
+-    else {
+-        menuElement.children[0].focus();
+-    }
+-}
+-$: if (items.length > 0) {
++  }
++  $: if (items.length > 0) {
+     if (open) {
+-        dispatch("open");
+-    }
+-    else {
+-        dispatch("close");
++      dispatch('open');
++    } else {
++      dispatch('close');
+     }
+-}
+-$: dispatch("select", selection);
+-$: menuGrowDirection =
++  }
++  $: dispatch('select', selection);
++  $: menuGrowDirection =
+     !selection || items[items.indexOf(selection)] === items[Math.floor(items.length / 2)]
+-        ? "center"
+-        : items.indexOf(selection) < items.indexOf(items[Math.floor(items.length / 2)])
+-            ? "top"
+-            : "bottom";
+-let inputFocused = false;
+-let itemHeight = 36;
+-const maxItems = 14; // 504 (`max-block-size` in ComboBox.scss) / 36 (itemHeight)
+-let menuOffset = itemHeight *
++      ? 'center'
++      : items.indexOf(selection) < items.indexOf(items[Math.floor(items.length / 2)])
++      ? 'top'
++      : 'bottom';
++  let inputFocused = false;
++  let itemHeight = 36;
++  const maxItems = 14; // 504 (`max-block-size` in ComboBox.scss) / 36 (itemHeight)
++  let menuOffset =
++    itemHeight *
+     -(selection
+-        ? items.indexOf(selection)
+-        : Math.floor(items.length > maxItems ? maxItems / 2 : items.length / 2));
+-onMount(() => {
+-    if (!searchValue)
+-        searchValue = value;
+-});
+-function updateOffset(target) {
++      ? items.indexOf(selection)
++      : Math.floor(items.length > maxItems ? maxItems / 2 : items.length / 2));
++  onMount(() => {
++    if (!searchValue) searchValue = value;
++  });
++  function updateOffset(target) {
+     const { top: containerTop } = containerElement.getBoundingClientRect();
+     const { top: targetTop } = target.getBoundingClientRect();
+     menuOffset += containerTop - targetTop;
+-}
+-function selectItem(item) {
+-    if (item.disabled)
+-        return;
++  }
++  function selectItem(item) {
++    if (item.disabled) return;
+     value = item.value;
+-    searchValue = item.name;
++    if (!disableAutoSelectFromSearch) searchValue = item.name;
+     open = false;
+-    if (containerElement && !editable)
+-        containerElement.children[0].focus();
+-}
+-async function openMenu() {
++    if (containerElement && !editable) containerElement.children[0].focus();
++  }
++  async function openMenu() {
+     open = !open;
+     await tick();
+-    if (editable && searchInputElement)
+-        searchInputElement.focus();
+-    if (menuElement && selection)
+-        updateOffset(menuElement.children[items.indexOf(selection)]);
+-}
+-async function handleKeyboardNavigation(event) {
++    if (editable && searchInputElement) searchInputElement.focus();
++    if (menuElement && selection) updateOffset(menuElement.children[items.indexOf(selection)]);
++  }
++  async function handleKeyboardNavigation(event, item) {
+     const { key } = event;
+     event.stopPropagation();
+     const editableClosed = editable && !open;
++
+     // Conditions for closing the menu.
+-    if (key === "Tab" || key === "Esc" || key === "Escape")
+-        open = false;
++    if ((key === 'Tab' && !disableAutoSelectFromSearch) || key === 'Esc' || key === 'Escape') open = false;
++
+     // Oh boy, here we go...
+-    if (key === "ArrowDown" &&
+-        !editableClosed &&
+-        !(items.indexOf(selection) >= items.length - 1)) {
++    if (!disableAutoSelectFromSearch) {
++      if (key === 'ArrowDown' && !editableClosed && !(items.indexOf(selection) >= items.length - 1)) {
+         value = selectableItems[selectableItems.indexOf(selection) + 1].value; // If down arrow is pressed, check current selection and move to next non-disabled item.
+         searchValue = selectableItems[selectableItems.indexOf(selection) + 1].name;
+-    }
+-    else if (key === "ArrowUp" && !editableClosed && !(items.indexOf(selection) <= 0)) {
++      } else if (key === 'ArrowUp' && !editableClosed && !(items.indexOf(selection) <= 0)) {
+         value = selectableItems[selectableItems.indexOf(selection) - 1].value; // Do the same with up arrow.
+         searchValue = selectableItems[selectableItems.indexOf(selection) - 1].name;
+-    }
+-    else if (key === "Home") {
++      } else if (key === 'Home') {
+         value = selectableItems[0].value; // If home is pressed, move to first non-disabled item.
+         searchValue = selectableItems[0].name;
+-    }
+-    else if (key === "End") {
++      } else if (key === 'End') {
+         value = selectableItems[selectableItems.length - 1].value; // If end is pressed, move to last non-disabled item.
+         searchValue = selectableItems[selectableItems.length - 1].name;
+-    }
+-    else if (open && (key === "Enter" || key === " ")) {
++      } else if (open && (key === 'Enter' || key === ' ')) {
+         event.preventDefault();
+         selectItem(selection); // Select item when the enter/space key is pressed and the menu is open
+-    }
+-    else if (searchInputElement && document.activeElement !== searchInputElement) {
++      } else if (searchInputElement && document.activeElement !== searchInputElement) {
+         searchInputElement.focus(); // If the input element has lost focus, regain it.
+-    }
+-    // Prevent the browser's default scrolling behavior for these keys
+-    if (key === "ArrowDown" || key === "ArrowUp" || key === "Home" || key === "End")
+-        event.preventDefault();
+-    // Keybindings for opening the menu when in editable mode using arrow keys
+-    if (key === "ArrowDown" || (key === "ArrowUp" && editable)) {
++      }
++
++      // Keybindings for opening the menu when in editable mode using arrow keys
++      if (key === 'ArrowDown' || (key === 'ArrowUp' && editable)) {
+         if (open) {
+-            await tick();
+-            searchInputElement === null || searchInputElement === void 0 ? void 0 : searchInputElement.select(); // Select text when an item is chosen.
+-        }
+-        else {
+-            open = true;
++          await tick();
++          searchInputElement === null || searchInputElement === void 0 ? void 0 : searchInputElement.select(); // Select text when an item is chosen.
++        } else {
++          open = true;
+         }
++      }
++    } else {
++      if (key === 'ArrowDown' && !editableClosed) {
++        if (item) {
++          if (event.target?.nextElementSibling) event.target.nextElementSibling.focus();
++        } else menuElement?.firstElementChild.focus();
++      } else if (key === 'ArrowUp' && !editableClosed && event.target?.previousElementSibling) {
++        if (item) {
++          if (event.target?.previousElementSibling) event.target.previousElementSibling.focus();
++        } else menuElement?.lastElementChild.focus();
++      } else if (key === 'Home') {
++        menuElement?.firstElementChild.focus(); // If home is pressed, move to first non-disabled item.
++      } else if (key === 'End') {
++        menuElement?.lastElementChild.focus(); // If end is pressed, move to last non-disabled item.
++      } else if (open && item && (key === 'Enter' || key === ' ')) {
++        event.preventDefault();
++        selectItem(item); // Select item when the enter/space key is pressed and the menu is open
++      }
+     }
+-}
+-function handleInputFocus() {
++
++    // Prevent the browser's default scrolling behavior for these keys
++    if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End') event.preventDefault();
++  }
++  function handleInputFocus() {
+     searchInputElement.select();
+     inputFocused = true;
+-}
+-function handleInputBlur() {
++  }
++  function handleInputBlur() {
+     inputFocused = false;
+-}
+-function handleInput(event) {
+-    const match = selectableItems.find(i => i.name.toLowerCase().startsWith(searchValue.toLowerCase()));
+-    if (!match)
+-        value = null;
+-    if (match && event.inputType === "insertText" && searchValue.trim() !== "") {
+-        searchInputElement.value = match.name;
++  }
++  function handleInput(event) {
++		if (!disableAutoSelectFromSearch) {
++			const match = selectableItems.find((i) => i.name.toLowerCase().startsWith(searchValue.toLowerCase()));
++      if (!match) value = null;
++      if (match && event.inputType === 'insertText' && searchValue.trim() !== '') {
++				searchInputElement.value = match.name;
+         searchInputElement.setSelectionRange(searchValue.length, match.name.length);
++      }
++      if (match && !match.disabled) value = match.value;
++			searchValue = searchInputElement.value;
+     }
+-    if (match && !match.disabled)
+-        value = match.value;
+-    searchValue = searchInputElement.value;
+-}
++		
++    if (openOnFocus && !open) {
++      openMenu();
++    }
++  }
+ </script>
+ 
+ <!--
+@@ -187,139 +204,269 @@ When the combo box is closed, it either displays the current selection or is emp
+     ```
+ -->
+ <div
+-	use:forwardEvents
+-	use:externalMouseEvents={{ type: "mousedown" }}
+-	class="combo-box {className}"
+-	class:disabled
+-	class:editable
+-	class:open
+-	on:outermousedown={() => {
+-		if (open) open = false;
+-	}}
+-	bind:this={containerElement}
+-	{...$$restProps}
++  use:forwardEvents
++  use:externalMouseEvents={{ type: 'mousedown' }}
++  class="combo-box {className}"
++  class:disabled
++  class:editable
++  class:open
++  on:outermousedown={() => {
++    if (open) open = false;
++  }}
++  bind:this={containerElement}
++  {...$$restProps}
+ >
+-	{#if editable}
+-		<TextBox
+-			clearButton={false}
+-			class="combo-box-text-box"
+-			role="combobox"
+-			aria-activedescendant={inputFocused}
+-			aria-autocomplete="both"
+-			aria-controls={dropdownId}
+-			aria-expanded={open}
+-			aria-haspopup={open ? "listbox" : undefined}
+-			bind:value={searchValue}
+-			bind:inputElement={searchInputElement}
+-			on:keydown={handleKeyboardNavigation}
+-			on:input={handleInput}
+-			on:focus={handleInputFocus}
+-			on:blur={handleInputBlur}
+-			on:change
+-			on:input
+-			on:beforeinput
+-			on:keydown
+-			{placeholder}
+-			{disabled}
+-		>
+-			<TextBoxButton
+-				aria-expanded={open}
+-				aria-label="Open dropdown"
+-				aria-controls={dropdownId}
+-				class="combo-box-dropdown-button"
+-				on:click={openMenu}
+-				bind:element={buttonElement}
+-				slot="buttons"
+-			>
+-				<svg
+-					aria-hidden="true"
+-					class="combo-box-icon"
+-					xmlns="http://www.w3.org/2000/svg"
+-					width="48"
+-					height="48"
+-					viewBox="0 0 48 48"
+-				>
+-					<path
+-						fill="currentColor"
+-						d="M8.36612 16.1161C7.87796 16.6043 7.87796 17.3957 8.36612 17.8839L23.1161 32.6339C23.6043 33.122 24.3957 33.122 24.8839 32.6339L39.6339 17.8839C40.122 17.3957 40.122 16.6043 39.6339 16.1161C39.1457 15.628 38.3543 15.628 37.8661 16.1161L24 29.9822L10.1339 16.1161C9.64573 15.628 8.85427 15.628 8.36612 16.1161Z"
+-					/>
+-				</svg>
+-			</TextBoxButton>
+-		</TextBox>
+-	{:else}
+-		<Button
+-			type="button"
+-			class="combo-box-button"
+-			id={buttonId}
+-			aria-labelledby={buttonId}
+-			aria-haspopup={open ? "listbox" : undefined}
+-			aria-controls={dropdownId}
+-			on:keydown={handleKeyboardNavigation}
+-			on:keydown
+-			on:click={openMenu}
+-			bind:element={buttonElement}
+-			{disabled}
+-		>
+-			<span class="combo-box-label" class:placeholder={!selection}>
+-				{selection?.name || placeholder}
+-			</span>
+-			<svg
+-				aria-hidden="true"
+-				class="combo-box-icon"
+-				xmlns="http://www.w3.org/2000/svg"
+-				width="48"
+-				height="48"
+-				viewBox="0 0 48 48"
+-			>
+-				<path
+-					fill="currentColor"
+-					d="M8.36612 16.1161C7.87796 16.6043 7.87796 17.3957 8.36612 17.8839L23.1161 32.6339C23.6043 33.122 24.3957 33.122 24.8839 32.6339L39.6339 17.8839C40.122 17.3957 40.122 16.6043 39.6339 16.1161C39.1457 15.628 38.3543 15.628 37.8661 16.1161L24 29.9822L10.1339 16.1161C9.64573 15.628 8.85427 15.628 8.36612 16.1161Z"
+-				/>
+-			</svg>
+-		</Button>
+-	{/if}
+-	{#if !disabled && items.length > 0}
+-		{#if open}
+-			<ul
+-				bind:this={menuElement}
+-				on:blur={() => (open = false)}
+-				id={dropdownId}
+-				aria-labelledby={buttonId}
+-				aria-activedescendant={editable
+-					? undefined
+-					: `${dropdownId}-item-${items.indexOf(selection)}`}
+-				role="listbox"
+-				class="combo-box-dropdown direction-{!editable
+-					? menuGrowDirection ?? 'center'
+-					: 'top'}"
+-				style="--fds-menu-offset: {menuOffset}px;"
+-			>
+-				{#each items as item, i}
+-					<ComboBoxItem
+-						role="option"
+-						selected={item.value === value}
+-						disabled={item.disabled}
+-						id="{dropdownId}-item-{i}"
+-						on:keydown={handleKeyboardNavigation}
+-						on:click={() => selectItem(item)}
+-					>
+-						{item.name}
++  {#if editable}
++    <TextBox
++      clearButton={false}
++      role="combobox"
++      aria-activedescendant={inputFocused}
++      aria-autocomplete="both"
++      aria-controls={dropdownId}
++      aria-expanded={open}
++      aria-haspopup={open ? 'listbox' : undefined}
++      bind:value={searchValue}
++      bind:inputElement={searchInputElement}
++      on:keydown={handleKeyboardNavigation}
++      on:input={handleInput}
++      on:focus={handleInputFocus}
++      on:blur={handleInputBlur}
++      on:change
++      on:input
++      on:beforeinput
++      on:keydown
++      {placeholder}
++      {disabled}
++    >
++      <TextBoxButton
++        aria-expanded={open}
++        aria-label="Open dropdown"
++        aria-controls={dropdownId}
++        class="combo-box-dropdown-button"
++        on:click={openMenu}
++        bind:element={buttonElement}
++        slot="buttons"
++      >
++        <svg
++          aria-hidden="true"
++          class="combo-box-icon"
++          xmlns="http://www.w3.org/2000/svg"
++          width="48"
++          height="48"
++          viewBox="0 0 48 48"
++        >
++          <path
++            fill="currentColor"
++            d="M8.36612 16.1161C7.87796 16.6043 7.87796 17.3957 8.36612 17.8839L23.1161 32.6339C23.6043 33.122 24.3957 33.122 24.8839 32.6339L39.6339 17.8839C40.122 17.3957 40.122 16.6043 39.6339 16.1161C39.1457 15.628 38.3543 15.628 37.8661 16.1161L24 29.9822L10.1339 16.1161C9.64573 15.628 8.85427 15.628 8.36612 16.1161Z"
++          />
++        </svg>
++      </TextBoxButton>
++    </TextBox>
++  {:else}
++    <Button
++      type="button"
++      class="combo-box-button"
++      id={buttonId}
++      aria-labelledby={buttonId}
++      aria-haspopup={open ? 'listbox' : undefined}
++      aria-controls={dropdownId}
++      on:keydown={handleKeyboardNavigation}
++      on:keydown
++      on:click={openMenu}
++      bind:element={buttonElement}
++      {disabled}
++    >
++      <span class="combo-box-label" class:placeholder={!selection}>
++        {selection?.name || placeholder}
++      </span>
++      <svg
++        aria-hidden="true"
++        class="combo-box-icon"
++        xmlns="http://www.w3.org/2000/svg"
++        width="48"
++        height="48"
++        viewBox="0 0 48 48"
++      >
++        <path
++          fill="currentColor"
++          d="M8.36612 16.1161C7.87796 16.6043 7.87796 17.3957 8.36612 17.8839L23.1161 32.6339C23.6043 33.122 24.3957 33.122 24.8839 32.6339L39.6339 17.8839C40.122 17.3957 40.122 16.6043 39.6339 16.1161C39.1457 15.628 38.3543 15.628 37.8661 16.1161L24 29.9822L10.1339 16.1161C9.64573 15.628 8.85427 15.628 8.36612 16.1161Z"
++        />
++      </svg>
++    </Button>
++  {/if}
++  {#if !disabled && (items.length > 0 || noItemsMessage)}
++    {#if open}
++      <ul
++        bind:this={menuElement}
++        on:blur={() => (open = false)}
++        id={dropdownId}
++        aria-labelledby={buttonId}
++        aria-activedescendant={editable ? undefined : `${dropdownId}-item-${items.indexOf(selection)}`}
++        role="listbox"
++        class="combo-box-dropdown direction-{!editable ? menuGrowDirection ?? 'center' : 'top'}"
++        style="--fds-menu-offset: {menuOffset}px;"
++      >
++				{#if items.length === 0}
++					<ComboBoxItem disabled>
++						{noItemsMessage}
+ 					</ComboBoxItem>
+-				{/each}
+-			</ul>
+-		{/if}
++				{/if}
++        {#each items as item, i}
++          <ComboBoxItem
++            role="option"
++            selected={item.value === value}
++            disabled={item.disabled}
++						identifier={item.identifier}
++						errorMessage={item.errorMessage}
++            id="{dropdownId}-item-{i}"
++            on:keydown={(evt) => handleKeyboardNavigation(evt, item)}
++            on:click={() => selectItem(item)}
++          >
++            {item.name}
++          </ComboBoxItem>
++        {/each}
++      </ul>
++    {/if}
+ 
+-		<input
+-			type="hidden"
+-			aria-hidden="true"
+-			bind:this={inputElement}
+-			bind:value
+-			on:change
+-			on:input
+-			on:beforeinput
+-		/>
+-		<slot />
+-	{/if}
++    <input
++      type="hidden"
++      aria-hidden="true"
++      bind:this={inputElement}
++      bind:value
++      on:change
++      on:input
++      on:beforeinput
++    />
++    <slot />
++  {/if}
+ </div>
+ 
+-<style >@-webkit-keyframes menu-in{0%{-webkit-clip-path:var(--fds-grow-clip-path);clip-path:var(--fds-grow-clip-path)}to{-webkit-clip-path:polygon(0 0,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}@keyframes menu-in{0%{-webkit-clip-path:var(--fds-grow-clip-path);clip-path:var(--fds-grow-clip-path)}to{-webkit-clip-path:polygon(0 0,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}@-webkit-keyframes shadow-in{0%{box-shadow:none}to{box-shadow:var(--fds-flyout-shadow)}}@keyframes shadow-in{0%{box-shadow:none}to{box-shadow:var(--fds-flyout-shadow)}}.combo-box{display:inline-flex;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.combo-box :global(.button),.combo-box :global(.text-box){flex:1 1 auto}.combo-box :global(.text-box){border-color:var(--fds-control-border-default)}.combo-box :global(.text-box-underline:after){border-color:transparent}.combo-box :global(.text-box-container){cursor:default}.combo-box :global(.text-box-container:focus-visible){cursor:text}.combo-box.editable :global(.combo-box-textbox:not(:focus-within)){border-color:var(--fds-control-border-default);cursor:default}.combo-box.editable :global(.combo-box-textbox:not(:focus-within)) :global(.text-box-underline:after){content:none}.combo-box.editable :global(.combo-box-textbox.disabled){border-color:var(--fds-control-stroke-default)}.combo-box.editable.open :global(.combo-box-textbox){background-color:var(--fds-control-fill-input-active);cursor:text}.combo-box.editable.open :global(.combo-box-textbox) :global(.text-box-underline:after){border-bottom:2px solid var(--fds-accent-default);content:""}.combo-box.editable.open :global(.combo-box-textbox) :global(input::-moz-placeholder){color:var(--fds-text-tertiary)}.combo-box.editable.open :global(.combo-box-textbox) :global(input:-ms-input-placeholder){color:var(--fds-text-tertiary)}.combo-box.editable.open :global(.combo-box-textbox) :global(input::placeholder){color:var(--fds-text-tertiary)}.combo-box.editable.open :global(.text-box-underline){border-end-end-radius:0;border-end-start-radius:0}.combo-box.editable .combo-box-dropdown{border-radius:var(--fds-overlay-corner-radius);border-start-end-radius:0;border-start-start-radius:0;inline-size:100%;inset-block-start:100%;inset-inline-start:0;margin:0}.combo-box.editable .combo-box-icon{margin:0}.combo-box-label{flex:1 1 auto;min-block-size:20px;text-align:start}.combo-box-label.placeholder{color:var(--fds-text-secondary)}.combo-box.disabled .placeholder{color:var(--fds-text-disabled)}.combo-box-icon{-webkit-margin-start:8px;block-size:12px;inline-size:12px;margin-inline-start:8px}.combo-box-dropdown{-webkit-margin-before:-6px;-webkit-margin-start:-5px;-webkit-animation:menu-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing),shadow-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing) var(--fds-control-normal-duration);animation:menu-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing),shadow-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing) var(--fds-control-normal-duration);background-clip:padding-box;background-color:var(--fds-solid-background-quarternary);border:1px solid var(--fds-surface-stroke-flyout);border-radius:var(--fds-overlay-corner-radius);box-shadow:var(--fds-flyout-shadow);box-sizing:border-box;inline-size:calc(100% + 8px);inset-block-start:var(--fds-menu-offset,0);inset-inline-start:0;margin:0;margin-block-start:-6px;margin-inline-start:-5px;max-block-size:504px;overflow:auto;padding:1px;position:absolute;z-index:100}@supports (overflow:overlay){.combo-box-dropdown{overflow:overlay}}.combo-box-dropdown.direction-top{--fds-grow-clip-path:polygon(0 0,100% 0,100% 25%,0 25%)}.combo-box-dropdown.direction-center{--fds-grow-clip-path:polygon(0 25%,100% 24%,100% 75%,0 75%)}.combo-box-dropdown.direction-bottom{--fds-grow-clip-path:polygon(0 75%,100% 75%,100% 100%,0 100%)}</style>
++<style>
++  @-webkit-keyframes menu-in {
++    0% {
++      -webkit-clip-path: var(--fds-grow-clip-path);
++      clip-path: var(--fds-grow-clip-path);
++    }
++    to {
++      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
++      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
++    }
++  }
++  @keyframes menu-in {
++    0% {
++      -webkit-clip-path: var(--fds-grow-clip-path);
++      clip-path: var(--fds-grow-clip-path);
++    }
++    to {
++      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
++      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
++    }
++  }
++  @-webkit-keyframes shadow-in {
++    0% {
++      box-shadow: none;
++    }
++    to {
++      box-shadow: var(--fds-flyout-shadow);
++    }
++  }
++  @keyframes shadow-in {
++    0% {
++      box-shadow: none;
++    }
++    to {
++      box-shadow: var(--fds-flyout-shadow);
++    }
++  }
++  .combo-box {
++    display: inline-flex;
++    position: relative;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++  }
++  .combo-box :global(.button),
++  .combo-box :global(.text-box) {
++    flex: 1 1 auto;
++  }
++  .combo-box :global(.text-box) {
++    border-color: var(--fds-control-border-default);
++  }
++  .combo-box :global(.text-box-container) {
++    cursor: default;
++  }
++  .combo-box :global(.text-box-container:focus-visible) {
++    cursor: text;
++  }
++  .combo-box.editable .combo-box-dropdown {
++    border-radius: var(--fds-overlay-corner-radius);
++    border-start-end-radius: 0;
++    border-start-start-radius: 0;
++    inline-size: 100%;
++    inset-block-start: 100%;
++    inset-inline-start: 0;
++    margin: 0;
++  }
++  .combo-box.editable .combo-box-icon {
++    margin: 0;
++  }
++  .combo-box-label {
++    flex: 1 1 auto;
++    min-block-size: 20px;
++    text-align: start;
++  }
++  .combo-box-label.placeholder {
++    color: var(--fds-text-secondary);
++  }
++  .combo-box.disabled .placeholder {
++    color: var(--fds-text-disabled);
++  }
++  .combo-box-icon {
++    -webkit-margin-start: 8px;
++    block-size: 12px;
++    inline-size: 12px;
++    margin-inline-start: 8px;
++  }
++  .combo-box-dropdown {
++    -webkit-margin-before: -6px;
++    -webkit-margin-start: -5px;
++    -webkit-animation: menu-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing),
++      shadow-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing)
++        var(--fds-control-normal-duration);
++    animation: menu-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing),
++      shadow-in var(--fds-control-normal-duration) var(--fds-control-fast-out-slow-in-easing)
++        var(--fds-control-normal-duration);
++    background-clip: padding-box;
++    background-color: var(--fds-solid-background-quarternary);
++    border: 1px solid var(--fds-surface-stroke-flyout);
++    border-radius: var(--fds-overlay-corner-radius);
++    box-shadow: var(--fds-flyout-shadow);
++    box-sizing: border-box;
++    inline-size: calc(100% + 8px);
++    inset-block-start: var(--fds-menu-offset, 0);
++    inset-inline-start: 0;
++    margin: 0;
++    margin-block-start: -6px;
++    margin-inline-start: -5px;
++    max-block-size: 504px;
++    /* overflow: auto; */
++    padding: 1px;
++    position: absolute;
++    z-index: 100;
++  }
++  /* @supports (overflow: overlay) {
++    .combo-box-dropdown {
++      overflow: overlay;
++    }
++  } */
++  .combo-box-dropdown.direction-top {
++    --fds-grow-clip-path: polygon(0 0, 100% 0, 100% 25%, 0 25%);
++  }
++  .combo-box-dropdown.direction-center {
++    --fds-grow-clip-path: polygon(0 25%, 100% 24%, 100% 75%, 0 75%);
++  }
++  .combo-box-dropdown.direction-bottom {
++    --fds-grow-clip-path: polygon(0 75%, 100% 75%, 100% 100%, 0 100%);
++  }
++</style>
+diff --git a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts
+index 9a7e080..49579de 100644
+--- a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts
++++ b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts
+@@ -9,8 +9,15 @@ declare const __propDef: {
+             name: string;
+             value: any;
+             disabled?: boolean;
++            identifier?: string;
++            errorMessage?: string
+         }[];
+         editable?: boolean;
++        /** Disables selecting the first match upon searching */
++        disableAutoSelectFromSearch?: boolean;
++        /** Opens the options when the editable combobox text input is selected */
++        openOnFocus?: boolean;
++        noItemsMessage?: string;
+         disabled?: boolean;
+         open?: boolean;
+         class?: string;
+@@ -23,6 +30,8 @@ declare const __propDef: {
+     events: {
+         change: Event;
+         input: Event;
++        focus: FocusEvent;
++        blur: FocusEvent;
+         beforeinput: InputEvent;
+         keydown: CustomEvent<any>;
+         open: CustomEvent<any>;
+@@ -55,4 +64,5 @@ export declare type ComboBoxSlots = typeof __propDef.slots;
+  */
+ export default class ComboBox extends SvelteComponentTyped<ComboBoxProps, ComboBoxEvents, ComboBoxSlots> {
+ }
+-export {};
++export { };
++
+diff --git a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte
+index 3296705..6304758 100644
+--- a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte
++++ b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte
+@@ -1,24 +1,138 @@
+-<script >import { createEventForwarder } from "../internal";
+-import { get_current_component } from "svelte/internal";
+-export let selected = false;
+-export let disabled = false;
+-let className = "";
+-export { className as class };
+-const forwardEvents = createEventForwarder(get_current_component());
++<script>
++  import { get_current_component } from 'svelte/internal';
++  import Tooltip from '../Tooltip/TooltipWrapper.svelte';
++  import { createEventForwarder } from '../internal';
++  export let selected = false;
++  export let disabled = false;
++  let className = '';
++	export let identifier = '';
++	export let errorMessage = '';
++  export { className as class };
++  const forwardEvents = createEventForwarder(get_current_component());
+ </script>
+ 
+ <li
+-	use:forwardEvents
+-	tabindex="0"
+-	class="combo-box-item {className}"
+-	class:selected
+-	class:disabled
+-	{...$$restProps}
++  use:forwardEvents
++  tabindex="-1"
++  class="combo-box-item {className}"
++  class:selected
++  class:disabled
++  {...$$restProps}
+ >
+-	<slot name="icon" />
+-	<span>
+-		<slot />
+-	</span>
++  <slot name="icon" />
++  <span>
++    <slot />
++  </span>
++	{#if identifier}
++  	<span class="identifier">{identifier}</span>
++	{/if}
++	{#if errorMessage}
++		<Tooltip text={errorMessage} offset={4} placement="top" alignment="end">
++			<svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="error">
++				<path
++				d="M12 2c5.523 0 10 4.478 10 10s-4.477 10-10 10S2 17.522 2 12 6.477 2 12 2Zm0 1.667c-4.595 0-8.333 3.738-8.333 8.333 0 4.595 3.738 8.333 8.333 8.333 4.595 0 8.333-3.738 8.333-8.333 0-4.595-3.738-8.333-8.333-8.333Zm-.001 10.835a.999.999 0 1 1 0 1.998.999.999 0 0 1 0-1.998ZM11.994 7a.75.75 0 0 1 .744.648l.007.101.004 4.502a.75.75 0 0 1-1.493.103l-.007-.102-.004-4.501a.75.75 0 0 1 .75-.751Z"
++				fill="#ffffff"
++				/>
++			</svg>
++		</Tooltip>
++	{/if}
+ </li>
+ 
+-<style >.combo-box-item{align-items:center;background-color:var(--fds-subtle-fill-transparent);block-size:32px;border-radius:var(--fds-control-corner-radius);box-sizing:border-box;color:var(--fds-text-primary);cursor:default;display:flex;flex:0 0 auto;font-family:var(--fds-font-family-text);font-size:var(--fds-body-font-size);font-weight:400;line-height:20px;margin:4px;outline:none;padding:0 11px;position:relative;text-decoration:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.combo-box-item:before{background-color:var(--fds-accent-default);block-size:0;border-radius:3px;content:"";inline-size:3px;inset-inline-start:0;opacity:0;position:absolute;transition:transform var(--fds-control-fast-duration) var(--fds-control-fast-out-slow-in-easing)}.combo-box-item:focus-visible{box-shadow:var(--fds-focus-stroke)}.combo-box-item.selected,.combo-box-item:hover{background-color:var(--fds-subtle-fill-secondary)}.combo-box-item:active{background-color:var(--fds-subtle-fill-tertiary);color:var(--fds-text-secondary)}.combo-box-item:active:before{transform:scaleY(.625)}.combo-box-item.disabled{background-color:var(--fds-subtle-fill-transparent);color:var(--fds-text-disabled);pointer-events:none}.combo-box-item.disabled.selected{background-color:var(--fds-subtle-fill-secondary)}.combo-box-item.disabled.selected:before{background-color:var(--fds-accent-disabled)}.combo-box-item.selected:before{block-size:16px;opacity:1}.combo-box-item>span{flex:1 1 auto;max-inline-size:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.combo-box-item>:global(svg){fill:currentColor;-webkit-margin-end:16px;block-size:auto;inline-size:16px;margin-inline-end:16px}</style>
++<style>
++  .combo-box-item {
++    align-items: center;
++    background-color: var(--fds-subtle-fill-transparent);
++    block-size: 32px;
++    border-radius: var(--fds-control-corner-radius);
++    box-sizing: border-box;
++    color: var(--fds-text-primary);
++    cursor: default;
++    display: flex;
++    flex: 0 0 auto;
++    font-family: var(--fds-font-family-text);
++    font-size: var(--fds-body-font-size);
++    font-weight: 400;
++    line-height: 20px;
++    margin: 4px;
++    outline: none;
++    padding: 0 11px;
++    position: relative;
++    text-decoration: none;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++  }
++  .combo-box-item:before {
++    background-color: var(--fds-accent-default);
++    block-size: 0;
++    border-radius: 3px;
++    content: '';
++    inline-size: 3px;
++    inset-inline-start: 0;
++    opacity: 0;
++    position: absolute;
++    transition: transform var(--fds-control-fast-duration) var(--fds-control-fast-out-slow-in-easing);
++  }
++  .combo-box-item:focus-visible {
++    box-shadow: var(--fds-focus-stroke);
++  }
++  .combo-box-item.selected,
++  .combo-box-item:hover {
++    background-color: var(--fds-subtle-fill-secondary);
++  }
++  .combo-box-item:active {
++    background-color: var(--fds-subtle-fill-tertiary);
++    color: var(--fds-text-secondary);
++  }
++  .combo-box-item:active:before {
++    transform: scaleY(0.625);
++  }
++  .combo-box-item.disabled {
++    background-color: var(--fds-subtle-fill-transparent);
++    color: var(--fds-text-disabled);
++    pointer-events: none;
++  }
++  .combo-box-item.disabled.selected {
++    background-color: var(--fds-subtle-fill-secondary);
++  }
++  .combo-box-item.disabled.selected:before {
++    background-color: var(--fds-accent-disabled);
++  }
++  .combo-box-item.selected:before {
++    block-size: 16px;
++    opacity: 1;
++  }
++  .combo-box-item > span {
++    flex: 1 1 auto;
++    max-inline-size: 100%;
++    overflow: hidden;
++    text-overflow: ellipsis;
++    white-space: nowrap;
++  }
++  .combo-box-item > :global(svg) {
++    fill: currentColor;
++    -webkit-margin-end: 16px;
++    block-size: auto;
++    inline-size: 16px;
++    margin-inline-end: 16px;
++  }
++	.identifier {
++		flex-grow: 0 !important;
++		flex-shrink: 0 !important;
++		margin: 0 0 0 10px;
++		color: var(--fds-text-tertiary);
++	}
++	.combo-box-item > :global(.tooltip-wrapper) {
++		display: flex;
++		align-items: center;
++		justify-content: center;
++	}
++	svg.error {
++		fill: var(--fds-system-caution);
++		block-size: auto;
++    inline-size: 16px;
++		margin: 0 0 0 10px;
++		cursor: help;
++	}
++</style>
+diff --git a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts
+index 7579583..7cfdbdd 100644
+--- a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts
++++ b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts
+@@ -5,6 +5,8 @@ declare const __propDef: {
+         selected?: boolean;
+         disabled?: boolean;
+         class?: string;
++        identifier?: string;
++        errorMessage?: string;
+     };
+     events: {
+         [evt: string]: CustomEvent<any>;
+@@ -19,4 +21,5 @@ export declare type ComboBoxItemEvents = typeof __propDef.events;
+ export declare type ComboBoxItemSlots = typeof __propDef.slots;
+ export default class ComboBoxItem extends SvelteComponentTyped<ComboBoxItemProps, ComboBoxItemEvents, ComboBoxItemSlots> {
+ }
+-export {};
++export { };
++
+diff --git a/node_modules/fluent-svelte/Expander/Expander.svelte b/node_modules/fluent-svelte/Expander/Expander.svelte
+index ea44880..e616389 100644
+--- a/node_modules/fluent-svelte/Expander/Expander.svelte
++++ b/node_modules/fluent-svelte/Expander/Expander.svelte
+@@ -18,6 +18,7 @@ export let containerElement = null;
+ export let headerElement = null;
+ /** Obtains a bound DOM reference to the expander's content container. */
+ export let contentElement = null;
++export let href = undefined;
+ const dispatch = createEventDispatcher();
+ const forwardEvents = createEventForwarder(get_current_component(), ["expand", "collapse"]);
+ const headerId = uid("fds-expander-header-");
+@@ -58,7 +59,8 @@ Expanders are controls that display a header and a collapsable content area. The
+ 	{...$$restProps}
+ >
+ 	<svelte:element this="h">
+-		<div
++		<svelte:element
++			this={href ? "a" : "div"}
+ 			role="button"
+ 			id={headerId}
+ 			aria-controls={contentId}
+@@ -67,7 +69,10 @@ Expanders are controls that display a header and a collapsable content area. The
+ 			tabindex="0"
+ 			bind:this={headerElement}
+ 			on:keydown={handleKeydown}
+-			on:click={() => (expanded = !expanded)}
++			on:click={() => {
++				if (!href) expanded = !expanded
++			}}
++			{href}
+ 		>
+ 			{#if $$slots.icon}
+ 				<div class="expander-icon">
+@@ -77,27 +82,39 @@ Expanders are controls that display a header and a collapsable content area. The
+ 			<span class="expander-header-title">
+ 				<slot />
+ 			</span>
++			<span class="expander-header-side">
++				<slot name="side" />
++			</span>
+ 			<button
+ 				class="expander-chevron"
+ 				tabindex="-1"
+ 				id={contentId}
+ 				aria-labelledby={headerId}
+ 			>
+-				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+-					{#if direction === "down"}
++				{#if href}
++					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
++						<path
++							fill="currentColor"
++							d="M8.293 4.293a1 1 0 0 0 0 1.414L14.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414l7-7a1 1 0 0 0 0-1.414l-7-7a1 1 0 0 0-1.414 0Z"
++						/>
++					</svg>
++				{:else if direction === "down"}
++					<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+ 						<path
+ 							fill="currentColor"
+ 							d="M2.14645 4.64645C2.34171 4.45118 2.65829 4.45118 2.85355 4.64645L6 7.79289L9.14645 4.64645C9.34171 4.45118 9.65829 4.45118 9.85355 4.64645C10.0488 4.84171 10.0488 5.15829 9.85355 5.35355L6.35355 8.85355C6.15829 9.04882 5.84171 9.04882 5.64645 8.85355L2.14645 5.35355C1.95118 5.15829 1.95118 4.84171 2.14645 4.64645Z"
+ 						/>
+-					{:else}
++					</svg>
++				{:else}
++					<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+ 						<path
+ 							fill="currentColor"
+ 							d="M2.14645 7.35355C2.34171 7.54882 2.65829 7.54882 2.85355 7.35355L6 4.20711L9.14645 7.35355C9.34171 7.54882 9.65829 7.54882 9.85355 7.35355C10.0488 7.15829 10.0488 6.84171 9.85355 6.64645L6.35355 3.14645C6.15829 2.95118 5.84171 2.95118 5.64645 3.14645L2.14645 6.64645C1.95118 6.84171 1.95118 7.15829 2.14645 7.35355Z"
+ 						/>
+-					{/if}
+-				</svg>
++					</svg>
++				{/if}
+ 			</button>
+-		</div>
++		</svelte:element>
+ 	</svelte:element>
+ 	<div class="expander-content-anchor">
+ 		<div class="expander-content" bind:this={contentElement}>
+@@ -106,4 +123,161 @@ Expanders are controls that display a header and a collapsable content area. The
+ 	</div>
+ </div>
+ 
+-<style >.expander{border-radius:var(--fds-control-corner-radius);color:var(--fds-text-primary);display:flex;flex-direction:column;inline-size:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.expander.direction-down .expander-content{-webkit-border-before:none;border-block-start:none;border-radius:var(--fds-control-corner-radius);border-start-end-radius:0;border-start-start-radius:0;transform:translateY(-100%)}.expander.direction-down.expanded .expander-header{border-end-end-radius:0;border-end-start-radius:0;border-radius:var(--fds-control-corner-radius)}.expander.direction-up .expander-content{border-bottom:none;border-end-end-radius:0;border-end-start-radius:0;border-radius:var(--fds-control-corner-radius);transform:translateY(100%)}.expander.direction-up .expander-content-anchor{order:-1}.expander.direction-up.expanded .expander-header{border-radius:var(--fds-control-corner-radius);border-start-end-radius:0;border-start-start-radius:0}.expander.expanded .expander-content{transform:none;transition:var(--fds-control-slow-duration) var(--fds-control-fast-out-slow-in-easing) transform}.expander.expanded .expander-content-anchor{max-block-size:6.019999999999999e+23vmax;transition:none}.expander.expanded .expander-chevron svg{transform:rotate(180deg)}.expander>h3{display:contents}.expander-icon{-webkit-margin-end:16px;block-size:16px;color:var(--fds-text-primary);flex:0 0 auto;inline-size:16px;margin-inline-end:16px}.expander-icon>:global(svg){fill:currentColor;block-size:auto;inline-size:16px}.expander-header{-webkit-padding-start:16px;align-items:center;background-clip:padding-box;background-color:var(--fds-card-background-default);border:1px solid var(--fds-card-stroke-default);border-radius:var(--fds-control-corner-radius);box-sizing:border-box;display:flex;font-family:var(--fds-font-family-text);font-size:var(--fds-body-font-size);font-weight:400;line-height:20px;outline:none;padding:8px;padding-inline-start:16px;text-align:start;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.expander-header-title{flex:1 1 auto}.expander-header:focus-visible{box-shadow:var(--fds-focus-stroke)}.expander-header:hover .expander-chevron{background-color:var(--fds-subtle-fill-secondary)}.expander-header:active .expander-chevron{background-color:var(--fds-subtle-fill-tertiary);color:var(--fds-text-secondary)}.expander-chevron{-webkit-margin-start:20px;align-items:center;-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:var(--fds-subtle-fill-transparent);block-size:32px;border:none;border-radius:var(--fds-control-corner-radius);color:var(--fds-text-primary);display:flex;flex:0 0 auto;inline-size:32px;justify-content:center;margin-inline-start:20px;outline:none}.expander-chevron:focus-visible{box-shadow:var(--fds-focus-stroke)}.expander-chevron svg{fill:currentColor;block-size:12px;inline-size:12px;transition:calc(var(--fds-control-faster-duration)*1.2) linear transform var(--fds-control-faster-duration)}.expander-content{background-clip:padding-box;background-color:var(--fds-card-background-secondary);border:1px solid var(--fds-card-stroke-default);font-family:var(--fds-font-family-text);font-size:var(--fds-body-font-size);font-weight:400;line-height:20px;padding:16px;transition:var(--fds-control-fast-duration) cubic-bezier(1,1,0,1) transform;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.expander-content-anchor{max-height:0;overflow:hidden;position:relative;transition:0ms linear var(--fds-control-slow-duration) max-height}</style>
++<style>
++	.expander {
++    border-radius: var(--fds-control-corner-radius);
++    color: var(--fds-text-primary);
++    display: flex;
++    flex-direction: column;
++    inline-size: 100%;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++  }
++  .expander.direction-down .expander-content {
++    -webkit-border-before: none;
++    border-block-start: none;
++    border-radius: var(--fds-control-corner-radius);
++    border-start-end-radius: 0;
++    border-start-start-radius: 0;
++    transform: translateY(-100%);
++  }
++  .expander.direction-down.expanded .expander-header {
++    border-end-end-radius: 0;
++    border-end-start-radius: 0;
++    border-radius: var(--fds-control-corner-radius);
++  }
++  .expander.direction-up .expander-content {
++    border-bottom: none;
++    border-end-end-radius: 0;
++    border-end-start-radius: 0;
++    border-radius: var(--fds-control-corner-radius);
++    transform: translateY(100%);
++  }
++  .expander.direction-up .expander-content-anchor {
++    order: -1;
++  }
++  .expander.direction-up.expanded .expander-header {
++    border-radius: var(--fds-control-corner-radius);
++    border-start-end-radius: 0;
++    border-start-start-radius: 0;
++  }
++  .expander.expanded .expander-content {
++    transform: none;
++    transition: var(--fds-control-slow-duration) var(--fds-control-fast-out-slow-in-easing) transform;
++  }
++  .expander.expanded .expander-content-anchor {
++    max-block-size: 6.019999999999999e23vmax;
++    transition: none;
++  }
++  .expander.expanded .expander-chevron svg {
++    transform: rotate(180deg);
++  }
++  .expander > h3 {
++    display: contents;
++  }
++  .expander-icon {
++    -webkit-margin-end: 16px;
++    block-size: 16px;
++    color: var(--fds-text-primary);
++    flex: 0 0 auto;
++    inline-size: 16px;
++    margin-inline-end: 16px;
++  }
++  .expander-icon > :global(svg) {
++    fill: currentColor;
++    block-size: auto;
++    inline-size: 16px;
++  }
++  .expander-header {
++    -webkit-padding-start: 16px;
++    align-items: center;
++    background-clip: padding-box;
++    background-color: var(--fds-card-background-default);
++    border: 1px solid var(--fds-card-stroke-default);
++    border-radius: var(--fds-control-corner-radius);
++    box-sizing: border-box;
++    display: flex;
++    font-family: var(--fds-font-family-text);
++    font-size: var(--fds-body-font-size);
++    font-weight: 400;
++    line-height: 20px;
++    outline: none;
++    padding: 8px;
++    padding-inline-start: 16px;
++    text-align: start;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++		text-decoration: none;
++    color: currentColor;
++		cursor: default;
++  }
++  .expander-header-title {
++    flex: 1 1 auto;
++  }
++	.expander-header-side {
++    flex: 0 1 auto;
++  }
++  .expander-header:focus-visible {
++    box-shadow: var(--fds-focus-stroke);
++  }
++  .expander-header:hover .expander-chevron {
++    background-color: var(--fds-subtle-fill-secondary);
++  }
++  .expander-header:active .expander-chevron {
++    background-color: var(--fds-subtle-fill-tertiary);
++    color: var(--fds-text-secondary);
++  }
++  .expander-chevron {
++    -webkit-margin-start: 20px;
++    align-items: center;
++    -webkit-appearance: none;
++    -moz-appearance: none;
++    appearance: none;
++    background-color: var(--fds-subtle-fill-transparent);
++    block-size: 32px;
++    border: none;
++    border-radius: var(--fds-control-corner-radius);
++    color: var(--fds-text-primary);
++    display: flex;
++    flex: 0 0 auto;
++    inline-size: 32px;
++    justify-content: center;
++    margin-inline-start: 20px;
++    outline: none;
++  }
++  .expander-chevron:focus-visible {
++    box-shadow: var(--fds-focus-stroke);
++  }
++  .expander-chevron svg {
++    fill: currentColor;
++    block-size: 12px;
++    inline-size: 12px;
++    transition: calc(var(--fds-control-faster-duration) * 1.2) linear transform
++      var(--fds-control-faster-duration);
++  }
++  .expander-content {
++    background-clip: padding-box;
++    background-color: var(--fds-card-background-secondary);
++    border: 1px solid var(--fds-card-stroke-default);
++    font-family: var(--fds-font-family-text);
++    font-size: var(--fds-body-font-size);
++    font-weight: 400;
++    line-height: 20px;
++    padding: 16px;
++    transition: var(--fds-control-fast-duration) cubic-bezier(1, 1, 0, 1) transform;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++  }
++  .expander-content-anchor {
++    max-height: 0;
++    overflow: hidden;
++    position: relative;
++    transition: 0ms linear var(--fds-control-slow-duration) max-height;
++  }
++</style>
+diff --git a/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts b/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts
+index fe49ca4..760e5d7 100644
+--- a/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts
++++ b/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts
+@@ -9,6 +9,7 @@ declare const __propDef: {
+         containerElement?: HTMLDivElement;
+         headerElement?: HTMLDivElement;
+         contentElement?: HTMLDivElement;
++        href?: string;
+     };
+     events: {
+         expand: CustomEvent<any>;
+@@ -20,6 +21,7 @@ declare const __propDef: {
+         icon: {};
+         default: {};
+         content: {};
++        side: {};
+     };
+ };
+ export declare type ExpanderProps = typeof __propDef.props;
+@@ -39,4 +41,5 @@ export declare type ExpanderSlots = typeof __propDef.slots;
+  */
+ export default class Expander extends SvelteComponentTyped<ExpanderProps, ExpanderEvents, ExpanderSlots> {
+ }
+-export {};
++export { };
++
+diff --git a/node_modules/fluent-svelte/IconButton/IconButton.svelte b/node_modules/fluent-svelte/IconButton/IconButton.svelte
+index 4bd8c1a..8fa48e2 100644
+--- a/node_modules/fluent-svelte/IconButton/IconButton.svelte
++++ b/node_modules/fluent-svelte/IconButton/IconButton.svelte
+@@ -38,4 +38,38 @@ An Icon Button is a clickable control that triggers an immediate action. Unlike
+ 	<slot />
+ </svelte:element>
+ 
+-<style >.icon-button{align-items:center;background-color:var(--fds-subtle-fill-transparent);border:none;border-radius:var(--fds-control-corner-radius);box-sizing:border-box;color:var(--fds-text-primary);display:inline-flex;justify-content:center;min-block-size:30px;min-inline-size:30px;outline:none;padding:8px}.icon-button:focus-visible{box-shadow:var(--fds-focus-stroke)}.icon-button:hover{background-color:var(--fds-subtle-fill-secondary)}.icon-button:active{background-color:var(--fds-subtle-fill-tertiary);color:var(--fds-text-secondary)}.icon-button:disabled{background-color:var(--fds-subtle-fill-disabled);color:var(--fds-text-disabled)}.icon-button :global(svg){fill:currentColor;block-size:auto;inline-size:16px}</style>
++<style>
++	.icon-button {
++    align-items: center;
++    background-color: var(--fds-subtle-fill-transparent);
++    border: none;
++    border-radius: var(--fds-control-corner-radius);
++    box-sizing: border-box;
++    color: var(--fds-text-primary);
++    display: inline-flex;
++    justify-content: center;
++    min-block-size: 30px;
++    min-inline-size: 30px;
++    outline: none;
++    padding: 8px;
++  }
++  .icon-button:focus-visible:not(.disabled) {
++    box-shadow: var(--fds-focus-stroke);
++  }
++  .icon-button:hover:not(.disabled) {
++    background-color: var(--fds-subtle-fill-secondary);
++  }
++  .icon-button:active:not(.disabled) {
++    background-color: var(--fds-subtle-fill-tertiary);
++    color: var(--fds-text-secondary);
++  }
++  .icon-button:disabled, .icon-button.disabled {
++    background-color: var(--fds-subtle-fill-disabled);
++    color: var(--fds-text-disabled);
++  }
++  .icon-button :global(svg) {
++    fill: currentColor;
++    block-size: auto;
++    inline-size: 16px;
++  }
++</style>
+diff --git a/node_modules/fluent-svelte/ListItem/ListItem.svelte b/node_modules/fluent-svelte/ListItem/ListItem.svelte
+index d75aa4a..5e28503 100644
+--- a/node_modules/fluent-svelte/ListItem/ListItem.svelte
++++ b/node_modules/fluent-svelte/ListItem/ListItem.svelte
+@@ -16,6 +16,8 @@ let className = "";
+ export { className as class };
+ /** Obtains a bound DOM reference to the item's element. */
+ export let element = null;
++/** Whether the text content should be transparent. */
++export let collapsed = false;
+ const forwardEvents = createEventForwarder(get_current_component(), ["select"]);
+ const dispatch = createEventDispatcher();
+ $: if (selected)
+@@ -49,7 +51,7 @@ List Items display data stacked vertically in a single column. List Items work b
+ 		{...$$restProps}
+ 	>
+ 		<slot name="icon" />
+-		<TextBlock>
++		<TextBlock class={collapsed ? 'collapsed' : ''}>
+ 			<slot />
+ 		</TextBlock>
+ 	</a>
+@@ -68,10 +70,102 @@ List Items display data stacked vertically in a single column. List Items work b
+ 		{...$$restProps}
+ 	>
+ 		<slot name="icon" />
+-		<TextBlock>
++		<TextBlock class={collapsed ? 'collapsed' : ''}>
+ 			<slot />
+ 		</TextBlock>
++		<slot name="icon-end" />
+ 	</li>
+ {/if}
+ 
+-<style >.list-item{align-items:center;background-color:var(--fds-subtle-fill-transparent);block-size:34px;border-radius:var(--fds-control-corner-radius);box-sizing:border-box;color:var(--fds-text-primary);cursor:default;display:flex;flex:0 0 auto;inline-size:calc(100% - 10px);margin:3px 5px;outline:none;padding-inline:12px;position:relative;text-decoration:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.list-item:before{background-color:var(--fds-accent-default);block-size:16px;border-radius:3px;content:"";inline-size:3px;inset-inline-start:0;opacity:0;position:absolute;transform:scaleY(0);transition:transform var(--fds-control-fast-duration) var(--fds-control-fast-out-slow-in-easing)}.list-item.selected:before{opacity:1;transform:scaleY(1)}.list-item:focus-visible{box-shadow:var(--fds-focus-stroke)}.list-item.selected,.list-item:hover{background-color:var(--fds-subtle-fill-secondary)}.list-item:active{background-color:var(--fds-subtle-fill-tertiary);color:var(--fds-text-secondary)}.list-item:active:before{transform:scaleY(.625)}.list-item.disabled{background-color:var(--fds-subtle-fill-transparent);color:var(--fds-text-disabled);pointer-events:none}.list-item.disabled.selected{background-color:var(--fds-subtle-fill-secondary)}.list-item.disabled.selected:before{background-color:var(--fds-accent-disabled)}.list-item>:global(svg){fill:currentColor;-webkit-margin-end:16px;block-size:auto;inline-size:16px;margin-inline-end:16px}</style>
++<style>
++	.list-item {
++    align-items: center;
++    background-color: var(--fds-subtle-fill-transparent);
++    block-size: 34px;
++    border-radius: var(--fds-control-corner-radius);
++    box-sizing: border-box;
++    color: var(--fds-text-primary);
++    cursor: default;
++    display: flex;
++    flex: 0 0 auto;
++    inline-size: calc(100% - 10px);
++    margin: 3px 5px;
++    outline: none;
++    padding-inline: 12px;
++    position: relative;
++    text-decoration: none;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++  }
++  .list-item:before {
++    background-color: var(--fds-accent-default);
++    block-size: 16px;
++    border-radius: 3px;
++    content: '';
++    inline-size: 3px;
++    inset-inline-start: 0;
++    opacity: 0;
++    position: absolute;
++    transform: scaleY(0);
++    transition: transform var(--fds-control-fast-duration) var(--fds-control-fast-out-slow-in-easing);
++  }
++  .list-item.selected:before {
++    opacity: 1;
++    transform: scaleY(1);
++  }
++  .list-item:focus-visible {
++    box-shadow: var(--fds-focus-stroke);
++  }
++  .list-item.selected,
++  .list-item:hover {
++    background-color: var(--fds-subtle-fill-secondary);
++  }
++  .list-item:active {
++    background-color: var(--fds-subtle-fill-tertiary);
++    color: var(--fds-text-secondary);
++  }
++  .list-item:active:before {
++    transform: scaleY(0.625);
++  }
++  .list-item.disabled {
++    background-color: var(--fds-subtle-fill-transparent);
++    color: var(--fds-text-disabled);
++    pointer-events: none;
++  }
++  .list-item.disabled.selected {
++    background-color: var(--fds-subtle-fill-secondary);
++  }
++  .list-item.disabled.selected:before {
++    background-color: var(--fds-accent-disabled);
++  }
++	.list-item > :global(svg),
++	.list-item > :global(.person-picture-container) {
++		flex-grow: 0;
++		flex-shrink: 0;
++	}
++	.list-item > :global(svg) { 
++		fill: currentColor;
++		-webkit-margin-end: 16px;
++		block-size: auto;
++		inline-size: 16px;
++		margin-inline-end: 16px;
++	}
++	.list-item > :global(.text-block) { 
++		flex-grow: 1;
++		transition: opacity 100ms;
++	}
++	.list-item > :global(.text-block.collapsed) {
++		opacity: 0;
++	}
++	.list-item > :global(.text-block + svg) { 
++		fill: currentColor;
++		-webkit-margin-start: 16px;
++		-webkit-margin-end: 0;
++		block-size: auto;
++		inline-size: 16px;
++		margin-inline-start: 16px;
++		margin-inline-end: 0;
++	}
++</style>
+diff --git a/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts b/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts
+index d89233c..5b6620d 100644
+--- a/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts
++++ b/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts
+@@ -16,6 +16,7 @@ declare const __propDef: {
+     };
+     slots: {
+         icon: {};
++        'icon-end': {};
+         default: {};
+     };
+ };
+@@ -31,4 +32,5 @@ export declare type ListItemSlots = typeof __propDef.slots;
+  */
+ export default class ListItem extends SvelteComponentTyped<ListItemProps, ListItemEvents, ListItemSlots> {
+ }
+-export {};
++export { };
++
+diff --git a/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte b/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte
+index 60ea3cb..d9654d8 100644
+--- a/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte
++++ b/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte
+@@ -84,6 +84,7 @@ setContext("closeFlyout", event => {
+ 			bind:this={backdropElement}
+ 			on:click={e => e.stopPropagation()}
+ 			on:mousedown={closeFlyout}
++			on:touchstart={closeFlyout}
+ 		/>
+ 	{/if}
+ </div>
+diff --git a/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts b/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts
+index 5d5d5b7..fbfc7fc 100644
+--- a/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts
++++ b/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts
+@@ -23,6 +23,7 @@ declare const __propDef: {
+         clear: CustomEvent<any>;
+         search: CustomEvent<any>;
+         reveal: CustomEvent<any>;
++        keydown: KeyboardEvent;
+     } & {
+         [evt: string]: CustomEvent<any>;
+     };
+@@ -45,4 +46,5 @@ export declare type TextBoxSlots = typeof __propDef.slots;
+  */
+ export default class TextBox extends SvelteComponentTyped<TextBoxProps, TextBoxEvents, TextBoxSlots> {
+ }
+-export {};
++export { };
++

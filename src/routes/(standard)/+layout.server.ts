@@ -1,6 +1,5 @@
 import { apity } from '$api';
 import type { NavigationGroup, NavigationGroupItem } from '$components/TopNavigation';
-import { PROTECTED_PAGE_PASSWORD } from '$env/static/private';
 import { notEmpty, parseDoc } from '$utils';
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
@@ -8,24 +7,7 @@ import type { LayoutServerLoad } from './$types';
 const getRedirects = apity.path('/redirects').method('get').create();
 const getNavigation = apity.path('/navigation').method('get').create();
 
-export const load: LayoutServerLoad = async ({ locals }) => {
-  // handle authentication
-  const { counter = 0, protectedPass = '' } = locals.session.data;
-  const authenticated = protectedPass === PROTECTED_PAGE_PASSWORD;
-
-  await locals.session.set({
-    ...locals.session.data,
-    counter: counter + 1,
-    authenticated: authenticated,
-    authStrings: authenticated
-      ? {
-          password_message_when_authenticated: `Password: ${PROTECTED_PAGE_PASSWORD}`,
-        }
-      : {
-          password_message_when_authenticated: 'Password: ████████',
-        },
-  });
-
+export const load: LayoutServerLoad = async () => {
   // get the redirects
   const { result: redirectsResult } = getRedirects({}, fetch);
   const resolvedRedirects = await redirectsResult;
@@ -64,7 +46,6 @@ export const load: LayoutServerLoad = async ({ locals }) => {
     : [];
 
   return {
-    session: locals.session.data,
     redirects,
     navConfig,
   };
