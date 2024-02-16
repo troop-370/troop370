@@ -16,6 +16,7 @@
 
 <svelte:head>
   <title>Troop 370 Admin</title>
+  <link rel="manifest" href="/admin/manifest.webmanifest">
 </svelte:head>
 
 {#if !['/admin/login'].includes(path)}
