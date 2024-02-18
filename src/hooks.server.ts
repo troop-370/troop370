@@ -40,7 +40,7 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       })();
 
       // get the resource from the strapi server
-      const cmsAdminUrl = new URL(STRAPI_URL + strapiPathname);
+      const cmsAdminUrl = new URL(STRAPI_URL + strapiPathname + event.url.search);
       const cmsAdminRes = await fetch(cmsAdminUrl, {
         headers: { ...requestHeaders },
         method: request.method,
