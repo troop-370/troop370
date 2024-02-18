@@ -15,7 +15,7 @@ export const actions: Actions = {
       return fail(400, { missingPassword: true });
     }
 
-    const [status, code] = await tryCredentials(
+    const [status, code, credentials] = await tryCredentials(
       fetch,
       data.get('email') || '',
       data.get('password') || ''
@@ -34,8 +34,8 @@ export const actions: Actions = {
 
     await locals.session.set({
       ...locals.session.data,
-      adminEmail: data.get('email') || '',
-      adminPass: data.get('password') || '',
+      adminEmail: data.get('email')?.toString() || '',
+      adminPass: data.get('password')?.toString() || '',
       adminLastAuth: new Date().toISOString(),
     });
 

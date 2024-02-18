@@ -5,7 +5,10 @@ import type { Actions, PageServerLoad } from './$types';
 export const actions: Actions = {
   default: async ({ request, locals, url }) => {
     const data = await request.formData();
-    await locals.session.set({ ...locals.session.data, protectedPass: data.get('password') || '' });
+    await locals.session.set({
+      ...locals.session.data,
+      protectedPass: data.get('password')?.toString() || '',
+    });
 
     if (data.get('password') !== PROTECTED_PAGE_PASSWORD) {
       return fail(400, { incorrectPassword: true });
