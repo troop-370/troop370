@@ -83,8 +83,8 @@ const adminProxyHandler = (async ({ event, resolve }) => {
                 --content-bg: #272727;
               }
             }
-            html {
-              background-color: var(--titlebar-bg);
+            html, body {
+              background-color: var(--content-bg) !important;
               height: 100%;
             }
             html::before, html::after {
@@ -111,7 +111,8 @@ const adminProxyHandler = (async ({ event, resolve }) => {
             }
             nav[aria-label='Content'] + div,
             nav[aria-label='Settings'] + div,
-            div[data-strapi-header-sticky='true'] {
+            div[data-strapi-header-sticky='true'],
+            #strapi > div:has(#main-content) {
               background-color: var(--content-bg);
               color: var(--color-neutral-light-1400);
               border-radius: 6px 0 0 0;

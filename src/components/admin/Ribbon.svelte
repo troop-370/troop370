@@ -6,8 +6,12 @@
   import { Button, MenuFlyout, MenuFlyoutItem } from 'fluent-svelte';
 
   let tabsContainerElement: HTMLDivElement;
-  let activeTab: 'content-manager' | 'settings' = $page.url.pathname.startsWith('/admin/settings')
+  let activeTab: 'content-manager' | 'settings' | 'media' = $page.url.pathname.startsWith(
+    '/admin/settings'
+  )
     ? 'settings'
+    : $page.url.pathname.startsWith('/admin/plugins/upload')
+    ? 'upload'
     : 'content-manager';
   let mouseOverActiveTab = false;
   $: ({ activeTabWidth, activeTabLeft } = (() => {
@@ -59,6 +63,7 @@
   const tabLocations = {
     'content-manager': '/admin/content-manager',
     settings: '/admin/settings',
+    upload: '/admin/plugins/upload',
   };
 </script>
 
@@ -88,6 +93,14 @@
             on:mouseleave={handleTabMouseLeave}
           >
             Content manager
+          </Button>
+          <Button
+            data-tab={'upload'}
+            on:click={handleTabClick}
+            on:mouseenter={handleTabMouseEnter}
+            on:mouseleave={handleTabMouseLeave}
+          >
+            Media
           </Button>
           <Button
             data-tab={'settings'}
