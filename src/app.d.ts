@@ -18,8 +18,8 @@ declare namespace App {
 interface SessionData {
   adminEmail: string;
   adminPass: string;
-  /** ISO date string */
-  adminLastAuth: string;
+  adminToken: string;
+  adminUser: import('./routes/(admin)/admin/login/tryCredentials').UserData;
   authenticated: boolean;
   protectedPass: string;
   constantContactAccessToken: string;

@@ -29,8 +29,7 @@ async function tryCredentials(
 
   if (res.status === 200) {
     const json = await res.json();
-    console.log(json);
-    return [200, null, null];
+    return [200, null, json.data];
   }
 
   return [400, 'UNKNOWN_ERROR', null];

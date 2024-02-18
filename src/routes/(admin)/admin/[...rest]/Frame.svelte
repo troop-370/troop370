@@ -2,11 +2,7 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
-  import { debounce } from '$utils';
   import { onMount } from 'svelte';
-  import type { PageData } from './$types';
-
-  export let data: PageData;
 
   let probablyPath = `/admin/${$page.params.rest}`;
   onMount(() => {
@@ -50,39 +46,10 @@
     }
   });
 
-  function process() {
-    if (data.session.adminEmail && data.session.adminPass)
-      data
-        .checkCredentials(data.session.adminEmail, data.session.adminPass)
-        .then(([status, code]) => {
-          if (status !== 200) throw code;
-          if (!data.session.adminEmail || !data.session.adminPass) throw null;
-
-          const doc = iframe?.contentDocument;
-          if (doc) {
-            const email = doc.querySelector<HTMLInputElement>('form input[name=email]');
-            if (email) data.setReactInputValue(email, data.session.adminEmail);
-            const password = doc.querySelector<HTMLInputElement>('form input[name=password]');
-            if (password) data.setReactInputValue(password, data.session.adminPass);
-            const rememberMe = doc.querySelector<HTMLInputElement>('form input[name=rememberMe]');
-            if (rememberMe) data.setReactChecked(rememberMe, true);
-            const submit = doc.querySelector<HTMLButtonElement>('form button[type=submit]');
-            if (submit) submit.click();
-          } else {
-            window.location.href = '/admin/content-manager';
-          }
-        })
-        .catch(() => {
-          goto(`/admin/login?from=${encodeURIComponent($page.url.href)}`);
-        });
-  }
-
   let iframe: HTMLIFrameElement;
-  $: {
-    if (browser) {
-      if (probablyPath.startsWith('/admin/auth/login')) {
-        debounce(process)();
-      }
+  $: if (browser) {
+    if (probablyPath.startsWith('/admin/auth/login')) {
+      goto(`/admin/login?from=${encodeURIComponent($page.url.href)}`);
     }
   }
 </script>

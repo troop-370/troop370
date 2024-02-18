@@ -133,6 +133,14 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         );
       }
 
+      // whenever the strapi app requests a renewal token, we should update that in the session data
+      if (cmsAdminRes.status === 200 && cmsAdminUrl.pathname === '/admin/renew-token') {
+        await locals.session.set({
+          ...locals.session.data,
+          adminToken: JSON.parse(responseBody)?.data?.token,
+        });
+      }
+
       // pass the response from the strapi server to the client
       return new Response(responseBody, {
         status: cmsAdminRes.status,

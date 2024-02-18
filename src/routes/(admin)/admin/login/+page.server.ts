@@ -36,7 +36,8 @@ export const actions: Actions = {
       ...locals.session.data,
       adminEmail: data.get('email')?.toString() || '',
       adminPass: data.get('password')?.toString() || '',
-      adminLastAuth: new Date().toISOString(),
+      adminToken: credentials?.token,
+      adminUser: credentials?.user,
     });
 
     const from = url.searchParams.get('from');
@@ -50,7 +51,17 @@ export const load: PageServerLoad = async ({ parent, url, fetch, locals }) => {
 
   // if the credentials are stored, use them if they are still valid
   if (session && session.adminEmail && session.adminPass) {
-    const [status] = await tryCredentials(fetch, session.adminEmail, session.adminPass);
+    const [status, , credentials] = await tryCredentials(
+      fetch,
+      session.adminEmail,
+      session.adminPass
+    );
+
+    await locals.session.set({
+      ...locals.session.data,
+      adminToken: credentials?.token,
+      adminUser: credentials?.user,
+    });
 
     if (status === 200) {
       const from = url.searchParams.get('from');
@@ -63,7 +74,8 @@ export const load: PageServerLoad = async ({ parent, url, fetch, locals }) => {
     ...locals.session.data,
     adminEmail: undefined,
     adminPass: undefined,
-    adminLastAuth: undefined,
+    adminToken: undefined,
+    adminUser: undefined,
   });
 
   return {};

@@ -2,8 +2,6 @@
   import { afterNavigate } from '$app/navigation';
   import Frame from './Frame.svelte';
 
-  export let data;
-
   let key = 0;
   afterNavigate(() => {
     key++;
@@ -12,7 +10,7 @@
 
 <div>
   {#key key}
-    <Frame {data} />
+    <Frame />
   {/key}
 </div>
 
