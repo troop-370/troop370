@@ -84,22 +84,8 @@ const adminProxyHandler = (async ({ event, resolve }) => {
               }
             }
             html, body {
-              background-color: var(--content-bg) !important;
+              background-color: transparent !important;
               height: 100%;
-            }
-            html::before, html::after {
-              content: '';
-              position: fixed;
-              top: 0;
-              left: 232px;
-              background-color: var(--titlebar-bg);
-              z-index: 0;
-              width: 6px;
-              height: 6px;
-            }
-            html::after {
-              background-color: var(--content-bg);
-              border-radius: 6px 0 0 0;
             }
             #strapi > div > div > nav { 
               display: none;
@@ -119,6 +105,10 @@ const adminProxyHandler = (async ({ event, resolve }) => {
               border: none;
               overflow: hidden;
             }
+            #strapi > div:has(#main-content) {
+              height: 100%;
+              overflow: auto;
+            }
             @media (prefers-color-scheme: dark) {
               nav[aria-label='Content'] + div,
               nav[aria-label='Settings'] + div,
@@ -128,6 +118,24 @@ const adminProxyHandler = (async ({ event, resolve }) => {
             }
             div[data-strapi-header='true'] {
               background: none;
+            }
+
+            /* hide content manager side nav */
+            :has(> nav[aria-label='Content']) {
+              grid-template-columns: 1fr;
+            }
+            nav[aria-label='Content'] {
+              display: none;
+            }
+
+            /* hide strapi-provider spinner */
+            div[data-testid="loader"] {
+              display: none;
+            }
+
+            /* hide back button provided by strapi */
+            div:has(> a svg path[d="M24 13.3a.2.2 0 0 1-.2.2H5.74l8.239 8.239a.2.2 0 0 1 0 .282L12.14 23.86a.2.2 0 0 1-.282 0L.14 12.14a.2.2 0 0 1 0-.282L11.86.14a.2.2 0 0 1 .282 0L13.98 1.98a.2.2 0 0 1 0 .282L5.74 10.5H23.8c.11 0 .2.09.2.2v2.6Z"]) {
+              display: none;
             }
           </style>`
         );

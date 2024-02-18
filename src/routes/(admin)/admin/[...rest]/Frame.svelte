@@ -2,7 +2,9 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import { ProgressRing, TextBlock } from 'fluent-svelte';
   import { onMount } from 'svelte';
+  ('svelte');
 
   let probablyPath = `/admin/${$page.params.rest}`;
   onMount(() => {
@@ -54,17 +56,45 @@
   }
 </script>
 
-<iframe
-  id="content-iframe"
-  title="strapi"
-  src="/admin/strapi{$page.url.pathname}"
-  bind:this={iframe}
-/>
+<div class="wrapper">
+  <div class="progress-ring">
+    <ProgressRing size={32} />
+    <TextBlock variant="bodyStrong">Please wait</TextBlock>
+  </div>
+
+  <iframe
+    id="content-iframe"
+    title="strapi"
+    src="/admin/strapi{$page.url.pathname}"
+    bind:this={iframe}
+    allowtransparency
+  />
+</div>
 
 <style>
+  .wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
   iframe {
     border: 0;
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .progress-ring {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
   }
 </style>
