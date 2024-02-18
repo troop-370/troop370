@@ -146,6 +146,14 @@
   <slot />
 {/if}
 
+<div>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+  </style>
+</div>
+
 <style>
   #admin {
     box-sizing: border-box;

@@ -74,6 +74,7 @@ const adminProxyHandler = (async ({ event, resolve }) => {
           '</head>',
           `<style>
             :root {
+              color-scheme: light dark;
               --titlebar-bg: #f3f3f3;
               --content-bg: #ffffff;
             }
