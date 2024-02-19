@@ -5,7 +5,7 @@ export function isIsoDate(str: string) {
 }
 
 export function isShortIsoDate(str: string) {
-  if (str.length !== 10) return;
+  if (str?.length !== 10) return;
   const d = new Date(str);
   return d instanceof Date && !isNaN(d.getTime());
 }
