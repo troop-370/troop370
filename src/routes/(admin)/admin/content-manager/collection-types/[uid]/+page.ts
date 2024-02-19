@@ -69,6 +69,7 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
         Object.entries(sort).map(([key, value]) => [key, value === -1 ? 'desc' : 'asc'])
       ),
       _q: url.searchParams.get('_search'),
+      filters: paramsToFilter(url.searchParams),
     },
     Authorization: `Bearer ${session.adminToken}`,
     validator: collectionDocsSchema,
@@ -134,17 +135,14 @@ const collectionDocsSchema = z
   .passthrough()
   .array();
 
-// const docsSchema = z.object({
-//   pagination: z.object({
-//     page: z.number(),
-//     pageCount: z.number(),
-//     pageSize: z.number(),
-//     total: z.number(),
-//   }),
-//   results: z
-//     .object({
-//       id: z.number(),
-//     })
-//     .passthrough()
-//     .array(),
-// });
+function paramsToFilter(search: URLSearchParams) {
+  const result: Record<string, string> = {};
+  for (const [key, value] of search.entries()) {
+    // each 'entry' is a [key, value] tuple
+    if (!key.startsWith('__')) {
+      if (value.startsWith('"') && value.endsWith('"')) result[key] = value.slice(1, -1);
+      else result[key] = value;
+    }
+  }
+  return result;
+}
