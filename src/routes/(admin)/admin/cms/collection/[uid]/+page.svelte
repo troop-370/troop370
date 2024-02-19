@@ -356,10 +356,6 @@
   </div>
 </div>
 
-<pre>
-  {JSON.stringify($collectionDocsData.data, null, 2)}
-</pre>
-
 <style>
   .wrapper {
     display: flex;
