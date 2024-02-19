@@ -1,4 +1,7 @@
-import ColorHash from 'color-hash';
+import _ColorHash from 'color-hash';
+
+// @ts-expect-error https://github.com/zenozeng/color-hash/issues/42
+const ColorHash: typeof _ColorHash = _ColorHash.default || _ColorHash;
 
 /**
  * Generate an avatar from a string.
