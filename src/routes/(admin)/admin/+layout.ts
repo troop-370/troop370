@@ -38,7 +38,32 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
       return contentManagerInitSchema.parse(data);
     });
 
-  return { contentManagerSettings };
+  const userPermissions = await fetch('/admin/strapi/admin/users/me/permissions', {
+    headers: {
+      Authorization: `Bearer ${session.adminToken}`,
+    },
+  })
+    .then((res) => res.json())
+    .then(({ data }) => {
+      return userPermissionsSchema.parse(data);
+    });
+
+  const permissions = {
+    raw: userPermissions,
+    contentManager: {
+      read: (() => {
+        const permissions = userPermissions.filter(
+          ({ action }) => action === 'plugin::content-manager.explorer.read'
+        );
+        return { uids: permissions.map((p) => p.subject), specs: permissions };
+      })(),
+    },
+  };
+
+  return {
+    contentManagerSettings: await contentManagerSettings,
+    userPermissions: permissions,
+  };
 }) satisfies LayoutLoad;
 
 const contentTypeSchema = z
@@ -63,3 +88,16 @@ const contentTypeSchema = z
 const contentManagerInitSchema = z.object({
   contentTypes: contentTypeSchema,
 });
+
+const userPermissionsSchema = z
+  .object({
+    id: z.number(),
+    subject: z.string().nullable(),
+    action: z.string(),
+    actionParameters: z.object({}).nullable(),
+    conditions: z.string().array(),
+    properties: z.object({
+      fields: z.string().array().nullish(),
+    }),
+  })
+  .array();

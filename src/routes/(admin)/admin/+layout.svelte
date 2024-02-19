@@ -56,8 +56,8 @@
   ];
 
   $: cmsContentTypes = data.contentManagerSettings?.contentTypes
+    .filter((type) => data.userPermissions?.contentManager.read.uids.includes(type.uid))
     .filter((type) => type.isDisplayed)
-    .filter((type) => type.kind === 'collectionType')
     .sort((a, b) => a.info.displayName.localeCompare(b.info.displayName));
 
   $: routeMenuItems = $page.url.pathname.startsWith('/admin/content-manager')
@@ -69,23 +69,23 @@
           type: 'category',
           label: 'Collections',
         },
-        ...(cmsContentTypes?.map((type) => {
-          const pathname = `/admin/content-manager/collection-types/${type.uid}`;
-          return {
-            label: type.info.displayName,
-            icon: 'CircleSmall20Filled',
-            href: pathname,
-            selected: $page.url.pathname.startsWith(pathname),
-          };
-        }) || []),
+        ...(cmsContentTypes
+          ?.filter((type) => type.kind === 'collectionType')
+          .map((type) => {
+            const pathname = `/admin/content-manager/collection-types/${type.uid}`;
+            return {
+              label: type.info.displayName,
+              icon: 'CircleSmall20Filled',
+              href: pathname,
+              selected: $page.url.pathname.startsWith(pathname),
+            };
+          }) || []),
         {
           type: 'category',
           label: 'Single types',
         },
-        ...(data.contentManagerSettings?.contentTypes
-          .filter((type) => type.isDisplayed)
-          .filter((type) => type.kind === 'singleType')
-          .sort((a, b) => a.info.displayName.localeCompare(b.info.displayName))
+        ...(cmsContentTypes
+          ?.filter((type) => type.kind === 'singleType')
           .map((type) => {
             const pathname = `/admin/content-manager/single-types/${type.uid}`;
             return {
@@ -137,8 +137,10 @@
         {/if}
       </div>
 
-      <div id="admin-content">
-        <slot />
+      <div id="admin-content-outer">
+        <div id="admin-content">
+          <slot />
+        </div>
       </div>
     </div>
   </div>
@@ -156,15 +158,11 @@
 
 <style>
   #admin {
-    box-sizing: border-box;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: env(titlebar-area-height, 33px) 1fr;
-    grid-template-areas:
-      'header'
-      'content';
-    height: 100vh;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: fixed;
     color: var(--color-neutral-light-1400);
   }
   @media (prefers-color-scheme: dark) {
@@ -182,6 +180,10 @@
   #admin-app {
     display: flex;
     flex-direction: row;
+    width: 100%;
+    height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
     background-color: var(--titlebar-bg);
   }
 
@@ -192,14 +194,20 @@
     flex-shrink: 0;
   }
 
-  #admin-content {
-    box-sizing: border-box;
+  #admin-content-outer {
+    overflow: hidden;
+    width: 100%;
     height: 100%;
-    overflow: auto;
+    /* display: flex;
+    flex-direction: column; */
     background-color: var(--content-bg);
-    flex-grow: 1;
-    flex-shrink: 1;
     border-radius: 6px 0 0 0;
     position: relative;
+  }
+
+  #admin-content {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
   }
 </style>

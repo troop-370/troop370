@@ -29,3 +29,10 @@ interface SessionData {
     password_message_when_authenticated: string;
   }>;
 }
+
+declare module '@tanstack/table-core' {
+  interface TableMeta<TData extends RowData> {
+    compactMode: boolean;
+    noWrap: boolean;
+  }
+}
