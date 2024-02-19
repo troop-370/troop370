@@ -66,7 +66,7 @@
   function setSearchFilters() {
     let filters = [];
     let search = '';
-    searchBoxValue.split(' ').forEach((val) => {
+    searchBoxValue.match(/(?:[^\s"]+|"[^"]*")+/g)?.forEach((val) => {
       if (val.split(':').length === 2) {
         filters.push(val.split(':'));
       } else {

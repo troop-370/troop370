@@ -1,7 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { Button, Flyout, IconButton, PersonPicture, TextBlock } from 'fluent-svelte';
-  import type { LayoutData } from '../../routes/$types';
+  import { genAvatar } from '$utils';
+  import { Button, PersonPicture, TextBlock } from 'fluent-svelte';
+  import type { LayoutData } from '../../routes/(admin)/admin/$types';
   import FluentIcon from './FluentIcon.svelte';
 
   export let data: LayoutData;
@@ -12,18 +13,21 @@
   <div class="current-profile">
     <PersonPicture
       size={60}
-      src="/user-photo/{data.session.adminEmail}"
+      src={genAvatar(data.session.adminUser?.id.toString() || '')}
       alt={data.session.adminEmail}
     />
     <div style="margin: 12px 0 6px 0;">
-      <TextBlock variant="bodyLarge">{data.session.adminEmail}</TextBlock>
+      <TextBlock variant="bodyLarge">
+        {data.session.adminUser?.firstname}
+        {data.session.adminUser?.lastname}
+      </TextBlock>
     </div>
     <div style="color: var(--fds-text-secondary); display: flex; flex-direction: column;">
       {#if data.session.adminEmail}
         <TextBlock variant="caption">{data.session.adminEmail}</TextBlock>
       {/if}
-      {#if data.session.adminEmail}
-        <TextBlock variant="caption">{data.session.adminEmail}</TextBlock>
+      {#if data.session.adminUser?.username}
+        <TextBlock variant="caption">{data.session.adminUser.username}</TextBlock>
       {/if}
     </div>
     <div class="button-row">
@@ -31,7 +35,7 @@
         href="/admin/settings/users"
         on:click={(e) => {
           e.preventDefault();
-          goto(`/admin/settings/users`);
+          goto(`/admin/settings/users/${data.session.adminUser?.id}`);
           flyoutOpen = false;
         }}
       >

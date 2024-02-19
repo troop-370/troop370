@@ -28,8 +28,6 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
       return collectionConfigurationSchema.parse(data);
     });
 
-  console.log(collectionConfig);
-
   const sort = (() => {
     // prefer to use the sort defined in localstorage
     const localStorageSortStr: string | null = browser

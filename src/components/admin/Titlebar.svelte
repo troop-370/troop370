@@ -2,9 +2,10 @@
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { title } from '$stores/title';
+  import { genAvatar } from '$utils';
   import { Flyout, IconButton, PersonPicture, TextBlock } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
-  import type { LayoutData } from '../../routes/$types';
+  import type { LayoutData } from '../../routes/(admin)/admin/$types';
   import ProfileFlyout from './ProfileFlyout.svelte';
 
   export let data: LayoutData;
@@ -97,7 +98,7 @@
     </TextBlock>
   </div>
   <div class="right">
-    <!-- <div class="account" data-tauri-drag-region class:tauri={false}>
+    <div class="account" data-tauri-drag-region class:tauri={false}>
       <Flyout
         placement="bottom"
         alignment="end"
@@ -107,13 +108,16 @@
           --fds-flyout-transition-offset: translateY(-24px) /* this is twice the default */
         "
       >
-        <IconButton>
-          {#if data.tauri}
-            <TextBlock variant="caption" style="margin-right: 10px;">{data.authUser.name}</TextBlock>
+        <IconButton style="padding: 0 10px; margin-right: -10px;">
+          {#if true}
+            <TextBlock variant="caption" style="margin-right: 10px;">
+              {data.session.adminUser?.firstname}
+              {data.session.adminUser?.lastname}
+            </TextBlock>
           {/if}
           <PersonPicture
             size={26}
-            src="/user-photo/{data.session.adminEmail}"
+            src={genAvatar(data.session.adminUser?.id.toString() || '')}
             alt={data.session.adminEmail}
           />
         </IconButton>
@@ -121,7 +125,7 @@
           <ProfileFlyout {data} bind:flyoutOpen />
         </svelte:fragment>
       </Flyout>
-    </div> -->
+    </div>
   </div>
 </div>
 
