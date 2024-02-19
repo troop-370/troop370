@@ -2,5 +2,5 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-  throw redirect(302, '/admin/content-manager');
+  throw redirect(302, '/admin/cms');
 }) satisfies PageLoad;

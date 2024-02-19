@@ -1,8 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import NavigationView from '$components/admin/NavigationView.svelte';
-  import type { MenuItem } from '$components/admin/NavigationView/_NavigationTypes.js';
-  import Ribbon from '$components/admin/Ribbon.svelte';
   import Titlebar from '$components/admin/Titlebar.svelte';
   import { collapsedPane, collapsedPaneCompact } from '$stores/collapsedPane';
   import { compactMode } from '$stores/compactMode';
@@ -32,8 +30,8 @@
           label: 'Content manager',
           icon: 'ContentView32Regular',
           href: (() => {
-            if (cmsContentTypes?.[0]) {
-              return `/admin/content-manager/collection-types/${cmsContentTypes[0].uid}`;
+            if (data.cmsContentTypes?.[0]) {
+              return `/admin/cms/collection/${data.cmsContentTypes[0].uid}`;
             }
             return '/admin/content-manager';
           })(),
@@ -55,12 +53,7 @@
     },
   ];
 
-  $: cmsContentTypes = data.contentManagerSettings?.contentTypes
-    .filter((type) => data.userPermissions?.contentManager.read.uids.includes(type.uid))
-    .filter((type) => type.isDisplayed)
-    .sort((a, b) => a.info.displayName.localeCompare(b.info.displayName));
-
-  $: routeMenuItems = $page.url.pathname.startsWith('/admin/content-manager')
+  $: routeMenuItems = $page.url.pathname.startsWith('/admin/cms')
     ? [
         {
           label: 'hr',
@@ -69,10 +62,10 @@
           type: 'category',
           label: 'Collections',
         },
-        ...(cmsContentTypes
+        ...(data.cmsContentTypes
           ?.filter((type) => type.kind === 'collectionType')
           .map((type) => {
-            const pathname = `/admin/content-manager/collection-types/${type.uid}`;
+            const pathname = `/admin/cms/collection/${type.uid}`;
             return {
               label: type.info.displayName,
               icon: 'CircleSmall20Filled',
@@ -84,7 +77,7 @@
           type: 'category',
           label: 'Single types',
         },
-        ...(cmsContentTypes
+        ...(data.cmsContentTypes
           ?.filter((type) => type.kind === 'singleType')
           .map((type) => {
             const pathname = `/admin/content-manager/single-types/${type.uid}`;

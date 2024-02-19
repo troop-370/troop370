@@ -20,6 +20,7 @@
 
         if (pathname) {
           probablyPath = pathname.replace('/admin/strapi', '');
+          if (probablyPath === '/admin/') goto('/admin/cms');
           history.replaceState(args[0], args[1], probablyPath);
           originalPushState.apply(this, args);
         }

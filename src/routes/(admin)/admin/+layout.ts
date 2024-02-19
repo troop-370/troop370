@@ -60,9 +60,15 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
     },
   };
 
+  const cmsContentTypes = (await contentManagerSettings)?.contentTypes
+    .filter((type) => permissions?.contentManager.read.uids.includes(type.uid))
+    .filter((type) => type.isDisplayed)
+    .sort((a, b) => a.info.displayName.localeCompare(b.info.displayName));
+
   return {
     contentManagerSettings: await contentManagerSettings,
     userPermissions: permissions,
+    cmsContentTypes,
   };
 }) satisfies LayoutLoad;
 
