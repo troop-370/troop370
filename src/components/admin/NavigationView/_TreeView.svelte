@@ -149,9 +149,8 @@
           if (path) goto(path);
         }}
         type="navigation"
-        selected={selected ||
-          path === $page.url.pathname ||
-          path?.slice(0, -1) === $page.url.pathname}
+        selected={selected ??
+          (path === $page.url.pathname || path?.slice(0, -1) === $page.url.pathname)}
         href={path}
         style="--depth: {__depth}"
         class="listitem {compact ? 'compact' : ''} {collapsed ? 'collapsed' : ''}"
