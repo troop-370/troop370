@@ -25,6 +25,7 @@
       pages: item.children?.map(itemMap),
       onClick: item.onClick,
       selected: item.selected ?? false,
+      disabled: item.disabled ?? false,
     };
   }
 

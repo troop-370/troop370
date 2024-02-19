@@ -58,7 +58,7 @@
 <svelte:window bind:innerHeight={windowHeight} />
 
 <div class="tree-view" class:collapsed>
-  {#each (tree || []).filter((tr) => tr.name !== 'footer') as { name, path, type, pages, icon, onClick, selected }}
+  {#each (tree || []).filter((tr) => tr.name !== 'footer') as { name, path, type, pages, icon, onClick, selected, disabled }}
     {#if name === 'hr'}
       <hr />
     {:else if type === 'category' || type === 'expander'}
@@ -148,6 +148,7 @@
           onClick?.();
           if (path) goto(path);
         }}
+        {disabled}
         type="navigation"
         selected={selected ??
           (path === $page.url.pathname || path?.slice(0, -1) === $page.url.pathname)}

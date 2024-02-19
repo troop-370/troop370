@@ -6,6 +6,7 @@ export interface MenuItem {
   icon?: string;
   onClick?: () => void;
   selected?: boolean;
+  disabled?: boolean;
 }
 
 export interface Tree {
@@ -16,4 +17,5 @@ export interface Tree {
   type: 'category' | 'expander' | 'navigation';
   pages?: Tree[];
   selected: boolean;
+  disabled: boolean;
 }
