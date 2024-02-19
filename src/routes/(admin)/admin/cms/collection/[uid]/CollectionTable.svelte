@@ -38,7 +38,7 @@
   type Doc = NonNullable<NonNullable<typeof $tableData.data>['docs']>[0];
 
   // row links behaviors
-  const links = {
+  $: links = {
     href: `/admin/content-manager/collection-types/${settings.uid}`,
     hrefSuffixKey: 'id',
     hrefSearch: undefined,

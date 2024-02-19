@@ -13,7 +13,7 @@
 
   $: show = $selectedIds.length > 0;
 
-  const links = {
+  $: links = {
     href: `/admin/content-manager/collection-types/${settings.uid}`,
     hrefSuffixKey: 'id',
     hrefSearch: undefined,
