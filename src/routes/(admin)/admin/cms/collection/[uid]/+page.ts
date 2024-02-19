@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { isJSON } from '$utils/isJSON';
 import { queryWithStore } from '$utils/query';
 import { error } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -140,7 +141,9 @@ function paramsToFilter(search: URLSearchParams) {
   for (const [key, value] of search.entries()) {
     // each 'entry' is a [key, value] tuple
     if (!key.startsWith('__')) {
+      console.log(isJSON(value));
       if (value.startsWith('"') && value.endsWith('"')) result[key] = value.slice(1, -1);
+      else if (isJSON(value)) result[key] = JSON.parse(value);
       else result[key] = value;
     }
   }

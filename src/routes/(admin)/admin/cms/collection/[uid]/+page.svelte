@@ -67,8 +67,9 @@
     let filters = [];
     let search = '';
     searchBoxValue.match(/(?:[^\s"]+|"[^"]*")+/g)?.forEach((val) => {
-      if (val.split(':').length === 2) {
-        filters.push(val.split(':'));
+      if (val.split(':').length > 1) {
+        const splits = val.split(':');
+        filters.push([splits[0], splits.slice(1).join(':')]);
       } else {
         search += ` ${val}`;
       }
