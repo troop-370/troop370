@@ -46,11 +46,13 @@
     fetch('/email/secure/send', {
       method: 'POST',
       body: searchParams,
-    }).then(async (res) => {
-      const redirect = (await res.json()).data?.[0];
-      sendLoading = false;
-      goto(redirect);
-    });
+    })
+      .then((res) => res.json())
+      .then(({ data }) => {
+        const redirect = JSON.parse(data)[0];
+        sendLoading = false;
+        goto(redirect);
+      });
   };
 </script>
 
