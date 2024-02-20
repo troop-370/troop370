@@ -1,12 +1,18 @@
 <script lang="ts">
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import NavigationView from '$components/admin/NavigationView.svelte';
   import type { MenuItem } from '$components/admin/NavigationView/_NavigationTypes.js';
   import Titlebar from '$components/admin/Titlebar.svelte';
   import { collapsedPane, collapsedPaneCompact } from '$stores/collapsedPane';
   import { compactMode } from '$stores/compactMode';
+  import { motionMode } from '$stores/motionMode';
   import { notEmpty } from '$utils';
+  import type { BeforeNavigate } from '@sveltejs/kit';
+  import { ProgressRing, TextBlock } from 'fluent-svelte';
   import { afterUpdate } from 'svelte';
+  import { expoOut, linear } from 'svelte/easing';
+  import { fade, fly } from 'svelte/transition';
 
   export let data;
 
@@ -298,6 +304,64 @@
 
   let windowWidth = 1000;
   $: navPaneCompactMode = windowWidth < 900;
+
+  // variables for page transitions
+  let unique = {};
+  let waiting = false;
+  let showSpinner = false;
+  $: delay = $motionMode === 'reduced' ? 0 : 130;
+  $: duration = $motionMode === 'reduced' ? 0 : 270;
+
+  /**
+   * Trigger the page transition by re-rendering the content div (which contains the slot)
+   */
+  function triggerTransition() {
+    unique = {}; // every {} is unique; {} === {} evaluates to false
+  }
+
+  /**
+   * Ensure that `waiting` is `false` after skipping a transition
+   */
+  function handleEndTransition() {
+    waiting = false;
+  }
+
+  /**
+   * Triggers the page transition unless skip conditions are met (conditions are defined in the function).
+   */
+  function handleTransition(navigation: BeforeNavigate) {
+    // skip if user wants no motion
+    if ($motionMode === 'reduced') return handleEndTransition();
+
+    // skip transition if pathname does not change
+    if (navigation.from?.url.pathname === navigation.to?.url.pathname) return handleEndTransition();
+
+    // animate a fancy transition between pages
+    triggerTransition();
+  }
+
+  beforeNavigate(handleTransition);
+  afterNavigate(handleEndTransition);
+
+  function customFade(
+    node: Element,
+    { delay = 0, duration = 400, easing: easing$1 = linear } = {}
+  ) {
+    const o = +getComputedStyle(node).opacity;
+
+    waiting = true;
+    setTimeout(() => {
+      // show the loading spinner if the next page still has not loaded
+      if (waiting) showSpinner = true;
+    }, duration + 800);
+
+    return {
+      delay,
+      duration,
+      easing: easing$1,
+      css: (t: number) => `opacity: ${t * o}`,
+    };
+  }
 </script>
 
 <svelte:head>
@@ -336,9 +400,29 @@
       </div>
 
       <div id="admin-content-outer">
-        <div id="admin-content">
-          <slot />
-        </div>
+        {#key unique}
+          <div style="height: 100%; width: 100%;">
+            {#if !waiting}
+              <div
+                id="admin-content"
+                in:fly={{ y: 40, duration, easing: expoOut, delay }}
+                out:customFade={{ duration: delay }}
+              >
+                <slot />
+              </div>
+            {:else if showSpinner}
+              <div
+                id="admin-content"
+                style="display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center;"
+                in:fade={{ duration: delay }}
+                out:fade={{ duration: delay }}
+              >
+                <ProgressRing size={32} />
+                <TextBlock variant="bodyStrong">Please wait</TextBlock>
+              </div>
+            {/if}
+          </div>
+        {/key}
       </div>
     </div>
   </div>
