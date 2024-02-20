@@ -163,7 +163,10 @@ const adminProxyHandler = (async ({ event, resolve }) => {
     }
   } catch (error) {
     console.error(error);
-    return resolve(event);
+    if (error instanceof Error) {
+      return new Response(error.message, { status: 500, headers: { 'Content-Type': 'text' } });
+    }
+    return new Response(null, { status: 500 });
   }
 
   return resolve(event);
