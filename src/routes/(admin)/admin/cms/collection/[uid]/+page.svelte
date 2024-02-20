@@ -225,7 +225,6 @@
               <MenuFlyoutItem
                 indented
                 on:click={() => {
-                  viewDropdownOpen = false;
                   searchBoxValue = searchBoxValue.replace('archived:true', '');
                   setSearchFilters();
                 }}
@@ -237,7 +236,6 @@
                 indented
                 disabled
                 on:click={() => {
-                  viewDropdownOpen = false;
                   searchBoxValue += 'archived:true';
                   setSearchFilters();
                 }}
@@ -311,7 +309,6 @@
             </MenuFlyoutItem>
             <MenuFlyoutItem
               on:click={() => {
-                viewDropdownOpen = false;
                 goto($page.url.pathname);
               }}
             >
