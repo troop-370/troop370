@@ -39,7 +39,7 @@
           icon: 'ContentView32Regular',
           href: (() => {
             if (data.cmsContentTypes?.[0]) {
-              return `/admin/cms/collection/api::post.post?publishedAt={"$null":true}`;
+              return `/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}`;
             }
             return '/admin/content-manager';
           })(),
@@ -94,10 +94,10 @@
                     {
                       label: 'Unpublished posts',
                       icon: 'SlideText24Regular',
-                      href: '/admin/cms/collection/api::post.post?publishedAt={"$null":true}',
+                      href: '/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/admin/cms/collection/api::post.post?publishedAt={%22$null%22:true}',
+                        '/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={%22$null%22:true}',
                     },
                     {
                       label: 'All posts',
@@ -145,10 +145,10 @@
                     {
                       label: 'Unpublished standalone emails',
                       icon: 'MailMultiple24Regular',
-                      href: '/admin/cms/collection/api::standalone-email.standalone-email?publishedAt={"$null":true}',
+                      href: '/admin/cms/collection/api::standalone-email.standalone-email?__pageTitle=Unpublished%20standalone%20emails&publishedAt={"$null":true}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/admin/cms/collection/api::standalone-email.standalone-email?publishedAt={%22$null%22:true}',
+                        '/admin/cms/collection/api::standalone-email.standalone-email?__pageTitle=Unpublished%20standalone%20emails&publishedAt={%22$null%22:true}',
                     },
                   ]
                 : []),
@@ -165,10 +165,10 @@
                     {
                       label: 'Unpublished newsletters',
                       icon: 'MailTemplate24Regular',
-                      href: '/admin/cms/collection/api::newsletter.newsletter?publishedAt={"$null":true}',
+                      href: '/admin/cms/collection/api::newsletter.newsletter?__pageTitle=Unpublished%20newsletters&publishedAt={"$null":true}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/admin/cms/collection/api::newsletter.newsletter?publishedAt={%22$null%22:true}',
+                        '/admin/cms/collection/api::newsletter.newsletter?__pageTitle=Unpublished%20newsletters&publishedAt={%22$null%22:true}',
                     },
                   ]
                 : []),
@@ -196,10 +196,10 @@
                     {
                       label: 'Unpublished pages',
                       icon: 'DocumentBulletList24Regular',
-                      href: '/admin/cms/collection/api::page.page?publishedAt={"$null":true}',
+                      href: '/admin/cms/collection/api::page.page?__pageTitle=Unpublished%20pages&publishedAt={"$null":true}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/admin/cms/collection/api::page.page?publishedAt={%22$null%22:true}',
+                        '/admin/cms/collection/api::page.page?__pageTitle=Unpublished%20pages&publishedAt={%22$null%22:true}',
                     },
                   ]
                 : []),

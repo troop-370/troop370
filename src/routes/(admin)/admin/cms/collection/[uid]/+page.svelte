@@ -5,7 +5,8 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { ActionRow } from '$lib/common/PageTitle';
   import PageTitle from '$lib/common/PageTitle/PageTitle.svelte';
-  import { hasKey } from '$utils';
+  import { motionMode } from '$stores/motionMode';
+  import { capitalize, hasKey } from '$utils';
   import {
     Button,
     MenuFlyout,
@@ -16,13 +17,23 @@
     Tooltip,
   } from 'fluent-svelte';
   import { onMount } from 'svelte';
+  import { expoOut } from 'svelte/easing';
+  import { fly } from 'svelte/transition';
   import CollectionTable from './CollectionTable.svelte';
 
   export let data;
   $: ({ collectionDocsData } = data);
 
   $: collectionNameSingular = data.settings.info.singularName || data.settings.info.name;
-  $: collectionNamePlural = data.settings.info.pluralName || data.settings.info.name;
+  $: collectionNamePlural = data.settings.info.pluralName || data.settings.info.name || '';
+  $: displayName = data.settings.info.displayName.split('::').slice(-1)[0];
+
+  $: pageTitle =
+    // if defined, attempt to use the page title in the query string
+    $page.url.searchParams.get('__pageTitle') ||
+    // otherwise, build a title using the collection name
+    (displayName ? displayName : capitalize(collectionNamePlural.replaceAll('-', ' '))) +
+      ' collection';
 
   // keep the search box value representative of the URL search params
   let searchBoxValue = calculateSearchBoxValue();
@@ -81,7 +92,7 @@
       url.searchParams.set(key, value);
     });
     Array.from($page.url.searchParams.entries()).forEach(([key, value]) => {
-      if (key.includes('__')) {
+      if (key.includes('__') && key !== '__pageTitle') {
         url.searchParams.set(key, value);
       }
     });
@@ -136,7 +147,19 @@
 
 <div class="wrapper">
   <div class="header">
-    <PageTitle fullWidth>{data.settings.info.displayName}</PageTitle>
+    {#key pageTitle}
+      <div
+        in:fly={{ y: 26, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+        style="
+          margin: 32px 0 20px 0;
+          min-height: 40px;
+        "
+      >
+        <PageTitle fullWidth>
+          {pageTitle}
+        </PageTitle>
+      </div>
+    {/key}
 
     <ActionRow fullWidth>
       <Tooltip
