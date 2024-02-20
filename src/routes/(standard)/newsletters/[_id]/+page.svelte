@@ -113,8 +113,17 @@
       })
       .then(async (res) => {
         const text = await res.text();
+
         if (newsletter?.name) sessionStorage.setItem('email.subject', newsletter.name);
         sessionStorage.setItem('email.body', text);
+
+        if (data.session.adminUser?.firstname) {
+          sessionStorage.setItem(
+            'email.senderName',
+            `${data.session.adminUser.firstname} from Troop 370`
+          );
+        }
+
         goto('/email/secure/send');
       });
   };

@@ -60,6 +60,7 @@
         const text = await res.text();
         sessionStorage.setItem('email.subject', data.email.name);
         sessionStorage.setItem('email.body', text);
+        sessionStorage.setItem('email.senderName', data.email.sender_name);
         goto('/email/secure/send');
       });
   };

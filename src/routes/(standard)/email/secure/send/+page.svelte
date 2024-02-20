@@ -22,6 +22,7 @@
   onMount(() => {
     subject = sessionStorage?.getItem('email.subject') || '';
     body = sessionStorage?.getItem('email.body') || '';
+    senderName = sessionStorage?.getItem('email.senderName') || '';
   });
 
   let sendLoading = false;
