@@ -7,9 +7,9 @@
   import { collapsedPane, collapsedPaneCompact } from '$stores/collapsedPane';
   import { compactMode } from '$stores/compactMode';
   import { motionMode } from '$stores/motionMode';
-  import { notEmpty } from '$utils';
+  import { hasKey, notEmpty } from '$utils';
   import type { BeforeNavigate } from '@sveltejs/kit';
-  import { ProgressRing, TextBlock } from 'fluent-svelte';
+  import { Flyout, ProgressRing, TextBlock, ToggleSwitch } from 'fluent-svelte';
   import { afterUpdate } from 'svelte';
   import { expoOut, linear } from 'svelte/easing';
   import { fade, fly } from 'svelte/transition';
@@ -302,8 +302,27 @@
         ]
       : [];
 
+  $: menuFooterItems = [
+    {
+      label: 'footer',
+      children: [
+        {
+          label: 'hr',
+        },
+        {
+          label: 'Settings',
+          icon: 'Settings16Regular',
+          onClick: () => {
+            settingFlyoutOpen = !settingFlyoutOpen;
+          },
+        },
+      ],
+    },
+  ];
+
   let windowWidth = 1000;
   $: navPaneCompactMode = windowWidth < 900;
+  let settingFlyoutOpen = false;
 
   // variables for page transitions
   let unique = {};
@@ -383,7 +402,7 @@
         {#if navPaneCompactMode}
           <NavigationView
             variant="leftCompact"
-            menuItems={[...mainMenuItems, ...routeMenuItems]}
+            menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
             showBackArrow={false}
             compact={$compactMode}
             bind:collapsedPane={$collapsedPaneCompact}
@@ -391,12 +410,36 @@
         {:else}
           <NavigationView
             variant="left"
-            menuItems={[...mainMenuItems, ...routeMenuItems]}
+            menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
             showBackArrow
             compact={$compactMode}
             bind:collapsedPane={$collapsedPane}
           />
         {/if}
+
+        <div
+          class="settings-flyout"
+          class:collapsedPane={navPaneCompactMode ? $collapsedPaneCompact : $collapsedPane}
+        >
+          <Flyout bind:open={settingFlyoutOpen} placement="right">
+            <svelte:fragment slot="flyout">
+              <div class="settings-flyout-flex">
+                <TextBlock variant="subtitle" style="margin-bottom: 10px;">Settings</TextBlock>
+                <ToggleSwitch bind:checked={$compactMode}>Compact mode</ToggleSwitch>
+                <ToggleSwitch
+                  checked={$motionMode === 'reduced'}
+                  on:change={(evt) => {
+                    if (evt.target && hasKey(evt.target, 'checked') && evt.target.checked)
+                      $motionMode = 'reduced';
+                    else $motionMode = 'no-preference';
+                  }}
+                >
+                  Reduce motion
+                </ToggleSwitch>
+              </div>
+            </svelte:fragment>
+          </Flyout>
+        </div>
       </div>
 
       <div id="admin-content-outer">
@@ -471,9 +514,11 @@
 
   #admin-sidebar {
     box-sizing: border-box;
-    grid-area: sidebar;
     flex-grow: 0;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
   }
 
   #admin-content-outer {
@@ -491,5 +536,19 @@
     overflow: auto;
     width: 100%;
     height: 100%;
+  }
+
+  .settings-flyout {
+    position: fixed;
+    z-index: 99999;
+    left: 290px;
+    bottom: 67px;
+  }
+  .settings-flyout.collapsedPane {
+    left: 50px;
+  }
+  .settings-flyout-flex {
+    display: flex;
+    flex-direction: column;
   }
 </style>
