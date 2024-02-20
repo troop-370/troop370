@@ -65,7 +65,12 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
   const cmsContentTypes = (await contentManagerSettings)?.contentTypes
     .filter((type) => permissions?.contentManager.read.uids.includes(type.uid))
     .filter((type) => type.isDisplayed)
-    .sort((a, b) => a.info.displayName.localeCompare(b.info.displayName));
+    .sort((a, b) =>
+      a.info.displayName
+        .split('::')
+        .slice(-1)[0]
+        .localeCompare(b.info.displayName.split('::').slice(-1)[0])
+    );
 
   return {
     contentManagerSettings: await contentManagerSettings,
