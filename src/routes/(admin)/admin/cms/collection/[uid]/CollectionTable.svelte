@@ -37,6 +37,8 @@
 
   type Doc = NonNullable<NonNullable<typeof $tableData.data>['docs']>[0];
 
+  $: console.log($tableData);
+
   // row links behaviors
   $: links = {
     href: `/admin/content-manager/collection-types/${settings.uid}`,
@@ -100,6 +102,7 @@
       accessorKey: '__stage',
       cell: (info) => {
         const publishedAt = info.row.original.publishedAt;
+        const stageName = info.row.original.strapi_stage?.name;
         return renderComponent(ValueCell, {
           info,
           key: 'updatedBy',
@@ -109,10 +112,18 @@
               chips: [
                 { value: 'Published', color: 'green' },
                 { value: 'Draft', color: 'neutral' },
+                { value: 'stage__Planning', label: 'Planning', color: 'indigo' },
+                { value: 'stage__Draft', label: 'Draft', color: 'orange' },
+                { value: 'stage__In review', label: 'In review', color: 'red' },
+                { value: 'stage__Ready', label: 'Ready', color: 'blue' },
               ],
             },
           },
-          valueOverride: publishedAt ? 'Published' : 'Draft',
+          valueOverride: (() => {
+            if (publishedAt) return 'Published';
+            if (stageName) return 'stage__' + stageName;
+            return 'Draft';
+          })(),
         });
       },
       size: 120,

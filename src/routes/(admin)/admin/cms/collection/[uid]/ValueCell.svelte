@@ -53,7 +53,7 @@
         {:else}
           {@const match = def.column.chips.find((s) => s.value === stringValue)}
           <Chip color={match?.color || 'neutral'} data-value={stringValue}>
-            {match?.label || stringValue}
+            {match?.label || stringValue.replace('stage__', '_')}
           </Chip>
         {/if}
       {:else}
