@@ -22,6 +22,13 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       const requestHeaders = (() => {
         const headers: Record<string, string> = {};
         for (const [header, value] of request.headers.entries()) {
+          // An error similar to this one from nextjs was occuring
+          // https://github.com/vercel/next.js/issues/48214
+          // and the solution is to remove the tranfer-encoding
+          // header when making POST requests so that fetch
+          // does not fail.
+          if (request.method === 'POST' && header.toLowerCase() === 'transfer-encoding') continue;
+
           headers[header] = value;
         }
         return headers;
@@ -162,9 +169,11 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       });
     }
   } catch (error) {
-    console.error(error);
     if (error instanceof Error) {
-      return new Response(error.message, { status: 500, headers: { 'Content-Type': 'text' } });
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
     return new Response(null, { status: 500 });
   }
