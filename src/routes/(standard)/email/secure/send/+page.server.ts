@@ -76,7 +76,7 @@ export const load: Load = async ({ parent }) => {
     })
     .catch((error) => {
       console.error(error);
-      return [];
+      return [] as string[];
     });
 
   return { contactListOptions, accountEmails };

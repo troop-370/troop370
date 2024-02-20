@@ -23,6 +23,16 @@
     subject = sessionStorage?.getItem('email.subject') || '';
     body = sessionStorage?.getItem('email.body') || '';
     senderName = sessionStorage?.getItem('email.senderName') || '';
+
+    const maybeSenderEmail = sessionStorage?.getItem('email.senderEmail') || '';
+    if (data.accountEmails.includes(maybeSenderEmail)) {
+      senderEmail = maybeSenderEmail;
+    }
+
+    const maybeReplyEmail = sessionStorage?.getItem('email.replyEmail') || '';
+    if (data.accountEmails.includes(maybeSenderEmail)) {
+      replyEmail = maybeSenderEmail;
+    }
   });
 
   let sendLoading = false;

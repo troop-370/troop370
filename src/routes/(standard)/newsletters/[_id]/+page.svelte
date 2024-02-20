@@ -117,11 +117,11 @@
         if (newsletter?.name) sessionStorage.setItem('email.subject', newsletter.name);
         sessionStorage.setItem('email.body', text);
 
-        if (data.session.adminUser?.firstname) {
-          sessionStorage.setItem(
-            'email.senderName',
-            `${data.session.adminUser.firstname} from Troop 370`
-          );
+        if (data.session.adminUser) {
+          const { firstname, email } = data.session.adminUser;
+          if (firstname) sessionStorage.setItem('email.senderName', `${firstname} from Troop 370`);
+          if (email) sessionStorage.setItem('email.senderEmail', email);
+          if (email) sessionStorage.setItem('email.replyEmail', email);
         }
 
         goto('/email/secure/send');
