@@ -54,6 +54,12 @@
           selected: $page.url.pathname.startsWith('/admin/plugins/upload'),
         },
         {
+          label: 'Store orders',
+          icon: 'ShoppingBag24Regular',
+          href: '/admin/ecommerce/orders',
+          selected: $page.url.pathname.startsWith('/admin/ecommerce/orders'),
+        },
+        {
           label: 'Administration',
           icon: 'Options24Regular',
           href: '/admin/settings',
@@ -299,6 +305,18 @@
                 },
               ]
             : []),
+        ]
+      : $page.url.pathname.startsWith('/admin/ecommerce')
+      ? [
+          {
+            label: 'hr',
+          },
+          {
+            label: 'All orders',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders',
+            selected: $page.url.pathname.startsWith('/admin/ecommerce/orders'),
+          },
         ]
       : [];
 

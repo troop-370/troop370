@@ -62,6 +62,7 @@
     "@cocreators-ee/apity": "^0.0.5",
     "@cristata/prosemirror-to-html-js": "^3.1.0",
     "@fluentui/svg-icons": "1.1.192",
+    "@iwsio/json-csv-core": "^1.1.4",
     "@tanstack/svelte-table": "8.7.9",
     "blocks-html-renderer": "^1.0.4",
     "color": "^4.2.3",
