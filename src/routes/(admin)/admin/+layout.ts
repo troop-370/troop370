@@ -1,12 +1,10 @@
 import { browser } from '$app/environment';
-import type { MenuItem } from '$components/admin/NavigationView/_NavigationTypes';
-import { notEmpty } from '$utils';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
 
-export const load = (async ({ parent, url, data, fetch, route }) => {
+export const load = (async ({ parent, url, fetch }) => {
   const { session } = await parent();
 
   if (url.pathname === '/admin/login') return {};
@@ -30,15 +28,26 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
     sessionStorage.setItem('jwtToken', JSON.stringify(session.adminToken));
   }
 
-  const contentManagerSettings = fetch('/admin/strapi/content-manager/init', {
+  const contentManagerSettings = await fetch('/admin/strapi/content-manager/init', {
     headers: {
       Authorization: `Bearer ${session.adminToken}`,
     },
   })
     .then((res) => res.json())
-    .then(({ data }) => {
+    .then(({ data, error }) => {
+      if (error?.status === 401) return new Error('401');
       return contentManagerInitSchema.parse(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      return new Error('failed to get content manager settings');
     });
+  if (contentManagerSettings instanceof Error) {
+    if (contentManagerSettings.message === '401') {
+      throw redirect(302, '/admin/login');
+    }
+    throw error(500, contentManagerSettings.message);
+  }
 
   const userPermissions = await fetch('/admin/strapi/admin/users/me/permissions', {
     headers: {
@@ -48,6 +57,10 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
     .then((res) => res.json())
     .then(({ data }) => {
       return userPermissionsSchema.parse(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      return [];
     });
 
   const permissions = {
@@ -62,7 +75,7 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
     },
   };
 
-  const cmsContentTypes = (await contentManagerSettings)?.contentTypes
+  const cmsContentTypes = contentManagerSettings?.contentTypes
     .filter((type) => permissions?.contentManager.read.uids.includes(type.uid))
     .filter((type) => type.isDisplayed)
     .sort((a, b) =>
@@ -73,7 +86,7 @@ export const load = (async ({ parent, url, data, fetch, route }) => {
     );
 
   return {
-    contentManagerSettings: await contentManagerSettings,
+    contentManagerSettings,
     userPermissions: permissions,
     cmsContentTypes,
   };
