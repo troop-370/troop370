@@ -1,5 +1,5 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
-import { unflatten } from '$utils';
+import { formatISODate, unflatten } from '$utils';
 import { toCsv } from '@iwsio/json-csv-core';
 import { flatten } from 'flatten-anything';
 import type { z } from 'zod';
@@ -73,8 +73,64 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
   await getMore();
 
   if (as === 'csv') {
+    const isPineStraw = url.search.includes('148999309') || url.search.includes('149009997');
+
     let indexWithItem = 0;
     const flatOrders = orders.flatMap(({ id, items, ...rest }, index) => {
+      if (isPineStraw) {
+        if (items) {
+          const pinestrawItem = items.find((d) => d.productId === 149009997);
+          const spreadItem = items.find((d) => d.productId === 148999309);
+          const isShipping = rest.shippingOption?.fulfillmentType === 'SHIPPING';
+          const { street, city, stateOrProvinceCode, postalCode } = rest.shippingPerson || {};
+
+          const postOfficeLookup = `https://www.zip-codes.com/search.asp?fld-address=${street}&fld-address2=&fld-city=${city}&fld-state=${stateOrProvinceCode}&fld-zip=${postalCode}&srch-type=address&selectTab=1&Submit=Find+ZIP+Code+of+this+U.S.+Address`;
+          const addressLookup = `https://www.google.com/maps/dir/St+James+United+Methodist+Church,+4400+Peachtree+Dunwoody+Rd+NE,+Atlanta,+GA+30342/${street}+${city}+${stateOrProvinceCode}+${postalCode}`;
+
+          return {
+            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD' : ''}`,
+            'Full Address': isShipping
+              ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
+              : 'PICK UP',
+            'Date received': rest.createDate
+              ? formatISODate(rest.createDate.toISOString(), false, true, false)
+              : '',
+            'Ordered by': rest.billingPerson?.name || '',
+            Source: 'portal',
+            'Online Store Order No.': id,
+            phone: rest.billingPerson?.phone || '',
+            email: rest.email || '',
+            Address: street || '',
+            ZIP: postalCode?.slice(0, 5) || '',
+            'Lookip postoffice': postOfficeLookup,
+            'Zip plus 4 Search': `=HYPERLINK("${postOfficeLookup}", "postoffice")`,
+            Lookup: addressLookup,
+            'Map link': `=HYPERLINK("${addressLookup}", "lookup")`,
+            Bales: pinestrawItem?.quantity || '',
+            'Bales Cost': pinestrawItem?.productPrice
+              ? `$ ${pinestrawItem.productPrice.toFixed(2)}`
+              : '',
+            'Paypal Cost': '',
+            'Delivery Fee': rest.shippingOption?.shippingRate
+              ? `$ ${(rest.shippingOption.shippingRate || 0).toFixed(2)}`
+              : '',
+            'Spread out NO YES': spreadItem ? 'yes' : 'NO',
+            'Spead out cost per bale': spreadItem?.productPrice
+              ? `$ ${spreadItem.productPrice}`
+              : '',
+            'No. bales spread out': spreadItem?.quantity ? spreadItem.quantity : '',
+            '$ spread out':
+              spreadItem?.productPrice && spreadItem?.quantity
+                ? `$ ${(spreadItem.quantity * spreadItem.productPrice).toFixed(2)}`
+                : '',
+            Donation: '',
+            Total: `$ ${rest.usdTotal}`,
+            Paid: rest.paymentStatus === 'PAID' ? 'Yes' : 'No',
+          };
+        }
+        return { id };
+      }
+
       if (items) {
         indexWithItem = index;
         return items.map((item) => {
@@ -93,6 +149,7 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
           };
         });
       }
+
       return { id, ...rest };
     });
 
@@ -101,7 +158,7 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
         unflatten(
           Object.fromEntries(
             Object.entries(flatten(entry)).map(([key, value]) => {
-              return [key, `${value}`.replaceAll('"', '_').replaceAll('#', '_')];
+              return [key, `${value}`.replaceAll('#', '_')];
             })
           )
         )

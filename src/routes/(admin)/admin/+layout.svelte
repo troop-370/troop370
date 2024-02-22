@@ -312,10 +312,53 @@
             label: 'hr',
           },
           {
-            label: 'All orders',
+            label: 'All strore orders',
             icon: 'CircleSmall24Filled',
             href: '/admin/ecommerce/orders',
-            selected: $page.url.pathname.startsWith('/admin/ecommerce/orders'),
+            selected: $page.url.pathname + $page.url.search === '/admin/ecommerce/orders',
+          },
+          {
+            label: 'hr',
+          },
+          {
+            label: 'Pine straw fundraiser',
+            type: 'category',
+          },
+          {
+            label: 'All orders',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders?productId=148999309%2C149009997',
+            selected:
+              $page.url.pathname + $page.url.search ===
+              '/admin/ecommerce/orders?productId=148999309%2C149009997',
+          },
+          (() => {
+            const date = new Date();
+            date.setMonth(date.getMonth() - 3);
+            const shortIsoDate = date.toISOString().split('T')[0];
+            const location = `/admin/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}`;
+            return {
+              label: 'All orders (last three months)',
+              icon: 'CircleSmall24Filled',
+              href: location,
+              selected: $page.url.pathname + $page.url.search === location,
+            };
+          })(),
+          {
+            label: 'Pine straw bales',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders?productId=149009997',
+            selected:
+              $page.url.pathname + $page.url.search ===
+              '/admin/ecommerce/orders?productId=149009997',
+          },
+          {
+            label: 'Spread pine straw',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders?productId=148999309',
+            selected:
+              $page.url.pathname + $page.url.search ===
+              '/admin/ecommerce/orders?productId=148999309',
           },
         ]
       : [];

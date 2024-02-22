@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import { StatelessCheckbox } from '$lib/common/Checkbox';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import Loading from '$lib/common/Loading.svelte';
@@ -111,9 +112,278 @@
     },
   ];
 
+  $: isPineStraw = $page.url.search.includes('148999309') || $page.url.search.includes('149009997');
+  const bales = (d) => d.productId === 149009997;
+  const spread = (d) => d.productId === 148999309;
+  const pineStrawColumns: ColumnDef<(typeof data)[0]>[] = [
+    {
+      accessorKey: '_',
+      header: 'Delivery code',
+      cell: (info) => {
+        const pinestrawItem = info.row.original.items.find(bales);
+        const spreadItem = info.row.original.items.find(spread);
+        return `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD' : ''}`;
+      },
+      size: 150,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Address',
+      cell: (info) => {
+        const isShipping = info.row.original.shippingOption?.fulfillmentType === 'SHIPPING';
+        if (!isShipping) return 'PICK UP';
+
+        const shippingPerson = info.row.original.shippingPerson;
+        if (!shippingPerson) return '';
+
+        return (
+          shippingPerson.street +
+          ', ' +
+          shippingPerson.city +
+          ', ' +
+          shippingPerson.stateOrProvinceCode +
+          ', ' +
+          shippingPerson.postalCode
+        );
+      },
+      size: 350,
+      enableSorting: false,
+    },
+    {
+      accessorKey: 'createDate',
+      header: 'Date received',
+      cell: (info) => {
+        return formatISODate(info.getValue().toISOString(), false, true, false);
+      },
+      size: 200,
+      enableSorting: false,
+      meta: {
+        justify: 'left',
+      },
+    },
+    {
+      accessorKey: 'billingPerson.name',
+      header: 'Ordered by',
+      cell: (info) => {
+        return info.getValue();
+      },
+      size: 200,
+      enableSorting: false,
+      meta: {
+        justify: 'left',
+      },
+    },
+    {
+      accessorKey: 'id',
+      header: 'Online store order no.',
+      cell: (info) => {
+        return info.getValue();
+      },
+      size: 160,
+      enableSorting: false,
+      meta: {
+        justify: 'left',
+      },
+    },
+    {
+      accessorKey: 'billingPerson.phone',
+      header: 'Phone number',
+      cell: (info) => {
+        return info.getValue() || '';
+      },
+      size: 160,
+      enableSorting: false,
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
+      cell: (info) => {
+        return info.getValue();
+      },
+      size: 240,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Street address',
+      cell: (info) => {
+        const isShipping = info.row.original.shippingOption?.fulfillmentType === 'SHIPPING';
+        if (!isShipping) return '';
+
+        const shippingPerson = info.row.original.shippingPerson;
+        if (!shippingPerson) return '';
+
+        return shippingPerson.street;
+      },
+      size: 250,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'ZIP',
+      cell: (info) => {
+        const isShipping = info.row.original.shippingOption?.fulfillmentType === 'SHIPPING';
+        if (!isShipping) return '';
+
+        const shippingPerson = info.row.original.shippingPerson;
+        if (!shippingPerson) return '';
+
+        return shippingPerson.postalCode.slice(0, 5);
+      },
+      size: 80,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'ZIP+4',
+      cell: (info) => {
+        const isShipping = info.row.original.shippingOption?.fulfillmentType === 'SHIPPING';
+        if (!isShipping) return '';
+
+        const shippingPerson = info.row.original.shippingPerson;
+        if (!shippingPerson) return '';
+
+        return '';
+      },
+      size: 80,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Bales',
+      cell: (info) => {
+        const pinestrawItem = info.row.original.items.find(bales);
+        if (!pinestrawItem) return '';
+
+        return pinestrawItem.quantity;
+      },
+      size: 60,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Bale cost',
+      cell: (info) => {
+        const pinestrawItem = info.row.original.items.find(bales);
+        if (!pinestrawItem) return '';
+
+        return `$ ${pinestrawItem.productPrice.toFixed(2)}`;
+      },
+      size: 80,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Pine straw cost',
+      cell: (info) => {
+        const pinestrawItem = info.row.original.items.find(bales);
+        if (!pinestrawItem) return '';
+
+        return `$ ${(pinestrawItem.quantity * pinestrawItem.productPrice).toFixed(2)}`;
+      },
+      size: 120,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Paypal cost',
+      cell: () => {
+        return '';
+      },
+      size: 90,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Delivery fee',
+      cell: (info) => {
+        const shippingRate = info.row.original.shippingOption?.shippingRate;
+        if (!shippingRate) return '';
+        return `$ ${(shippingRate || 0).toFixed(2)}`;
+      },
+      size: 90,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Spread out?',
+      cell: (info) => {
+        const spreadItem = info.row.original.items.find(spread);
+        return spreadItem ? 'YES' : '';
+      },
+      size: 120,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Spead out cost per bale',
+      cell: (info) => {
+        const spreadItem = info.row.original.items.find(spread);
+        if (!spreadItem) return '';
+        return `$ ${spreadItem.productPrice}`;
+      },
+      size: 170,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'No. bales spread out',
+      cell: (info) => {
+        const spreadItem = info.row.original.items.find(spread);
+        if (!spreadItem) return '';
+        return spreadItem.quantity;
+      },
+      size: 160,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Total cost spread out',
+      cell: (info) => {
+        const spreadItem = info.row.original.items.find(spread);
+        if (!spreadItem) return '';
+        return `$ ${(spreadItem.quantity * spreadItem.productPrice).toFixed(2)}`;
+      },
+      size: 150,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Donation',
+      cell: (info) => {
+        return '';
+      },
+      size: 120,
+      enableSorting: false,
+    },
+    {
+      accessorKey: '_',
+      header: 'Total',
+      cell: (info) => {
+        const pinestrawItem = info.row.original.items.find(bales);
+        const spreadItem = info.row.original.items.find(spread);
+        const psCost = pinestrawItem ? pinestrawItem?.quantity * pinestrawItem?.productPrice : 0;
+        const spCost = spreadItem ? spreadItem?.quantity * spreadItem?.productPrice : 0;
+        return `$ ${(psCost + spCost).toFixed(2)}`;
+      },
+      size: 150,
+      enableSorting: false,
+    },
+    {
+      accessorKey: 'paymentStatus',
+      header: 'Paid?',
+      cell: (info) => {
+        return info.getValue() === 'PAID' ? 'Yes' : 'NO';
+      },
+      size: 80,
+      enableSorting: false,
+    },
+  ];
+
   $: options = writable<TableOptions<(typeof data)[0]>>({
     data: data,
-    columns: columns,
+    columns: isPineStraw ? pineStrawColumns : columns,
     getCoreRowModel: getCoreRowModel(),
     debugAll: false,
     enableSorting: true,

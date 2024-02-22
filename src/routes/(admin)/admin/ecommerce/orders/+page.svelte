@@ -106,8 +106,6 @@
         loading: false,
       };
   }
-
-  $: console.log($orders.loading, loading);
 </script>
 
 <div class="wrapper">
