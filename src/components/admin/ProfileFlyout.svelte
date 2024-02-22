@@ -26,8 +26,8 @@
       {#if data.session.adminEmail}
         <TextBlock variant="caption">{data.session.adminEmail}</TextBlock>
       {/if}
-      {#if data.session.adminUser?.username}
-        <TextBlock variant="caption">{data.session.adminUser.username}</TextBlock>
+      {#if data.session.adminUser?.roles && data.session.adminUser.roles.length > 0}
+        <TextBlock variant="caption">{data.session.adminUser.roles[0].name}</TextBlock>
       {/if}
     </div>
     <div class="button-row">

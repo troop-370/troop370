@@ -28,8 +28,17 @@ async function tryCredentials(
   }
 
   if (res.status === 200) {
-    const json = await res.json();
-    return [200, null, json.data];
+    const credentials = (await res.json())?.data as Credentials;
+
+    const roles = await fetch('/admin/strapi/admin/users/me', {
+      headers: {
+        Authorization: `Bearer ${credentials.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(({ data }) => data.roles);
+
+    return [200, null, { token: credentials.token, user: { ...credentials.user, roles } }];
   }
 
   return [400, 'UNKNOWN_ERROR', null];
@@ -48,6 +57,14 @@ interface UserData {
   perferedLanguage: string | null;
   createdAt: string;
   updatedAt: string;
+  roles?: Roles[];
+}
+
+interface Roles {
+  id: number;
+  name: string;
+  description?: string;
+  code: string;
 }
 
 interface Credentials {
