@@ -15,4 +15,5 @@ export { parseDoc } from './parseDoc';
 export { query } from './query';
 export { replaceLast } from './replaceLast';
 export { slugify } from './slugify';
+export { unflatten } from './unflatten';
 export { withoutImageNodes } from './withoutImageNodes';

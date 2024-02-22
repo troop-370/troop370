@@ -1,4 +1,5 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
+import { unflatten } from '$utils';
 import { toCsv } from '@iwsio/json-csv-core';
 import { flatten } from 'flatten-anything';
 import type { z } from 'zod';
@@ -95,21 +96,32 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
       return { id, ...rest };
     });
 
-    return toCsv(flatOrders, {
-      fields: Object.keys(flatten(flatOrders[indexWithItem])).flatMap((key) => {
-        return {
-          name: key,
-          label: key,
-          transform(source) {
-            if (JSON.stringify(source) === JSON.stringify('{}')) return '';
-            if (JSON.stringify(source) === JSON.stringify('[]')) return '';
-            return `${source}`;
-          },
-        };
-      }),
-      fieldSeparator: ',',
-      ignoreHeader: false,
-    });
+    return toCsv(
+      flatOrders.map((entry) =>
+        unflatten(
+          Object.fromEntries(
+            Object.entries(flatten(entry)).map(([key, value]) => {
+              return [key, `${value}`.replaceAll('"', '_').replaceAll('#', '_')];
+            })
+          )
+        )
+      ),
+      {
+        fields: Object.keys(flatten(flatOrders[indexWithItem])).flatMap((key) => {
+          return {
+            name: key,
+            label: key,
+            transform(source) {
+              if (JSON.stringify(source) === JSON.stringify('{}')) return '';
+              if (JSON.stringify(source) === JSON.stringify('[]')) return '';
+              return `${source}`;
+            },
+          };
+        }),
+        fieldSeparator: ',',
+        ignoreHeader: false,
+      }
+    );
   }
 
   return orders;
