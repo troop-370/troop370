@@ -23,6 +23,8 @@
     path = $page.url.pathname;
   });
 
+  $: userRoles = data.session.adminUser?.roles?.map((role) => role.name) || [];
+
   $: mainMenuItems = [
     {
       label: 'Troop 370 Home',
@@ -53,12 +55,16 @@
           href: '/admin/plugins/upload',
           selected: $page.url.pathname.startsWith('/admin/plugins/upload'),
         },
-        {
-          label: 'Store orders',
-          icon: 'ShoppingBag24Regular',
-          href: '/admin/ecommerce/orders',
-          selected: $page.url.pathname.startsWith('/admin/ecommerce/orders'),
-        },
+        ...(userRoles.includes('Super Admin') || userRoles.includes('Store Manager')
+          ? [
+              {
+                label: 'Store orders',
+                icon: 'ShoppingBag24Regular',
+                href: '/admin/ecommerce/orders',
+                selected: $page.url.pathname.startsWith('/admin/ecommerce/orders'),
+              },
+            ]
+          : []),
         {
           label: 'Administration',
           icon: 'Options24Regular',
