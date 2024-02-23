@@ -475,7 +475,7 @@
     </div>
     <div role="rowgroup" class="tbody">
       {#each $table.getRowModel().rows as row, i}
-        {@const href = `http://localhost:370/admin/ecommerce/orders/${row.getValue('id')}`}
+        {@const href = `/admin/ecommerce/orders/${row.getValue('id')}`}
         {#key href}
           <a
             role="row"
