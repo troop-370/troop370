@@ -318,7 +318,7 @@
             label: 'hr',
           },
           {
-            label: 'All strore orders',
+            label: 'All store orders',
             icon: 'CircleSmall24Filled',
             href: '/admin/ecommerce/orders',
             selected: $page.url.pathname + $page.url.search === '/admin/ecommerce/orders',
@@ -365,6 +365,34 @@
             selected:
               $page.url.pathname + $page.url.search ===
               '/admin/ecommerce/orders?productId=148999309',
+          },
+          {
+            label: 'Holiday wreaths fundraiser',
+            type: 'category',
+          },
+          {
+            label: 'All orders',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders?productId=153658178%2C153614606',
+            selected:
+              $page.url.pathname + $page.url.search ===
+              '/admin/ecommerce/orders?productId=153658178%153614606',
+          },
+          {
+            label: 'Classic wreaths',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders?productId=153658178',
+            selected:
+              $page.url.pathname + $page.url.search ===
+              '/admin/ecommerce/orders?productId=153658178',
+          },
+          {
+            label: 'Wintergreen wreaths',
+            icon: 'CircleSmall24Filled',
+            href: '/admin/ecommerce/orders?productId=153614606',
+            selected:
+              $page.url.pathname + $page.url.search ===
+              '/admin/ecommerce/orders?productId=153614606',
           },
         ]
       : [];

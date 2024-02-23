@@ -10,6 +10,8 @@
 
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;
+
+  $: console.log(data.order);
 </script>
 
 <div class="page-title">
