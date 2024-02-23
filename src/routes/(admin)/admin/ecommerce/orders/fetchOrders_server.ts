@@ -92,9 +92,7 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
             'Full Address': isShipping
               ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
               : 'PICK UP',
-            'Date received': rest.createDate
-              ? formatISODate(rest.createDate.toISOString(), false, true, false)
-              : '',
+            'Date received': rest.createDate ? rest.createDate.toISOString() : '',
             'Ordered by': rest.billingPerson?.name || '',
             Source: 'portal',
             'Online Store Order No.': id,
