@@ -1,5 +1,4 @@
 <script>
-  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
@@ -10,8 +9,6 @@
 
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;
-
-  $: console.log(data.order);
 </script>
 
 <div class="page-title">

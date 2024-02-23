@@ -3,8 +3,11 @@
   import { page } from '$app/stores';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { ActionRow, PageTitle } from '$lib/common/PageTitle';
+  import { motionMode } from '$stores/motionMode';
   import { hasKey } from '$utils';
   import { Button, ProgressRing, TextBox } from 'fluent-svelte';
+  import { expoOut } from 'svelte/easing';
+  import { fly } from 'svelte/transition';
   import { ordersSchema } from '../ecwidSchemas';
   import OrdersTable from './OrdersTable.svelte';
 
@@ -15,6 +18,12 @@
   let exporting = false;
   let loadingMore = false;
   $: loading = refetching || loadingMore || $orders.loading;
+
+  $: pageTitle =
+    // if defined, attempt to use the page title in the query string
+    $page.url.searchParams.get('__pageTitle') ||
+    // otherwise, use the default title
+    'Online store orders';
 
   // keep the search box value representative of the URL search params
   let searchBoxValue = calculateSearchBoxValue();
@@ -110,7 +119,19 @@
 
 <div class="wrapper">
   <div class="header">
-    <PageTitle fullWidth>Online store orders</PageTitle>
+    {#key pageTitle}
+      <div
+        in:fly={{ y: 26, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+        style="
+          margin: 32px 0 20px 0;
+          min-height: 40px;
+        "
+      >
+        <PageTitle fullWidth>
+          {pageTitle}
+        </PageTitle>
+      </div>
+    {/key}
     <ActionRow fullWidth>
       <Button
         variant="accent"

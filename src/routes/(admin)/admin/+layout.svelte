@@ -333,18 +333,18 @@
           {
             label: 'All orders',
             icon: 'CircleSmall24Filled',
-            href: '/admin/ecommerce/orders?productId=148999309%2C149009997',
+            href: '/admin/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
             selected:
               $page.url.pathname + $page.url.search ===
-              '/admin/ecommerce/orders?productId=148999309%2C149009997',
+              '/admin/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
           },
           (() => {
             const date = new Date();
             date.setMonth(date.getMonth() - 3);
             const shortIsoDate = date.toISOString().split('T')[0];
-            const location = `/admin/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}`;
+            const location = `/admin/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}&__pageTitle=Recent%20pine%20straw%20fundraiser%20orders`;
             return {
-              label: 'All orders (last three months)',
+              label: 'Recent orders (last three months)',
               icon: 'CircleSmall24Filled',
               href: location,
               selected: $page.url.pathname + $page.url.search === location,
@@ -353,18 +353,18 @@
           {
             label: 'Pine straw bales',
             icon: 'CircleSmall24Filled',
-            href: '/admin/ecommerce/orders?productId=149009997',
+            href: '/admin/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
             selected:
               $page.url.pathname + $page.url.search ===
-              '/admin/ecommerce/orders?productId=149009997',
+              '/admin/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
           },
           {
             label: 'Spread pine straw',
             icon: 'CircleSmall24Filled',
-            href: '/admin/ecommerce/orders?productId=148999309',
+            href: '/admin/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
             selected:
               $page.url.pathname + $page.url.search ===
-              '/admin/ecommerce/orders?productId=148999309',
+              '/admin/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
           },
           {
             label: 'Holiday wreaths fundraiser',
@@ -373,26 +373,26 @@
           {
             label: 'All orders',
             icon: 'CircleSmall24Filled',
-            href: '/admin/ecommerce/orders?productId=153658178%2C153614606',
+            href: '/admin/ecommerce/orders?productId=153658178%2C153614606&__pageTitle=All%20holiday%20wreath%20orders',
             selected:
               $page.url.pathname + $page.url.search ===
-              '/admin/ecommerce/orders?productId=153658178%153614606',
+              '/admin/ecommerce/orders?productId=153658178%2C153614606&__pageTitle=All%20holiday%20wreath%20orders',
           },
           {
             label: 'Classic wreaths',
             icon: 'CircleSmall24Filled',
-            href: '/admin/ecommerce/orders?productId=153658178',
+            href: '/admin/ecommerce/orders?productId=153658178&__pageTitle=All%20classic%20wreath%20orders',
             selected:
               $page.url.pathname + $page.url.search ===
-              '/admin/ecommerce/orders?productId=153658178',
+              '/admin/ecommerce/orders?productId=153658178&__pageTitle=All%20classic%20wreath%20orders',
           },
           {
             label: 'Wintergreen wreaths',
             icon: 'CircleSmall24Filled',
-            href: '/admin/ecommerce/orders?productId=153614606',
+            href: '/admin/ecommerce/orders?productId=153614606&__pageTitle=All%20wintergreen%20wreath%20orders',
             selected:
               $page.url.pathname + $page.url.search ===
-              '/admin/ecommerce/orders?productId=153614606',
+              '/admin/ecommerce/orders?productId=153614606&__pageTitle=All%20wintergreen%20wreath%20orders',
           },
         ]
       : [];
