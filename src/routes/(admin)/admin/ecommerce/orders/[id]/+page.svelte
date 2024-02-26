@@ -239,6 +239,7 @@
     padding: 0 20px;
     max-width: 1000px;
     margin: 32px auto 20px auto;
+    box-sizing: border-box;
   }
 
   article {
