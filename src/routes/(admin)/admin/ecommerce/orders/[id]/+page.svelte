@@ -7,6 +7,7 @@
   import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
   import type { z } from 'zod';
   import type { orderEntrySchema } from '../../ecwidSchemas.js';
+  import OrderSelectedOption from './OrderSelectedOption.svelte';
 
   export let data;
 
@@ -15,7 +16,8 @@
 
   let paymentStatusLoading = false;
   let fulfillmentStatusLoading = false;
-  $: loading = paymentStatusLoading || fulfillmentStatusLoading;
+  let itemOptionLoading = false;
+  $: loading = paymentStatusLoading || fulfillmentStatusLoading || itemOptionLoading;
 
   const paymentStatuses = [
     'AWAITING_PAYMENT',
@@ -71,6 +73,39 @@
     });
 
     fulfillmentStatusLoading = false;
+  }
+
+  async function updateItemOption(itemIndex: number, optionName: string, optionValue: string) {
+    itemOptionLoading = true;
+
+    const items = data.order.items || [];
+
+    const options = items[itemIndex].selectedOptions;
+    const optionIndex = options?.findIndex((opt) => opt.name === optionName);
+
+    const updatedOptions =
+      options && optionIndex !== undefined
+        ? options.splice(optionIndex, 1, {
+            ...options[optionIndex],
+            value: optionValue,
+          })
+        : [];
+
+    const updatedItem = {
+      ...items[itemIndex],
+      selectedOptions: updatedOptions,
+    } satisfies NonNullable<NonNullable<z.infer<typeof orderEntrySchema>>['items']>[number];
+
+    const orderUpdate = {
+      id: data.order.id,
+      items: items.splice(itemIndex, 1, updatedItem),
+    } satisfies z.infer<typeof orderEntrySchema>;
+
+    await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(async () => {
+      await invalidate('order-page');
+    });
+
+    itemOptionLoading = false;
   }
 </script>
 
@@ -181,7 +216,7 @@
 
     <div class="card">
       <TextBlock variant="subtitle" class="card-header">Order items</TextBlock>
-      {#each data.order.items || [] as item}
+      {#each data.order.items || [] as item, itemIndex}
         <div class="item">
           <img src={item.imageUrl} alt="" />
           <div>
@@ -189,14 +224,15 @@
             <div style="margin-bottom: 6px;" class="lesser">
               <TextBlock>SKU: {item.sku}</TextBlock>
             </div>
-            {#each item.selectedOptions || [] as opt}
-              <div>
-                <TextBlock>{opt.name}:</TextBlock>
-                <TextBlock style="display: block; margin-left: 30px;">
-                  {opt.value || '<no value>'}
-                  <Button variant="hyperlink" disabled>Edit</Button>
-                </TextBlock>
-              </div>
+            {#each item.selectedOptions || [] as option, optionIndex}
+              <OrderSelectedOption
+                {option}
+                disabled={loading}
+                handleSave={async (newValue) => {
+                  if (option.name) updateItemOption(itemIndex, option.name, newValue);
+                  return true;
+                }}
+              />
             {/each}
           </div>
           <div style="text-align: right;">
