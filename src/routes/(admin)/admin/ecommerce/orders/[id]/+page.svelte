@@ -309,7 +309,13 @@
 
     {#if data.order.shippingOption?.shippingMethodName}
       <div class="card">
-        <TextBlock variant="subtitle" class="card-header">Shipping details</TextBlock>
+        <TextBlock variant="subtitle" class="card-header">
+          {#if data.order.shippingOption.isPickup}
+            Pickup details
+          {:else}
+            Shipping details
+          {/if}
+        </TextBlock>
         <div>
           <TextBlock>
             Selected method:
@@ -318,7 +324,7 @@
             ).toFixed(2)}
           </TextBlock>
         </div>
-        {#if data.order.shippingPerson}
+        {#if data.order.shippingPerson && !data.order.shippingOption.isPickup}
           {@const { name, street, city, stateOrProvinceCode, postalCode, countryName } =
             data.order.shippingPerson}
           <div style="margin: 5px 0;">
