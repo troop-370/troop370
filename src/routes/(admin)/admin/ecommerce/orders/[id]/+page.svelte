@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import { compactMode } from '$stores/compactMode.js';
   import { capitalize, formatISODate, openWindow } from '$utils';
   import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
   import type { z } from 'zod';
@@ -125,7 +126,7 @@
   </Button>
 </div>
 
-<article>
+<article class:compact={$compactMode}>
   <div>
     <div class="card">
       <TextBlock variant="subtitle" class="card-header">
@@ -385,16 +386,27 @@
     gap: 20px;
   }
 
+  article.compact {
+    gap: 15px;
+  }
+
   article > div {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
+  article.compact > div {
+    gap: 15px;
+  }
+
   .card {
     background-color: var(--fds-card-background-secondary);
     border: 1px solid var(--fds-card-stroke-default);
     border-radius: var(--fds-control-corner-radius);
+    padding: 25px;
+  }
+  article.compact .card {
     padding: 20px;
   }
 
