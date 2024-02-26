@@ -1,14 +1,46 @@
-<script>
+<script lang="ts">
+  import { invalidate } from '$app/navigation';
   import { page } from '$app/stores';
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { capitalize, formatISODate, openWindow } from '$utils';
-  import { Button, MenuFlyout, MenuFlyoutItem, TextBlock } from 'fluent-svelte';
+  import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
+  import type { z } from 'zod';
+  import type { orderEntrySchema } from '../../ecwidSchemas.js';
 
   export let data;
 
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;
+
+  let paymentStatusLoading = false;
+  $: loading = paymentStatusLoading;
+
+  const paymentStatuses = [
+    'AWAITING_PAYMENT',
+    'PAID',
+    'CANCELLED',
+    'REFUNDED',
+    'PARTIALLY_REFUNDED',
+    'INCOMPLETE',
+  ] as const;
+
+  async function updatePaymentStatus(newPaymentStatus: (typeof paymentStatuses)[number]) {
+    if (newPaymentStatus === data.order.paymentStatus) return;
+
+    paymentStatusLoading = true;
+
+    const orderUpdate = {
+      id: data.order.id,
+      paymentStatus: newPaymentStatus,
+    } satisfies z.infer<typeof orderEntrySchema>;
+
+    await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(async () => {
+      await invalidate('order-page');
+    });
+
+    paymentStatusLoading = false;
+  }
 </script>
 
 <div class="page-title">
@@ -42,20 +74,34 @@
           <div style="display: flex;">
             <MenuFlyout alignment="start" placement="bottom" bind:open={paymentStatusDropdownOpen}>
               <svelte:fragment slot="flyout">
-                <MenuFlyoutItem>Paid</MenuFlyoutItem>
-                <MenuFlyoutItem>Awaiting payment</MenuFlyoutItem>
-                <MenuFlyoutItem>Cancelled</MenuFlyoutItem>
-                <MenuFlyoutItem>Refunded</MenuFlyoutItem>
-                <MenuFlyoutItem>Partially refunded</MenuFlyoutItem>
+                {#each paymentStatuses as status}
+                  <MenuFlyoutItem
+                    selected={data.order.paymentStatus === status}
+                    disabled={status === 'INCOMPLETE'}
+                    on:click={() => updatePaymentStatus(status)}
+                  >
+                    {capitalize(status.toLowerCase().replaceAll('_', ' '))}
+                  </MenuFlyoutItem>
+                {/each}
               </svelte:fragment>
             </MenuFlyout>
             <Button
               style="width: fit-content;"
-              disabled
               on:click={() => (paymentStatusDropdownOpen = !paymentStatusDropdownOpen)}
+              disabled={loading}
             >
-              {capitalize(data.order.paymentStatus?.toLowerCase() || '')}
-              <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
+              {#if paymentStatusLoading}
+                <ProgressRing
+                  style="--fds-accent-default: currentColor; position: absolute;"
+                  size={16}
+                />
+              {/if}
+              <div
+                style="display: flex; visibility: {paymentStatusLoading ? 'hidden' : 'visible'};"
+              >
+                {capitalize(data.order.paymentStatus?.toLowerCase() || '').replaceAll('_', ' ')}
+                <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
+              </div>
             </Button>
           </div>
         </FieldWrapper>
