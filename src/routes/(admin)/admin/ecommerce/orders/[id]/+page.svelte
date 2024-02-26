@@ -14,7 +14,8 @@
   let fulfillmentStatusDropdownOpen = false;
 
   let paymentStatusLoading = false;
-  $: loading = paymentStatusLoading;
+  let fulfillmentStatusLoading = false;
+  $: loading = paymentStatusLoading || fulfillmentStatusLoading;
 
   const paymentStatuses = [
     'AWAITING_PAYMENT',
@@ -40,6 +41,36 @@
     });
 
     paymentStatusLoading = false;
+  }
+
+  const fulfillmentStatuses = [
+    'AWAITING_PROCESSING',
+    'PROCESSING',
+    'SHIPPED',
+    'DELIVERED',
+    'WILL_NOT_DELIVER',
+    'RETURNED',
+    'READY_FOR_PICKUP',
+    'OUT_FOR_DELIVERY',
+  ] as const;
+
+  async function updateFulfillmentStatus(
+    newFulfillmentStatus: (typeof fulfillmentStatuses)[number]
+  ) {
+    if (newFulfillmentStatus === data.order.fulfillmentStatus) return;
+
+    fulfillmentStatusLoading = true;
+
+    const orderUpdate = {
+      id: data.order.id,
+      fulfillmentStatus: newFulfillmentStatus,
+    } satisfies z.infer<typeof orderEntrySchema>;
+
+    await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(async () => {
+      await invalidate('order-page');
+    });
+
+    fulfillmentStatusLoading = false;
   }
 </script>
 
@@ -113,22 +144,35 @@
               bind:open={fulfillmentStatusDropdownOpen}
             >
               <svelte:fragment slot="flyout">
-                <MenuFlyoutItem>Awaiting processing</MenuFlyoutItem>
-                <MenuFlyoutItem>Processing</MenuFlyoutItem>
-                <MenuFlyoutItem>Ready for pickup</MenuFlyoutItem>
-                <MenuFlyoutItem>Shipped</MenuFlyoutItem>
-                <MenuFlyoutItem>Delivered</MenuFlyoutItem>
-                <MenuFlyoutItem>Delivery cancelled</MenuFlyoutItem>
-                <MenuFlyoutItem>Returned</MenuFlyoutItem>
+                {#each fulfillmentStatuses as status}
+                  <MenuFlyoutItem
+                    selected={data.order.fulfillmentStatus === status}
+                    on:click={() => updateFulfillmentStatus(status)}
+                  >
+                    {capitalize(status.toLowerCase().replaceAll('_', ' '))}
+                  </MenuFlyoutItem>
+                {/each}
               </svelte:fragment>
             </MenuFlyout>
             <Button
               style="width: fit-content;"
-              disabled
+              disabled={loading}
               on:click={() => (fulfillmentStatusDropdownOpen = !fulfillmentStatusDropdownOpen)}
             >
-              {capitalize(data.order.fulfillmentStatus?.toLowerCase().replaceAll('_', ' ') || '')}
-              <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
+              {#if fulfillmentStatusLoading}
+                <ProgressRing
+                  style="--fds-accent-default: currentColor; position: absolute;"
+                  size={16}
+                />
+              {/if}
+              <div
+                style="display: flex; visibility: {fulfillmentStatusLoading
+                  ? 'hidden'
+                  : 'visible'};"
+              >
+                {capitalize(data.order.fulfillmentStatus?.toLowerCase().replaceAll('_', ' ') || '')}
+                <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
+              </div>
             </Button>
           </div>
         </FieldWrapper>
