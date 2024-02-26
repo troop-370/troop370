@@ -337,14 +337,16 @@
       </div>
     {/if}
 
-    {#if data.order.paymentMethod}
+    {#if data.order.paymentMethod || data.order.billingPerson}
       <div class="card">
         <TextBlock variant="subtitle" class="card-header">Billing details</TextBlock>
-        <div><TextBlock>{data.order.paymentMethod}</TextBlock></div>
-        {#if data.order.externalTransactionId}
-          <div style="margin-left: 20px;" class="lesser">
-            <TextBlock>{data.order.externalTransactionId}</TextBlock>
-          </div>
+        {#if data.order.paymentMethod}
+          <div><TextBlock>{data.order.paymentMethod}</TextBlock></div>
+          {#if data.order.externalTransactionId}
+            <div style="margin-left: 20px;" class="lesser">
+              <TextBlock>{data.order.externalTransactionId}</TextBlock>
+            </div>
+          {/if}
         {/if}
         {#if data.order.billingPerson}
           {@const { name, street, city, stateOrProvinceCode, postalCode, countryName } =
