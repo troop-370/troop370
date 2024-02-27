@@ -122,7 +122,9 @@
       cell: (info) => {
         const pinestrawItem = info.row.original.items.find(bales);
         const spreadItem = info.row.original.items.find(spread);
-        return `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD' : ''}`;
+        return `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
+          spreadItem?.quantity || 0
+        }`;
       },
       size: 150,
       enableSorting: false,

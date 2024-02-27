@@ -88,7 +88,9 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
           const addressLookup = `https://www.google.com/maps/dir/St+James+United+Methodist+Church,+4400+Peachtree+Dunwoody+Rd+NE,+Atlanta,+GA+30342/${street}+${city}+${stateOrProvinceCode}+${postalCode}`;
 
           return {
-            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD' : ''}`,
+            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
+              spreadItem?.quantity || 0
+            }`,
             'Full Address': isShipping
               ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
               : 'PICK UP',
