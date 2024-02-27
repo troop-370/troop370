@@ -89,7 +89,7 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
 
           return {
             'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
-              spreadItem?.quantity || 0
+              spreadItem ? spreadItem?.quantity || 0 : ''
             }`,
             'Full Address': isShipping
               ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
