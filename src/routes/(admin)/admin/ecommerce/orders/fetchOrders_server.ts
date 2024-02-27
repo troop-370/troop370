@@ -126,6 +126,7 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
             Donation: '',
             Total: `$ ${rest.usdTotal}`,
             Paid: rest.paymentStatus === 'PAID' ? 'Yes' : 'No',
+            Notes: rest.privateAdminNotes || '',
           };
         }
         return { id };
