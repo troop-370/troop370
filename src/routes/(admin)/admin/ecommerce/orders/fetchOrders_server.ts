@@ -96,7 +96,7 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
               : 'PICK UP',
             'Date received': rest.createDate ? rest.createDate.toISOString() : '',
             'Ordered by': rest.billingPerson?.name || '',
-            Source: 'portal',
+            Source: 'store_' + (rest.paymentMethod || 'manual'),
             'Online Store Order No.': id,
             phone: rest.billingPerson?.phone || '',
             email: rest.email || '',
