@@ -319,7 +319,7 @@
           },
           {
             label: 'All store orders',
-            icon: 'CircleSmall24Filled',
+            icon: 'Receipt24Regular',
             href: '/admin/ecommerce/orders',
             selected: $page.url.pathname + $page.url.search === '/admin/ecommerce/orders',
           },
@@ -345,7 +345,7 @@
             const location = `/admin/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}&__pageTitle=Recent%20pine%20straw%20fundraiser%20orders`;
             return {
               label: 'Recent orders (last three months)',
-              icon: 'CircleSmall24Filled',
+              icon: 'Clock24Regular',
               href: location,
               selected: $page.url.pathname + $page.url.search === location,
             };
