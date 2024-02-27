@@ -1,7 +1,14 @@
 <script lang="ts">
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import { slugify } from '$utils';
-  import { Button, ContentDialog, RadioButton, TextBlock, TextBox } from 'fluent-svelte';
+  import {
+    Button,
+    ContentDialog,
+    ProgressRing,
+    RadioButton,
+    TextBlock,
+    TextBox,
+  } from 'fluent-svelte';
   import type { z } from 'zod';
   import type { orderEntrySchema } from '../../ecwidSchemas';
 
@@ -13,6 +20,7 @@
   export let handleSave: ((newValue: string) => Promise<true | Error>) | undefined = undefined;
   let dialogOpen = false;
   let errorMessage = '';
+  let loading = false;
 
   $: id = slugify(option.name || '', '_');
 
@@ -26,6 +34,7 @@
   $: updateValueFromParent(option.value);
 
   async function processSave() {
+    loading = true;
     if (handleSave) {
       const status = await handleSave(value || '');
       if (status === true) dialogOpen = false;
@@ -33,6 +42,7 @@
     } else {
       dialogOpen = false;
     }
+    loading = false;
   }
 </script>
 
@@ -64,7 +74,15 @@
   </FieldWrapper>
 
   <svelte:fragment slot="footer">
-    <Button slot="footer" variant="accent" on:click={processSave}>Save</Button>
-    <Button slot="footer" on:click={() => (dialogOpen = false)}>Do not save</Button>
+    <Button slot="footer" variant="accent" on:click={processSave} disabled={disabled || loading}>
+      {#if loading}
+        <ProgressRing style="--fds-accent-default: currentColor;" size={16} />
+      {:else}
+        Save
+      {/if}
+    </Button>
+    <Button slot="footer" on:click={() => (dialogOpen = false)} disabled={disabled || loading}
+      >Do not save</Button
+    >
   </svelte:fragment>
 </ContentDialog>
