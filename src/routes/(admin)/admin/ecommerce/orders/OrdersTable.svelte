@@ -14,6 +14,7 @@
     getCoreRowModel,
     type Column,
     type ColumnDef,
+    type Row,
     type TableOptions,
   } from '@tanstack/svelte-table';
   import { Button } from 'fluent-svelte';
@@ -22,6 +23,7 @@
   import { fly } from 'svelte/transition';
   import type { z } from 'zod';
   import type { orderEntrySchema } from '../ecwidSchemas';
+  import { selectedIds } from './selectedIdsStore';
 
   export let data: z.infer<typeof orderEntrySchema>[];
   export let loading = false;
@@ -385,7 +387,14 @@
 
   $: options = writable<TableOptions<(typeof data)[0]>>({
     data: data,
-    columns: isPineStraw ? pineStrawColumns : columns,
+    columns: [
+      {
+        accessorKey: '__checkbox',
+        size: 42,
+        enableSorting: false,
+      },
+      ...(isPineStraw ? pineStrawColumns : columns),
+    ],
     getCoreRowModel: getCoreRowModel(),
     debugAll: false,
     enableSorting: true,
@@ -407,6 +416,77 @@
   });
 
   $: table = createSvelteTable(options);
+
+  function handleRowClick(evt: PointerEvent | MouseEvent, row: Row<(typeof data)[0]>) {
+    const lastRowIndex = lastSelectedRowIndex;
+    const thisRowIndex = row.index;
+
+    if (
+      ((isPointerEvent(evt) && evt.pointerType === 'mouse') || !isPointerEvent(evt)) &&
+      !isInputElem(evt.target) &&
+      !isCheckbox(evt.target)
+    ) {
+      // disable navigating by anchor tag on single click (use double click or enter or middle click instead)
+      evt.preventDefault();
+
+      // if control clicking, select with deselecting other rows
+      if (evt.ctrlKey) {
+        row.toggleSelected();
+      }
+      // if shift clicking, deselect all and then select all from this row to last selected row
+      else if (evt.shiftKey) {
+        $table.toggleAllRowsSelected(false);
+        if (lastRowIndex > thisRowIndex) {
+          $table
+            .getRowModel()
+            .rows.filter((row) => row.index >= thisRowIndex && row.index <= lastRowIndex)
+            .forEach((row) => {
+              row.toggleSelected(true);
+            });
+        } else if (lastRowIndex <= thisRowIndex) {
+          $table
+            .getRowModel()
+            .rows.filter((row) => row.index <= thisRowIndex && row.index >= lastRowIndex)
+            .forEach((row) => {
+              row.toggleSelected(true);
+            });
+        }
+      }
+      // otherise, deselect all rows before selecting this row
+      else {
+        $table.toggleAllRowsSelected(false);
+        row.toggleSelected();
+      }
+      // update the last selected row index once we are done
+      lastSelectedRowIndex = thisRowIndex;
+    }
+    evt.stopPropagation();
+  }
+
+  function isPointerEvent(evt: PointerEvent | MouseEvent): evt is PointerEvent {
+    if (hasKey(evt, 'pointerType')) return true;
+    return false;
+  }
+
+  function isInputElem(target: EventTarget | null): target is HTMLInputElement {
+    return !!target && hasKey(target, 'nodeName') && target.nodeName === 'INPUT';
+  }
+
+  function isCheckbox(target: EventTarget | null): target is Element {
+    if (!target) return false;
+
+    if (hasKey(target, 'class') && typeof target.class === 'string') {
+      return target.class.includes('checkbox');
+    }
+    if (hasKey(target, 'nodeName')) {
+      return target.nodeName === 'INPUT' || target.nodeName === 'svg' || target.nodeName === 'path';
+    }
+
+    return false;
+  }
+
+  let lastSelectedRowIndex = 0;
+  $: $selectedIds = $table.getSelectedRowModel().rows.map((row) => row.original.id) as number[];
 
   function toggleSort(column: Column<(typeof data)[0]>, sortable: boolean, shiftKey?: boolean) {
     if (sortable) column.toggleSorting(undefined, shiftKey);
@@ -482,7 +562,10 @@
           <a
             role="row"
             {href}
-            on:click={() => goto(href)}
+            on:click={(evt) => handleRowClick(evt, row)}
+            on:dblclick={(evt) => {
+              if (!isInputElem(evt.target) && !isCheckbox(evt.target)) goto(href);
+            }}
             in:fly={{ y: 40, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
           >
             {#each row.getVisibleCells() as cell}
@@ -500,7 +583,7 @@
                 class:rightPadding={justify === 'right'}
               >
                 {#if cell.column.id === '__checkbox'}
-                  <!-- <StatelessCheckbox
+                  <StatelessCheckbox
                     checked={row.getIsSelected()}
                     disabled={!row.getCanSelect()}
                     indeterminate={row.getIsSomeSelected()}
@@ -513,7 +596,7 @@
                       row.toggleSelected(evt.detail.checked);
                       lastSelectedRowIndex = row.index;
                     }}
-                  /> -->
+                  />
                 {:else}
                   <span class="cell-content" class:noWrap={$table.options.meta?.noWrap}>
                     <svelte:component
