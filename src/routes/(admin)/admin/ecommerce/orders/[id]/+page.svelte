@@ -5,7 +5,15 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { compactMode } from '$stores/compactMode.js';
   import { capitalize, formatISODate, openWindow } from '$utils';
-  import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
+  import {
+    Button,
+    ContentDialog,
+    MenuFlyout,
+    MenuFlyoutItem,
+    ProgressRing,
+    TextBlock,
+    TextBox,
+  } from 'fluent-svelte';
   import type { z } from 'zod';
   import { fulfillmentStatuses, orderEntrySchema, paymentStatuses } from '../../ecwidSchemas.js';
   import OrderSelectedOption from './OrderSelectedOption.svelte';
@@ -14,11 +22,23 @@
 
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;
+  let privateAdminNotesDialogOpen = false;
 
   let paymentStatusLoading = false;
   let fulfillmentStatusLoading = false;
   let itemOptionLoading = false;
-  $: loading = paymentStatusLoading || fulfillmentStatusLoading || itemOptionLoading;
+  let privateAdminNotesLoading = false;
+  $: loading =
+    paymentStatusLoading ||
+    fulfillmentStatusLoading ||
+    itemOptionLoading ||
+    privateAdminNotesLoading;
+
+  let newPrivateAdminNotesValue = data.order.privateAdminNotes || '';
+  function restoreNewPrivateAdminNotes(unused: string | undefined) {
+    newPrivateAdminNotesValue = data.order.privateAdminNotes || '';
+  }
+  $: restoreNewPrivateAdminNotes(data.order.privateAdminNotes);
 
   async function updatePaymentStatus(newPaymentStatus: (typeof paymentStatuses)[number]) {
     if (newPaymentStatus === data.order.paymentStatus) return;
@@ -87,6 +107,23 @@
     });
 
     itemOptionLoading = false;
+  }
+
+  async function updatePrivateAdminNotes(newPrivateAdminNotes: string) {
+    if (newPrivateAdminNotes === data.order.privateAdminNotes) return;
+
+    privateAdminNotesLoading = true;
+
+    const orderUpdate = {
+      id: data.order.id,
+      privateAdminNotes: newPrivateAdminNotes,
+    } satisfies z.infer<typeof orderEntrySchema>;
+
+    await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(async () => {
+      await invalidate('order-page');
+    });
+
+    privateAdminNotesLoading = false;
   }
 </script>
 
@@ -250,16 +287,32 @@
       </table>
     </div>
 
-    <div class="card">
-      <TextBlock variant="subtitle" class="card-header">Additional information</TextBlock>
-      {#if data.order.ipAddress}
-        <div>
-          <TextBlock tag="div">
-            IP Address: {data.order.ipAddress}
-          </TextBlock>
-        </div>
-      {/if}
-    </div>
+    {#if data.order.ipAddress || data.order.privateAdminNotes}
+      <div class="card">
+        <TextBlock variant="subtitle" class="card-header">Additional information</TextBlock>
+        {#if data.order.ipAddress}
+          <div>
+            <TextBlock tag="div">
+              IP Address: {data.order.ipAddress}
+            </TextBlock>
+          </div>
+        {/if}
+        {#if data.order.privateAdminNotes}
+          <div>
+            <TextBlock tag="div">
+              Notes: {data.order.privateAdminNotes}
+              <Button
+                variant="hyperlink"
+                disabled={loading}
+                on:click={() => (privateAdminNotesDialogOpen = !privateAdminNotesDialogOpen)}
+              >
+                Edit
+              </Button>
+            </TextBlock>
+          </div>
+        {/if}
+      </div>
+    {/if}
   </div>
 
   <div>
@@ -343,6 +396,44 @@
     {/if}
   </div>
 </article>
+
+<ContentDialog
+  bind:open={privateAdminNotesDialogOpen}
+  title="Edit notes"
+  on:close={() => restoreNewPrivateAdminNotes('')}
+>
+  <TextBox
+    bind:value={newPrivateAdminNotesValue}
+    on:keydown={(evt) => {
+      if (evt.key === 'Enter' && !evt.ctrlKey && !evt.shiftKey && !evt.altKey && !evt.metaKey) {
+        updatePrivateAdminNotes(newPrivateAdminNotesValue).finally(() => {
+          privateAdminNotesDialogOpen = false;
+        });
+      }
+    }}
+  />
+
+  <svelte:fragment slot="footer">
+    <Button
+      slot="footer"
+      variant="accent"
+      on:click={async () => {
+        await updatePrivateAdminNotes(newPrivateAdminNotesValue);
+        privateAdminNotesDialogOpen = false;
+      }}
+      disabled={loading}
+    >
+      {#if privateAdminNotesLoading}
+        <ProgressRing style="--fds-accent-default: currentColor;" size={16} />
+      {:else}
+        Save
+      {/if}
+    </Button>
+    <Button slot="footer" on:click={() => (privateAdminNotesDialogOpen = false)} disabled={loading}>
+      Do not save
+    </Button>
+  </svelte:fragment>
+</ContentDialog>
 
 <style>
   .page-title {
