@@ -287,32 +287,28 @@
       </table>
     </div>
 
-    {#if data.order.ipAddress || data.order.privateAdminNotes}
-      <div class="card">
-        <TextBlock variant="subtitle" class="card-header">Additional information</TextBlock>
-        {#if data.order.ipAddress}
-          <div>
-            <TextBlock tag="div">
-              IP Address: {data.order.ipAddress}
-            </TextBlock>
-          </div>
-        {/if}
-        {#if data.order.privateAdminNotes}
-          <div>
-            <TextBlock tag="div">
-              Notes: {data.order.privateAdminNotes}
-              <Button
-                variant="hyperlink"
-                disabled={loading}
-                on:click={() => (privateAdminNotesDialogOpen = !privateAdminNotesDialogOpen)}
-              >
-                Edit
-              </Button>
-            </TextBlock>
-          </div>
-        {/if}
+    <div class="card">
+      <TextBlock variant="subtitle" class="card-header">Additional information</TextBlock>
+      {#if data.order.ipAddress}
+        <div>
+          <TextBlock tag="div">
+            IP Address: {data.order.ipAddress}
+          </TextBlock>
+        </div>
+      {/if}
+      <div>
+        <TextBlock tag="div">
+          Notes: {data.order.privateAdminNotes || '<no value>'}
+          <Button
+            variant="hyperlink"
+            disabled={loading}
+            on:click={() => (privateAdminNotesDialogOpen = !privateAdminNotesDialogOpen)}
+          >
+            Edit
+          </Button>
+        </TextBlock>
       </div>
-    {/if}
+    </div>
   </div>
 
   <div>
