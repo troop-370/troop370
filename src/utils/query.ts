@@ -1,10 +1,10 @@
 import { browser } from '$app/environment';
 import { flattenObject } from 'flatten-anything';
-import { get as getProperty } from 'object-path';
 import qs from 'qs';
 import type { Readable } from 'svelte/store';
 import { derived, get, readable, writable } from 'svelte/store';
 import type { z } from 'zod';
+import { getProperty } from './objectPath';
 
 export interface GraphqlQueryOptions<VariablesType = {}> {
   fetch: typeof fetch;

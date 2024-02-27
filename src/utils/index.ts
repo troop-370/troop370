@@ -10,6 +10,7 @@ export { hasKey } from './hasKey';
 export { isIsoDate, isShortIsoDate } from './isIsoDate';
 export { listOxford } from './listOxford';
 export { notEmpty } from './notEmpty';
+export { get, getProperty, set, setProperty } from './objectPath';
 export { openWindow } from './openWindow';
 export { parseDoc } from './parseDoc';
 export { query } from './query';
