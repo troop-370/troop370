@@ -15,5 +15,6 @@ export { parseDoc } from './parseDoc';
 export { query } from './query';
 export { replaceLast } from './replaceLast';
 export { slugify } from './slugify';
+export { stateNameToAbbreviation } from './stateNameToAbbreviation';
 export { unflatten } from './unflatten';
 export { withoutImageNodes } from './withoutImageNodes';

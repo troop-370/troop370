@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { flattenObject } from 'flatten-anything';
+import { get as getProperty } from 'object-path';
 import qs from 'qs';
 import type { Readable } from 'svelte/store';
 import { derived, get, readable, writable } from 'svelte/store';
@@ -34,6 +35,10 @@ export interface GraphqlQueryOptions<VariablesType = {}> {
   clearStoreBeforeFetch?: boolean;
   Authorization?: string;
   validator?: z.Schema;
+  /**
+   * Default: `'include'`
+   */
+  credentials?: RequestCredentials;
 }
 
 interface Query {
@@ -77,8 +82,8 @@ const loading = writable<Record<string, Record<string, boolean>>>({});
 function getOperationInfo(query: Query) {
   return {
     operationName: query.opName,
-    topSelectionName: query.docsPath || 'results',
-    paginationName: query.paginationPath || 'pagination',
+    topSelectionName: query.docsPath ?? 'results',
+    paginationName: query.paginationPath ?? 'pagination',
   };
 }
 
@@ -118,7 +123,7 @@ export async function query<DataType = unknown, VariablesType = unknown>({
   return fetch(opts.query.location + '?' + qs.stringify(opts.variables || {}), {
     method: 'GET',
     signal: opts.signal,
-    credentials: 'include',
+    credentials: opts.credentials ?? 'include',
     headers: { 'Content-Type': 'application/json', Authorization: opts.Authorization || '' },
   }).then(async (res) => {
     if (res.ok) {
@@ -128,13 +133,13 @@ export async function query<DataType = unknown, VariablesType = unknown>({
       let errors: any[] = [];
       let data: any = [];
       if (opts.validator) {
-        const result = opts.validator.safeParse(_json[topSelectionName]);
+        const result = opts.validator.safeParse(getProperty(_json, topSelectionName));
         if (result.success) {
-          const page = _json[paginationName]?.page;
-          const totalPages = _json[paginationName]?.pageCount;
+          const page = getProperty(_json, paginationName)?.page;
+          const totalPages = getProperty(_json, paginationName)?.pageCount;
           data = {
             docs: result.data,
-            totalDocs: _json[paginationName]?.total,
+            totalDocs: getProperty(_json, paginationName)?.total,
             page,
             totalPages,
             pagingCounter: undefined,
@@ -142,7 +147,8 @@ export async function query<DataType = unknown, VariablesType = unknown>({
             hasNextPage: page < totalPages,
             prevPage: page > 1 ? page - 1 : undefined,
             nextPage: page < totalPages ? page + 1 : undefined,
-            pageSize: _json[paginationName]?.pageSize,
+            pageSize: getProperty(_json, paginationName)?.pageSize,
+            offset: getProperty(_json, paginationName)?.offset,
           };
         } else {
           errors = result.error.errors;
@@ -160,8 +166,8 @@ export async function query<DataType = unknown, VariablesType = unknown>({
           ...opts,
           variables: { ...opts.variables, page: page + 1 },
         });
-        const nextDocs = (next?.data as any)?.docs?.[topSelectionName];
-        (json.data as any)[topSelectionName].push(...nextDocs);
+        const nextDocs = getProperty((next?.data as any)?.docs || {}, topSelectionName);
+        getProperty(json.data, topSelectionName).push(...nextDocs);
       }
 
       // cache the result so it can be used immediately (cache is lost on page refresh)

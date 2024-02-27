@@ -43,7 +43,9 @@ export const shippingOptionInfoSchema = z.object({
   estimatedTransitTime: z.string().optional(),
   isPickup: z.boolean().optional(),
   pickupInstruction: z.string().optional(),
-  fulfillmentType: z.union([z.literal('SHIPPING'), z.literal('PICKUP'), z.literal('DELIVERY')]),
+  fulfillmentType: z
+    .union([z.literal('SHIPPING'), z.literal('PICKUP'), z.literal('DELIVERY')])
+    .optional(),
 });
 
 export const handlingFeeInfoSchema = z.object({
@@ -559,3 +561,23 @@ export const ordersSchema = z.object({
   limit: z.number(),
   items: orderEntrySchema.array(),
 });
+
+export const paymentStatuses = [
+  'AWAITING_PAYMENT',
+  'PAID',
+  'CANCELLED',
+  'REFUNDED',
+  'PARTIALLY_REFUNDED',
+  'INCOMPLETE',
+] as const;
+
+export const fulfillmentStatuses = [
+  'AWAITING_PROCESSING',
+  'PROCESSING',
+  'SHIPPED',
+  'DELIVERED',
+  'WILL_NOT_DELIVER',
+  'RETURNED',
+  'READY_FOR_PICKUP',
+  'OUT_FOR_DELIVERY',
+] as const;

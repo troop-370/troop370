@@ -137,6 +137,16 @@
         variant="accent"
         disabled={loading}
         on:click={() => {
+          goto('/admin/ecommerce/orders/new');
+        }}
+      >
+        <FluentIcon name="Add16Regular" mode="buttonIconLeft" />
+        Add manual order
+      </Button>
+
+      <Button
+        disabled={loading}
+        on:click={() => {
           exporting = true;
           const searchParams = new URLSearchParams($page.url.search);
           searchParams.set('all', 'true');

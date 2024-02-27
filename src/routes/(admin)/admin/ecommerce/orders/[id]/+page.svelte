@@ -7,7 +7,7 @@
   import { capitalize, formatISODate, openWindow } from '$utils';
   import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
   import type { z } from 'zod';
-  import type { orderEntrySchema } from '../../ecwidSchemas.js';
+  import { fulfillmentStatuses, orderEntrySchema, paymentStatuses } from '../../ecwidSchemas.js';
   import OrderSelectedOption from './OrderSelectedOption.svelte';
 
   export let data;
@@ -19,15 +19,6 @@
   let fulfillmentStatusLoading = false;
   let itemOptionLoading = false;
   $: loading = paymentStatusLoading || fulfillmentStatusLoading || itemOptionLoading;
-
-  const paymentStatuses = [
-    'AWAITING_PAYMENT',
-    'PAID',
-    'CANCELLED',
-    'REFUNDED',
-    'PARTIALLY_REFUNDED',
-    'INCOMPLETE',
-  ] as const;
 
   async function updatePaymentStatus(newPaymentStatus: (typeof paymentStatuses)[number]) {
     if (newPaymentStatus === data.order.paymentStatus) return;
@@ -45,17 +36,6 @@
 
     paymentStatusLoading = false;
   }
-
-  const fulfillmentStatuses = [
-    'AWAITING_PROCESSING',
-    'PROCESSING',
-    'SHIPPED',
-    'DELIVERED',
-    'WILL_NOT_DELIVER',
-    'RETURNED',
-    'READY_FOR_PICKUP',
-    'OUT_FOR_DELIVERY',
-  ] as const;
 
   async function updateFulfillmentStatus(
     newFulfillmentStatus: (typeof fulfillmentStatuses)[number]
