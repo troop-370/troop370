@@ -87,6 +87,10 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
           const postOfficeLookup = `https://www.zip-codes.com/search.asp?fld-address=${street}&fld-address2=&fld-city=${city}&fld-state=${stateOrProvinceCode}&fld-zip=${postalCode}&srch-type=address&selectTab=1&Submit=Find+ZIP+Code+of+this+U.S.+Address`;
           const addressLookup = `https://www.google.com/maps/dir/St+James+United+Methodist+Church,+4400+Peachtree+Dunwoody+Rd+NE,+Atlanta,+GA+30342/${street}+${city}+${stateOrProvinceCode}+${postalCode}`;
 
+          const total = rest.usdTotal || 0;
+          const paymentProcessorFees =
+            rest.usdTotal && rest.paymentMethod === 'PayPal' ? rest.usdTotal * 0.0349 + 0.49 : 0;
+
           return {
             'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
               spreadItem ? spreadItem?.quantity || 0 : ''
@@ -124,7 +128,9 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
                 ? `$ ${(spreadItem.quantity * spreadItem.productPrice).toFixed(2)}`
                 : '',
             Donation: '',
-            Total: `$ ${rest.usdTotal}`,
+            Subtotal: `$ ${total}`,
+            'Payment processor fees': paymentProcessorFees ? `$ (${paymentProcessorFees})` : '',
+            Total: `$ ${total - paymentProcessorFees}`,
             Paid: rest.paymentStatus === 'PAID' ? 'Yes' : 'No',
             Notes: rest.privateAdminNotes || '',
           };
