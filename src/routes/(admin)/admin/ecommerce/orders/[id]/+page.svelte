@@ -5,6 +5,7 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { compactMode } from '$stores/compactMode.js';
   import { capitalize, formatISODate, openWindow } from '$utils';
+  import { stateAbbreviationToName } from '$utils/stateNameToAbbreviation.js';
   import {
     Button,
     ContentDialog,
@@ -16,6 +17,7 @@
   } from 'fluent-svelte';
   import type { z } from 'zod';
   import { fulfillmentStatuses, orderEntrySchema, paymentStatuses } from '../../ecwidSchemas.js';
+  import EditShippingAddressDialog from './EditShippingAddressDialog.svelte';
   import OrderSelectedOption from './OrderSelectedOption.svelte';
 
   export let data;
@@ -23,6 +25,7 @@
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;
   let privateAdminNotesDialogOpen = false;
+  let shippingAddressDialogOpen = false;
 
   let paymentStatusLoading = false;
   let fulfillmentStatusLoading = false;
@@ -356,13 +359,50 @@
           </TextBlock>
         </div>
         {#if data.order.shippingPerson && !data.order.shippingOption.isPickup}
-          {@const { name, street, city, stateOrProvinceCode, postalCode, countryName } =
-            data.order.shippingPerson}
+          {@const {
+            name = '',
+            street = '',
+            city = '',
+            stateOrProvinceCode = 'GA',
+            postalCode = '30342',
+            countryName,
+          } = data.order.shippingPerson}
           <div style="margin: 5px 0;">
             <div><TextBlock>{name}</TextBlock></div>
             <div><TextBlock>{street}</TextBlock></div>
             <div><TextBlock>{city}, {stateOrProvinceCode} {postalCode}</TextBlock></div>
             <div><TextBlock>{countryName}</TextBlock></div>
+            <EditShippingAddressDialog
+              {name}
+              {street}
+              {city}
+              stateOrProvinceName={stateAbbreviationToName(stateOrProvinceCode)}
+              {postalCode}
+              bind:open={shippingAddressDialogOpen}
+              handleSave={async (shippingOption) => {
+                const orderUpdate = {
+                  id: data.order.id,
+                  shippingPerson: {
+                    ...(data.order.shippingPerson || {}),
+                    ...shippingOption,
+                  },
+                };
+
+                await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(
+                  async () => {
+                    await invalidate('order-page');
+                  }
+                );
+              }}
+            />
+            <Button
+              variant="hyperlink"
+              disabled={loading}
+              on:click={() => (shippingAddressDialogOpen = !shippingAddressDialogOpen)}
+              style="margin: 5px 0 0 -10px;"
+            >
+              Edit address
+            </Button>
           </div>
         {/if}
       </div>

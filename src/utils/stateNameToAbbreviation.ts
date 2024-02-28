@@ -2,6 +2,10 @@ export function stateNameToAbbreviation(name: keyof typeof states): string {
   return states[name] ?? name; // Return name if record is not found
 }
 
+export function stateAbbreviationToName(abbreviation: keyof typeof stateCodes): string {
+  return stateCodes[abbreviation] ?? abbreviation; // Return abbreviation if record is not found
+}
+
 type T = keyof typeof states;
 
 const states = {
@@ -62,6 +66,66 @@ const states = {
   'puerto rico': 'PR',
   'us virgin islands': 'VI',
   'us minor outlying islands': 'UM',
+};
+
+const stateCodes = {
+  AZ: 'arizona',
+  AL: 'alabama',
+  AK: 'alaska',
+  AR: 'arkansas',
+  CA: 'california',
+  CO: 'colorado',
+  CT: 'connecticut',
+  DC: 'district of columbia',
+  DE: 'delaware',
+  FL: 'florida',
+  GA: 'georgia',
+  HI: 'hawaii',
+  ID: 'idaho',
+  IL: 'illinois',
+  IN: 'indiana',
+  IA: 'iowa',
+  KS: 'kansas',
+  KY: 'kentucky',
+  LA: 'louisiana',
+  ME: 'maine',
+  MD: 'maryland',
+  MA: 'massachusetts',
+  MI: 'michigan',
+  MN: 'minnesota',
+  MS: 'mississippi',
+  MO: 'missouri',
+  MT: 'montana',
+  NE: 'nebraska',
+  NV: 'nevada',
+  NH: 'new hampshire',
+  NJ: 'new jersey',
+  NM: 'new mexico',
+  NY: 'new york',
+  NC: 'north carolina',
+  ND: 'north dakota',
+  OH: 'ohio',
+  OK: 'oklahoma',
+  OR: 'oregon',
+  PA: 'pennsylvania',
+  RI: 'rhode island',
+  SC: 'south carolina',
+  SD: 'south dakota',
+  TN: 'tennessee',
+  TX: 'texas',
+  UT: 'utah',
+  VT: 'vermont',
+  VA: 'virginia',
+  WA: 'washington',
+  WV: 'west virginia',
+  WI: 'wisconsin',
+  WY: 'wyoming',
+  AS: 'american samoa',
+  GU: 'guam',
+  MP: 'northern mariana islands',
+  PR: 'puerto rico',
+  VI: 'us virgin islands',
+  UM: 'us minor outlying islands',
 };
 
 export const stateNames = [
