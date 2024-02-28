@@ -24,6 +24,7 @@
   import { fly } from 'svelte/transition';
   import type { z } from 'zod';
   import type { orderEntrySchema } from '../ecwidSchemas';
+  import BulkActions from './BulkActions.svelte';
   import OrderTableCell from './OrderTableCell.svelte';
   import { selectedIds } from './selectedIdsStore';
 
@@ -655,6 +656,10 @@
       {/if}
     </div>
   {/if}
+</div>
+
+<div style="position: relative;">
+  <BulkActions tableData={data} />
 </div>
 
 <style>
