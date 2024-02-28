@@ -348,6 +348,8 @@
   {/if}
 {/if}
 
+<div style="padding-bottom: 60px;" />
+
 <style>
   section {
     margin: 0 auto;

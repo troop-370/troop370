@@ -393,6 +393,8 @@
   </div>
 </article>
 
+<div style="padding-bottom: 60px;" />
+
 <ContentDialog
   bind:open={privateAdminNotesDialogOpen}
   title="Edit notes"
