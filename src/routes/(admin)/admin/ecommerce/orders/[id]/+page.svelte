@@ -237,7 +237,7 @@
       {#each data.order.items || [] as item, itemIndex}
         <div class="item">
           <img src={item.imageUrl} alt="" />
-          <div>
+          <div style="grid-area: meta;">
             <TextBlock variant="bodyStrong">{item.name}</TextBlock>
             <div style="margin-bottom: 6px;" class="lesser">
               <TextBlock>SKU: {item.sku}</TextBlock>
@@ -253,7 +253,7 @@
               />
             {/each}
           </div>
-          <div style="text-align: right;">
+          <div style="grid-area: price; text-align: right;">
             <div>
               <TextBlock variant="bodyStrong">
                 ${((item.quantity || 0) * (item.price || 0)).toFixed(2)}
@@ -266,6 +266,7 @@
             </div>
           </div>
         </div>
+        <hr class="order-item-divider" />
       {/each}
       <table class="total">
         <tr>
@@ -455,6 +456,12 @@
     gap: 20px;
   }
 
+  @container content (max-width: 900px) {
+    article {
+      grid-template-columns: 1fr;
+    }
+  }
+
   article.compact {
     gap: 15px;
   }
@@ -470,13 +477,24 @@
   }
 
   .card {
+    --padding: 25px;
     background-color: var(--fds-card-background-secondary);
     border: 1px solid var(--fds-card-stroke-default);
     border-radius: var(--fds-control-corner-radius);
-    padding: 25px;
+    padding: var(--padding);
   }
   article.compact .card {
-    padding: 20px;
+    --padding: 20px;
+  }
+
+  hr {
+    width: calc(100% + 2 * var(--padding));
+    margin-left: calc(-1 * var(--padding));
+    height: 0;
+    appearance: none;
+    border: none;
+    border-top: 1px solid var(--fds-divider-stroke-default);
+    margin-block: 24px;
   }
 
   .card :global(.card-header) {
@@ -487,8 +505,8 @@
   .item {
     display: grid;
     grid-template-columns: 72px 1fr 100px;
+    grid-template-areas: 'photo meta price';
     gap: 12px;
-    margin-bottom: 24px;
   }
 
   .item img {
@@ -497,6 +515,23 @@
     object-fit: cover;
     border-radius: var(--fds-control-corner-radius);
     margin-top: 4px;
+    grid-area: photo;
+  }
+
+  @container content (max-width: 500px) {
+    .item {
+      grid-template-columns: 30px 1fr;
+      grid-template-rows: 30px auto;
+      grid-template-areas:
+        'photo meta'
+        'photo meta'
+        'photo price';
+    }
+
+    .item img {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .lesser {
@@ -527,5 +562,11 @@
 
   .main-statuses :global(.field) {
     margin-bottom: 0 !important;
+  }
+
+  @container content (max-width: 500px) {
+    .main-statuses {
+      flex-direction: column;
+    }
   }
 </style>
