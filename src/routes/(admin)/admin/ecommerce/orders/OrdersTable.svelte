@@ -12,6 +12,7 @@
     createSvelteTable,
     flexRender,
     getCoreRowModel,
+    renderComponent,
     type Column,
     type ColumnDef,
     type Row,
@@ -23,6 +24,7 @@
   import { fly } from 'svelte/transition';
   import type { z } from 'zod';
   import type { orderEntrySchema } from '../ecwidSchemas';
+  import OrderTableCell from './OrderTableCell.svelte';
   import { selectedIds } from './selectedIdsStore';
 
   export let data: z.infer<typeof orderEntrySchema>[];
@@ -58,20 +60,18 @@
     {
       accessorKey: 'paymentStatus',
       header: 'Payment status',
-      cell: (info) => {
-        return info.getValue().toLowerCase();
-      },
+      cell: (info) => renderComponent(OrderTableCell, { info, tableLoading: loading }),
       size: 140,
       enableSorting: false,
+      meta: { noPadding: true },
     },
     {
       accessorKey: 'fulfillmentStatus',
       header: 'Fulfillment status',
-      cell: (info) => {
-        return info.getValue().toLowerCase();
-      },
+      cell: (info) => renderComponent(OrderTableCell, { info, tableLoading: loading }),
       size: 200,
       enableSorting: false,
+      meta: { noPadding: true },
     },
     {
       accessorKey: 'items',
@@ -130,6 +130,22 @@
       },
       size: 150,
       enableSorting: false,
+    },
+    {
+      accessorKey: 'paymentStatus',
+      header: 'Payment status',
+      cell: (info) => renderComponent(OrderTableCell, { info, tableLoading: loading }),
+      size: 140,
+      enableSorting: false,
+      meta: { noPadding: true },
+    },
+    {
+      accessorKey: 'fulfillmentStatus',
+      header: 'Fulfillment status',
+      cell: (info) => renderComponent(OrderTableCell, { info, tableLoading: loading }),
+      size: 200,
+      enableSorting: false,
+      meta: { noPadding: true },
     },
     {
       accessorKey: '_',
@@ -385,8 +401,11 @@
     },
   ];
 
+  let tableData = data;
+  $: if (JSON.stringify(tableData) !== JSON.stringify(data)) tableData = data;
+
   $: options = writable<TableOptions<(typeof data)[0]>>({
-    data: data,
+    data: tableData,
     columns: [
       {
         accessorKey: '__checkbox',
@@ -579,7 +598,10 @@
                   width: {columnSize};
                   flex-shrink: {columnSize === '100%' ? '1' : '0'};
                   justify-content: {justify};
+                  {cell.column.id === '__checkbox' ? 'align-self: center;' : ''}
                 "
+                class:compact={$compactMode}
+                class:noPadding={meta.noPadding}
                 class:rightPadding={justify === 'right'}
               >
                 {#if cell.column.id === '__checkbox'}
@@ -667,7 +689,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    align-items: center;
+    align-items: stretch;
     justify-content: flex-start;
   }
   a[role='row'] {
@@ -716,12 +738,22 @@
 
   /* cell */
   span[role='columnheader'], span[role='cell'] {
-    padding: 4px 0 4px 10px;
+    padding: 10px 0 10px 10px;
     box-sizing: border-box;
-    height: 100%;
     display: flex;
     flex-direction: row;
+  }
+  span[role='columnheader'] {
     align-items: center;
+  }
+  span[role='cell'] {
+    align-items: stretch;
+  }
+  span[role='cell'].compact {
+    padding: 4px 0 4px 10px;
+  }
+  span[role='cell'].noPadding {
+    padding: 0;
   }
   span[role='columnheader'].rightPadding, span[role='cell'].rightPadding {
     padding-right: 10px;
@@ -758,6 +790,7 @@
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
   }
   span.cell-content.noWrap {
     white-space: nowrap;
