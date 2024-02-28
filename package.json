@@ -70,6 +70,7 @@
     "color": "^4.2.3",
     "color-hash": "^2.0.2",
     "css-inliner": "^2.0.0",
+    "csv-to-js-parser": "^2.3.5",
     "dompurify": "^3.0.9",
     "flatten-anything": "^3.0.5",
     "fluent-svelte": "^1.6.0",

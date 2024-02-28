@@ -1,15 +1,17 @@
 <script lang="ts">
   import { afterNavigate, goto, invalidate } from '$app/navigation';
   import { page } from '$app/stores';
+  import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { ActionRow, PageTitle } from '$lib/common/PageTitle';
   import { motionMode } from '$stores/motionMode';
   import { hasKey } from '$utils';
-  import { Button, ProgressRing, TextBox } from 'fluent-svelte';
+  import { Button, Checkbox, ContentDialog, ProgressRing, TextBox } from 'fluent-svelte';
   import { expoOut } from 'svelte/easing';
   import { fly } from 'svelte/transition';
   import { ordersSchema } from '../ecwidSchemas';
   import OrdersTable from './OrdersTable.svelte';
+  import { fetchZip4s_client } from './fetchZip4s_client';
 
   export let data;
   $: ({ orders } = data);
@@ -18,6 +20,11 @@
   let exporting = false;
   let loadingMore = false;
   $: loading = refetching || loadingMore || $orders.loading;
+
+  let exportDialogOpen = false;
+  let exportDialogZip4 = false;
+
+  $: isPineStraw = $page.url.search.includes('148999309') || $page.url.search.includes('149009997');
 
   $: pageTitle =
     // if defined, attempt to use the page title in the query string
@@ -144,34 +151,9 @@
         Add manual order
       </Button>
 
-      <Button
-        disabled={loading}
-        on:click={() => {
-          exporting = true;
-          const searchParams = new URLSearchParams($page.url.search);
-          searchParams.set('all', 'true');
-          searchParams.set('as', 'csv');
-          fetch(`?${searchParams}`)
-            .then((res) => res.text())
-            .then((csv) => {
-              const hiddenElement = document.createElement('a');
-              hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-              hiddenElement.target = '_blank';
-              hiddenElement.download = `orders_${new Date().toISOString()}.csv`;
-              hiddenElement.click();
-            })
-            .finally(() => {
-              exporting = false;
-            });
-        }}
-        style="width: 140px;"
-      >
-        {#if exporting}
-          <ProgressRing style="--fds-accent-default: currentColor;" size={16} />
-        {:else}
-          <FluentIcon name="ArrowDownload16Regular" mode="buttonIconLeft" />
-          Export to csv
-        {/if}
+      <Button disabled={loading} on:click={() => (exportDialogOpen = !exportDialogOpen)}>
+        <FluentIcon name="ArrowDownload16Regular" mode="buttonIconLeft" />
+        Export to csv
       </Button>
 
       <Button
@@ -210,6 +192,61 @@
     </div>
   </div>
 </div>
+
+<ContentDialog
+  title="Export as CSV"
+  bind:open={exportDialogOpen}
+  on:close={() => {
+    exportDialogZip4 = false;
+  }}
+>
+  {#if isPineStraw}
+    <FieldWrapper label="ZIP+4" forId="zip4">
+      <Checkbox id="zip4" bind:checked={exportDialogZip4}>
+        Download ZIP+4 for each order (may take a while)
+      </Checkbox>
+    </FieldWrapper>
+  {/if}
+
+  <svelte:fragment slot="footer">
+    <Button
+      slot="footer"
+      variant="accent"
+      on:click={() => {
+        exporting = true;
+        const searchParams = new URLSearchParams($page.url.search);
+        searchParams.set('all', 'true');
+        searchParams.set('as', 'csv');
+        searchParams.set('zip4', exportDialogZip4 ? '1' : '0');
+        fetch(`?${searchParams}`)
+          .then((res) => res.text())
+          .then(async (csv) => {
+            const fullCsv = exportDialogZip4 ? await fetchZip4s_client(fetch, csv) : csv;
+
+            const hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(fullCsv);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = `orders_${new Date().toISOString()}.csv`;
+            hiddenElement.click();
+          })
+          .finally(() => {
+            exportDialogOpen = false;
+            exporting = false;
+          });
+      }}
+      disabled={loading}
+    >
+      {#if exporting}
+        <ProgressRing style="--fds-accent-default: currentColor;" size={16} />
+      {:else}
+        Export to csv
+      {/if}
+    </Button>
+    <Button slot="footer" on:click={() => (exportDialogOpen = false)} disabled={loading}>
+      Cancel
+    </Button>
+  </svelte:fragment>
+</ContentDialog>
 
 <style>
   .wrapper {
