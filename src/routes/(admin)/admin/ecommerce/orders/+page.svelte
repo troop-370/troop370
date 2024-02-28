@@ -201,7 +201,11 @@
   }}
 >
   {#if isPineStraw}
-    <FieldWrapper label="ZIP+4" forId="zip4">
+    <FieldWrapper
+      label="ZIP+4"
+      forId="zip4"
+      description="This feature only allows around 200 checks for ZIP+4s within every 2 hours."
+    >
       <Checkbox id="zip4" bind:checked={exportDialogZip4}>
         Download ZIP+4 for each order (may take a while)
       </Checkbox>
