@@ -190,7 +190,7 @@
     </FieldWrapper>
 
     <div class="address-line-3">
-      <FieldWrapper label="City*" forId="billingPerson.city">
+      <FieldWrapper label="City*" forId="billingPerson.city" style="grid-area: city;">
         <TextBox id="billingPerson.city" bind:value={city} />
       </FieldWrapper>
 
@@ -360,13 +360,41 @@
   .address-line-3 {
     display: grid;
     grid-template-columns: 1fr 240px 140px;
-    gap: 20px;
+    grid-template-areas: 'city state postal';
+    column-gap: 20px;
+  }
+
+  @container content (max-width: 700px) {
+    .address-line-3 {
+      grid-template-columns: 1fr 140px;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        'city city'
+        'state postal';
+    }
+  }
+
+  @container content (max-width: 500px) {
+    .address-line-3 {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        'city'
+        'state'
+        'postal';
+    }
   }
 
   .statuses {
     display: flex;
     flex-direction: row;
     gap: 20px;
+  }
+
+  @container content (max-width: 500px) {
+    .statuses {
+      flex-direction: column;
+    }
   }
 
   .products {
