@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { genAvatar } from '$utils';
   import { Button, PersonPicture, TextBlock } from 'fluent-svelte';
@@ -7,9 +8,11 @@
 
   export let data: LayoutData;
   export let flyoutOpen: boolean;
+
+  $: hideButtons = !!browser && !!window.name;
 </script>
 
-<div id="account-switcher-content">
+<div id="account-switcher-content" class:hideButtons>
   <div class="current-profile">
     <PersonPicture
       size={60}
@@ -30,22 +33,27 @@
         <TextBlock variant="caption">{data.session.adminUser.roles[0].name}</TextBlock>
       {/if}
     </div>
-    <div class="button-row">
-      <Button
-        href="/admin/settings/users"
-        on:click={(e) => {
-          e.preventDefault();
-          goto(`/admin/settings/users/${data.session.adminUser?.id}`);
-          flyoutOpen = false;
-        }}
-      >
-        <FluentIcon name="Person24Regular" mode="buttonIconLeft" />
-        View profile
-      </Button>
-    </div>
+
+    {#if !hideButtons}
+      <div class="button-row">
+        <Button
+          href="/admin/settings/users"
+          on:click={(e) => {
+            e.preventDefault();
+            goto(`/admin/settings/users/${data.session.adminUser?.id}`);
+            flyoutOpen = false;
+          }}
+        >
+          <FluentIcon name="Person24Regular" mode="buttonIconLeft" />
+          View profile
+        </Button>
+      </div>
+    {/if}
   </div>
-  <hr />
-  <!-- <div class="account-switcher">
+
+  {#if !hideButtons}
+    <hr />
+    <!-- <div class="account-switcher">
     {#if data.authUser.otherUsers?.length > 0}
       {#each data.authUser.otherUsers as { _id, name, tenant }}
         <Button
@@ -95,14 +103,15 @@
     {/if}
   </div> 
   <hr /> -->
-  <div
-    style="margin-top: 0px; display: flex; flex-direction: row; justify-content: center; gap: 6px; padding-bottom: 16px;"
-  >
-    <Button href="/admin/sign-out">
-      <FluentIcon name="SignOut24Regular" mode="buttonIconLeft" />
-      Sign out of all accounts
-    </Button>
-  </div>
+    <div
+      style="margin-top: 0px; display: flex; flex-direction: row; justify-content: center; gap: 6px; padding-bottom: 16px;"
+    >
+      <Button href="/admin/sign-out">
+        <FluentIcon name="SignOut24Regular" mode="buttonIconLeft" />
+        Sign out of all accounts
+      </Button>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -111,6 +120,10 @@
     text-align: center;
     border: 1px solid var(--fds-divider-stroke-default);
     border-radius: var(--fds-overlay-corner-radius);
+  }
+
+  #account-switcher-content.hideButtons {
+    padding-bottom: 16px;
   }
 
   .current-profile {

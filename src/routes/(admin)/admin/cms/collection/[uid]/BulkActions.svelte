@@ -16,7 +16,7 @@
   $: links = {
     href: `/admin/content-manager/collection-types/${settings.uid}`,
     hrefSuffixKey: 'id',
-    hrefSearch: undefined,
+    hrefSearch: '?childWindow=1',
     windowName: `editor-troop-370-${settings.uid}-`,
   };
 

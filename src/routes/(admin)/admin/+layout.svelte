@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import NavigationView from '$components/admin/NavigationView.svelte';
@@ -476,6 +477,9 @@
       css: (t: number) => `opacity: ${t * o}`,
     };
   }
+
+  $: hideSidebar =
+    (!!browser && !!window.name) || $page.url.searchParams.get('childWindow') === '1';
 </script>
 
 <svelte:head>
@@ -493,51 +497,53 @@
     </div>
 
     <div id="admin-app">
-      <div id="admin-sidebar">
-        {#if navPaneCompactMode}
-          <NavigationView
-            variant="leftCompact"
-            menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
-            showBackArrow={false}
-            compact={$compactMode}
-            bind:collapsedPane={$collapsedPaneCompact}
-          />
-        {:else}
-          <NavigationView
-            variant="left"
-            menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
-            showBackArrow
-            compact={$compactMode}
-            bind:collapsedPane={$collapsedPane}
-          />
-        {/if}
+      {#if !hideSidebar}
+        <div id="admin-sidebar">
+          {#if navPaneCompactMode}
+            <NavigationView
+              variant="leftCompact"
+              menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
+              showBackArrow={false}
+              compact={$compactMode}
+              bind:collapsedPane={$collapsedPaneCompact}
+            />
+          {:else}
+            <NavigationView
+              variant="left"
+              menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
+              showBackArrow
+              compact={$compactMode}
+              bind:collapsedPane={$collapsedPane}
+            />
+          {/if}
 
-        <div
-          class="settings-flyout"
-          class:collapsedPane={navPaneCompactMode ? $collapsedPaneCompact : $collapsedPane}
-        >
-          <Flyout bind:open={settingFlyoutOpen} placement="right">
-            <svelte:fragment slot="flyout">
-              <div class="settings-flyout-flex">
-                <TextBlock variant="subtitle" style="margin-bottom: 10px;">Settings</TextBlock>
-                <ToggleSwitch bind:checked={$compactMode}>Compact mode</ToggleSwitch>
-                <ToggleSwitch
-                  checked={$motionMode === 'reduced'}
-                  on:change={(evt) => {
-                    if (evt.target && hasKey(evt.target, 'checked') && evt.target.checked)
-                      $motionMode = 'reduced';
-                    else $motionMode = 'no-preference';
-                  }}
-                >
-                  Reduce motion
-                </ToggleSwitch>
-              </div>
-            </svelte:fragment>
-          </Flyout>
+          <div
+            class="settings-flyout"
+            class:collapsedPane={navPaneCompactMode ? $collapsedPaneCompact : $collapsedPane}
+          >
+            <Flyout bind:open={settingFlyoutOpen} placement="right">
+              <svelte:fragment slot="flyout">
+                <div class="settings-flyout-flex">
+                  <TextBlock variant="subtitle" style="margin-bottom: 10px;">Settings</TextBlock>
+                  <ToggleSwitch bind:checked={$compactMode}>Compact mode</ToggleSwitch>
+                  <ToggleSwitch
+                    checked={$motionMode === 'reduced'}
+                    on:change={(evt) => {
+                      if (evt.target && hasKey(evt.target, 'checked') && evt.target.checked)
+                        $motionMode = 'reduced';
+                      else $motionMode = 'no-preference';
+                    }}
+                  >
+                    Reduce motion
+                  </ToggleSwitch>
+                </div>
+              </svelte:fragment>
+            </Flyout>
+          </div>
         </div>
-      </div>
+      {/if}
 
-      <div id="admin-content-outer">
+      <div id="admin-content-outer" class:noRadius={hideSidebar}>
         {#key unique}
           <div style="height: 100%; width: 100%;">
             {#if !waiting}
@@ -625,6 +631,9 @@
     background-color: var(--content-bg);
     border-radius: 6px 0 0 0;
     position: relative;
+  }
+  #admin-content-outer.noRadius {
+    border-radius: 0;
   }
 
   #admin-content {
