@@ -24,6 +24,10 @@
     path = $page.url.pathname;
   });
 
+  $: canReadUploads = !!data.userPermissions?.raw.find((p) =>
+    p.action.startsWith('plugin::upload.read')
+  );
+
   $: userRoles = data.session.adminUser?.roles?.map((role) => role.name) || [];
 
   $: mainMenuItems = [
@@ -40,6 +44,7 @@
         {
           label: 'Content manager',
           icon: 'ContentView32Regular',
+          disabled: !data.cmsContentTypes || data.cmsContentTypes.length === 0,
           href: (() => {
             if (data.cmsContentTypes?.[0]) {
               return `/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}`;
@@ -53,6 +58,7 @@
         {
           label: 'Media library',
           icon: 'Folder24Regular',
+          disabled: !canReadUploads,
           href: '/admin/plugins/upload',
           selected: $page.url.pathname.startsWith('/admin/plugins/upload'),
         },
