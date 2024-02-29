@@ -32,9 +32,9 @@
 
   $: mainMenuItems = [
     {
-      label: 'Troop 370 Home',
+      label: 'Dashboard',
       icon: 'Home16Regular',
-      href: `/`,
+      href: `/admin`,
     },
     {
       label: 'Apps',

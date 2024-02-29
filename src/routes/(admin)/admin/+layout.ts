@@ -6,6 +6,7 @@ import type { LayoutLoad } from './$types';
 
 export const load = (async ({ parent, url, fetch }) => {
   const { session } = await parent();
+  const userRoles = session.adminUser?.roles?.map((role) => role.name);
 
   if (url.pathname === '/admin/login') return {};
 
@@ -73,6 +74,9 @@ export const load = (async ({ parent, url, fetch }) => {
         return { uids: permissions.map((p) => p.subject), specs: permissions };
       })(),
     },
+    uploads: {
+      read: !!userPermissions.find((p) => p.action.startsWith('plugin::upload.read')),
+    },
   };
 
   const cmsContentTypes = contentManagerSettings?.contentTypes
@@ -85,10 +89,47 @@ export const load = (async ({ parent, url, fetch }) => {
         .localeCompare(b.info.displayName.split('::').slice(-1)[0])
     );
 
+  const apps = [
+    {
+      label: 'Content manager',
+      icon: 'ContentView32Regular',
+      disabled: !cmsContentTypes || cmsContentTypes.length === 0,
+      href: (() => {
+        if (cmsContentTypes?.[0]) {
+          return `/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}`;
+        }
+        return '/admin/content-manager';
+      })(),
+      selected: (url: URL) =>
+        url.pathname.startsWith('/admin/content-manager') || url.pathname.startsWith('/admin/cms'),
+    },
+    {
+      label: 'Media library',
+      icon: 'Folder24Regular',
+      disabled: !permissions.uploads.read,
+      href: '/admin/plugins/upload',
+      selected: (url: URL) => url.pathname.startsWith('/admin/plugins/upload'),
+    },
+    {
+      label: 'Store orders',
+      icon: 'ShoppingBag24Regular',
+      disabled: !(userRoles?.includes('Super Admin') || userRoles?.includes('Store Manager')),
+      href: '/admin/ecommerce/orders',
+      selected: (url: URL) => url.pathname.startsWith('/admin/ecommerce/orders'),
+    },
+    {
+      label: 'Administration',
+      icon: 'Options24Regular',
+      href: '/admin/settings',
+      selected: (url: URL) => url.pathname.startsWith('/admin/settings'),
+    },
+  ];
+
   return {
     contentManagerSettings,
     userPermissions: permissions,
     cmsContentTypes,
+    apps,
   };
 }) satisfies LayoutLoad;
 
