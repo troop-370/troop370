@@ -30,7 +30,7 @@
 
   $: pageTitle =
     // if defined, attempt to use the page title in the query string
-    $page.url.searchParams.get('__pageTitle') ||
+    data.url.searchParams.get('__pageTitle') ||
     // otherwise, build a title using the collection name
     (displayName ? displayName : capitalize(collectionNamePlural.replaceAll('-', ' '))) +
       ' collection';
@@ -46,7 +46,7 @@
    * URL search params.
    */
   function calculateSearchBoxValue() {
-    let str = Array.from($page.url.searchParams.entries())
+    let str = Array.from(data.url.searchParams.entries())
       .filter(([key]) => {
         if (key.includes('__')) {
           return false;
@@ -64,7 +64,7 @@
       .join(' ');
 
     // add space to the end of the string if there are only filters
-    if (!$page.url.searchParams.has('_search')) {
+    if (!data.url.searchParams.has('_search')) {
       str += ' ';
     }
 
@@ -87,11 +87,11 @@
     });
     if (search.trim().length > 0) filters.push(['_search', search.trim()]);
 
-    const url = new URL($page.url.pathname, $page.url.origin);
+    const url = new URL(data.url.pathname, data.url.origin);
     filters.forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
-    Array.from($page.url.searchParams.entries()).forEach(([key, value]) => {
+    Array.from(data.url.searchParams.entries()).forEach(([key, value]) => {
       if (key.includes('__') && key !== '__pageTitle') {
         url.searchParams.set(key, value);
       }
@@ -309,7 +309,7 @@
             </MenuFlyoutItem>
             <MenuFlyoutItem
               on:click={() => {
-                goto($page.url.pathname);
+                goto(data.url.pathname);
               }}
             >
               <FluentIcon name="FilterDismiss16Regular" slot="icon" />

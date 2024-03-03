@@ -95,6 +95,7 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
     table: {
       sort,
     },
+    url,
   };
 }) satisfies PageLoad;
 
