@@ -94,6 +94,7 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
     collectionDocsData: await collectionDocsData,
     table: {
       sort,
+      filters: paramsToFilter(url.searchParams),
     },
     url,
   };

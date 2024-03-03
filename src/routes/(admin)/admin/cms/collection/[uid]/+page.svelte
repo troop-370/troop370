@@ -361,6 +361,7 @@
         collectionConfig={data.collectionConfig}
         tableData={data.collectionDocsData}
         tableDataSort={data.table.sort}
+        tableDataFilter={data.table.filters}
         bind:loadingMore
         on:sort={(evt) => {
           // backup the current sort in localstorage so it can be restored later
