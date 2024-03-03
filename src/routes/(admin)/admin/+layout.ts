@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
-import { error, redirect } from '@sveltejs/kit';
+import { queryWithStore } from '$utils/query';
+import { redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
+import { derived, get } from 'svelte/store';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
 
@@ -29,26 +31,27 @@ export const load = (async ({ parent, url, fetch }) => {
     sessionStorage.setItem('jwtToken', JSON.stringify(session.adminToken));
   }
 
-  const contentManagerSettings = await fetch('/admin/strapi/content-manager/init', {
-    headers: {
-      Authorization: `Bearer ${session.adminToken}`,
+  const cmsSettings = await queryWithStore<z.infer<typeof contentManagerInitSchema>>({
+    fetch,
+    query: {
+      location: '/admin/strapi/content-manager/init',
+      opName: 'strapiContentManagerInit',
+      docsPath: 'data',
+      paginationPath: '',
     },
+    validator: contentManagerInitSchema,
+    Authorization: `Bearer ${session.adminToken}`,
+    waitForQuery: true, // ensure that data is available before continuing since we need it in this function
+    useCache: true,
+    expireCache: 15 * 60 * 1000, // require refetch if it has been 15 minutes
   })
-    .then((res) => res.json())
-    .then(({ data, error }) => {
-      if (error?.status === 401) return new Error('401');
-      return contentManagerInitSchema.parse(data);
-    })
-    .catch((err) => {
-      console.error(err);
-      return new Error('failed to get content manager settings');
+    .then((store) => [store, get(store)] as const)
+    .then(([store, $store]) => {
+      if ($store.errors?.[0]?.status === 401) {
+        throw redirect(302, '/admin/login');
+      }
+      return store;
     });
-  if (contentManagerSettings instanceof Error) {
-    if (contentManagerSettings.message === '401') {
-      throw redirect(302, '/admin/login');
-    }
-    throw error(500, contentManagerSettings.message);
-  }
 
   const userPermissions = await fetch('/admin/strapi/admin/users/me/permissions', {
     headers: {
@@ -79,54 +82,66 @@ export const load = (async ({ parent, url, fetch }) => {
     },
   };
 
-  const cmsContentTypes = contentManagerSettings?.contentTypes
-    .filter((type) => permissions?.contentManager.read.uids.includes(type.uid))
-    .filter((type) => type.isDisplayed)
-    .sort((a, b) =>
-      a.info.displayName
-        .split('::')
-        .slice(-1)[0]
-        .localeCompare(b.info.displayName.split('::').slice(-1)[0])
+  const cmsContentTypes = derived([cmsSettings], ([$contentManagerSettings]) => {
+    return (
+      $contentManagerSettings?.data?.docs?.contentTypes
+        .filter((type) => permissions?.contentManager.read.uids.includes(type.uid))
+        .filter((type) => type.isDisplayed)
+        .sort((a, b) =>
+          a.info.displayName
+            .split('::')
+            .slice(-1)[0]
+            .localeCompare(b.info.displayName.split('::').slice(-1)[0])
+        ) || []
     );
+  });
 
-  const apps = [
-    {
-      label: 'Content manager',
-      icon: 'ContentView32Regular',
-      disabled: !cmsContentTypes || cmsContentTypes.length === 0,
-      href: (() => {
-        if (cmsContentTypes?.[0]) {
-          return `/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}`;
-        }
-        return '/admin/content-manager';
-      })(),
-      selected: (url: URL) =>
-        url.pathname.startsWith('/admin/content-manager') || url.pathname.startsWith('/admin/cms'),
-    },
-    {
-      label: 'Media library',
-      icon: 'Folder24Regular',
-      disabled: !permissions.uploads.read,
-      href: '/admin/plugins/upload',
-      selected: (url: URL) => url.pathname.startsWith('/admin/plugins/upload'),
-    },
-    {
-      label: 'Store orders',
-      icon: 'ShoppingBag24Regular',
-      disabled: !(userRoles?.includes('Super Admin') || userRoles?.includes('Store Manager')),
-      href: '/admin/ecommerce/orders',
-      selected: (url: URL) => url.pathname.startsWith('/admin/ecommerce/orders'),
-    },
-    {
-      label: 'Administration',
-      icon: 'Options24Regular',
-      href: '/admin/settings',
-      selected: (url: URL) => url.pathname.startsWith('/admin/settings'),
-    },
-  ];
+  const apps = derived([cmsContentTypes], ([$cmsContentTypes]) => {
+    return [
+      {
+        label: 'Content manager',
+        icon: 'ContentView32Regular',
+        disabled: !cmsContentTypes || $cmsContentTypes.length === 0,
+        href: (() => {
+          if ($cmsContentTypes?.[0]) {
+            const uids = $cmsContentTypes.map(({ uid }) => uid);
+            if (uids.includes('api::post.post')) {
+              return `/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}`;
+            } else {
+              return `/admin/cms/collection/${$cmsContentTypes[0].uid}`;
+            }
+          }
+          return '/admin/content-manager';
+        })(),
+        selected: (url: URL) =>
+          url.pathname.startsWith('/admin/content-manager') ||
+          url.pathname.startsWith('/admin/cms'),
+      },
+      {
+        label: 'Media library',
+        icon: 'Folder24Regular',
+        disabled: !permissions.uploads.read,
+        href: '/admin/plugins/upload',
+        selected: (url: URL) => url.pathname.startsWith('/admin/plugins/upload'),
+      },
+      {
+        label: 'Store orders',
+        icon: 'ShoppingBag24Regular',
+        disabled: !(userRoles?.includes('Super Admin') || userRoles?.includes('Store Manager')),
+        href: '/admin/ecommerce/orders',
+        selected: (url: URL) => url.pathname.startsWith('/admin/ecommerce/orders'),
+      },
+      {
+        label: 'Administration',
+        icon: 'Options24Regular',
+        href: '/admin/settings',
+        selected: (url: URL) => url.pathname.startsWith('/admin/settings'),
+      },
+    ];
+  });
 
   return {
-    contentManagerSettings,
+    contentManagerSettings: cmsSettings,
     userPermissions: permissions,
     cmsContentTypes,
     apps,

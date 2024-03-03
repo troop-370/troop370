@@ -6,12 +6,13 @@
   import { copy } from 'copy-anything';
 
   export let data;
+  $: ({ apps } = data);
 </script>
 
 <PageTitle>Dashboard</PageTitle>
 
 <div class="margin apps">
-  {#each (data.apps || [])
+  {#each ($apps || [])
     .filter(notEmpty)
     .filter(({ label }) => label !== 'Home' && label !== 'Dashboard')
     .map((_item) => {

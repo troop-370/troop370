@@ -16,6 +16,7 @@
   import { fade, fly } from 'svelte/transition';
 
   export let data;
+  $: ({ cmsContentTypes, apps } = data);
 
   // keep track of the page path
   export let path: string = $page.url.pathname;
@@ -40,66 +41,26 @@
       label: 'Apps',
       icon: 'Apps16Regular',
       type: 'expander',
-      children: [
-        {
-          label: 'Content manager',
-          icon: 'ContentView32Regular',
-          disabled: !data.cmsContentTypes || data.cmsContentTypes.length === 0,
-          href: (() => {
-            if (data.cmsContentTypes?.[0]) {
-              return `/admin/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}`;
-            }
-            return '/admin/content-manager';
-          })(),
-          selected:
-            $page.url.pathname.startsWith('/admin/content-manager') ||
-            $page.url.pathname.startsWith('/admin/cms'),
-        },
-        {
-          label: 'Media library',
-          icon: 'Folder24Regular',
-          disabled: !canReadUploads,
-          href: '/admin/plugins/upload',
-          selected: $page.url.pathname.startsWith('/admin/plugins/upload'),
-        },
-        ...(userRoles.includes('Super Admin') || userRoles.includes('Store Manager')
-          ? [
-              {
-                label: 'Store orders',
-                icon: 'ShoppingBag24Regular',
-                href: '/admin/ecommerce/orders',
-                selected: $page.url.pathname.startsWith('/admin/ecommerce/orders'),
-              },
-            ]
-          : []),
-        {
-          label: 'Administration',
-          icon: 'Options24Regular',
-          href: '/admin/settings',
-          selected: $page.url.pathname.startsWith('/admin/settings'),
-        },
-      ],
+      children: ($apps || []).map(({ label, icon, disabled, href, selected }) => {
+        return { label, icon, disabled, href, selected: selected($page.url) };
+      }),
     },
   ];
 
   $: customCmsNav = ((): MenuItem[] => {
-    const posts = data.cmsContentTypes?.find(({ uid }) => uid === 'api::post.post');
-    const announcements = data.cmsContentTypes?.find(
-      ({ uid }) => uid === 'api::home-page.home-page'
-    );
-    const standaloneEmail = data.cmsContentTypes?.find(
+    const posts = $cmsContentTypes?.find(({ uid }) => uid === 'api::post.post');
+    const announcements = $cmsContentTypes?.find(({ uid }) => uid === 'api::home-page.home-page');
+    const standaloneEmail = $cmsContentTypes?.find(
       ({ uid }) => uid === 'api::standalone-email.standalone-email'
     );
-    const newsletterEmail = data.cmsContentTypes?.find(
+    const newsletterEmail = $cmsContentTypes?.find(
       ({ uid }) => uid === 'api::newsletter.newsletter'
     );
-    const pages = data.cmsContentTypes?.find(({ uid }) => uid === 'api::page.page');
-    const formsAndDocsPage = data.cmsContentTypes?.find(
+    const pages = $cmsContentTypes?.find(({ uid }) => uid === 'api::page.page');
+    const formsAndDocsPage = $cmsContentTypes?.find(
       ({ uid }) => uid === 'api::forms-and-documents-page.forms-and-documents-page'
     );
-    const eventsPage = data.cmsContentTypes?.find(
-      ({ uid }) => uid === 'api::events-page.events-page'
-    );
+    const eventsPage = $cmsContentTypes?.find(({ uid }) => uid === 'api::events-page.events-page');
 
     const postsGroup =
       posts || announcements
@@ -254,7 +215,7 @@
   })();
 
   $: cmsCollections =
-    data.cmsContentTypes
+    $cmsContentTypes
       ?.filter((type) => type.kind === 'collectionType')
       .map((type) => {
         const pathname = `/admin/cms/collection/${type.uid}`;
@@ -268,7 +229,7 @@
         };
       }) || [];
   $: cmsSingleTypes =
-    data.cmsContentTypes
+    $cmsContentTypes
       ?.filter((type) => type.kind === 'singleType')
       .map((type) => {
         const pathname = `/admin/content-manager/single-types/${type.uid}`;

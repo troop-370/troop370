@@ -2,6 +2,7 @@ import { browser } from '$app/environment';
 import { isJSON } from '$utils/isJSON';
 import { queryWithStore } from '$utils/query';
 import { error } from '@sveltejs/kit';
+import { get } from 'svelte/store';
 import { z } from 'zod';
 import type { PageLoad } from './$types';
 
@@ -9,8 +10,11 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
   depends('collection-table');
 
   const { session, contentManagerSettings, userPermissions } = await parent();
+  if (!contentManagerSettings) throw error(404, 'failed to find content manager settings');
 
-  const settings = contentManagerSettings?.contentTypes.find((type) => type.uid === params.uid);
+  const settings = get(contentManagerSettings)?.data?.docs?.contentTypes.find(
+    (type) => type.uid === params.uid
+  );
   if (!settings) throw error(404, 'failed to find content type settings');
 
   const permissions = userPermissions?.raw.filter((p) => p.subject === params.uid);
