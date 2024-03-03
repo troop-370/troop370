@@ -22,7 +22,7 @@
   import CollectionTable from './CollectionTable.svelte';
 
   export let data;
-  $: ({ collectionDocsData } = data);
+  $: ({ collectionDocsData, userPermissions } = data);
 
   $: collectionNameSingular = data.settings.info.singularName || data.settings.info.name;
   $: collectionNamePlural = data.settings.info.pluralName || data.settings.info.name || '';
@@ -317,7 +317,7 @@
             </MenuFlyoutItem>
             <MenuFlyoutDivider />
             <MenuFlyoutItem
-              disabled={!data.userPermissions?.raw.find(
+              disabled={!$userPermissions?.raw.find(
                 ({ action }) => action === 'plugin::content-manager.collection-types.configure-view'
               )}
               on:click={() =>
