@@ -32,6 +32,7 @@
   export let loading = false;
   export let fetchMore: (() => Promise<void>) | undefined = undefined;
   export let totalDocs: number | undefined = undefined;
+  export let url: URL;
 
   const columns: ColumnDef<(typeof data)[0]>[] = [
     {
@@ -578,7 +579,7 @@
     <div role="rowgroup" class="tbody">
       {#each $table.getRowModel().rows as row, i}
         {@const href = `/admin/ecommerce/orders/${row.getValue('id')}`}
-        {#key href}
+        {#key href + url.search}
           <a
             role="row"
             {href}
