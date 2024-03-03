@@ -16,7 +16,7 @@
   import { fade, fly } from 'svelte/transition';
 
   export let data;
-  $: ({ cmsContentTypes, apps } = data);
+  $: ({ cmsContentTypes, apps, userPermissions } = data);
 
   // keep track of the page path
   export let path: string = $page.url.pathname;
@@ -25,7 +25,7 @@
     path = $page.url.pathname;
   });
 
-  $: canReadUploads = !!data.userPermissions?.raw.find((p) =>
+  $: canReadUploads = !!$userPermissions?.raw.find((p) =>
     p.action.startsWith('plugin::upload.read')
   );
 

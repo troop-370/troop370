@@ -62,12 +62,12 @@
       size: 42,
       enableSorting: false,
     },
-    ...collectionConfig.contentType.layouts.list
+    ...($collectionConfig?.contentType.layouts.list || [])
       .map((key) => {
         if (['id', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'].includes(key)) return null;
 
-        const sortable = collectionConfig.contentType.metadatas[key]?.list?.sortable;
-        const label = collectionConfig.contentType.metadatas[key]?.list?.label;
+        const sortable = $collectionConfig?.contentType.metadatas[key]?.list?.sortable;
+        const label = $collectionConfig?.contentType.metadatas[key]?.list?.label;
 
         return {
           header: label || key,

@@ -53,50 +53,57 @@ export const load = (async ({ parent, url, fetch }) => {
       return store;
     });
 
-  const userPermissions = await fetch('/admin/strapi/admin/users/me/permissions', {
-    headers: {
-      Authorization: `Bearer ${session.adminToken}`,
+  const userPermissions = await queryWithStore<z.infer<typeof userPermissionsSchema>>({
+    fetch,
+    query: {
+      location: '/admin/strapi/admin/users/me/permissions',
+      opName: 'strapiUserPermissions',
+      docsPath: 'data',
+      paginationPath: '',
     },
-  })
-    .then((res) => res.json())
-    .then(({ data }) => {
-      return userPermissionsSchema.parse(data);
-    })
-    .catch((err) => {
-      console.error(err);
-      return [];
-    });
-
-  const permissions = {
-    raw: userPermissions,
-    contentManager: {
-      read: (() => {
-        const permissions = userPermissions.filter(
-          ({ action }) => action === 'plugin::content-manager.explorer.read'
-        );
-        return { uids: permissions.map((p) => p.subject), specs: permissions };
-      })(),
-    },
-    uploads: {
-      read: !!userPermissions.find((p) => p.action.startsWith('plugin::upload.read')),
-    },
-  };
-
-  const cmsContentTypes = derived([cmsSettings], ([$contentManagerSettings]) => {
-    return (
-      $contentManagerSettings?.data?.docs?.contentTypes
-        .filter((type) => permissions?.contentManager.read.uids.includes(type.uid))
-        .filter((type) => type.isDisplayed)
-        .sort((a, b) =>
-          a.info.displayName
-            .split('::')
-            .slice(-1)[0]
-            .localeCompare(b.info.displayName.split('::').slice(-1)[0])
-        ) || []
-    );
+    validator: userPermissionsSchema,
+    Authorization: `Bearer ${session.adminToken}`,
+    waitForQuery: true, // ensure that data is available before continuing since we need it in this function
+    useCache: true,
+    expireCache: 15 * 60 * 1000, // require refetch if it has been 15 minutes
   });
 
-  const apps = derived([cmsContentTypes], ([$cmsContentTypes]) => {
+  const permissions = derived([userPermissions], ([$userPermissions]) => {
+    return {
+      raw: $userPermissions.data?.docs || [],
+      contentManager: {
+        read: (() => {
+          const permissions =
+            $userPermissions.data?.docs.filter(
+              ({ action }) => action === 'plugin::content-manager.explorer.read'
+            ) || [];
+          return { uids: permissions.map((p) => p.subject), specs: permissions };
+        })(),
+      },
+      uploads: {
+        read: !!$userPermissions.data?.docs.find((p) => p.action.startsWith('plugin::upload.read')),
+      },
+    };
+  });
+
+  const cmsContentTypes = derived(
+    [cmsSettings, permissions],
+    ([$contentManagerSettings, $permissions]) => {
+      return (
+        $contentManagerSettings?.data?.docs?.contentTypes
+          .filter((type) => $permissions.contentManager.read.uids.includes(type.uid))
+          .filter((type) => type.isDisplayed)
+          .sort((a, b) =>
+            a.info.displayName
+              .split('::')
+              .slice(-1)[0]
+              .localeCompare(b.info.displayName.split('::').slice(-1)[0])
+          ) || []
+      );
+    }
+  );
+
+  const apps = derived([cmsContentTypes, permissions], ([$cmsContentTypes, $permissions]) => {
     return [
       {
         label: 'Content manager',
@@ -120,7 +127,7 @@ export const load = (async ({ parent, url, fetch }) => {
       {
         label: 'Media library',
         icon: 'Folder24Regular',
-        disabled: !permissions.uploads.read,
+        disabled: !$permissions.uploads.read,
         href: '/admin/plugins/upload',
         selected: (url: URL) => url.pathname.startsWith('/admin/plugins/upload'),
       },
