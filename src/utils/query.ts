@@ -125,51 +125,82 @@ export async function query<DataType = unknown, VariablesType = unknown>({
     signal: opts.signal,
     credentials: opts.credentials ?? 'include',
     headers: { 'Content-Type': 'application/json', Authorization: opts.Authorization || '' },
-  }).then(async (res) => {
-    if (res.ok) {
-      const _json = await res.json();
+  })
+    .then(async (res) => {
+      if (res.ok) {
+        const _json = await res.json();
 
-      // if a validator is provided, try to make sure it matches
-      let errors: any[] = [];
-      let data: any = [];
-      if (opts.validator) {
-        const result = opts.validator.safeParse(getProperty(_json, topSelectionName));
-        if (result.success) {
-          const page = getProperty(_json, paginationName)?.page;
-          const totalPages = getProperty(_json, paginationName)?.pageCount;
-          data = {
-            docs: result.data,
-            totalDocs: getProperty(_json, paginationName)?.total,
-            page,
-            totalPages,
-            pagingCounter: undefined,
-            hasPrevPage: page > 1,
-            hasNextPage: page < totalPages,
-            prevPage: page > 1 ? page - 1 : undefined,
-            nextPage: page < totalPages ? page + 1 : undefined,
-            pageSize: getProperty(_json, paginationName)?.pageSize,
-            offset: getProperty(_json, paginationName)?.offset,
-          };
-        } else {
-          errors = result.error.errors;
+        // if a validator is provided, try to make sure it matches
+        let errors: any[] = [];
+        let data: any = [];
+        if (opts.validator) {
+          const result = opts.validator.safeParse(getProperty(_json, topSelectionName));
+          if (result.success) {
+            const page = getProperty(_json, paginationName)?.page;
+            const totalPages = getProperty(_json, paginationName)?.pageCount;
+            data = {
+              docs: result.data,
+              totalDocs: getProperty(_json, paginationName)?.total,
+              page,
+              totalPages,
+              pagingCounter: undefined,
+              hasPrevPage: page > 1,
+              hasNextPage: page < totalPages,
+              prevPage: page > 1 ? page - 1 : undefined,
+              nextPage: page < totalPages ? page + 1 : undefined,
+              pageSize: getProperty(_json, paginationName)?.pageSize,
+              offset: getProperty(_json, paginationName)?.offset,
+            };
+          } else {
+            errors = result.error.errors;
+          }
         }
+
+        const json = { data, errors, loading: false } as ReturnType<Paged<DataType>>;
+
+        // attempt to retrieve the docs from every page (this could take a while)
+        // and combine into the main docs array
+        const page: number = (opts?.variables as any)?.page || 1;
+        if (opts?.fetchNextPages && json.data && (json.data as any)?.docs?.length > 0) {
+          const next = await query<DataType>({
+            fetch,
+            ...opts,
+            variables: { ...opts.variables, page: page + 1 },
+          });
+          const nextDocs = getProperty((next?.data as any)?.docs || {}, topSelectionName);
+          getProperty(json.data, topSelectionName).push(...nextDocs);
+        }
+
+        return json;
       }
+      throw res;
+    })
+    .catch(async (res) => {
+      try {
+        const _json = await res.json();
 
-      const json = { data, errors, loading: false } as ReturnType<Paged<DataType>>;
-
-      // attempt to retrieve the docs from every page (this could take a while)
-      // and combine into the main docs array
-      const page: number = (opts?.variables as any)?.page || 1;
-      if (opts?.fetchNextPages && json.data && (json.data as any)?.docs?.length > 0) {
-        const next = await query<DataType>({
-          fetch,
-          ...opts,
-          variables: { ...opts.variables, page: page + 1 },
-        });
-        const nextDocs = getProperty((next?.data as any)?.docs || {}, topSelectionName);
-        getProperty(json.data, topSelectionName).push(...nextDocs);
+        return {
+          data: {
+            docs: null as unknown,
+            totalDocs: 0,
+            page: 0,
+            totalPages: 0,
+            pagingCounter: 0,
+            hasPrevPage: false,
+            hasNextPage: false,
+            prevPage: 0,
+            nextPage: 0,
+            pageSize: 0,
+            offset: 0,
+          },
+          errors: [_json.error],
+          loading: false,
+        } as ReturnType<Paged<DataType>>;
+      } catch (err) {
+        return null;
       }
-
+    })
+    .then((json) => {
       // cache the result so it can be used immediately (cache is lost on page refresh)
       if (operationName) {
         cache.update((state) => ({
@@ -195,10 +226,7 @@ export async function query<DataType = unknown, VariablesType = unknown>({
       }
 
       return json;
-    }
-
-    return null;
-  });
+    });
 }
 
 export function getQueryStore<DataType = unknown, VariablesType = unknown>(opts: {
