@@ -136,11 +136,25 @@
       </Button>
     {/if}
 
+    {#if active === 'Cart'}
+      <div class="checkout-alert">
+        After you enter your email, press *Enter* or *Return* on your keyboard. If you are on a phone or tablet, tap the *Go* button or *→* icon on your keyboard. 
+      </div>
+    {/if}
+
     <div id="store-browser" style="background:none;min-height:100px;" />
   </div>
 </div>
 
 <style>
+  .checkout-alert {
+    font-family: var(--font-detail);
+    background-color: var(--color-secondary);
+    color: var(--color-neutral-30);
+    padding: 35px 20px;
+    max-width: 100%;
+  }
+
   .wrapper {
     position: relative;
     margin-top: -48px;
