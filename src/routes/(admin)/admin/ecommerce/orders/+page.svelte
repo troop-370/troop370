@@ -24,11 +24,11 @@
   let exportDialogOpen = false;
   let exportDialogZip4 = false;
 
-  $: isPineStraw = $page.url.search.includes('148999309') || $page.url.search.includes('149009997');
+  $: isPineStraw = data.url.search.includes('148999309') || data.url.search.includes('149009997');
 
   $: pageTitle =
     // if defined, attempt to use the page title in the query string
-    $page.url.searchParams.get('__pageTitle') ||
+    data.url.searchParams.get('__pageTitle') ||
     // otherwise, use the default title
     'Online store orders';
 
@@ -43,7 +43,7 @@
    * URL search params.
    */
   function calculateSearchBoxValue() {
-    let str = Array.from($page.url.searchParams.entries())
+    let str = Array.from(data.url.searchParams.entries())
       .filter(([key]) => {
         if (key.includes('__')) {
           return false;
@@ -61,7 +61,7 @@
       .join(' ');
 
     // add space to the end of the string if there are only filters
-    if (!$page.url.searchParams.has('_search')) {
+    if (!data.url.searchParams.has('_search')) {
       str += ' ';
     }
 
@@ -72,8 +72,6 @@
    * Updates the URL search params based on the search box value.
    */
   function setSearchFilters() {
-    $orders = { total: 0, count: 0, offset: 0, limit: 100, items: [], loading: true };
-
     let filters = [];
     let search = '';
     searchBoxValue.match(/(?:[^\s"]+|"[^"]*")+/g)?.forEach((val) => {
@@ -86,11 +84,11 @@
     });
     if (search.trim().length > 0) filters.push(['_search', search.trim()]);
 
-    const url = new URL($page.url.pathname, $page.url.origin);
+    const url = new URL(data.url.pathname, data.url.origin);
     filters.forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
-    Array.from($page.url.searchParams.entries()).forEach(([key, value]) => {
+    Array.from(data.url.searchParams.entries()).forEach(([key, value]) => {
       if (key.includes('__') && key !== '__pageTitle') {
         url.searchParams.set(key, value);
       }
@@ -102,7 +100,7 @@
   async function fetchMore() {
     $orders = { ...$orders, loading: true };
 
-    const searchParams = new URLSearchParams($page.url.search);
+    const searchParams = new URLSearchParams(data.url.search);
     searchParams.set('offset', $orders.items.length.toString());
 
     const nextOrders = await fetch(`?${searchParams}`)
@@ -188,7 +186,13 @@
   </div>
   <div class="explorer">
     <div class="new-table-wrapper explorer-main">
-      <OrdersTable data={$orders.items} totalDocs={$orders.total} {fetchMore} {loading} />
+      <OrdersTable
+        data={$orders.items}
+        totalDocs={$orders.total}
+        {fetchMore}
+        {loading}
+        url={data.url}
+      />
     </div>
   </div>
 </div>
@@ -218,7 +222,7 @@
       variant="accent"
       on:click={() => {
         exporting = true;
-        const searchParams = new URLSearchParams($page.url.search);
+        const searchParams = new URLSearchParams(data.url.search);
         searchParams.set('all', 'true');
         searchParams.set('as', 'csv');
         searchParams.set('zip4', exportDialogZip4 ? '1' : '0');

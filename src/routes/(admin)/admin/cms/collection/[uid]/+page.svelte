@@ -22,7 +22,7 @@
   import CollectionTable from './CollectionTable.svelte';
 
   export let data;
-  $: ({ collectionDocsData } = data);
+  $: ({ collectionDocsData, userPermissions } = data);
 
   $: collectionNameSingular = data.settings.info.singularName || data.settings.info.name;
   $: collectionNamePlural = data.settings.info.pluralName || data.settings.info.name || '';
@@ -30,7 +30,7 @@
 
   $: pageTitle =
     // if defined, attempt to use the page title in the query string
-    $page.url.searchParams.get('__pageTitle') ||
+    data.url.searchParams.get('__pageTitle') ||
     // otherwise, build a title using the collection name
     (displayName ? displayName : capitalize(collectionNamePlural.replaceAll('-', ' '))) +
       ' collection';
@@ -46,7 +46,7 @@
    * URL search params.
    */
   function calculateSearchBoxValue() {
-    let str = Array.from($page.url.searchParams.entries())
+    let str = Array.from(data.url.searchParams.entries())
       .filter(([key]) => {
         if (key.includes('__')) {
           return false;
@@ -64,7 +64,7 @@
       .join(' ');
 
     // add space to the end of the string if there are only filters
-    if (!$page.url.searchParams.has('_search')) {
+    if (!data.url.searchParams.has('_search')) {
       str += ' ';
     }
 
@@ -87,11 +87,11 @@
     });
     if (search.trim().length > 0) filters.push(['_search', search.trim()]);
 
-    const url = new URL($page.url.pathname, $page.url.origin);
+    const url = new URL(data.url.pathname, data.url.origin);
     filters.forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
-    Array.from($page.url.searchParams.entries()).forEach(([key, value]) => {
+    Array.from(data.url.searchParams.entries()).forEach(([key, value]) => {
       if (key.includes('__') && key !== '__pageTitle') {
         url.searchParams.set(key, value);
       }
@@ -309,7 +309,7 @@
             </MenuFlyoutItem>
             <MenuFlyoutItem
               on:click={() => {
-                goto($page.url.pathname);
+                goto(data.url.pathname);
               }}
             >
               <FluentIcon name="FilterDismiss16Regular" slot="icon" />
@@ -317,7 +317,7 @@
             </MenuFlyoutItem>
             <MenuFlyoutDivider />
             <MenuFlyoutItem
-              disabled={!data.userPermissions?.raw.find(
+              disabled={!$userPermissions?.raw.find(
                 ({ action }) => action === 'plugin::content-manager.collection-types.configure-view'
               )}
               on:click={() =>
@@ -361,6 +361,7 @@
         collectionConfig={data.collectionConfig}
         tableData={data.collectionDocsData}
         tableDataSort={data.table.sort}
+        tableDataFilter={data.table.filters}
         bind:loadingMore
         on:sort={(evt) => {
           // backup the current sort in localstorage so it can be restored later

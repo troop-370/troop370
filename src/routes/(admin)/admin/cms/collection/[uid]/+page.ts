@@ -2,6 +2,7 @@ import { browser } from '$app/environment';
 import { isJSON } from '$utils/isJSON';
 import { queryWithStore } from '$utils/query';
 import { error } from '@sveltejs/kit';
+import { derived, get } from 'svelte/store';
 import { z } from 'zod';
 import type { PageLoad } from './$types';
 
@@ -9,25 +10,35 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
   depends('collection-table');
 
   const { session, contentManagerSettings, userPermissions } = await parent();
+  if (!contentManagerSettings) throw error(404, 'failed to find content manager settings');
 
-  const settings = contentManagerSettings?.contentTypes.find((type) => type.uid === params.uid);
+  const settings = get(contentManagerSettings)?.data?.docs?.contentTypes.find(
+    (type) => type.uid === params.uid
+  );
   if (!settings) throw error(404, 'failed to find content type settings');
 
-  const permissions = userPermissions?.raw.filter((p) => p.subject === params.uid);
+  if (!userPermissions) throw error(404, 'failed to find user permissions');
+  const permissions = get(userPermissions)?.raw.filter((p) => p.subject === params.uid);
   if (!settings) throw error(404, 'failed to find content type permissions');
 
-  const collectionConfig = await fetch(
-    '/admin/strapi/content-manager/content-types/' + params.uid + '/configuration',
-    {
-      headers: {
-        Authorization: `Bearer ${session.adminToken}`,
-      },
-    }
-  )
-    .then((res) => res.json())
-    .then(({ data }) => {
-      return collectionConfigurationSchema.parse(data);
+  const collectionConfig = await queryWithStore<z.infer<typeof collectionConfigurationSchema>>({
+    fetch,
+    query: {
+      location: '/admin/strapi/content-manager/content-types/' + params.uid + '/configuration',
+      opName: `strapiContentTypeConfig_${params.uid}`,
+      docsPath: 'data',
+      paginationPath: '',
+    },
+    validator: collectionConfigurationSchema,
+    Authorization: `Bearer ${session.adminToken}`,
+    waitForQuery: true, // ensure that data is available before continuing since we need it in this function
+    useCache: true,
+    expireCache: 15 * 60 * 1000, // require refetch if it has been 15 minutes
+  }).then((store) => {
+    return derived([store], ([$store]) => {
+      return $store.data?.docs;
     });
+  });
 
   const sort = (() => {
     // prefer to use the sort defined in localstorage
@@ -42,12 +53,12 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
     if (Object.keys(sort).length === 0) {
       const defaultSortKey =
         url.searchParams.get('__defaultSortKey') ||
-        collectionConfig.contentType.settings.defaultSortBy ||
+        get(collectionConfig)?.contentType.settings.defaultSortBy ||
         'createdAt';
       const defaultSortKeyOrder = (() => {
         const __defaultSortKeyOrder = url.searchParams.get('__defaultSortKeyOrder');
         if (__defaultSortKeyOrder) return __defaultSortKeyOrder === '1' ? 1 : -1;
-        return collectionConfig.contentType.settings.defaultSortOrder.toLowerCase() === 'asc'
+        return get(collectionConfig)?.contentType.settings.defaultSortOrder.toLowerCase() === 'asc'
           ? 1
           : -1;
       })();
@@ -83,7 +94,9 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
     collectionDocsData: await collectionDocsData,
     table: {
       sort,
+      filters: paramsToFilter(url.searchParams),
     },
+    url,
   };
 }) satisfies PageLoad;
 

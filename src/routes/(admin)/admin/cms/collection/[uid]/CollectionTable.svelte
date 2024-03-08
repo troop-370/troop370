@@ -32,12 +32,12 @@
   export let collectionConfig: NonNullable<PageData['collectionConfig']>;
   export let permissions: NonNullable<PageData['permissions']>;
   export let tableData: PageData['collectionDocsData'];
-  // export let tableDataFilter: NonNullable<PageData['table']>['filter'];
+  export let tableDataFilter: NonNullable<PageData['table']>['filter'];
   export let tableDataSort: NonNullable<PageData['table']>['sort'];
 
-  type Doc = NonNullable<NonNullable<typeof $tableData.data>['docs']>[0];
+  const filterJSON = JSON.stringify(tableDataFilter);
 
-  $: console.log($tableData);
+  type Doc = NonNullable<NonNullable<typeof $tableData.data>['docs']>[0];
 
   // row links behaviors
   $: links = {
@@ -62,12 +62,12 @@
       size: 42,
       enableSorting: false,
     },
-    ...collectionConfig.contentType.layouts.list
+    ...($collectionConfig?.contentType.layouts.list || [])
       .map((key) => {
         if (['id', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'].includes(key)) return null;
 
-        const sortable = collectionConfig.contentType.metadatas[key]?.list?.sortable;
-        const label = collectionConfig.contentType.metadatas[key]?.list?.label;
+        const sortable = $collectionConfig?.contentType.metadatas[key]?.list?.sortable;
+        const label = $collectionConfig?.contentType.metadatas[key]?.list?.label;
 
         return {
           header: label || key,
@@ -374,7 +374,7 @@
         {@const href = `${links.href}/${row.original?.[links.hrefSuffixKey]}${
           links.hrefSearch || ''
         }`}
-        {#key href}
+        {#key href + filterJSON}
           <a
             role="row"
             {href}

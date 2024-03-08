@@ -69,6 +69,7 @@
     "blocks-html-renderer": "^1.0.4",
     "color": "^4.2.3",
     "color-hash": "^2.0.2",
+    "copy-anything": "^3.0.5",
     "css-inliner": "^2.0.0",
     "csv-to-js-parser": "^2.3.5",
     "dompurify": "^3.0.9",
