@@ -91,8 +91,8 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
           const paymentProcessorFees =
             rest.usdTotal && rest.paymentMethod === 'PayPal' ? rest.usdTotal * 0.0349 + 0.49 : 0;
 
-          const firstName = (rest.billingPerson?.phone || '').split(' ').slice(0, -1).join(' ');
-          const lastName = (rest.billingPerson?.phone || '').split(' ').slice(-1)[0];
+          const firstName = (rest.billingPerson?.name || '').split(' ').slice(0, -1).join(' ');
+          const lastName = (rest.billingPerson?.name || '').split(' ').slice(-1)[0];
 
           return {
             '': '',
