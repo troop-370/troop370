@@ -29,6 +29,7 @@ export async function fetchZip4s_client(fetch: Fetch, csv: string) {
       // wait so that we are not rate limited
       await wait(1000);
 
+      if (zipPlus4) obj['Full Address'] += '-' + zipPlus4;
       obj['Zip plus 4'] = zipPlus4;
       return Promise.resolve();
     });

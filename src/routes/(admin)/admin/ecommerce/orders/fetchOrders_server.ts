@@ -91,21 +91,26 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
           const paymentProcessorFees =
             rest.usdTotal && rest.paymentMethod === 'PayPal' ? rest.usdTotal * 0.0349 + 0.49 : 0;
 
+          const firstName = (rest.billingPerson?.phone || '').split(' ').slice(0, -1).join(' ');
+          const lastName = (rest.billingPerson?.phone || '').split(' ').slice(-1)[0];
+
           return {
+            '': '',
             'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
               spreadItem ? spreadItem?.quantity || 0 : ''
             }`,
             'Full Address': isShipping
               ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
               : 'PICK UP',
+            'Last Name': lastName,
+            'First Name': firstName,
             'Date received': rest.createDate ? rest.createDate.toISOString() : '',
-            'Ordered by': rest.billingPerson?.name || '',
             Source: 'store_' + (rest.paymentMethod || 'manual'),
             'Online Store Order No.': id,
             phone: rest.billingPerson?.phone || '',
             email: rest.email || '',
             Address: street || '',
-            ZIP: postalCode?.slice(0, 5) || '',
+            Zip: postalCode?.slice(0, 5) || '',
             'Lookup postoffice': postOfficeLookup,
             'Zip plus 4 Search': `=HYPERLINK("${postOfficeLookup}", "postoffice")`,
             'Zip plus 4': '',
@@ -115,11 +120,14 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
             'Bales Cost': pinestrawItem?.productPrice
               ? `$ ${pinestrawItem.productPrice.toFixed(2)}`
               : '',
-            'Paypal Cost': '',
+            'Pine Straw Cost': `${
+              (pinestrawItem?.quantity || 0) * (pinestrawItem?.productPrice || 0)
+            }`,
+            'Paypal Cost': paymentProcessorFees ? `$ (${paymentProcessorFees})` : '',
             'Delivery Fee': rest.shippingOption?.shippingRate
               ? `$ ${(rest.shippingOption.shippingRate || 0).toFixed(2)}`
               : '',
-            'Spread out NO YES': spreadItem ? 'yes' : 'NO',
+            'Spread out NO YES': spreadItem ? 'Yes' : 'NO',
             'Spead out cost per bale': spreadItem?.productPrice
               ? `$ ${spreadItem.productPrice}`
               : '',
@@ -129,10 +137,23 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
                 ? `$ ${(spreadItem.quantity * spreadItem.productPrice).toFixed(2)}`
                 : '',
             Donation: '',
-            Subtotal: `$ ${total}`,
-            'Payment processor fees': paymentProcessorFees ? `$ (${paymentProcessorFees})` : '',
+            // total = pine straw revenue + spreading revenue + delivery fee - paypal fees + dontation
             Total: `$ ${total - paymentProcessorFees}`,
-            Paid: rest.paymentStatus === 'PAID' ? 'Yes' : 'No',
+            Paid: rest.paymentStatus === 'PAID' ? 'Yes' : 'NO',
+            'spread out time': '',
+            'Spread out date Instrutions':
+              spreadItem?.selectedOptions?.find(
+                (opt) =>
+                  opt.name ===
+                  'Where should the pine straw be spread in your yard? (include the address when checking out)'
+              )?.value || '',
+            'delivery time': '',
+            'Delivery Instructions':
+              pinestrawItem?.selectedOptions?.find(
+                (opt) =>
+                  opt.name ===
+                  'Delivery Only: Where should the pine straw bales be placed in your yard?'
+              )?.value || '',
             Notes: rest.privateAdminNotes || '',
           };
         }
