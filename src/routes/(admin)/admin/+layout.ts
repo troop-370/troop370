@@ -50,6 +50,9 @@ export const load = (async ({ parent, url, fetch }) => {
       if ($store.errors?.[0]?.status === 401) {
         throw redirect(302, '/admin/login');
       }
+      if ($store.errors.length > 0) {
+        console.error($store.errors);
+      }
       return store;
     });
 
@@ -159,7 +162,49 @@ const contentTypeSchema = z
   .object({
     apiID: z.string(),
     uid: z.string(),
-    attributes: z.object({}).passthrough(),
+    attributes: z.record(
+      z.string(),
+      z
+        .object({
+          type: z
+            .enum([
+              'date',
+              'datetime',
+              'time',
+              'default',
+              'biginteger',
+              'boolean',
+              'component',
+              'decimal',
+              'dynamiczone',
+              'email',
+              'enumeration',
+              'float',
+              'integer',
+              'json',
+              'media',
+              'password',
+              'relation',
+              'richtext',
+              'blocks',
+              'string',
+              'text',
+              'uid',
+            ])
+            .optional(),
+          relation: z.enum(['oneToOne', 'manyToOne', 'oneToMany', 'manyToMany']).optional(),
+          target: z.string().optional(),
+          targetModel: z.string().optional(),
+          relationType: z.enum(['oneToOne', 'manyToOne', 'oneToMany', 'manyToMany']).optional(),
+          regex: z.string().optional(),
+          configurable: z.boolean().optional(),
+          writable: z.boolean().optional(),
+          visible: z.boolean().optional(),
+          useJoinTable: z.boolean().optional(),
+          private: z.boolean().optional(),
+        })
+        .passthrough()
+    ),
     info: z.object({
       description: z.string().optional(),
       displayName: z.string(),
