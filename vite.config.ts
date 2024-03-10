@@ -5,7 +5,7 @@ const config: UserConfig = {
   plugins: [sveltekit()],
   ssr: {
     // add libraries containing invalid ESM here
-    noExternal: ['rrule'],
+    noExternal: ['rrule', 'copy-anything'],
   },
 };
 
