@@ -8,7 +8,11 @@ export const load = (async ({ fetch, params, parent, url }) => {
   const docData = await query<any>({
     fetch,
     query: {
-      location: '/admin/strapi/content-manager/collection-types/api::post.post/' + params.item_id,
+      location:
+        '/admin/strapi/content-manager/collection-types/' +
+        params.collection +
+        '/' +
+        params.item_id,
       opName: `collectionItemData__${params.collection}__${params.item_id}`,
       docsPath: '',
     },
@@ -23,7 +27,7 @@ export const load = (async ({ fetch, params, parent, url }) => {
         const relationData = await query<any>({
           fetch,
           query: {
-            location: `/admin/strapi/content-manager/relations/api::post.post/${params.item_id}/${key}`,
+            location: `/admin/strapi/content-manager/relations/${params.collection}/${params.item_id}/${key}`,
             opName: `collectionItemData__${params.collection}__${params.item_id}`,
             docsPath: def.relationType === 'oneToOne' ? 'data' : 'results',
           },
