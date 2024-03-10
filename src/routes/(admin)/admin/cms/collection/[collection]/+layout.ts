@@ -1,3 +1,4 @@
+import { notEmpty } from '$utils';
 import { queryWithStore } from '$utils/query';
 import { error } from '@sveltejs/kit';
 import { derived, get } from 'svelte/store';
@@ -5,7 +6,7 @@ import { z } from 'zod';
 import type { LayoutLoad } from './$types';
 
 export const load = (async ({ fetch, parent, params }) => {
-  const { session, contentManagerSettings, userPermissions } = await parent();
+  const { session, contentManagerSettings, userPermissions, previewConfig } = await parent();
   if (!contentManagerSettings) throw error(404, 'failed to find content manager settings');
 
   const settings = get(contentManagerSettings)?.data?.docs?.contentTypes.find(
@@ -37,8 +38,43 @@ export const load = (async ({ fetch, parent, params }) => {
     });
   });
 
+  const defs = (() => {
+    const $collectionConfig = get(collectionConfig);
+    if (!$collectionConfig) return [];
+
+    const fieldNames = $collectionConfig.contentType.layouts.edit.flat().map(({ name }) => name);
+    const metadatas = Object.entries($collectionConfig.contentType.metadatas).map(
+      ([key, value]) => [key, value.edit] as const
+    );
+    const attributes = Object.entries(settings.attributes);
+
+    return fieldNames
+      .map((key) => {
+        const thisAttrs = attributes.find(([_key]) => _key === key);
+        if (!thisAttrs) return;
+
+        const thisMetadatas = metadatas.find(([_key]) => _key === key);
+        if (!thisMetadatas) return;
+
+        return [
+          key,
+          {
+            ...thisAttrs[1],
+            field: thisMetadatas[1],
+          },
+        ] as const;
+      })
+      .filter(notEmpty);
+  })();
+
+  const collectionPreviewConfig = get(previewConfig)?.find((config) => config.uid === settings.uid);
+
   return {
-    settings,
+    settings: {
+      ...settings,
+      defs,
+      preview: collectionPreviewConfig,
+    },
     permissions,
     collectionConfig,
   };
