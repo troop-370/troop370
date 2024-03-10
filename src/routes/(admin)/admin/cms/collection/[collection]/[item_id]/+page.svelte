@@ -1,5 +1,6 @@
 <script lang="ts">
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
+  import { RichBlocks } from '$lib/common/Blocks/index.js';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
@@ -206,6 +207,8 @@
                       <TextBox id={key} bind:value={$docData[key]} />
                     {:else if def.type === 'boolean'}
                       <ToggleSwitch id={key} bind:checked={$docData[key]} />
+                    {:else if def.type === 'blocks'}
+                      <RichBlocks bind:value={$docData[key]} />
                     {:else}
                       Unsupported content type: "{def.type}"
                       <pre>{JSON.stringify(def, null, 2)}</pre>
