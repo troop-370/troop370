@@ -146,293 +146,301 @@
   </Button>
 </div>
 
-<article class:compact={$compactMode}>
-  <div>
-    <div class="card">
-      <TextBlock variant="subtitle" class="card-header">
-        ${(data.order.total || 0).toFixed(2)}
-        {#if data.order.createDate}
-          –
-          {formatISODate(data.order.createDate.toISOString(), false, true, true)}
-        {/if}
-      </TextBlock>
-      <div class="main-statuses">
-        <FieldWrapper label="Payment status" forId="paymentStatus">
-          <div style="display: flex;">
-            <MenuFlyout alignment="start" placement="bottom" bind:open={paymentStatusDropdownOpen}>
-              <svelte:fragment slot="flyout">
-                {#each paymentStatuses as status}
-                  <MenuFlyoutItem
-                    selected={data.order.paymentStatus === status}
-                    disabled={status === 'INCOMPLETE'}
-                    on:click={() => updatePaymentStatus(status)}
-                  >
-                    {capitalize(status.toLowerCase().replaceAll('_', ' '))}
-                  </MenuFlyoutItem>
-                {/each}
-              </svelte:fragment>
-            </MenuFlyout>
-            <Button
-              style="width: fit-content;"
-              on:click={() => (paymentStatusDropdownOpen = !paymentStatusDropdownOpen)}
-              disabled={loading}
-            >
-              {#if paymentStatusLoading}
-                <ProgressRing
-                  style="--fds-accent-default: currentColor; position: absolute;"
-                  size={16}
-                />
-              {/if}
-              <div
-                style="display: flex; visibility: {paymentStatusLoading ? 'hidden' : 'visible'};"
-              >
-                {capitalize(data.order.paymentStatus?.toLowerCase() || '').replaceAll('_', ' ')}
-                <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
-              </div>
-            </Button>
-          </div>
-        </FieldWrapper>
-        <FieldWrapper label="Fulfillment status" forId="fulfillmentStatus">
-          <div style="display: flex;">
-            <MenuFlyout
-              alignment="start"
-              placement="bottom"
-              bind:open={fulfillmentStatusDropdownOpen}
-            >
-              <svelte:fragment slot="flyout">
-                {#each fulfillmentStatuses as status}
-                  <MenuFlyoutItem
-                    selected={data.order.fulfillmentStatus === status}
-                    on:click={() => updateFulfillmentStatus(status)}
-                  >
-                    {capitalize(status.toLowerCase().replaceAll('_', ' '))}
-                  </MenuFlyoutItem>
-                {/each}
-              </svelte:fragment>
-            </MenuFlyout>
-            <Button
-              style="width: fit-content;"
-              disabled={loading}
-              on:click={() => (fulfillmentStatusDropdownOpen = !fulfillmentStatusDropdownOpen)}
-            >
-              {#if fulfillmentStatusLoading}
-                <ProgressRing
-                  style="--fds-accent-default: currentColor; position: absolute;"
-                  size={16}
-                />
-              {/if}
-              <div
-                style="display: flex; visibility: {fulfillmentStatusLoading
-                  ? 'hidden'
-                  : 'visible'};"
-              >
-                {capitalize(data.order.fulfillmentStatus?.toLowerCase().replaceAll('_', ' ') || '')}
-                <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
-              </div>
-            </Button>
-          </div>
-        </FieldWrapper>
-      </div>
-    </div>
-
-    <div class="card">
-      <TextBlock variant="subtitle" class="card-header">Order items</TextBlock>
-      {#each data.order.items || [] as item, itemIndex}
-        <div class="item">
-          <img src={item.imageUrl} alt="" />
-          <div style="grid-area: meta;">
-            <TextBlock variant="bodyStrong">{item.name}</TextBlock>
-            <div style="margin-bottom: 6px;" class="lesser">
-              <TextBlock>SKU: {item.sku}</TextBlock>
-            </div>
-            {#each item.selectedOptions || [] as option, optionIndex}
-              <OrderSelectedOption
-                {option}
-                disabled={loading}
-                handleSave={async (newValue) => {
-                  if (option.name) updateItemOption(itemIndex, option.name, newValue);
-                  return true;
-                }}
-              />
-            {/each}
-          </div>
-          <div style="grid-area: price; text-align: right;">
-            <div>
-              <TextBlock variant="bodyStrong">
-                ${((item.quantity || 0) * (item.price || 0)).toFixed(2)}
-              </TextBlock>
-            </div>
-            <div class="lesser">
-              <TextBlock>{item.quantity}</TextBlock>
-              ·
-              <TextBlock>${item.price?.toFixed(2)}</TextBlock>
-            </div>
-          </div>
-        </div>
-        <hr class="order-item-divider" />
-      {/each}
-      <table class="total">
-        <tr>
-          <td>Items</td>
-          <td>${(data.order.subtotal || 0).toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td>Shipping</td>
-          <td>${(data.order.shippingOption?.shippingRate || 0).toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td><TextBlock variant="bodyLarge" style="font-weight: 500;">Total</TextBlock></td>
-          <td>
-            <TextBlock variant="bodyLarge" style="font-weight: 500;">
-              ${(data.order.total || 0).toFixed(2)}
-            </TextBlock>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <TextBlock variant="subtitle" class="card-header">Additional information</TextBlock>
-      {#if data.order.ipAddress}
-        <div>
-          <TextBlock tag="div">
-            IP Address: {data.order.ipAddress}
-          </TextBlock>
-        </div>
-      {/if}
-      <div>
-        <TextBlock tag="div">
-          Notes: {data.order.privateAdminNotes || '<no value>'}
-          <Button
-            variant="hyperlink"
-            disabled={loading}
-            on:click={() => (privateAdminNotesDialogOpen = !privateAdminNotesDialogOpen)}
-          >
-            Edit
-          </Button>
-        </TextBlock>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div class="card">
-      <TextBlock variant="subtitle" class="card-header">Customer</TextBlock>
-      {#if data.order.billingPerson?.name || data.order.shippingPerson?.name}
-        <div>
-          <TextBlock variant="bodyStrong">
-            {data.order.billingPerson?.name || data.order.shippingPerson?.name}
-          </TextBlock>
-        </div>
-      {/if}
-      {#if data.order.email}
-        <div>
-          <TextBlock>
-            Email address: <a href="mailto:{data.order.email}">{data.order.email}</a>
-          </TextBlock>
-        </div>
-      {/if}
-      {#if data.order.billingPerson?.phone || data.order.shippingPerson?.phone}
-        <div>
-          <TextBlock>
-            Phone {data.order.billingPerson?.phone || data.order.shippingPerson?.phone}
-          </TextBlock>
-        </div>
-      {/if}
-    </div>
-
-    {#if data.order.shippingOption?.shippingMethodName}
+<div class="container">
+  <article class:compact={$compactMode}>
+    <div>
       <div class="card">
         <TextBlock variant="subtitle" class="card-header">
-          {#if data.order.shippingOption.isPickup}
-            Pickup details
-          {:else}
-            Shipping details
+          ${(data.order.total || 0).toFixed(2)}
+          {#if data.order.createDate}
+            –
+            {formatISODate(data.order.createDate.toISOString(), false, true, true)}
           {/if}
         </TextBlock>
-        <div>
-          <TextBlock>
-            Selected method:
-            {data.order.shippingOption.shippingMethodName}, ${(
-              data.order.shippingOption.shippingRate || 0
-            ).toFixed(2)}
-          </TextBlock>
+        <div class="main-statuses">
+          <FieldWrapper label="Payment status" forId="paymentStatus">
+            <div style="display: flex;">
+              <MenuFlyout
+                alignment="start"
+                placement="bottom"
+                bind:open={paymentStatusDropdownOpen}
+              >
+                <svelte:fragment slot="flyout">
+                  {#each paymentStatuses as status}
+                    <MenuFlyoutItem
+                      selected={data.order.paymentStatus === status}
+                      disabled={status === 'INCOMPLETE'}
+                      on:click={() => updatePaymentStatus(status)}
+                    >
+                      {capitalize(status.toLowerCase().replaceAll('_', ' '))}
+                    </MenuFlyoutItem>
+                  {/each}
+                </svelte:fragment>
+              </MenuFlyout>
+              <Button
+                style="width: fit-content;"
+                on:click={() => (paymentStatusDropdownOpen = !paymentStatusDropdownOpen)}
+                disabled={loading}
+              >
+                {#if paymentStatusLoading}
+                  <ProgressRing
+                    style="--fds-accent-default: currentColor; position: absolute;"
+                    size={16}
+                  />
+                {/if}
+                <div
+                  style="display: flex; visibility: {paymentStatusLoading ? 'hidden' : 'visible'};"
+                >
+                  {capitalize(data.order.paymentStatus?.toLowerCase() || '').replaceAll('_', ' ')}
+                  <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
+                </div>
+              </Button>
+            </div>
+          </FieldWrapper>
+          <FieldWrapper label="Fulfillment status" forId="fulfillmentStatus">
+            <div style="display: flex;">
+              <MenuFlyout
+                alignment="start"
+                placement="bottom"
+                bind:open={fulfillmentStatusDropdownOpen}
+              >
+                <svelte:fragment slot="flyout">
+                  {#each fulfillmentStatuses as status}
+                    <MenuFlyoutItem
+                      selected={data.order.fulfillmentStatus === status}
+                      on:click={() => updateFulfillmentStatus(status)}
+                    >
+                      {capitalize(status.toLowerCase().replaceAll('_', ' '))}
+                    </MenuFlyoutItem>
+                  {/each}
+                </svelte:fragment>
+              </MenuFlyout>
+              <Button
+                style="width: fit-content;"
+                disabled={loading}
+                on:click={() => (fulfillmentStatusDropdownOpen = !fulfillmentStatusDropdownOpen)}
+              >
+                {#if fulfillmentStatusLoading}
+                  <ProgressRing
+                    style="--fds-accent-default: currentColor; position: absolute;"
+                    size={16}
+                  />
+                {/if}
+                <div
+                  style="display: flex; visibility: {fulfillmentStatusLoading
+                    ? 'hidden'
+                    : 'visible'};"
+                >
+                  {capitalize(
+                    data.order.fulfillmentStatus?.toLowerCase().replaceAll('_', ' ') || ''
+                  )}
+                  <FluentIcon name="ChevronDown16Regular" mode="buttonIconRight" />
+                </div>
+              </Button>
+            </div>
+          </FieldWrapper>
         </div>
-        {#if data.order.shippingPerson && !data.order.shippingOption.isPickup}
-          {@const {
-            name = '',
-            street = '',
-            city = '',
-            stateOrProvinceCode = 'GA',
-            postalCode = '30342',
-            countryName,
-          } = data.order.shippingPerson}
-          <div style="margin: 5px 0;">
-            <div><TextBlock>{name}</TextBlock></div>
-            <div><TextBlock>{street}</TextBlock></div>
-            <div><TextBlock>{city}, {stateOrProvinceCode} {postalCode}</TextBlock></div>
-            <div><TextBlock>{countryName}</TextBlock></div>
-            <EditShippingAddressDialog
-              {name}
-              {street}
-              {city}
-              stateOrProvinceName={stateAbbreviationToName(stateOrProvinceCode)}
-              {postalCode}
-              bind:open={shippingAddressDialogOpen}
-              handleSave={async (shippingOption) => {
-                const orderUpdate = {
-                  id: data.order.id,
-                  shippingPerson: {
-                    ...(data.order.shippingPerson || {}),
-                    ...shippingOption,
-                  },
-                };
+      </div>
 
-                await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(
-                  async () => {
-                    await invalidate('order-page');
-                  }
-                );
-              }}
-            />
+      <div class="card">
+        <TextBlock variant="subtitle" class="card-header">Order items</TextBlock>
+        {#each data.order.items || [] as item, itemIndex}
+          <div class="item">
+            <img src={item.imageUrl} alt="" />
+            <div style="grid-area: meta;">
+              <TextBlock variant="bodyStrong">{item.name}</TextBlock>
+              <div style="margin-bottom: 6px;" class="lesser">
+                <TextBlock>SKU: {item.sku}</TextBlock>
+              </div>
+              {#each item.selectedOptions || [] as option, optionIndex}
+                <OrderSelectedOption
+                  {option}
+                  disabled={loading}
+                  handleSave={async (newValue) => {
+                    if (option.name) updateItemOption(itemIndex, option.name, newValue);
+                    return true;
+                  }}
+                />
+              {/each}
+            </div>
+            <div style="grid-area: price; text-align: right;">
+              <div>
+                <TextBlock variant="bodyStrong">
+                  ${((item.quantity || 0) * (item.price || 0)).toFixed(2)}
+                </TextBlock>
+              </div>
+              <div class="lesser">
+                <TextBlock>{item.quantity}</TextBlock>
+                ·
+                <TextBlock>${item.price?.toFixed(2)}</TextBlock>
+              </div>
+            </div>
+          </div>
+          <hr class="order-item-divider" />
+        {/each}
+        <table class="total">
+          <tr>
+            <td>Items</td>
+            <td>${(data.order.subtotal || 0).toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td>Shipping</td>
+            <td>${(data.order.shippingOption?.shippingRate || 0).toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td><TextBlock variant="bodyLarge" style="font-weight: 500;">Total</TextBlock></td>
+            <td>
+              <TextBlock variant="bodyLarge" style="font-weight: 500;">
+                ${(data.order.total || 0).toFixed(2)}
+              </TextBlock>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <TextBlock variant="subtitle" class="card-header">Additional information</TextBlock>
+        {#if data.order.ipAddress}
+          <div>
+            <TextBlock tag="div">
+              IP Address: {data.order.ipAddress}
+            </TextBlock>
+          </div>
+        {/if}
+        <div>
+          <TextBlock tag="div">
+            Notes: {data.order.privateAdminNotes || '<no value>'}
             <Button
               variant="hyperlink"
               disabled={loading}
-              on:click={() => (shippingAddressDialogOpen = !shippingAddressDialogOpen)}
-              style="margin: 5px 0 0 -10px;"
+              on:click={() => (privateAdminNotesDialogOpen = !privateAdminNotesDialogOpen)}
             >
-              Edit address
+              Edit
             </Button>
+          </TextBlock>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <TextBlock variant="subtitle" class="card-header">Customer</TextBlock>
+        {#if data.order.billingPerson?.name || data.order.shippingPerson?.name}
+          <div>
+            <TextBlock variant="bodyStrong">
+              {data.order.billingPerson?.name || data.order.shippingPerson?.name}
+            </TextBlock>
+          </div>
+        {/if}
+        {#if data.order.email}
+          <div>
+            <TextBlock>
+              Email address: <a href="mailto:{data.order.email}">{data.order.email}</a>
+            </TextBlock>
+          </div>
+        {/if}
+        {#if data.order.billingPerson?.phone || data.order.shippingPerson?.phone}
+          <div>
+            <TextBlock>
+              Phone {data.order.billingPerson?.phone || data.order.shippingPerson?.phone}
+            </TextBlock>
           </div>
         {/if}
       </div>
-    {/if}
 
-    {#if data.order.paymentMethod || data.order.billingPerson}
-      <div class="card">
-        <TextBlock variant="subtitle" class="card-header">Billing details</TextBlock>
-        {#if data.order.paymentMethod}
-          <div><TextBlock>{data.order.paymentMethod}</TextBlock></div>
-          {#if data.order.externalTransactionId}
-            <div style="margin-left: 20px;" class="lesser">
-              <TextBlock>{data.order.externalTransactionId}</TextBlock>
+      {#if data.order.shippingOption?.shippingMethodName}
+        <div class="card">
+          <TextBlock variant="subtitle" class="card-header">
+            {#if data.order.shippingOption.isPickup}
+              Pickup details
+            {:else}
+              Shipping details
+            {/if}
+          </TextBlock>
+          <div>
+            <TextBlock>
+              Selected method:
+              {data.order.shippingOption.shippingMethodName}, ${(
+                data.order.shippingOption.shippingRate || 0
+              ).toFixed(2)}
+            </TextBlock>
+          </div>
+          {#if data.order.shippingPerson && !data.order.shippingOption.isPickup}
+            {@const {
+              name = '',
+              street = '',
+              city = '',
+              stateOrProvinceCode = 'GA',
+              postalCode = '30342',
+              countryName,
+            } = data.order.shippingPerson}
+            <div style="margin: 5px 0;">
+              <div><TextBlock>{name}</TextBlock></div>
+              <div><TextBlock>{street}</TextBlock></div>
+              <div><TextBlock>{city}, {stateOrProvinceCode} {postalCode}</TextBlock></div>
+              <div><TextBlock>{countryName}</TextBlock></div>
+              <EditShippingAddressDialog
+                {name}
+                {street}
+                {city}
+                stateOrProvinceName={stateAbbreviationToName(stateOrProvinceCode)}
+                {postalCode}
+                bind:open={shippingAddressDialogOpen}
+                handleSave={async (shippingOption) => {
+                  const orderUpdate = {
+                    id: data.order.id,
+                    shippingPerson: {
+                      ...(data.order.shippingPerson || {}),
+                      ...shippingOption,
+                    },
+                  };
+
+                  await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(
+                    async () => {
+                      await invalidate('order-page');
+                    }
+                  );
+                }}
+              />
+              <Button
+                variant="hyperlink"
+                disabled={loading}
+                on:click={() => (shippingAddressDialogOpen = !shippingAddressDialogOpen)}
+                style="margin: 5px 0 0 -10px;"
+              >
+                Edit address
+              </Button>
             </div>
           {/if}
-        {/if}
-        {#if data.order.billingPerson}
-          {@const { name, street, city, stateOrProvinceCode, postalCode, countryName } =
-            data.order.billingPerson}
-          <div style="margin: 5px 0;">
-            <div><TextBlock>{name}</TextBlock></div>
-            <div><TextBlock>{street}</TextBlock></div>
-            <div><TextBlock>{city}, {stateOrProvinceCode} {postalCode}</TextBlock></div>
-            <div><TextBlock>{countryName}</TextBlock></div>
-          </div>
-        {/if}
-      </div>
-    {/if}
-  </div>
-</article>
+        </div>
+      {/if}
+
+      {#if data.order.paymentMethod || data.order.billingPerson}
+        <div class="card">
+          <TextBlock variant="subtitle" class="card-header">Billing details</TextBlock>
+          {#if data.order.paymentMethod}
+            <div><TextBlock>{data.order.paymentMethod}</TextBlock></div>
+            {#if data.order.externalTransactionId}
+              <div style="margin-left: 20px;" class="lesser">
+                <TextBlock>{data.order.externalTransactionId}</TextBlock>
+              </div>
+            {/if}
+          {/if}
+          {#if data.order.billingPerson}
+            {@const { name, street, city, stateOrProvinceCode, postalCode, countryName } =
+              data.order.billingPerson}
+            <div style="margin: 5px 0;">
+              <div><TextBlock>{name}</TextBlock></div>
+              <div><TextBlock>{street}</TextBlock></div>
+              <div><TextBlock>{city}, {stateOrProvinceCode} {postalCode}</TextBlock></div>
+              <div><TextBlock>{countryName}</TextBlock></div>
+            </div>
+          {/if}
+        </div>
+      {/if}
+    </div>
+  </article>
+</div>
 
 <div style="padding-bottom: 60px;" />
 
@@ -475,6 +483,11 @@
 </ContentDialog>
 
 <style>
+  .container {
+    container-type: inline-size;
+    container-name: content;
+  }
+
   .page-title {
     display: flex;
     flex-direction: row;

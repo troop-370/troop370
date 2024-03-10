@@ -607,8 +607,6 @@
     overflow: auto;
     width: 100%;
     height: 100%;
-    container-type: inline-size;
-    container-name: content;
   }
 
   .settings-flyout {
