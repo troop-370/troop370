@@ -12,6 +12,7 @@ export { listOxford } from './listOxford';
 export { notEmpty } from './notEmpty';
 export { get, getProperty, set, setProperty } from './objectPath';
 export { openWindow } from './openWindow';
+export { paramsToStrapiFilter } from './paramsToStrapiFilter';
 export { parseDoc } from './parseDoc';
 export { query } from './query';
 export { replaceLast } from './replaceLast';

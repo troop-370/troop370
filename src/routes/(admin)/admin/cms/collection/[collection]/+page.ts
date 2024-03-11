@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { isJSON } from '$utils/isJSON';
+import { paramsToStrapiFilter } from '$utils';
 import { queryWithStore } from '$utils/query';
 import { get } from 'svelte/store';
 import { z } from 'zod';
@@ -51,7 +51,7 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
         Object.entries(sort).map(([key, value]) => [key, value === -1 ? 'desc' : 'asc'])
       ),
       _q: url.searchParams.get('_search'),
-      filters: paramsToFilter(url.searchParams),
+      filters: paramsToStrapiFilter(url.searchParams),
     },
     Authorization: `Bearer ${session.adminToken}`,
     validator: collectionDocsSchema,
@@ -61,7 +61,7 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
     collectionDocsData: await collectionDocsData,
     table: {
       sort,
-      filters: paramsToFilter(url.searchParams),
+      filters: paramsToStrapiFilter(url.searchParams),
     },
     url,
   };
@@ -74,16 +74,3 @@ const collectionDocsSchema = z
   })
   .passthrough()
   .array();
-
-function paramsToFilter(search: URLSearchParams) {
-  const result: Record<string, string> = {};
-  for (const [key, value] of search.entries()) {
-    // each 'entry' is a [key, value] tuple
-    if (!key.startsWith('__')) {
-      if (value.startsWith('"') && value.endsWith('"')) result[key] = value.slice(1, -1);
-      else if (isJSON(value)) result[key] = JSON.parse(value);
-      else result[key] = value;
-    }
-  }
-  return result;
-}
