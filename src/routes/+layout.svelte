@@ -272,6 +272,9 @@
     border: none !important;
     box-shadow: inset 0 0 0 1px var(--fds-control-strong-stroke-default);
   }
+  :global(:root .checkbox[type='checkbox']:disabled) {
+    box-shadow: inset 0 0 0 1px var(--fds-control-strong-stroke-disabled);
+  }
   :global(:root .text-box-underline) {
     block-size: calc(100% + 0px) !important;
     inline-size: calc(100% + 0px) !important;
