@@ -86,9 +86,7 @@
     "patch-package": "^8.0.0",
     "qs": "^6.11.2",
     "rrule": "^2.7.1",
-    "slate": "^0.102.0",
     "svelte-kit-cookie-session": "^3.2.2",
-    "svelte-slate": "^0.1.83",
     "xmldom": "^0.6.0",
     "zod": "^3.19.1"
   }
