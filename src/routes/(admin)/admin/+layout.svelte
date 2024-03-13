@@ -384,7 +384,10 @@
   ];
 
   let windowWidth = 1000;
-  $: navPaneCompactMode = windowWidth < 900;
+  $: navPaneCompactMode =
+    $page.url.searchParams.get('fs') === '1' ||
+    $page.url.searchParams.get('fs') === '3' ||
+    windowWidth < 900;
   let settingFlyoutOpen = false;
 
   // variables for page transitions

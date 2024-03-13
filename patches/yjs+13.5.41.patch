@@ -1,0 +1,31 @@
+diff --git a/node_modules/yjs/dist/src/types/YMap.d.ts b/node_modules/yjs/dist/src/types/YMap.d.ts
+index bbb8de2..efa89ef 100644
+--- a/node_modules/yjs/dist/src/types/YMap.d.ts
++++ b/node_modules/yjs/dist/src/types/YMap.d.ts
+@@ -95,17 +95,21 @@ export class YMap<MapType> extends AbstractType<YMapEvent<MapType>> implements I
+     /**
+      * Adds or updates an element with a specified key and value.
+      *
++     * @template {keyof MapType} MKey
++     *
+      * @param {string} key The key of the element to add to this YMap
+-     * @param {MapType} value The value of the element to add
++     * @param {MapType[MKey]} value The value of the element to add
+      */
+-    set(key: string, value: MapType): MapType;
++    set(key: string, value: MapType[MKey]): MapType[MKey];
+     /**
+      * Returns a specified element from this YMap.
+      *
+-     * @param {string} key
+-     * @return {MapType|undefined}
++     * @template {keyof MapType} MKey
++     *
++     * @param {MKey} key
++     * @return {MapType[MKey]}
+      */
+-    get(key: string): MapType | undefined;
++    get(key: string): MapType[MKey] | undefined;
+     /**
+      * Returns a boolean indicating whether the specified key exists or not.
+      *

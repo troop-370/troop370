@@ -1,9 +1,15 @@
 <script lang="ts">
+  import { afterNavigate } from '$app/navigation';
+  import { page } from '$app/stores';
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
-  import { RichBlocks } from '$lib/common/Blocks/index.js';
+  import { FileExplorerDialog } from '$lib/common/FileExplorer';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import { RichTiptap } from '$lib/common/Tiptap/index.js';
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
+  import { createYStore } from '$utils/y/createYStore.js';
+  import { processSchemaDef } from '$utils/y/processSchemaDef.js';
+  import { copy } from 'copy-anything';
   import { Button, TextBlock, TextBox, ToggleSwitch } from 'fluent-svelte';
   import { expoOut } from 'svelte/easing';
   import { writable } from 'svelte/store';
@@ -11,6 +17,28 @@
 
   export let data;
   $: ({ collectionConfig } = data);
+
+  const { collection, item_id } = data.params;
+
+  const deconstructedSchema = copy(data.deconstructedSchema);
+
+  const {
+    ydoc,
+    webProvider,
+    wsProvider,
+    awareness,
+    synced,
+    connected,
+    sharedData,
+    fullSharedData,
+  } = createYStore({
+    collection: collection,
+    id: item_id,
+    user: data.yuser,
+    deconstructedSchema: deconstructedSchema,
+    // disable syncing via providers (disables collaborative editing)
+    providerOpts: { noWebRtcConn: true, noWebsocketConn: true },
+  });
 
   const docData = writable<Record<string, any>>(data.docData);
 
@@ -62,9 +90,36 @@
     if (tabName === activeTab) mouseOverActiveTab = false;
     else mouseOverActiveTab = false;
   }
+
+  let filesDialogOpen = false;
+  let saveDocDialogOpen = false;
+
+  //
+  $: fullscreen =
+    $page.url.searchParams.get('fs') === '1' ||
+    $page.url.searchParams.get('fs') === '3' ||
+    $page.url.searchParams.get('fs') === 'force';
+  afterNavigate(() => {
+    fullscreen =
+      new URL(window.location.href).searchParams.get('fs') === '1' ||
+      new URL(window.location.href).searchParams.get('fs') === '3' ||
+      $page.url.searchParams.get('fs') === 'force';
+  });
 </script>
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
+  <div>
+    <button on:click={() => (filesDialogOpen = !filesDialogOpen)}>Toggle files dialog</button>
+    <FileExplorerDialog
+      session={data.session}
+      url={data.url}
+      bind:open={filesDialogOpen}
+      handleAction={async (files) => {
+        console.log('Selected files:', files);
+      }}
+    />
+  </div>
+
   <div
     class="doc-and-preview"
     bind:clientWidth={currentDocAndPreviewWidth}
@@ -208,7 +263,38 @@
                     {:else if def.type === 'boolean'}
                       <ToggleSwitch id={key} bind:checked={$docData[key]} />
                     {:else if def.type === 'blocks'}
-                      <RichBlocks bind:value={$docData[key]} />
+                      {#if !!$ydoc && !!$wsProvider && !!fullSharedData}
+                        <RichTiptap
+                          disabled={false}
+                          {ydoc}
+                          ydocKey={key}
+                          {wsProvider}
+                          user={data.yuser}
+                          options={{
+                            features: {
+                              bold: true,
+                              bulletList: true,
+                              italic: true,
+                              link: true,
+                              orderedList: true,
+                            },
+                          }}
+                          {fullscreen}
+                          {processSchemaDef}
+                          {fullSharedData}
+                          dynamicPreviewHref=""
+                          actions={[]}
+                          {connected}
+                        >
+                          <svelte:fragment slot="alerts">
+                            <slot name="alerts" />
+                          </svelte:fragment>
+                        </RichTiptap>
+                      {:else}
+                        <p>
+                          Error: The collaborative document or websocket was not found ({key}).
+                        </p>
+                      {/if}
                     {:else}
                       Unsupported content type: "{def.type}"
                       <pre>{JSON.stringify(def, null, 2)}</pre>

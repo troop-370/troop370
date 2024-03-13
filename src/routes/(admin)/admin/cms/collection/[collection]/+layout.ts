@@ -1,5 +1,6 @@
 import { notEmpty } from '$utils';
 import { queryWithStore } from '$utils/query';
+import { deconstructSchema } from '$utils/y/deconstructSchema';
 import { error } from '@sveltejs/kit';
 import { derived, get } from 'svelte/store';
 import { z } from 'zod';
@@ -69,6 +70,10 @@ export const load = (async ({ fetch, parent, params }) => {
 
   const collectionPreviewConfig = get(previewConfig)?.find((config) => config.uid === settings.uid);
 
+  const deconstructedSchema = deconstructSchema({
+    name: { type: 'String' },
+  });
+
   return {
     settings: {
       ...settings,
@@ -77,6 +82,7 @@ export const load = (async ({ fetch, parent, params }) => {
     },
     permissions,
     collectionConfig,
+    deconstructedSchema,
   };
 }) satisfies LayoutLoad;
 

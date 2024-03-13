@@ -1,0 +1,1 @@
+export { PhotoWidget } from './PhotoWidget';

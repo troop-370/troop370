@@ -8,6 +8,7 @@ export { formatISODate } from './formatISODate';
 export { genAvatar } from './genAvatar';
 export { hasKey } from './hasKey';
 export { isIsoDate, isShortIsoDate } from './isIsoDate';
+export { isJSON } from './isJSON';
 export { listOxford } from './listOxford';
 export { notEmpty } from './notEmpty';
 export { get, getProperty, set, setProperty } from './objectPath';

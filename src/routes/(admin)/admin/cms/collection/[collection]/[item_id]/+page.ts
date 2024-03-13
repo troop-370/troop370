@@ -45,5 +45,6 @@ export const load = (async ({ fetch, params, parent, url }) => {
   return {
     url,
     docData,
+    params,
   };
 }) satisfies PageLoad;

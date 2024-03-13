@@ -9,7 +9,7 @@ const config: UserConfig = {
   },
   ssr: {
     // add libraries containing invalid ESM here
-    noExternal: ['rrule', 'copy-anything'],
+    noExternal: ['rrule', 'copy-anything', 'scroll-into-view-if-needed'],
   },
   optimizeDeps: {
     exclude: ['svelte-slate'],
