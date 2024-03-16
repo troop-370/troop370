@@ -92,6 +92,9 @@ export const load = (async ({ fetch, parent, params }) => {
                       textStylePicker: true,
                       horizontalRule: true,
                       link: true,
+                      widgets: {
+                        photoWidget: true,
+                      },
                     },
                   },
                 },

@@ -1,0 +1,12 @@
+diff --git a/node_modules/svelte-tiptap/actions.js b/node_modules/svelte-tiptap/actions.js
+index 8f403ba..dc36e3d 100644
+--- a/node_modules/svelte-tiptap/actions.js
++++ b/node_modules/svelte-tiptap/actions.js
+@@ -1,6 +1,7 @@
+ export const editable = (node) => {
+     node.setAttribute('data-node-view-content', '');
+     node.style.whiteSpace = 'pre-wrap';
++    node.setAttribute('contenteditable', 'true')
+ };
+ export const draggable = (node) => {
+     node.setAttribute('data-drag-handle', '');

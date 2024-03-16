@@ -7,6 +7,8 @@
   import { RichTiptap } from '$lib/common/Tiptap/index.js';
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
+  import { blocksToProsemirror, notEmpty } from '$utils';
+  import { addToY } from '$utils/y/addTToY';
   import { createYStore } from '$utils/y/createYStore.js';
   import { processSchemaDef } from '$utils/y/processSchemaDef.js';
   import { copy } from 'copy-anything';
@@ -105,6 +107,31 @@
       new URL(window.location.href).searchParams.get('fs') === '3' ||
       $page.url.searchParams.get('fs') === 'force';
   });
+
+  // update shared rich text with doc data
+  let hasInitialDocData = false;
+  $: if ($ydoc && !hasInitialDocData) {
+    hasInitialDocData = true;
+
+    const dataToSet = Object.fromEntries(
+      (data.settings.defs || [])
+        .map(([key, { type }]) => {
+          if (type === 'blocks') {
+            return [key, JSON.stringify(blocksToProsemirror($docData[key]) || [])];
+          }
+        })
+        .filter(notEmpty)
+    );
+
+    addToY({
+      ydoc: $ydoc,
+      inputData: dataToSet,
+      schemaDef: deconstructedSchema,
+      onlyProvided: true,
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
 </script>
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
@@ -270,15 +297,8 @@
                           ydocKey={key}
                           {wsProvider}
                           user={data.yuser}
-                          options={{
-                            features: {
-                              bold: true,
-                              bulletList: true,
-                              italic: true,
-                              link: true,
-                              orderedList: true,
-                            },
-                          }}
+                          options={deconstructedSchema.find(([_key]) => _key === key)?.[1].field
+                            ?.tiptap}
                           {fullscreen}
                           {processSchemaDef}
                           {fullSharedData}

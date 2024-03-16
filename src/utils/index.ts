@@ -1,5 +1,6 @@
 export { Markdown } from './Markdown';
 export { MarkdownToStrapi } from './MarkdownToStrapi';
+export { blocksToProsemirror } from './blocksToProsemirror';
 export { camelToDashCase } from './camelToDashCase';
 export { capitalize } from './capitalize';
 export { debounce } from './debounce';

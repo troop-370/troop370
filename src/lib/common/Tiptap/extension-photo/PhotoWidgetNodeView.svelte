@@ -81,7 +81,7 @@
       class:left={node.attrs.position === 'left'}
       class:right={node.attrs.position === 'right'}
     >
-      <img src={node.attrs.photoUrl + '?tr=w-600'} alt="" use:draggable class:loading />
+      <img src={node.attrs.photoUrl} alt="" use:draggable class:loading />
       <div class="progress" class:loading>
         <ProgressRing style="--fds-accent-default: black;" />
       </div>
@@ -129,6 +129,7 @@
     color: #666;
     font-size: 90%;
     text-align: center;
+    width: 100%;
   }
   .editable :global(*) {
     display: inline-block;
