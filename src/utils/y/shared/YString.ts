@@ -1,7 +1,13 @@
+import { browser } from '$app/environment';
 import { editorExtensions } from '$lib/common/Tiptap/editorExtensions';
+import { hasKey } from '$utils/hasKey';
+import { JSDOM, VirtualConsole } from 'jsdom';
 import type * as Y from 'yjs';
 import { getTipTapEditorJson } from './getTipTapEditorJson';
 import { setTipTapXMLFragment } from './setTipTapXMLFragment';
+
+const virtualConsole = new VirtualConsole();
+const document = browser ? window.document : new JSDOM(``, { virtualConsole }).window.document;
 
 type Option = { value: string | number; label: string; disabled?: boolean };
 
@@ -23,9 +29,9 @@ class YString<K extends string, V extends string | undefined | null> {
   }
 
   set(key: K, value: V, opt1?: 'code'): string;
-  set(key: K, value: V, opt1?: 'tiptap'): Node;
+  set(key: K, value: V, opt1?: 'tiptap'): string;
   set(key: K, value: V[], opt1?: Option[]): Option[];
-  set(key: K, value: V | V[], opt1?: Option[] | 'code' | 'tiptap'): string | Node | Option[] {
+  set(key: K, value: V | V[], opt1?: Option[] | 'code' | 'tiptap'): string | Option[] {
     const options = Array.isArray(opt1) ? opt1 : undefined;
     const isRichText = opt1 === 'tiptap';
     const isCode = opt1 === 'code';
@@ -78,22 +84,51 @@ class YString<K extends string, V extends string | undefined | null> {
   }
 
   async get(key: K, isArray: false, isRichText: boolean, isCode: boolean): Promise<string>;
-  async get(key: K, isArray: true, isRichText: false, isCode: false): Promise<Option[]>;
+  async get(
+    key: K,
+    isArray: true,
+    isRichText: false,
+    isCode: false,
+    options?: Option[]
+  ): Promise<Option[]>;
   async get(
     key: K,
     isArray: boolean,
     isRichText: boolean,
-    isCode: boolean
+    isCode: boolean,
+    options?: Option[]
   ): Promise<string | Option[]> {
-    if (isArray) return this.#ydoc.getArray<Option>(key).toArray();
-    if (isRichText)
-      return await getTipTapEditorJson(
-        key,
-        this.#ydoc,
-        editorExtensions[isRichText ? 'tiptap' : 'text']
-      );
+    if (isArray) {
+      const found = this.#ydoc.getArray<Option | string | Y.XmlElement>(key).toArray();
+
+      const resolved = found.map((value): Option | undefined | null => {
+        // plain string
+        if (typeof value === 'string') {
+          if (options) return options.find((opt) => opt.value === value);
+          return { value, label: value };
+        }
+
+        // existing option
+        if (hasKey(value, 'value') && hasKey(value, 'label')) {
+          return value;
+        }
+
+        // YXMLFragment
+        const textContent = value.toDOM(document).textContent;
+        if (textContent) {
+          if (options) return options.find((opt) => opt.value === textContent);
+          return { value: textContent, label: textContent };
+        }
+
+        return undefined;
+      });
+
+      return resolved.filter((elem): elem is Option => !!elem);
+    }
+
+    if (isRichText) return getTipTapEditorJson(key, this.#ydoc);
     if (isCode) return this.#ydoc.getText(key).toJSON();
-    return this.#ydoc.getXmlFragment(key).toDOM().textContent || '';
+    return this.#ydoc.getXmlFragment(key).toDOM(document).textContent || '';
   }
 
   delete(key: K): void {

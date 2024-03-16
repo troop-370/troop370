@@ -1,6 +1,6 @@
-import type { Extensions } from '@tiptap/core';
-import { Editor } from '@tiptap/core';
+import { getSchema, type Extensions } from '@tiptap/core';
 import Collaboration from '@tiptap/extension-collaboration';
+import { prosemirrorJSONToYXmlFragment } from 'y-prosemirror';
 import type * as Y from 'yjs';
 
 function setTipTapXMLFragment(
@@ -8,35 +8,36 @@ function setTipTapXMLFragment(
   content: string | undefined | null,
   document: Y.Doc,
   extensions: Extensions
-): Node {
+): string {
   // delete current value
   const current = document.getXmlFragment(field);
   current.delete(0, current.length);
 
-  // set value in tiptap
-  const tiptap = new Editor({
-    extensions: [
-      ...extensions,
-      // set the sharsed type value at the provided key
-      Collaboration.configure({ document, field }),
-    ],
-  });
+  const schema = getSchema([
+    ...extensions,
+    // set the sharsed type value at the provided key
+    Collaboration.configure({ document, field }),
+  ]);
 
   // set the shared type based on this value
   if (content) {
     // if content is stringified json object, parse it before inserting it
     if (isJsonContentArrayString(content)) {
-      tiptap.commands.setContent(JSON.parse(content));
+      prosemirrorJSONToYXmlFragment(schema, { type: 'doc', content: JSON.parse(content) }, current);
     } else {
-      tiptap.commands.setContent(content);
+      prosemirrorJSONToYXmlFragment(
+        schema,
+        {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
+        },
+        current
+      );
     }
   }
 
-  // destroy tiptap editor
-  tiptap.destroy();
-
   // return the DOM version of the content
-  return current.toDOM();
+  return current.toJSON();
 }
 
 /**

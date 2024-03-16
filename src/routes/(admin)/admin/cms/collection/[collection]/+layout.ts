@@ -72,6 +72,34 @@ export const load = (async ({ fetch, parent, params }) => {
 
   const deconstructedSchema = deconstructSchema({
     name: { type: 'String' },
+    ...Object.fromEntries(
+      defs
+        .map(([key, def]) => {
+          if (def.type === 'blocks')
+            return [
+              key,
+              {
+                type: 'String',
+                field: {
+                  tiptap: {
+                    features: {
+                      bold: true,
+                      italic: true,
+                      underline: false,
+                      strike: true,
+                      bulletList: true,
+                      orderedList: true,
+                      textStylePicker: true,
+                      horizontalRule: true,
+                      link: true,
+                    },
+                  },
+                },
+              },
+            ];
+        })
+        .filter(notEmpty)
+    ),
   });
 
   return {
