@@ -399,6 +399,8 @@
                       <div class="item-icon">
                         {#if isFolder}
                           <FluentIcon name="Folder16Regular" />
+                        {:else if row.original.mime.startsWith('image/')}
+                          <img src={row.original.url} alt="" />
                         {:else}
                           <FluentIcon name="Document16Regular" />
                         {/if}
@@ -602,5 +604,8 @@
     fill: currentColor;
     width: 20px;
     height: 20px;
+  }
+  .item-icon img {
+    width: 20px;
   }
 </style>
