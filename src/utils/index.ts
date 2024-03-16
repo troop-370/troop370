@@ -5,6 +5,7 @@ export { camelToDashCase } from './camelToDashCase';
 export { capitalize } from './capitalize';
 export { debounce } from './debounce';
 export { findLastIndex } from './findLastIndex';
+export { formatBytes } from './formatBytes';
 export { formatISODate } from './formatISODate';
 export { genAvatar } from './genAvatar';
 export { hasKey } from './hasKey';

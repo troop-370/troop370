@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Chip } from '$lib/common/Chip';
-  import { formatISODate, genAvatar } from '$utils';
+  import { formatBytes, formatISODate, genAvatar } from '$utils';
   import type { colorType } from '$utils/theme/theme';
   import type { TableMeta } from '@tanstack/svelte-table';
   import type { ColumnDefBase } from '@tanstack/table-core/build/lib/types';
@@ -35,9 +35,9 @@
 {#if type === 'checkbox'}
   __checkbox
 {:else if def.type === 'size'}
-  {fieldData}
-  {#if fieldData}
-    MB
+  {@const sizeBytes = parseFloat(`${fieldData}`) * 1000}
+  {#if sizeBytes > 0}
+    {formatBytes(sizeBytes, 0)}
   {/if}
 {:else if def.type === 'user'}
   {@const name =
