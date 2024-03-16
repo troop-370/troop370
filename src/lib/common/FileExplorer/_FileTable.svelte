@@ -456,7 +456,7 @@
     --border-color: var(--color-neutral-light-200)
     border: 1px solid var(--fds-divider-stroke-default);
     box-shadow: 0 0 0 1px var(--border-color);
-    border-radius: var(--fds-control-corner-radius);
+    border-radius: var(--fds-control-corner-radius) var(--fds-control-corner-radius) 0 0;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -539,6 +539,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  span[role='cell'].rightPadding {
+    padding-right: 10px;
   }
 
   /* header sorting */

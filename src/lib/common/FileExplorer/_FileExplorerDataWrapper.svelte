@@ -51,9 +51,9 @@
 </script>
 
 {#await promise}
-  <FileExplorer {path} {search} {selectedIds} {enableMultiRowSelection} />
+  <FileExplorer {path} {search} {selectedIds} {enableMultiRowSelection} {mimeTypes} />
 {:then store}
-  <FileExplorer {store} {path} {search} {selectedIds} {enableMultiRowSelection} />
+  <FileExplorer {store} {path} {search} {selectedIds} {enableMultiRowSelection} {mimeTypes} />
 {:catch error}
   <p style="color: red">{error.message}</p>
 {/await}

@@ -81,7 +81,7 @@
     margin: 1px;
     --border-color: var(--color-neutral-light-200);
     box-shadow: 0 0 0 1px var(--border-color);
-    border-radius: var(--fds-control-corner-radius);
+    border-radius: var(--fds-control-corner-radius) var(--fds-control-corner-radius) 0 0;
   }
 
   @media (prefers-color-scheme: dark) {
