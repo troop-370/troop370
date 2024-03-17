@@ -4,6 +4,7 @@
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import { FileExplorerDialog } from '$lib/common/FileExplorer';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import StrapiUidField from '$lib/common/StrapiUIDField/StrapiUIDField.svelte';
   import { RichTiptap } from '$lib/common/Tiptap/index.js';
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
@@ -277,6 +278,13 @@
                       <TextBox id={key} bind:value={$docData[key]} />
                     {:else if def.type === 'boolean'}
                       <ToggleSwitch id={key} bind:checked={$docData[key]} />
+                    {:else if def.type === 'uid'}
+                      <StrapiUidField
+                        {key}
+                        {docData}
+                        collectionUID={data.settings.uid}
+                        sessionAdminToken={data.session.adminToken}
+                      />
                     {:else if def.type === 'blocks'}
                       {#if !!$ydoc && !!$wsProvider && !!fullSharedData}
                         <RichTiptap
