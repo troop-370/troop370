@@ -42,15 +42,12 @@
     promise?.then((data: Store) => {
       const files =
         get(data)
-          .files.data?.docs.filter((fileOrFolder) => $selectedIds.includes(fileOrFolder.id))
-          .filter((fileOrFolder): fileOrFolder is File => hasKey(fileOrFolder, 'hash')) || [];
+          .files.data?.docs.filter((file) => $selectedIds.includes(file.id))
+          .filter((file): file is File => hasKey(file, 'hash')) || [];
       const folders =
         get(data)
-          .files.data?.docs.filter(
-            (fileOrFolder: File | Folder): fileOrFolder is Folder => !hasKey(fileOrFolder, 'hash')
-          )
-          .filter((folder) => $selectedIds.includes(folder.id))
-          .map((folder) => folder as unknown as Folder) || [];
+          .folders.data?.filter((folder: Folder): folder is Folder => !hasKey(folder, 'hash'))
+          .filter((folder) => $selectedIds.includes(folder.id)) || [];
       selectedFilesData.set(files);
       selectedFoldersData.set(folders);
       selectedIdsData.set([...folders, ...files]);
@@ -64,11 +61,9 @@
   setContext('fileExplorer', {
     selectedFilesData: selectedFilesData,
     selectedFoldersData: selectedFoldersData,
-    selectedIdsData: selectedFilesData,
+    selectedIdsData: selectedIdsData,
   });
 </script>
-
-{$selectedIdsData.length}
 
 {#await promise}
   <FileExplorer {path} {search} {selectedIds} {enableMultiRowSelection} {mimeTypes} />
