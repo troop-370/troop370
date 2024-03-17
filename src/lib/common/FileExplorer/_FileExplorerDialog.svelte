@@ -26,7 +26,7 @@
   type File = NonNullable<FilesStoreData>['docs'][number];
 
   let selectedIds = writable<number[]>([]);
-  let selectedIdsData = writable<File[]>([]);
+  let selectedFilesData = writable<File[]>([]);
 
   setContext('insertFile', (file: File) => {
     handleAction?.([file]);
@@ -43,7 +43,7 @@
       {url}
       {mimeTypes}
       bind:selectedIds
-      bind:selectedIdsData
+      bind:selectedFilesData
       enableMultiRowSelection={false}
     />
   </div>
@@ -51,9 +51,9 @@
   <svelte:fragment slot="footer">
     <Button
       variant="accent"
-      disabled={$selectedIds.length === 0 || $selectedIds.length !== $selectedIdsData.length}
+      disabled={$selectedIds.length === 0 || $selectedIds.length !== $selectedFilesData.length}
       on:click={async () => {
-        await handleAction?.($selectedIdsData);
+        await handleAction?.($selectedFilesData);
         open = false;
       }}
     >

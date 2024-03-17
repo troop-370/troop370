@@ -1,6 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { debounce, hasKey } from '$utils';
+  import { setContext } from 'svelte';
   import { get, writable } from 'svelte/store';
   import FileExplorer from './_FileExplorer.svelte';
   import { getFileExplorerData } from './getFileExplorerData';
@@ -8,7 +9,9 @@
   export let session: Partial<SessionData>;
   export let url: URL;
   export let selectedIds = writable<number[]>([]);
-  export let selectedIdsData = writable<File[]>([]);
+  export let selectedFilesData = writable<File[]>([]);
+  export let selectedFoldersData = writable<Folder[]>([]);
+  export let selectedIdsData = writable<(File | Folder)[]>([]);
   export let mimeTypes: string[] = [];
   export let enableMultiRowSelection = true;
 
@@ -39,16 +42,33 @@
     promise?.then((data: Store) => {
       const files =
         get(data)
-          .files.data?.docs.filter((file) => $selectedIds.includes(file.id))
-          .filter((file): file is File => hasKey(file, 'hash')) || [];
-      selectedIdsData.set(files);
+          .files.data?.docs.filter((fileOrFolder) => $selectedIds.includes(fileOrFolder.id))
+          .filter((fileOrFolder): fileOrFolder is File => hasKey(fileOrFolder, 'hash')) || [];
+      const folders =
+        get(data)
+          .files.data?.docs.filter(
+            (fileOrFolder: File | Folder): fileOrFolder is Folder => !hasKey(fileOrFolder, 'hash')
+          )
+          .filter((folder) => $selectedIds.includes(folder.id))
+          .map((folder) => folder as unknown as Folder) || [];
+      selectedFilesData.set(files);
+      selectedFoldersData.set(folders);
+      selectedIdsData.set([...folders, ...files]);
     });
   }
   $: {
     $selectedIds;
     debouncedGetSelectedIdsData();
   }
+
+  setContext('fileExplorer', {
+    selectedFilesData: selectedFilesData,
+    selectedFoldersData: selectedFoldersData,
+    selectedIdsData: selectedFilesData,
+  });
 </script>
+
+{$selectedIdsData.length}
 
 {#await promise}
   <FileExplorer {path} {search} {selectedIds} {enableMultiRowSelection} {mimeTypes} />
