@@ -140,6 +140,7 @@
   let data: Doc[] = [];
   let filter = JSON.stringify(tableDataFilter);
   let sort = JSON.stringify(tableDataSort);
+  let contentMenuOpen: Record<number, boolean> = {};
   $: {
     if (
       data.length !== ($tableData?.docs || []).length ||
@@ -150,6 +151,7 @@
       data = $tableData?.docs || [];
       filter = JSON.stringify(tableDataFilter);
       sort = JSON.stringify(tableDataSort);
+      contentMenuOpen = {};
     }
   }
 
@@ -294,6 +296,14 @@
     if (sortable) column.toggleSorting(undefined, shiftKey);
   }
 
+  // remove focus trap if a context menu for a row is open since focus trap
+  // prevents the context menu from being focusable and firing click events
+  $: allContextMenusClosed = Object.values(contentMenuOpen).every((open) => !open);
+  $: {
+    if (allContextMenusClosed) $trapFocus = true;
+    else $trapFocus = false;
+  }
+
   export let loadingMore = false;
 </script>
 
@@ -363,13 +373,9 @@
           {@const isFolder = isFolderDoc(row.original)}
           {#key JSON.stringify($path) + row.original.hash + row.original.name + filter}
             <ContextMenu
-              on:contextmenu={async () => {
-                await tick();
-                $trapFocus = false;
-              }}
+              bind:open={contentMenuOpen[row.index]}
               on:select={async (evt) => {
                 console.log(evt);
-                $trapFocus = true;
               }}
             >
               <span
