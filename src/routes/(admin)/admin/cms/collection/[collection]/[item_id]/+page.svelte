@@ -135,18 +135,6 @@
 </script>
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
-  <div>
-    <button on:click={() => (filesDialogOpen = !filesDialogOpen)}>Toggle files dialog</button>
-    <FileExplorerDialog
-      session={data.session}
-      url={data.url}
-      bind:open={filesDialogOpen}
-      handleAction={async (files) => {
-        console.log('Selected files:', files);
-      }}
-    />
-  </div>
-
   <div
     class="doc-and-preview"
     bind:clientWidth={currentDocAndPreviewWidth}

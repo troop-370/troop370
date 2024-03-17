@@ -5,12 +5,20 @@ import PhotoWidgetNodeView from './PhotoWidgetNodeView.svelte';
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     photoWidget: {
-      insertPhotoWidget: (photoId: string) => ReturnType;
+      insertPhotoWidget: (photoId: string, attrs?: Omit<PhotoWidgetAttrs, 'photoId'>) => ReturnType;
     };
   }
 }
 
 interface PhotoWidgetOptions {}
+
+type PhotoWidgetAttrs = Partial<{
+  photoId: string;
+  photoUrl: string;
+  photoCredit: string;
+  showCaption: boolean;
+  position: string;
+}>;
 
 const PhotoWidget = Node.create<PhotoWidgetOptions>({
   name: 'photoWidget',
@@ -87,7 +95,7 @@ const PhotoWidget = Node.create<PhotoWidgetOptions>({
   addCommands() {
     return {
       insertPhotoWidget:
-        (photoId: string) =>
+        (photoId: string, attrs?: Omit<PhotoWidgetAttrs, 'photoId'>) =>
         ({ state, dispatch }) => {
           if (dispatch) {
             // remove anything within the selection
@@ -99,7 +107,10 @@ const PhotoWidget = Node.create<PhotoWidgetOptions>({
             state.tr.split(state.selection.from);
 
             // set the type of the empty node to the photo widget type
-            state.tr.setBlockType(state.selection.from - 2, state.selection.to - 2, this.type, { photoId });
+            state.tr.setBlockType(state.selection.from - 2, state.selection.to - 2, this.type, {
+              photoId,
+              ...(attrs || {}),
+            });
 
             dispatch(state.tr);
           }

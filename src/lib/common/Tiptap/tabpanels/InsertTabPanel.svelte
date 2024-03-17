@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from '$app/stores';
+  import { FileExplorerDialog } from '$lib/common/FileExplorer';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import LinkDialog from '$lib/dialogs/LinkDialog.svelte';
   import PhotoWidgetDialog from '$lib/dialogs/PhotoWidgetDialog.svelte';
@@ -31,17 +33,28 @@
 
   $: previewMode = $richTextParams.obj.previewMode > 0;
   $: hrDisabled =
-    disabled || previewMode || !options?.features.horizontalRule || !editor?.can().setHorizontalRule();
+    disabled ||
+    previewMode ||
+    !options?.features.horizontalRule ||
+    !editor?.can().setHorizontalRule();
   $: photoDisabled =
-    disabled || previewMode || !options?.features.widgets?.photoWidget || !editor?.can().insertPhotoWidget('');
+    disabled ||
+    previewMode ||
+    !options?.features.widgets?.photoWidget ||
+    !editor?.can().insertPhotoWidget('');
   $: ytDisabled =
-    disabled || previewMode || !options?.features.widgets?.youtube || !editor?.can().insertYoutubeWidget('');
+    disabled ||
+    previewMode ||
+    !options?.features.widgets?.youtube ||
+    !editor?.can().insertYoutubeWidget('');
   $: sweepWidgetDisabled = disabled || previewMode || true;
   $: widgetsDisabled = ytDisabled && sweepWidgetDisabled;
-  $: linkDisabled = disabled || previewMode || !options?.features.link || !editor?.can().setLink({ href: '' });
+  $: linkDisabled =
+    disabled || previewMode || !options?.features.link || !editor?.can().setLink({ href: '' });
   $: pullQuoteDisabled =
     disabled || previewMode || !options?.features.pullQuote || !editor?.can().insertPullQuote();
-  $: tablesDisabled = disabled || previewMode || !options?.features.tables || !editor?.can().insertTable();
+  $: tablesDisabled =
+    disabled || previewMode || !options?.features.tables || !editor?.can().insertTable();
   $: setCommentDisabled =
     disabled ||
     previewMode ||
@@ -50,6 +63,8 @@
     !editor?.can().setComment(coreNewCommentAttrs);
   $: unsetCommentDisabled =
     disabled || previewMode || !options?.features.comment || !editor?.can().unsetComment();
+
+  $: console.log(insertPhotoWidgetDialogOpen);
 </script>
 
 <div class="panel" class:visible bind:offsetWidth={width}>
@@ -67,7 +82,10 @@
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M2 9.5c0-.28.22-.5.5-.5h15a.5.5 0 010 1h-15a.5.5 0 01-.5-.5z" fill="currentColor" />
+          <path
+            d="M2 9.5c0-.28.22-.5.5-.5h15a.5.5 0 010 1h-15a.5.5 0 01-.5-.5z"
+            fill="currentColor"
+          />
         </svg>
       </FluentIcon>
       Horizontal Line
@@ -87,24 +105,44 @@
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M2 9.5c0-.28.22-.5.5-.5h15a.5.5 0 010 1h-15a.5.5 0 01-.5-.5z" fill="currentColor" />
+            <path
+              d="M2 9.5c0-.28.22-.5.5-.5h15a.5.5 0 010 1h-15a.5.5 0 01-.5-.5z"
+              fill="currentColor"
+            />
           </svg>
         </FluentIcon>
       </IconButton>
     </Tooltip>
   {/if}
 
-  <PhotoWidgetDialog
+  <FileExplorerDialog
+    session={$page.data.session}
+    url={$page.data.url}
     bind:open={insertPhotoWidgetDialogOpen}
-    handleSumbit={async (photoId) => {
+    mimeTypes={['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp']}
+    handleAction={async (files) => {
       if (photoDisabled) return;
-      editor?.chain().focus().insertPhotoWidget(photoId).run();
+      if (files && files.length > 0) {
+        const file = files[0];
+        editor
+          ?.chain()
+          .focus()
+          .insertPhotoWidget(file.id.toString(), {
+            photoUrl: file.url,
+            photoCredit: file.sourceName,
+            position: 'center',
+            showCaption: true,
+          })
+          .run();
+      }
     }}
   />
   {#if width > 640}
     <Button
       disabled={photoDisabled}
-      on:click={photoDisabled ? undefined : () => (insertPhotoWidgetDialogOpen = !insertPhotoWidgetDialogOpen)}
+      on:click={photoDisabled
+        ? undefined
+        : () => (insertPhotoWidgetDialogOpen = !insertPhotoWidgetDialogOpen)}
     >
       <FluentIcon mode="ribbonButtonIconLeft">
         <svg height="100%" width="100%" viewBox="0,0,2048,2048" focusable="false">
@@ -158,7 +196,11 @@
               class="OfficeIconColors_HighContrast"
               d="M 1485 794 q -27 0 -50 -10 q -23 -10 -40 -28 q -18 -17 -28 -41 q -10 -23 -10 -49 q 0 -27 10 -50 q 10 -23 28 -41 q 17 -17 40 -27 q 23 -10 50 -10 q 26 0 50 10 q 23 10 41 27 q 17 18 27 41 q 10 23 10 50 q 0 26 -10 49 q -10 24 -27 41 q -18 18 -41 28 q -24 10 -50 10 m -1383 -487 h 1844 v 1434 h -1844 m 1741 -1331 h -1638 v 746 l 461 -460 l 563 563 l 256 -256 l 358 358 m -1638 -60 v 337 h 1259 l -798 -798 m 942 798 h 235 v -132 l -358 -358 l -184 183 z"
             />
-            <path type="path" class="OfficeIconColors_m20" d="M 1894 1690 h -1740 v -1332 h 1740 z" />
+            <path
+              type="path"
+              class="OfficeIconColors_m20"
+              d="M 1894 1690 h -1740 v -1332 h 1740 z"
+            />
             <path
               type="path"
               class="OfficeIconColors_m26"
@@ -276,7 +318,9 @@
 
   {#if width > 640}
     <Button
-      on:click={pullQuoteDisabled ? undefined : () => editor?.chain().focus().insertPullQuote().run()}
+      on:click={pullQuoteDisabled
+        ? undefined
+        : () => editor?.chain().focus().insertPullQuote().run()}
       disabled={pullQuoteDisabled}
       class={editor?.isActive('pullQuote') ? 'active' : ''}
     >
@@ -286,7 +330,9 @@
   {:else}
     <Tooltip text="Insert pull quote">
       <IconButton
-        on:click={pullQuoteDisabled ? undefined : () => editor?.chain().focus().insertPullQuote().run()}
+        on:click={pullQuoteDisabled
+          ? undefined
+          : () => editor?.chain().focus().insertPullQuote().run()}
         disabled={pullQuoteDisabled}
         class={editor?.isActive('pullQuote') ? 'active' : ''}
       >
@@ -336,7 +382,11 @@
               class="OfficeIconColors_HighContrast"
               d="M 102 102 h 1844 v 1844 h -1844 m 103 -1741 v 205 h 1638 v -205 m -1024 1126 h 410 v -307 h -410 m 410 410 h -410 v 409 h 410 m -512 -512 v -307 h -512 v 307 m 1024 -819 h -410 v 410 h 410 m 102 102 v 307 h 512 v -307 m -512 -102 h 512 v -410 h -512 m -614 0 h -512 v 410 h 512 m -512 512 v 409 h 512 v -409 m 614 409 h 512 v -409 h -512 z"
             />
-            <path type="path" class="OfficeIconColors_m20" d="M 1894 1894 h -1740 v -1433 h 1740 z" />
+            <path
+              type="path"
+              class="OfficeIconColors_m20"
+              d="M 1894 1894 h -1740 v -1433 h 1740 z"
+            />
             <path type="path" class="OfficeIconColors_m21" d="M 1894 461 h -1740 v -307 h 1740 z" />
             <path
               type="path"
@@ -429,7 +479,9 @@
 
   <Tooltip text="Delete comment" alignment="end">
     <IconButton
-      on:click={unsetCommentDisabled ? undefined : () => editor?.chain().focus().unsetComment().run()}
+      on:click={unsetCommentDisabled
+        ? undefined
+        : () => editor?.chain().focus().unsetComment().run()}
       disabled={unsetCommentDisabled}
     >
       <FluentIcon>

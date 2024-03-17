@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from '$app/stores';
+  import { FileExplorerDialog } from '$lib/common/FileExplorer';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import PhotoWidgetDialog from '$lib/dialogs/PhotoWidgetDialog.svelte';
   import type { Editor } from '@tiptap/core';
@@ -51,11 +53,21 @@
 </script>
 
 <div class="panel" class:visible bind:offsetWidth={width}>
-  <PhotoWidgetDialog
+  <FileExplorerDialog
+    session={$page.data.session}
+    url={$page.data.url}
     bind:open={photoWidgetDialogOpen}
-    title="Change photo"
-    handleSumbit={async (photoId) => {
-      editor?.chain().focus().selectParentNode().updateAttributes('photoWidget', { photoId }).run();
+    mimeTypes={['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp']}
+    handleAction={async (files) => {
+      if (files && files.length > 0) {
+        const file = files[0];
+        editor
+          ?.chain()
+          .focus()
+          .selectParentNode()
+          .updateAttributes('photoWidget', { photoUrl: file.url, photoCredit: file.sourceName })
+          .run();
+      }
     }}
   />
   <Tooltip text="Change to a different photo">
@@ -71,7 +83,11 @@
               class="OfficeIconColors_HighContrast"
               d="M 1485 794 q -27 0 -50 -10 q -23 -10 -40 -28 q -18 -17 -28 -41 q -10 -23 -10 -49 q 0 -27 10 -50 q 10 -23 28 -41 q 17 -17 40 -27 q 23 -10 50 -10 q 26 0 50 10 q 23 10 41 27 q 17 18 27 41 q 10 23 10 50 q 0 26 -10 49 q -10 24 -27 41 q -18 18 -41 28 q -24 10 -50 10 m -1383 -487 h 1844 v 1434 h -1844 m 1741 -1331 h -1638 v 746 l 461 -460 l 563 563 l 256 -256 l 358 358 m -1638 -60 v 337 h 1259 l -798 -798 m 942 798 h 235 v -132 l -358 -358 l -184 183 z"
             />
-            <path type="path" class="OfficeIconColors_m20" d="M 1894 1690 h -1740 v -1332 h 1740 z" />
+            <path
+              type="path"
+              class="OfficeIconColors_m20"
+              d="M 1894 1690 h -1740 v -1332 h 1740 z"
+            />
             <path
               type="path"
               class="OfficeIconColors_m26"
@@ -112,7 +128,11 @@
               class="OfficeIconColors_HighContrast"
               d="M 1485 794 q -27 0 -50 -10 q -23 -10 -40 -28 q -18 -17 -28 -41 q -10 -23 -10 -49 q 0 -27 10 -50 q 10 -23 28 -41 q 17 -17 40 -27 q 23 -10 50 -10 q 26 0 50 10 q 23 10 41 27 q 17 18 27 41 q 10 23 10 50 q 0 26 -10 49 q -10 24 -27 41 q -18 18 -41 28 q -24 10 -50 10 m -1383 -487 h 1844 v 1434 h -1844 m 1741 -1331 h -1638 v 746 l 461 -460 l 563 563 l 256 -256 l 358 358 m -1638 -60 v 337 h 1259 l -798 -798 m 942 798 h 235 v -132 l -358 -358 l -184 183 z"
             />
-            <path type="path" class="OfficeIconColors_m20" d="M 1894 1690 h -1740 v -1332 h 1740 z" />
+            <path
+              type="path"
+              class="OfficeIconColors_m20"
+              d="M 1894 1690 h -1740 v -1332 h 1740 z"
+            />
             <path
               type="path"
               class="OfficeIconColors_m26"
@@ -147,7 +167,10 @@
 
   <Tooltip text="Delete the photo widget">
     {#if width < 480}
-      <IconButton disabled={disabled || !editor?.isActive('photoWidget')} on:click={deletePhotoNode}>
+      <IconButton
+        disabled={disabled || !editor?.isActive('photoWidget')}
+        on:click={deletePhotoNode}
+      >
         <FluentIcon>
           <svg height="100%" width="100%" viewBox="0,0,2048,2048" focusable="false">
             <path
@@ -389,7 +412,9 @@
 
   <span class="bar" />
 
-  <Tooltip text="{editor?.isActive('photoWidget', { showCaption: true }) ? 'Hide' : 'Show'} photo caption">
+  <Tooltip
+    text="{editor?.isActive('photoWidget', { showCaption: true }) ? 'Hide' : 'Show'} photo caption"
+  >
     {#if width < 310}
       <IconButton
         disabled={disabled || !editor?.isActive('photoWidget')}
@@ -412,7 +437,11 @@
               class="OfficeIconColors_HighContrast"
               d="M 1741 102 v 1844 h -1434 v -1844 m 1331 103 h -1228 v 1638 h 1228 m -204 -1229 h -820 v -102 h 820 m 0 410 h -820 v -103 h 820 m 0 410 h -820 v -103 h 820 m 0 410 h -820 v -102 h 820 z"
             />
-            <path type="path" class="OfficeIconColors_m20" d="M 1690 1894 h -1332 v -1740 h 1332 z" />
+            <path
+              type="path"
+              class="OfficeIconColors_m20"
+              d="M 1690 1894 h -1332 v -1740 h 1332 z"
+            />
             <path
               type="path"
               class="OfficeIconColors_m22"
@@ -448,7 +477,11 @@
               class="OfficeIconColors_HighContrast"
               d="M 1741 102 v 1844 h -1434 v -1844 m 1331 103 h -1228 v 1638 h 1228 m -204 -1229 h -820 v -102 h 820 m 0 410 h -820 v -103 h 820 m 0 410 h -820 v -103 h 820 m 0 410 h -820 v -102 h 820 z"
             />
-            <path type="path" class="OfficeIconColors_m20" d="M 1690 1894 h -1332 v -1740 h 1332 z" />
+            <path
+              type="path"
+              class="OfficeIconColors_m20"
+              d="M 1690 1894 h -1332 v -1740 h 1332 z"
+            />
             <path
               type="path"
               class="OfficeIconColors_m22"
