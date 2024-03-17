@@ -36,6 +36,7 @@
   export let tableDataFilter: ReturnType<typeof paramsToStrapiFilter>;
   export let tableDataSort: Record<string, 1 | -1>;
   export let enableMultiRowSelection = true;
+  export let editingCell: Writable<number>;
 
   type Store = Awaited<ReturnType<typeof getFileExplorerData>>;
   type StoreValue = Parameters<Parameters<Store['subscribe']>[0]>[0];
@@ -48,8 +49,6 @@
   type Doc = File;
 
   const insertFile = getContext('insertFile');
-
-  let editingCell = writable<number>(-1);
 
   $: tableData = store
     ? derived(store, ($store) => {

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Writable } from 'svelte/store';
+  import { writable, type Writable } from 'svelte/store';
   import ActionsRow from './_ActionsRow.svelte';
   import Breadcrumbs from './_Breadcrumbs.svelte';
   import FileTable from './_FileTable.svelte';
   import ExplorerFooter from './_Footer.svelte';
-  import type { GetFileExplorerDataParams, getFileExplorerData } from './getFileExplorerData';
+  import type { getFileExplorerData, GetFileExplorerDataParams } from './getFileExplorerData';
 
   export let store: Awaited<ReturnType<typeof getFileExplorerData>> | undefined = undefined;
   export let path: Writable<GetFileExplorerDataParams['path']>;
@@ -12,11 +12,13 @@
   export let selectedIds: Writable<number[]>;
   export let mimeTypes: string[] = [];
   export let enableMultiRowSelection = true;
+
+  let editingCell = writable<number>(-1);
 </script>
 
 <Breadcrumbs {path} {search} {store} />
 
-<ActionsRow />
+<ActionsRow {path} {store} {editingCell} />
 
 <div class="explorer">
   <div class="file-table-wrapper">
@@ -27,6 +29,7 @@
       tableDataFilter={{}}
       {selectedIds}
       {enableMultiRowSelection}
+      {editingCell}
     />
   </div>
 </div>
