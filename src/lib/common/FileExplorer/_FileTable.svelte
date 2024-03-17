@@ -49,6 +49,8 @@
 
   const insertFile = getContext('insertFile');
 
+  let editingCell = writable<number>(-1);
+
   $: tableData = store
     ? derived(store, ($store) => {
         return {
@@ -83,6 +85,8 @@
           type: 'string',
           key: 'name',
           def: { type: 'passthrough' },
+          editingCell,
+          store,
         });
       },
       size: 360,
@@ -140,6 +144,7 @@
   $: {
     if (
       data.length !== ($tableData?.docs || []).length ||
+      JSON.stringify(data) !== JSON.stringify($tableData?.docs || []) ||
       filter !== JSON.stringify(tableDataFilter) ||
       sort !== JSON.stringify(tableDataSort)
     ) {
@@ -357,7 +362,7 @@
       <div role="rowgroup" class="tbody">
         {#each $table.getRowModel().rows as row, i}
           {@const isFolder = isFolderDoc(row.original)}
-          {#key $path + row.original.hash + row.original.name + filter}
+          {#key JSON.stringify($path) + row.original.hash + row.original.name + filter}
             <ContextMenu
               on:contextmenu={async () => {
                 await tick();
@@ -424,7 +429,11 @@
                           {/if}
                         </div>
                       {/if}
-                      <span class="cell-content" class:noWrap={$table.options.meta?.noWrap}>
+                      <span
+                        class="cell-content"
+                        class:noWrap={$table.options.meta?.noWrap}
+                        style={cell.column.id === 'name' ? 'width: 100%;' : ''}
+                      >
                         <svelte:component
                           this={flexRender(cell.column.columnDef.cell, cell.getContext())}
                         />
@@ -453,6 +462,13 @@
                     Insert
                   </MenuFlyoutItem>
                 {/if}
+                <MenuFlyoutItem
+                  on:click={async () => {
+                    $editingCell = row.index;
+                  }}
+                >
+                  Rename
+                </MenuFlyoutItem>
               </svelte:fragment>
             </ContextMenu>
           {/key}

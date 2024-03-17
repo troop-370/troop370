@@ -1,9 +1,12 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { Chip } from '$lib/common/Chip';
-  import { formatBytes, formatISODate, genAvatar } from '$utils';
+  import { formatBytes, formatISODate, genAvatar, hasKey } from '$utils';
   import type { colorType } from '$utils/theme/theme';
   import type { TableMeta } from '@tanstack/svelte-table';
   import type { ColumnDefBase } from '@tanstack/table-core/build/lib/types';
+  import { TextBox } from 'fluent-svelte';
+  import { writable, type Writable } from 'svelte/store';
   import type { getFileExplorerData } from './getFileExplorerData';
 
   type Store = Awaited<ReturnType<typeof getFileExplorerData>>;
@@ -28,12 +31,75 @@
     column?: { chips?: boolean | { value: string | number; label?: string; color?: colorType }[] };
   };
   export let valueOverride = '';
+  export let store: Store | undefined = undefined;
+
+  export let editingCell = writable(-1);
+  $: editMode = $editingCell === info.row.index;
 
   const fieldData = valueOverride || info.getValue() || '';
+
+  // when the input first becomes available, focus it
+  let inputElement: HTMLInputElement;
+  $: if (inputElement) inputElement.focus();
+
+  // save the change when focus leaves
+  function handleSaveNameChange() {
+    const newName = inputElement.value;
+    const isFolder = isFolderDoc(info.row.original);
+
+    if (isFolder) {
+      fetch(`/admin/strapi/upload/folders/${info.row.original.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${$page.data.session?.adminToken}`,
+        },
+        body: JSON.stringify({
+          name: inputElement.value,
+          parent: info.row.original.parent?.split('/').slice(-2, -1)[0] ?? null,
+        }),
+      }).then(() => {
+        $store?.folders.refetch();
+        $editingCell = -1;
+      });
+    } else {
+      const data = new FormData();
+      data.set('fileInfo', JSON.stringify({ name: newName }));
+
+      fetch(`/admin/strapi/upload?id=${info.row.original.id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${$page.data.session?.adminToken}`,
+        },
+        body: data,
+      }).then(() => {
+        $store?.files.refetch();
+        $editingCell = -1;
+      });
+    }
+  }
+
+  function isFolderDoc(toCheck: File | Folder): toCheck is Folder {
+    return !!toCheck && hasKey(toCheck, 'files');
+  }
 </script>
 
 {#if type === 'checkbox'}
   __checkbox
+{:else if key === 'name'}
+  {#if editMode}
+    <TextBox
+      value={fieldData}
+      bind:inputElement
+      clearButton={false}
+      on:outermousedown={handleSaveNameChange}
+      on:keydown={(evt) => {
+        if (evt.key === 'Enter') handleSaveNameChange();
+      }}
+    />
+  {:else}
+    {fieldData}
+  {/if}
 {:else if def.type === 'size'}
   {@const sizeBytes = parseFloat(`${fieldData}`) * 1000}
   {#if sizeBytes > 0}
