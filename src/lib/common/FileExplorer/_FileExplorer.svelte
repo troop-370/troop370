@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { openWindow } from '$utils';
+  import { Button, InfoBar } from 'fluent-svelte';
   import { writable, type Writable } from 'svelte/store';
   import ActionsRow from './_ActionsRow.svelte';
   import Breadcrumbs from './_Breadcrumbs.svelte';
   import FileTable from './_FileTable.svelte';
   import ExplorerFooter from './_Footer.svelte';
-  import type { getFileExplorerData, GetFileExplorerDataParams } from './getFileExplorerData';
+  import type { GetFileExplorerDataParams, getFileExplorerData } from './getFileExplorerData';
 
   export let store: Awaited<ReturnType<typeof getFileExplorerData>> | undefined = undefined;
   export let path: Writable<GetFileExplorerDataParams['path']>;
@@ -18,7 +20,22 @@
 
 <Breadcrumbs {path} {search} {store} />
 
-<ActionsRow {path} {store} {editingCell} />
+<ActionsRow {path} {store} {editingCell} selectedItemsCount={$selectedIds.length} />
+
+<InfoBar title="Looking to edit or upload assets?" style="margin-bottom: 10px;">
+  Use the media library app.
+  <Button
+    variant="standard"
+    href="/admin/plugins/upload?childWindow=1"
+    slot="action"
+    on:click={(evt) => {
+      evt.preventDefault();
+      openWindow('/admin/plugins/upload?childWindow=1', 'uploadApp', 'location=no');
+    }}
+  >
+    Open media library app
+  </Button>
+</InfoBar>
 
 <div class="explorer">
   <div class="file-table-wrapper">

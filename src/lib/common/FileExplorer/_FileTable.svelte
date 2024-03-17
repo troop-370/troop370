@@ -26,6 +26,7 @@
   import { derived, writable, type Readable, type Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
   import Loading from '../Loading.svelte';
+  import DeleteDialog from './_DeleteDialog.svelte';
   import { trapFocus } from './_trapFocus';
   import type { getFileExplorerData, GetFileExplorerDataParams } from './getFileExplorerData';
   import ValueCell from './ValueCell.svelte';
@@ -140,7 +141,6 @@
   let data: Doc[] = [];
   let filter = JSON.stringify(tableDataFilter);
   let sort = JSON.stringify(tableDataSort);
-  let contentMenuOpen: Record<number, boolean> = {};
   $: {
     if (
       data.length !== ($tableData?.docs || []).length ||
@@ -151,7 +151,6 @@
       data = $tableData?.docs || [];
       filter = JSON.stringify(tableDataFilter);
       sort = JSON.stringify(tableDataSort);
-      contentMenuOpen = {};
     }
   }
 
@@ -165,6 +164,7 @@
     manualSorting: true,
     manualFiltering: true,
     enableRowSelection(row) {
+      return true;
       return !isFolderDoc(row.original);
     },
     enableMultiRowSelection: enableMultiRowSelection,
@@ -287,10 +287,7 @@
   }
 
   let lastSelectedRowIndex = 0;
-  $: $selectedIds = $table
-    .getSelectedRowModel()
-    .rows.filter((row) => !isFolderDoc(row.original))
-    .map((row) => row.original.id) as number[];
+  $: $selectedIds = $table.getSelectedRowModel().rows.map((row) => row.original.id) as number[];
 
   function toggleSort(column: Column<Doc>, sortable: boolean, shiftKey?: boolean) {
     if (sortable) column.toggleSorting(undefined, shiftKey);
@@ -298,6 +295,10 @@
 
   // remove focus trap if a context menu for a row is open since focus trap
   // prevents the context menu from being focusable and firing click events
+  let contentMenuOpen: Record<number, boolean> = {};
+  $: if ($store?.loading) {
+    contentMenuOpen = {};
+  }
   $: allContextMenusClosed = Object.values(contentMenuOpen).every((open) => !open);
   $: {
     if (allContextMenusClosed) $trapFocus = true;
@@ -305,6 +306,7 @@
   }
 
   export let loadingMore = false;
+  let deleteDialogOpen = false;
 </script>
 
 <div class="wrapper">
@@ -374,8 +376,13 @@
           {#key JSON.stringify($path) + row.original.hash + row.original.name + filter}
             <ContextMenu
               bind:open={contentMenuOpen[row.index]}
-              on:select={async (evt) => {
-                console.log(evt);
+              on:contextmenu={() => {
+                // if the row is not selected, deselect all others and then select it
+                if (!$selectedIds.includes(row.original.id)) {
+                  $table.toggleAllRowsSelected(false);
+                  row.toggleSelected();
+                  lastSelectedRowIndex = row.index;
+                }
               }}
             >
               <span
@@ -451,7 +458,6 @@
                 {#if isFolder}
                   <MenuFlyoutItem
                     on:click={async () => {
-                      $trapFocus = true;
                       handleRowSelect(row);
                     }}
                   >
@@ -460,7 +466,6 @@
                 {:else}
                   <MenuFlyoutItem
                     on:click={async () => {
-                      $trapFocus = true;
                       insertFile?.(row.original);
                     }}
                   >
@@ -473,6 +478,14 @@
                   }}
                 >
                   Rename
+                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                  on:click={async () => {
+                    // $editingCell = row.index;
+                    deleteDialogOpen = true;
+                  }}
+                >
+                  Delete
                 </MenuFlyoutItem>
               </svelte:fragment>
             </ContextMenu>
@@ -513,6 +526,18 @@
     </div>
   {/if} -->
 </div>
+
+<DeleteDialog
+  bind:open={deleteDialogOpen}
+  handleAction={async (deletedIds) => {
+    if (deletedIds) {
+      const deletedFolders = deletedIds.filter((id) => id < 0);
+      if (deletedFolders) $store?.folders.refetch();
+      const deletedFiles = deletedIds.filter((id) => id > 0);
+      if (deletedFiles) $store?.files.refetch();
+    }
+  }}
+/>
 
 <style>
   div.wrapper {

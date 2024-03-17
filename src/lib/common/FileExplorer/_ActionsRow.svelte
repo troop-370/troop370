@@ -3,11 +3,15 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { Button } from 'fluent-svelte';
   import type { Writable } from 'svelte/store';
+  import DeleteDialog from './_DeleteDialog.svelte';
   import type { GetFileExplorerDataParams, getFileExplorerData } from './getFileExplorerData';
 
   export let store: Awaited<ReturnType<typeof getFileExplorerData>> | undefined = undefined;
   export let path: Writable<GetFileExplorerDataParams['path']>;
   export let editingCell: Writable<number>;
+  export let selectedItemsCount = 0;
+
+  let deleteDialogOpen = false;
 
   function createFolder() {
     const duplicates =
@@ -46,7 +50,26 @@
     <FluentIcon name="ArrowUpload16Regular" mode="buttonIconLeft" />
     Upload asset
   </Button>
+  <Button
+    disabled={$store?.loading || selectedItemsCount === 0}
+    on:click={() => (deleteDialogOpen = !deleteDialogOpen)}
+  >
+    <FluentIcon name="Delete16Regular" mode="buttonIconLeft" />
+    Delete
+  </Button>
 </div>
+
+<DeleteDialog
+  bind:open={deleteDialogOpen}
+  handleAction={async (deletedIds) => {
+    if (deletedIds) {
+      const deletedFolders = deletedIds.filter((id) => id < 0);
+      if (deletedFolders) $store?.folders.refetch();
+      const deletedFiles = deletedIds.filter((id) => id > 0);
+      if (deletedFiles) $store?.files.refetch();
+    }
+  }}
+/>
 
 <style>
   .file-explorer-toolbar {
