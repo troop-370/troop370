@@ -58,7 +58,10 @@ export async function getFileExplorerData({
     return derived(store, ($store) => {
       return {
         ...$store,
-        data: !$store.data?.docs || search ? [] : $store.data.docs,
+        data:
+          !$store.data?.docs || search
+            ? []
+            : $store.data.docs.map((folder) => ({ ...folder, id: -1 * folder.id })),
       };
     });
   });

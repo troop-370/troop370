@@ -249,9 +249,9 @@
     if (isFolderDoc(row.original)) {
       const originalRow = row.original;
       path.update(($path) => {
-        $path.folder = originalRow.id;
+        $path.folder = Math.abs(originalRow.id);
         $path.folderPath = originalRow.path;
-        $path.folderNumberPath += '/' + originalRow.id;
+        $path.folderNumberPath += '/' + Math.abs(originalRow.id);
         $path.breadcrumbs = $path.breadcrumbs + '/' + originalRow.name;
         return $path;
       });

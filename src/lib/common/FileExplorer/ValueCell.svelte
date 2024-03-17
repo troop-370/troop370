@@ -48,7 +48,7 @@
     const isFolder = isFolderDoc(info.row.original);
 
     if (isFolder) {
-      fetch(`/admin/strapi/upload/folders/${info.row.original.id}`, {
+      fetch(`/admin/strapi/upload/folders/${Math.abs(info.row.original.id)}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@
       const data = new FormData();
       data.set('fileInfo', JSON.stringify({ name: newName }));
 
-      fetch(`/admin/strapi/upload?id=${info.row.original.id}`, {
+      fetch(`/admin/strapi/upload?id=${Math.abs(info.row.original.id)}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${$page.data.session?.adminToken}`,
