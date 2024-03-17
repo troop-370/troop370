@@ -20,11 +20,13 @@
     Table,
     TableOptions,
   } from '@tanstack/table-core/build/lib/types';
-  import { createEventDispatcher } from 'svelte';
+  import { ContextMenu, MenuFlyoutDivider, MenuFlyoutItem } from 'fluent-svelte';
+  import { createEventDispatcher, getContext, tick } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import { derived, writable, type Readable, type Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
   import Loading from '../Loading.svelte';
+  import { trapFocus } from './_trapFocus';
   import type { getFileExplorerData, GetFileExplorerDataParams } from './getFileExplorerData';
   import ValueCell from './ValueCell.svelte';
 
@@ -44,6 +46,8 @@
   type FilesStoreData = FilesStoreValue['data'];
   type File = NonNullable<FilesStoreData>['docs'][number];
   type Doc = File;
+
+  const insertFile = getContext('insertFile');
 
   $: tableData = store
     ? derived(store, ($store) => {
@@ -237,6 +241,19 @@
     evt.stopPropagation();
   }
 
+  function handleRowSelect(row: Row<Doc>) {
+    if (isFolderDoc(row.original)) {
+      const originalRow = row.original;
+      path.update(($path) => {
+        $path.folder = originalRow.id;
+        $path.folderPath = originalRow.path;
+        $path.folderNumberPath += '/' + originalRow.id;
+        $path.breadcrumbs = $path.breadcrumbs + '/' + originalRow.name;
+        return $path;
+      });
+    }
+  }
+
   function isPointerEvent(evt: PointerEvent | MouseEvent): evt is PointerEvent {
     if (hasKey(evt, 'pointerType')) return true;
     return false;
@@ -341,80 +358,103 @@
         {#each $table.getRowModel().rows as row, i}
           {@const isFolder = isFolderDoc(row.original)}
           {#key $path + row.original.hash + row.original.name + filter}
-            <span
-              role="row"
-              tabindex="0"
-              on:click={(evt) => handleRowClick(evt, row)}
-              on:keydown={(evt) => handleRowClick(evt, row)}
-              on:dblclick={(evt) => {
-                if (!isInputElem(evt.target) && !isCheckbox(evt.target)) {
-                  if (isFolderDoc(row.original)) {
-                    const originalRow = row.original;
-                    path.update(($path) => {
-                      $path.folder = originalRow.id;
-                      $path.folderPath = originalRow.path;
-                      $path.folderNumberPath += '/' + originalRow.id;
-                      $path.breadcrumbs = $path.breadcrumbs + '/' + originalRow.name;
-                      return $path;
-                    });
-                  }
-                }
+            <ContextMenu
+              on:contextmenu={async () => {
+                await tick();
+                $trapFocus = false;
               }}
-              in:fly={{ y: 40, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+              on:select={async (evt) => {
+                console.log(evt);
+                $trapFocus = true;
+              }}
             >
-              {#each row.getVisibleCells() as cell}
-                {@const columnSize =
-                  cell.column.getSize() === 9999 ? '100%' : cell.column.getSize() + 'px'}
-                {@const meta = cell.column.columnDef.meta || {}}
-                {@const justify = hasKey(meta, 'justify') ? meta.justify : 'left'}
+              <span
+                role="row"
+                tabindex="0"
+                on:click={(evt) => handleRowClick(evt, row)}
+                on:keydown={(evt) => handleRowClick(evt, row)}
+                on:dblclick={(evt) => {
+                  if (!isInputElem(evt.target) && !isCheckbox(evt.target)) {
+                    handleRowSelect(row);
+                  }
+                }}
+                in:fly={{ y: 40, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+              >
+                {#each row.getVisibleCells() as cell}
+                  {@const columnSize =
+                    cell.column.getSize() === 9999 ? '100%' : cell.column.getSize() + 'px'}
+                  {@const meta = cell.column.columnDef.meta || {}}
+                  {@const justify = hasKey(meta, 'justify') ? meta.justify : 'left'}
 
-                <span
-                  role="cell"
-                  style="
+                  <span
+                    role="cell"
+                    style="
                     width: {columnSize};
                     flex-shrink: {columnSize === '100%' ? '1' : '0'};
                     justify-content: {justify};
                     {cell.column.id === '__checkbox' ? 'align-self: center;' : ''}
                   "
-                  class:compact={$compactMode}
-                  class:rightPadding={justify === 'right'}
-                >
-                  {#if cell.column.id === '__checkbox'}
-                    <StatelessCheckbox
-                      checked={row.getIsSelected()}
-                      disabled={!row.getCanSelect()}
-                      indeterminate={row.getIsSomeSelected()}
-                      size={$compactMode ? 16 : 18}
-                      labelStyle="display: flex; margin-left: 3px;"
-                      on:click={(evt) => {
-                        evt.stopPropagation();
-                      }}
-                      on:change={(evt) => {
-                        row.toggleSelected(evt.detail.checked);
-                        lastSelectedRowIndex = row.index;
-                      }}
-                    />
-                  {:else}
-                    {#if cell.column.id === 'name'}
-                      <div class="item-icon">
-                        {#if isFolder}
-                          <FluentIcon name="Folder16Regular" />
-                        {:else if row.original.mime.startsWith('image/')}
-                          <img src={row.original.url} alt="" />
-                        {:else}
-                          <FluentIcon name="Document16Regular" />
-                        {/if}
-                      </div>
-                    {/if}
-                    <span class="cell-content" class:noWrap={$table.options.meta?.noWrap}>
-                      <svelte:component
-                        this={flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    class:compact={$compactMode}
+                    class:rightPadding={justify === 'right'}
+                  >
+                    {#if cell.column.id === '__checkbox'}
+                      <StatelessCheckbox
+                        checked={row.getIsSelected()}
+                        disabled={!row.getCanSelect()}
+                        indeterminate={row.getIsSomeSelected()}
+                        size={$compactMode ? 16 : 18}
+                        labelStyle="display: flex; margin-left: 3px;"
+                        on:click={(evt) => {
+                          evt.stopPropagation();
+                        }}
+                        on:change={(evt) => {
+                          row.toggleSelected(evt.detail.checked);
+                          lastSelectedRowIndex = row.index;
+                        }}
                       />
-                    </span>
-                  {/if}
-                </span>
-              {/each}
-            </span>
+                    {:else}
+                      {#if cell.column.id === 'name'}
+                        <div class="item-icon">
+                          {#if isFolder}
+                            <FluentIcon name="Folder16Regular" />
+                          {:else if row.original.mime.startsWith('image/')}
+                            <img src={row.original.url} alt="" />
+                          {:else}
+                            <FluentIcon name="Document16Regular" />
+                          {/if}
+                        </div>
+                      {/if}
+                      <span class="cell-content" class:noWrap={$table.options.meta?.noWrap}>
+                        <svelte:component
+                          this={flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        />
+                      </span>
+                    {/if}
+                  </span>
+                {/each}
+              </span>
+              <svelte:fragment slot="flyout">
+                {#if isFolder}
+                  <MenuFlyoutItem
+                    on:click={async () => {
+                      $trapFocus = true;
+                      handleRowSelect(row);
+                    }}
+                  >
+                    Open
+                  </MenuFlyoutItem>
+                {:else}
+                  <MenuFlyoutItem
+                    on:click={async () => {
+                      $trapFocus = true;
+                      insertFile?.(row.original);
+                    }}
+                  >
+                    Insert
+                  </MenuFlyoutItem>
+                {/if}
+              </svelte:fragment>
+            </ContextMenu>
           {/key}
         {/each}
       </div>

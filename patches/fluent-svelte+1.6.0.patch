@@ -1,5 +1,5 @@
 diff --git a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte
-index e089e13..a01a3ff 100644
+index 7fc0863..3e48fa2 100644
 --- a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte
 +++ b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte
 @@ -1,173 +1,190 @@
@@ -728,7 +728,7 @@ index e089e13..a01a3ff 100644
 +  }
 +</style>
 diff --git a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts
-index 9a7e080..49579de 100644
+index 2a81cc7..e037ba1 100644
 --- a/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts
 +++ b/node_modules/fluent-svelte/ComboBox/ComboBox.svelte.d.ts
 @@ -9,8 +9,15 @@ declare const __propDef: {
@@ -764,7 +764,7 @@ index 9a7e080..49579de 100644
 +export { };
 +
 diff --git a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte
-index 3296705..6304758 100644
+index 48b8217..6304758 100644
 --- a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte
 +++ b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte
 @@ -1,24 +1,138 @@
@@ -925,7 +925,7 @@ index 3296705..6304758 100644
 +	}
 +</style>
 diff --git a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts
-index 7579583..7cfdbdd 100644
+index b351c9e..46ad600 100644
 --- a/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts
 +++ b/node_modules/fluent-svelte/ComboBox/ComboBoxItem.svelte.d.ts
 @@ -5,6 +5,8 @@ declare const __propDef: {
@@ -944,8 +944,41 @@ index 7579583..7cfdbdd 100644
 -export {};
 +export { };
 +
+diff --git a/node_modules/fluent-svelte/ContentDialog/ContentDialog.svelte b/node_modules/fluent-svelte/ContentDialog/ContentDialog.svelte
+index 5a37e5a..c4160ba 100644
+--- a/node_modules/fluent-svelte/ContentDialog/ContentDialog.svelte
++++ b/node_modules/fluent-svelte/ContentDialog/ContentDialog.svelte
+@@ -1,9 +1,9 @@
+ <script >import { createEventDispatcher } from "svelte";
++import { circOut } from "svelte/easing";
+ import { get_current_component } from "svelte/internal";
+ import { fade, scale } from "svelte/transition";
+-import { circOut } from "svelte/easing";
+-import { uid, focusTrap, getCSSDuration, createEventForwarder } from "../internal";
+ import TextBlock from "../TextBlock/TextBlock.svelte";
++import { createEventForwarder, focusTrap, getCSSDuration, uid } from "../internal";
+ /** Determines whether the dialog is open or not. */
+ export let open = false;
+ /** Title text displayed as the dialog header. */
+@@ -40,7 +40,6 @@ const titleId = uid("fds-dialog-title-");
+ const bodyId = uid("fds-dialog-body-");
+ $: if (!open)
+     dispatch("close");
+-$: _focusTrap = trapFocus ? focusTrap : () => { };
+ function mountDialog(node) {
+     dispatch("open");
+     if (append)
+@@ -66,7 +65,7 @@ function handleEscapeKey({ key }) {
+ 		on:mousedown|self={e => dispatch("backdropmousedown", e)}
+ 		transition:fade|local={{ duration: getCSSDuration("--fds-control-faster-duration") }}
+ 		use:mountDialog
+-		use:_focusTrap
++		use:focusTrap={{ enabled: trapFocus }}
+ 		bind:this={backdropElement}
+ 	>
+ 		<div
 diff --git a/node_modules/fluent-svelte/Expander/Expander.svelte b/node_modules/fluent-svelte/Expander/Expander.svelte
-index ea44880..e616389 100644
+index 0b6e053..e616389 100644
 --- a/node_modules/fluent-svelte/Expander/Expander.svelte
 +++ b/node_modules/fluent-svelte/Expander/Expander.svelte
 @@ -18,6 +18,7 @@ export let containerElement = null;
@@ -1188,7 +1221,7 @@ index ea44880..e616389 100644
 +  }
 +</style>
 diff --git a/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts b/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts
-index fe49ca4..760e5d7 100644
+index b6b8881..06b0dd2 100644
 --- a/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts
 +++ b/node_modules/fluent-svelte/Expander/Expander.svelte.d.ts
 @@ -9,6 +9,7 @@ declare const __propDef: {
@@ -1215,7 +1248,7 @@ index fe49ca4..760e5d7 100644
 +export { };
 +
 diff --git a/node_modules/fluent-svelte/IconButton/IconButton.svelte b/node_modules/fluent-svelte/IconButton/IconButton.svelte
-index 4bd8c1a..8fa48e2 100644
+index 86cc70a..305f303 100644
 --- a/node_modules/fluent-svelte/IconButton/IconButton.svelte
 +++ b/node_modules/fluent-svelte/IconButton/IconButton.svelte
 @@ -38,4 +38,38 @@ An Icon Button is a clickable control that triggers an immediate action. Unlike
@@ -1259,7 +1292,7 @@ index 4bd8c1a..8fa48e2 100644
 +  }
 +</style>
 diff --git a/node_modules/fluent-svelte/ListItem/ListItem.svelte b/node_modules/fluent-svelte/ListItem/ListItem.svelte
-index d75aa4a..5e28503 100644
+index 3c4f8dc..d3cd829 100644
 --- a/node_modules/fluent-svelte/ListItem/ListItem.svelte
 +++ b/node_modules/fluent-svelte/ListItem/ListItem.svelte
 @@ -16,6 +16,8 @@ let className = "";
@@ -1386,7 +1419,7 @@ index d75aa4a..5e28503 100644
 +	}
 +</style>
 diff --git a/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts b/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts
-index d89233c..5b6620d 100644
+index 1f40bae..2270f56 100644
 --- a/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts
 +++ b/node_modules/fluent-svelte/ListItem/ListItem.svelte.d.ts
 @@ -16,6 +16,7 @@ declare const __propDef: {
@@ -1405,7 +1438,7 @@ index d89233c..5b6620d 100644
 +export { };
 +
 diff --git a/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte b/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte
-index 60ea3cb..d9654d8 100644
+index 7c4166c..e04e195 100644
 --- a/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte
 +++ b/node_modules/fluent-svelte/MenuFlyout/MenuFlyoutWrapper.svelte
 @@ -84,6 +84,7 @@ setContext("closeFlyout", event => {
@@ -1417,7 +1450,7 @@ index 60ea3cb..d9654d8 100644
  	{/if}
  </div>
 diff --git a/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts b/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts
-index 5d5d5b7..fbfc7fc 100644
+index e0dd9e5..a10fa80 100644
 --- a/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts
 +++ b/node_modules/fluent-svelte/TextBox/TextBox.svelte.d.ts
 @@ -23,6 +23,7 @@ declare const __propDef: {
@@ -1435,3 +1468,43 @@ index 5d5d5b7..fbfc7fc 100644
 -export {};
 +export { };
 +
+diff --git a/node_modules/fluent-svelte/internal.js b/node_modules/fluent-svelte/internal.js
+index d603738..994536f 100644
+--- a/node_modules/fluent-svelte/internal.js
++++ b/node_modules/fluent-svelte/internal.js
+@@ -1,11 +1,11 @@
++import { createFocusTrap } from "focus-trap";
+ import { bubble, listen } from "svelte/internal";
+ import { tabbable } from "tabbable";
+-import { createFocusTrap } from "focus-trap";
++export { default as CalendarViewItem } from "./CalendarView/CalendarViewItem.svelte";
+ export { default as ComboBoxItem } from "./ComboBox/ComboBoxItem.svelte";
+ export { default as FlyoutSurface } from "./Flyout/FlyoutSurface.svelte";
+-export { default as TooltipSurface } from "./Tooltip/TooltipSurface.svelte";
+ export { default as MenuFlyoutSurface } from "./MenuFlyout/MenuFlyoutSurface.svelte";
+-export { default as CalendarViewItem } from "./CalendarView/CalendarViewItem.svelte";
++export { default as TooltipSurface } from "./Tooltip/TooltipSurface.svelte";
+ export function externalMouseEvents(node, options = { type: "click", stopPropagation: false }) {
+     const { type, stopPropagation } = options;
+     const handleEvent = (event) => {
+@@ -25,12 +25,17 @@ export function externalMouseEvents(node, options = { type: "click", stopPropaga
+     };
+ }
+ // Basic wrapper action around focus-trap
+-export function focusTrap(node, options) {
+-    const trap = createFocusTrap(node, (options = { ...options, fallbackFocus: node }));
+-    trap.activate();
++export function focusTrap(node, { enabled = true, ...options }) {
++    let trap = createFocusTrap(node, (options = { ...options, fallbackFocus: node }));
++    if (enabled) trap.activate();
+     return {
+         destroy() {
+             trap.deactivate();
++        },
++        update({ enabled = true, ...options }) {
++            trap.deactivate();
++            trap = createFocusTrap(node, (options = { ...options, fallbackFocus: node }));
++            if (enabled) trap.activate();
+         }
+     };
+ }

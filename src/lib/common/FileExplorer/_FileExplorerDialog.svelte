@@ -1,13 +1,20 @@
 <script lang="ts">
   import { Button, ContentDialog } from 'fluent-svelte';
+  import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
   import FileExplorerDataWrapper from './_FileExplorerDataWrapper.svelte';
+  import { trapFocus } from './_trapFocus';
   import type { getFileExplorerData } from './getFileExplorerData';
 
   export let open = false;
   export let session: Partial<SessionData>;
   export let url: URL;
   export let mimeTypes: string[] = [];
+
+  $: {
+    open;
+    $trapFocus = true;
+  }
 
   type Store = Awaited<ReturnType<typeof getFileExplorerData>>;
   type StoreValue = Parameters<Parameters<Store['subscribe']>[0]>[0];
@@ -21,10 +28,15 @@
   let selectedIds = writable<number[]>([]);
   let selectedIdsData = writable<File[]>([]);
 
+  setContext('insertFile', (file: File) => {
+    handleAction?.([file]);
+    open = false;
+  });
+
   export let handleAction: ((selectedFiles?: File[]) => Promise<void>) | undefined = undefined;
 </script>
 
-<ContentDialog bind:open size="max" class="file-explorer-dialog">
+<ContentDialog bind:open size="max" class="file-explorer-dialog" trapFocus={$trapFocus}>
   <div class="wrapper">
     <FileExplorerDataWrapper
       {session}
