@@ -260,10 +260,14 @@
   <LinkDialog
     bind:open={insertLinkDialogOpen}
     {editor}
-    handleSumbit={async (href) => {
+    handleSumbit={async (href, fileId) => {
       if (linkDisabled) return;
       if (href) {
-        editor?.chain().focus().setLink({ href }).run();
+        editor
+          ?.chain()
+          .focus()
+          .setLink({ href, file: fileId ? { id: fileId } : null })
+          .run();
       } else {
         editor?.chain().focus().unsetLink().run();
       }

@@ -91,7 +91,24 @@ export async function getFileExplorerData({
   });
 
   const combined = derived([await folders, await files], ([$folders, $files]) => {
-    return { folders: $folders, files: $files, loading: $folders.loading || $files.loading };
+    return {
+      folders: $folders,
+      files: {
+        ...$files,
+        data: {
+          ...$files.data,
+          docs:
+            $files.data?.docs?.map((file) => {
+              const url = new URL(file.url);
+              return {
+                ...file,
+                url: 'https://troop370atlanta.org/filestore' + url.pathname + url.search,
+              };
+            }) || [],
+        },
+      },
+      loading: $folders.loading || $files.loading,
+    };
   });
 
   return combined;

@@ -116,7 +116,40 @@ const editorExtensions = {
     Comment,
     PullQuote,
     ClassName.configure({ types: ['heading', 'paragraph'] }),
-    Link.configure({
+    Link.extend({
+      addAttributes() {
+        return {
+          href: {
+            default: null,
+          },
+          target: {
+            default: this.options.HTMLAttributes.target,
+          },
+          rel: {
+            default: this.options.HTMLAttributes.rel,
+          },
+          class: {
+            default: this.options.HTMLAttributes.class,
+            // renderHTML: (attributes) => {
+            //   let className = '';
+            //   if (attributes.class) className += attributes.class;
+            //   if (attributes.id) className += `~~file_${attributes.id}~~`;
+            //   return { class: className };
+            // },
+          },
+          file: {
+            default: null,
+            // parseHTML: (element) => {
+            //   const className = element.getAttribute('class');
+            //   const id = className?.match(/~~file_(\d+)~~/)?.[1];
+            //   console.log(className, id);
+            //   if (id) return { id };
+            //   return null;
+            // },
+          },
+        };
+      },
+    }).configure({
       HTMLAttributes: {
         target: '_self',
         rel: 'noopener noreferrer nofollow',
