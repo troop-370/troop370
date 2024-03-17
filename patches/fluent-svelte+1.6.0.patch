@@ -1494,14 +1494,14 @@ index d603738..994536f 100644
 -export function focusTrap(node, options) {
 -    const trap = createFocusTrap(node, (options = { ...options, fallbackFocus: node }));
 -    trap.activate();
-+export function focusTrap(node, { enabled = true, ...options }) {
++export function focusTrap(node, { enabled = true, ...options } = {}) {
 +    let trap = createFocusTrap(node, (options = { ...options, fallbackFocus: node }));
 +    if (enabled) trap.activate();
      return {
          destroy() {
              trap.deactivate();
 +        },
-+        update({ enabled = true, ...options }) {
++        update({ enabled = true, ...options } = {}) {
 +            trap.deactivate();
 +            trap = createFocusTrap(node, (options = { ...options, fallbackFocus: node }));
 +            if (enabled) trap.activate();
