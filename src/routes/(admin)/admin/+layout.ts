@@ -77,14 +77,16 @@ export const load = (async ({ parent, url, fetch }) => {
       contentManager: {
         read: (() => {
           const permissions =
-            $userPermissions.data?.docs.filter(
+            $userPermissions.data?.docs?.filter(
               ({ action }) => action === 'plugin::content-manager.explorer.read'
             ) || [];
           return { uids: permissions.map((p) => p.subject), specs: permissions };
         })(),
       },
       uploads: {
-        read: !!$userPermissions.data?.docs.find((p) => p.action.startsWith('plugin::upload.read')),
+        read: !!$userPermissions.data?.docs?.find((p) =>
+          p.action.startsWith('plugin::upload.read')
+        ),
       },
     };
   });
