@@ -19,8 +19,9 @@
   import { Button, TextBlock, TextBox, ToggleSwitch } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
   import { expoOut } from 'svelte/easing';
-  import { writable } from 'svelte/store';
+  import { derived, writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
+  import Sidebar from './Sidebar.svelte';
 
   export let data;
   $: ({ collectionConfig } = data);
@@ -161,6 +162,29 @@
       console.error(error);
     });
   }
+
+  $: coreSidebarProps = {
+    docInfo: {
+      id: $docData.id,
+      createdAt: $docData.createdAt,
+      modifiedAt: $docData.updatedAt,
+      collectionName: data.settings.uid,
+    },
+    disabled: false,
+    ydoc,
+    sharedData,
+    fullSharedData: derived([docData, fullSharedData], ([$docData, fullSharedData]) => ({
+      ...$docData,
+      ...fullSharedData,
+    })),
+    awareness,
+    preview: {
+      previewUrl: previewSrc,
+      refreshDocData: $docData.refetch,
+    },
+    hideVersions: true,
+    actions: [],
+  };
 </script>
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
@@ -177,26 +201,11 @@
           >
             {#if tabsShown}
               <div class="tabs-container" class:reduceSpaceAbove={showSidebarInline}>
-                <!-- {#if showSidebarInline}
+                {#if showSidebarInline}
                   <div style="margin: 0 11px;">
-                    <Sidebar
-                      docInfo={coreSidebarProps.docInfo}
-                      disabled={coreSidebarProps.disabled}
-                      ydoc={coreSidebarProps.ydoc}
-                      stageDef={coreSidebarProps.stageDef}
-                      sharedData={coreSidebarProps.sharedData}
-                      fullSharedData={coreSidebarProps.fullSharedData}
-                      awareness={coreSidebarProps.awareness}
-                      tenant={coreSidebarProps.tenant}
-                      preview={coreSidebarProps.preview}
-                      permissions={coreSidebarProps.permissions}
-                      hideVersions={coreSidebarProps.hideVersions}
-                      actions={coreSidebarProps.actions}
-                      features={{ actions: true }}
-                      isEmbedded
-                    />
+                    <Sidebar {...coreSidebarProps} features={{ actions: true }} isEmbedded />
                   </div>
-                {/if} -->
+                {/if}
                 <div class="tabs" bind:this={tabsContainerElement}>
                   <Button
                     data-tab={'compose'}
@@ -273,26 +282,15 @@
                 />
               {/if}
 
-              <!-- {#if showSidebarInline}
+              {#if showSidebarInline}
                 <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
                   <Sidebar
-                    docInfo={coreSidebarProps.docInfo}
-                    disabled={coreSidebarProps.disabled}
-                    ydoc={coreSidebarProps.ydoc}
-                    stageDef={coreSidebarProps.stageDef}
-                    sharedData={coreSidebarProps.sharedData}
-                    fullSharedData={coreSidebarProps.fullSharedData}
-                    awareness={coreSidebarProps.awareness}
-                    tenant={coreSidebarProps.tenant}
-                    preview={coreSidebarProps.preview}
-                    permissions={coreSidebarProps.permissions}
-                    hideVersions={coreSidebarProps.hideVersions}
-                    actions={coreSidebarProps.actions}
+                    {...coreSidebarProps}
                     features={{ docInfo: true, stage: true, download: true, preview: true }}
                     isEmbedded
                   />
                 </div>
-              {/if} -->
+              {/if}
 
               {#if !tabsShown || activeTab === 'compose'}
                 {#each (data.settings.defs || []).filter(([, { hidden }]) => {
@@ -393,21 +391,10 @@
                 {/each}
               {/if}
 
-              <!-- {#if showSidebarInline}
+              {#if showSidebarInline}
                 <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
                   <Sidebar
-                    docInfo={coreSidebarProps.docInfo}
-                    disabled={coreSidebarProps.disabled}
-                    ydoc={coreSidebarProps.ydoc}
-                    stageDef={coreSidebarProps.stageDef}
-                    sharedData={coreSidebarProps.sharedData}
-                    fullSharedData={coreSidebarProps.fullSharedData}
-                    awareness={coreSidebarProps.awareness}
-                    tenant={coreSidebarProps.tenant}
-                    preview={coreSidebarProps.preview}
-                    permissions={coreSidebarProps.permissions}
-                    hideVersions={coreSidebarProps.hideVersions}
-                    actions={coreSidebarProps.actions}
+                    {...coreSidebarProps}
                     features={{
                       access: true,
                       actions: false,
@@ -421,7 +408,7 @@
                     isEmbedded
                   />
                 </div>
-              {/if} -->
+              {/if}
             {/if}
           </div>
         </div>
@@ -437,22 +424,9 @@
       </div>
     {/if}
   </div>
-  <!-- {#if !showSidebarInline}
-    <Sidebar
-      docInfo={coreSidebarProps.docInfo}
-      disabled={coreSidebarProps.disabled}
-      ydoc={coreSidebarProps.ydoc}
-      stageDef={coreSidebarProps.stageDef}
-      sharedData={coreSidebarProps.sharedData}
-      fullSharedData={coreSidebarProps.fullSharedData}
-      awareness={coreSidebarProps.awareness}
-      tenant={coreSidebarProps.tenant}
-      preview={coreSidebarProps.preview}
-      permissions={coreSidebarProps.permissions}
-      hideVersions={coreSidebarProps.hideVersions}
-      actions={coreSidebarProps.actions}
-    />
-  {/if} -->
+  {#if !showSidebarInline}
+    <Sidebar {...coreSidebarProps} />
+  {/if}
 </div>
 
 <pre>
