@@ -7,6 +7,7 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { SelectMany, SelectOne } from '$lib/common/Select';
   import StrapiUidField from '$lib/common/StrapiUIDField/StrapiUIDField.svelte';
+  import PreviewFrame from '$lib/common/Tiptap/PreviewFrame.svelte';
   import { RichTiptap } from '$lib/common/Tiptap/index.js';
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
@@ -52,8 +53,7 @@
 
   let currentDocAndPreviewWidth = 1000;
   $: previewSrc = data.settings.preview?.draft?.url || undefined;
-  // $: showPreviewWidth = previewSrc ? 1400 : 99999999999;
-  $: showPreviewWidth = 99999999999;
+  $: showPreviewWidth = previewSrc ? 1400 : 99999999999;
   $: tabsShown = currentDocAndPreviewWidth <= showPreviewWidth;
 
   let currentContentWidth = 1000;
@@ -265,13 +265,12 @@
                     </ToggleSwitch>
                   </div>
                 {/if}
-                PREVIEW FRAME
-                <!-- <PreviewFrame
+                <PreviewFrame
                   src={previewSrc}
-                  fullSharedData={advancedSharedData}
+                  fullSharedData={{ ...docData, ...fullSharedData }}
                   noOuterMargin
                   hide={activeTab !== 'preview'}
-                /> -->
+                />
               {/if}
 
               <!-- {#if showSidebarInline}
@@ -430,8 +429,11 @@
     </div>
     {#if currentDocAndPreviewWidth > showPreviewWidth}
       <div class="concurrent-preview">
-        PREVIEW FRAME
-        <!-- <PreviewFrame src={previewSrc} fullSharedData={advancedSharedData} noOuterMargin /> -->
+        <PreviewFrame
+          src={previewSrc}
+          fullSharedData={{ ...docData, ...fullSharedData }}
+          noOuterMargin
+        />
       </div>
     {/if}
   </div>

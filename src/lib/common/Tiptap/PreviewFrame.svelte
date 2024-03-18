@@ -7,12 +7,11 @@
   import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import { create_in_transition } from 'svelte/internal';
-  import type { Readable } from 'svelte/store';
   import { fly } from 'svelte/transition';
 
   export let src = '';
   export let iframehtmlstring = '';
-  export let fullSharedData: Readable<Record<string, unknown>>;
+  export let fullSharedData: Record<string, unknown>;
   export let noOuterMargin = false;
   export let style = '';
   export let hide = false;
@@ -93,18 +92,18 @@
     }
   };
 
-  function sendFields(iframeElem: HTMLIFrameElement, fields?: typeof $fullSharedData) {
+  function sendFields(iframeElem: HTMLIFrameElement, fields?: typeof fullSharedData) {
     dataSent = true;
     iframeElem.contentWindow?.postMessage(
       JSON.stringify({
         type: 'fields',
-        fields: fields || $fullSharedData,
+        fields: fields || fullSharedData,
       }),
       new URL(src).origin
     );
   }
 
-  $: if (iframeElem) sendFields(iframeElem, $fullSharedData);
+  $: if (iframeElem) sendFields(iframeElem, fullSharedData);
 
   afterUpdate(() => {
     window.addEventListener('message', reportMessages, false);
