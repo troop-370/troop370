@@ -63,8 +63,6 @@
     !editor?.can().setComment(coreNewCommentAttrs);
   $: unsetCommentDisabled =
     disabled || previewMode || !options?.features.comment || !editor?.can().unsetComment();
-
-  $: console.log(insertPhotoWidgetDialogOpen);
 </script>
 
 <div class="panel" class:visible bind:offsetWidth={width}>

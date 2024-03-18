@@ -64,7 +64,7 @@
         ref.token
       )
         .then((options) => {
-          console.log('new', { options, referenceOpts });
+          // console.log('new', { options, referenceOpts });
           handleDragFinalize(options);
         })
         .finally(() => {
