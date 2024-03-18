@@ -4,6 +4,7 @@
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
   import { FileExplorerDialog } from '$lib/common/FileExplorer';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import { SelectMany, SelectOne } from '$lib/common/Select';
   import StrapiUidField from '$lib/common/StrapiUIDField/StrapiUIDField.svelte';
   import { RichTiptap } from '$lib/common/Tiptap/index.js';
   import { motionMode } from '$stores/motionMode.js';
@@ -285,6 +286,49 @@
                         collectionUID={data.settings.uid}
                         sessionAdminToken={data.session.adminToken}
                       />
+                    {:else if def.type === 'relation' && def.target && field.mainField}
+                      {#if !!$ydoc && def.relationType === 'oneToOne'}
+                        <SelectOne
+                          referenceOpts={{
+                            collectionUid: data.settings.uid,
+                            targetCollectionUid: def.target,
+                            fieldId: key,
+                            entityId: data.docData.id,
+                            token: data.session.adminToken,
+                            mainField: field.mainField,
+                            idsToInclude: [$docData[key]?.id],
+                            searchImmediately: true,
+                          }}
+                          selectedOption={{
+                            _id: $docData[key]?.id,
+                            label: $docData[key]?.[field.mainField],
+                          }}
+                        />
+                      {:else if !!$ydoc && def.relationType === 'oneToMany'}
+                        <SelectMany
+                          referenceOpts={{
+                            collectionUid: data.settings.uid,
+                            targetCollectionUid: def.target,
+                            fieldId: key,
+                            entityId: data.docData.id,
+                            token: data.session.adminToken,
+                            mainField: field.mainField,
+                            pageSize: 100,
+                            idsToInclude: [$docData[key]?.id],
+                            searchImmediately: true,
+                          }}
+                          selectedOptions={$docData[key].map((opt) => {
+                            if (!field.mainField) return { _id: opt.id };
+                            return {
+                              _id: opt.id,
+                              label: opt?.[field.mainField],
+                            };
+                          })}
+                        />
+                      {:else}
+                        <p>Error: The reference field could not be loaded.</p>
+                        <pre>{JSON.stringify($docData[key], null, 2)}</pre>
+                      {/if}
                     {:else if def.type === 'blocks'}
                       {#if !!$ydoc && !!$wsProvider && !!fullSharedData}
                         <RichTiptap

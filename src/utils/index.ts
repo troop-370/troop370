@@ -11,6 +11,8 @@ export { genAvatar } from './genAvatar';
 export { hasKey } from './hasKey';
 export { isIsoDate, isShortIsoDate } from './isIsoDate';
 export { isJSON } from './isJSON';
+export { isObjectId } from './isObjectId';
+export { isURL } from './isURL';
 export { listOxford } from './listOxford';
 export { notEmpty } from './notEmpty';
 export { get, getProperty, set, setProperty } from './objectPath';

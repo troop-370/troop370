@@ -132,18 +132,23 @@ const collectionConfigurationSchema = z.object({
     metadatas: z.record(
       z.string(),
       z.object({
-        edit: z.object({
-          description: z.string().optional(),
-          editable: z.boolean().optional(),
-          label: z.string().optional(),
-          placeholder: z.string().optional(),
-          visible: z.boolean().optional(),
-        }),
-        list: z.object({
-          label: z.string(),
-          searchable: z.boolean(),
-          sortable: z.boolean(),
-        }),
+        edit: z
+          .object({
+            description: z.string().optional(),
+            editable: z.boolean().optional(),
+            label: z.string().optional(),
+            placeholder: z.string().optional(),
+            visible: z.boolean().optional(),
+            mainField: z.string().optional(),
+          })
+          .passthrough(),
+        list: z
+          .object({
+            label: z.string(),
+            searchable: z.boolean(),
+            sortable: z.boolean(),
+          })
+          .passthrough(),
       })
     ),
     settings: z.object({
