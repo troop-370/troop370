@@ -289,4 +289,9 @@
     border: none !important;
     box-shadow: inset 0 -2px 0 0 var(--fds-accent-default);
   }
+
+  /* force dropdowns to be scrollable instead of eventually overflowing out of the container */
+  :global(:root .combo-box-dropdown) {
+    overflow: auto;
+  }
 </style>
