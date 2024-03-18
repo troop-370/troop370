@@ -4,9 +4,9 @@ import { derived } from 'svelte/store';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
 
-export const load = (async ({ fetch, parent }) => {
-  overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
+overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
 
+export const load = (async ({ fetch, parent }) => {
   const { session } = await parent();
 
   const previewConfig = await queryWithStore<z.infer<typeof collectionPreviewConfigSchema>[]>({
