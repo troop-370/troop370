@@ -272,6 +272,9 @@
     border: none !important;
     box-shadow: inset 0 0 0 1px var(--fds-control-strong-stroke-default);
   }
+  :global(:root .checkbox[type='checkbox']:disabled) {
+    box-shadow: inset 0 0 0 1px var(--fds-control-strong-stroke-disabled);
+  }
   :global(:root .text-box-underline) {
     block-size: calc(100% + 0px) !important;
     inline-size: calc(100% + 0px) !important;
@@ -285,5 +288,10 @@
   :global(:root .text-box-container:focus-within .text-box-underline):after {
     border: none !important;
     box-shadow: inset 0 -2px 0 0 var(--fds-accent-default);
+  }
+
+  /* force dropdowns to be scrollable instead of eventually overflowing out of the container */
+  :global(:root .combo-box-dropdown) {
+    overflow: auto;
   }
 </style>

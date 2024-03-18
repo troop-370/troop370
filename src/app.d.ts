@@ -32,7 +32,7 @@ interface SessionData {
 
 declare module '@tanstack/table-core' {
   interface TableMeta<TData extends RowData> {
-    compactMode: boolean;
-    noWrap: boolean;
+    compactMode?: boolean;
+    noWrap?: boolean;
   }
 }

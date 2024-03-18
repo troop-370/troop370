@@ -1,0 +1,1 @@
+export { PowerComment } from './powerComment';

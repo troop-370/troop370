@@ -13,6 +13,8 @@ const sessionHandler = handleSession(
 const adminProxyHandler = (async ({ event, resolve }) => {
   const { fetch, request, locals } = event;
 
+  // console.log(`[${event.request.method}] ${event.url.pathname}`);
+
   try {
     if (event.url.pathname.startsWith('/admin/strapi')) {
       // this is the pathname to use for the proxy to the strapi server (remove the prefix path)
@@ -29,7 +31,7 @@ const adminProxyHandler = (async ({ event, resolve }) => {
           // does not fail.
           if (request.method === 'POST' && header.toLowerCase() === 'transfer-encoding') continue;
 
-          headers[header] = value;
+          headers[header.toLowerCase()] = value;
         }
         return headers;
       })();
@@ -42,6 +44,11 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         }
         if (request.headers.get('Content-Type') === 'application/json') {
           return JSON.stringify(await request.json());
+        }
+        if (request.headers.get('Content-Type')?.startsWith('multipart/form-data')) {
+          delete requestHeaders['content-type'];
+          delete requestHeaders['content-length'];
+          return request.formData();
         }
         return request.text();
       })();
@@ -70,12 +77,16 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         if (cmsAdminRes.headers.get('Content-Type')?.includes('application/json')) {
           return JSON.stringify(await cmsAdminRes.json());
         }
+        if (cmsAdminRes.headers.get('Content-Type')?.startsWith('image/')) {
+          return await cmsAdminRes.blob();
+        }
         return cmsAdminRes.text();
       })();
 
       if (
         cmsAdminRes.status === 200 &&
-        cmsAdminRes.headers.get('Content-Type')?.startsWith('text/html')
+        cmsAdminRes.headers.get('Content-Type')?.startsWith('text/html') &&
+        typeof responseBody === 'string'
       ) {
         responseBody = responseBody.replace(
           '</head>',
@@ -155,7 +166,11 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       }
 
       // whenever the strapi app requests a renewal token, we should update that in the session data
-      if (cmsAdminRes.status === 200 && cmsAdminUrl.pathname === '/admin/renew-token') {
+      if (
+        cmsAdminRes.status === 200 &&
+        cmsAdminUrl.pathname === '/admin/renew-token' &&
+        typeof responseBody === 'string'
+      ) {
         await locals.session.set({
           ...locals.session.data,
           adminToken: JSON.parse(responseBody)?.data?.token,

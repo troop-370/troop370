@@ -56,8 +56,6 @@ export const load = (async ({ fetch }) => {
     //   return orderEntrySchema.parse(data);
     // });
 
-    console.log(payload.privateAdminNotes);
-
     const order = await fetch('', {
       method: 'POST',
       headers: {

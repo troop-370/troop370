@@ -11,7 +11,13 @@ export const load: LayoutServerLoad = async () => {
   // get the redirects
   const { result: redirectsResult } = getRedirects({}, fetch);
   const resolvedRedirects = await redirectsResult;
-  if (!resolvedRedirects.ok) throw error(resolvedRedirects.status, 'server error');
+  if (!resolvedRedirects.ok)
+    throw error(
+      resolvedRedirects.status >= 400 && resolvedRedirects.status < 600
+        ? resolvedRedirects.status
+        : 500,
+      'server error'
+    );
   if (!resolvedRedirects.data.data) throw error(404, 'redirects not found');
   const redirects = resolvedRedirects.data.data
     .map(parseDoc)
