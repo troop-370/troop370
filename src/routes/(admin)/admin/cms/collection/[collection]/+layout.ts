@@ -49,7 +49,7 @@ export const load = (async ({ fetch, parent, params }) => {
     );
     const attributes = Object.entries(settings.attributes);
 
-    return fieldNames
+    const alwaysVisibleDefs = fieldNames
       .map((key) => {
         const thisAttrs = attributes.find(([_key]) => _key === key);
         if (!thisAttrs) return;
@@ -66,6 +66,33 @@ export const load = (async ({ fetch, parent, params }) => {
         ] as const;
       })
       .filter(notEmpty);
+
+    const hiddenDefs = attributes
+      .filter(([key]) => !fieldNames.includes(key))
+      .filter(
+        ([key]) =>
+          key !== 'id' &&
+          key !== 'createdAt' &&
+          key !== 'updatedAt' &&
+          key !== 'createdBy' &&
+          key !== 'updatedBy'
+      )
+      .map(([key, value]) => {
+        const thisMetadatas = metadatas.find(([_key]) => _key === key);
+        if (!thisMetadatas) return;
+
+        return [
+          key,
+          {
+            ...value,
+            field: thisMetadatas[1],
+            hidden: true,
+          },
+        ] as const;
+      })
+      .filter(notEmpty);
+
+    return [...alwaysVisibleDefs, ...hiddenDefs];
   })();
 
   const collectionPreviewConfig = get(previewConfig)?.find((config) => config.uid === settings.uid);

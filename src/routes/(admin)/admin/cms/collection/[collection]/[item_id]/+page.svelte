@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
@@ -15,6 +16,7 @@
   import { processSchemaDef } from '$utils/y/processSchemaDef.js';
   import { copy } from 'copy-anything';
   import { Button, TextBlock, TextBox, ToggleSwitch } from 'fluent-svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import { writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
@@ -97,6 +99,31 @@
 
   let filesDialogOpen = false;
   let saveDocDialogOpen = false;
+  let showHiddenFields = false;
+
+  function keyboardShortcuts(evt: KeyboardEvent) {
+    // trigger whether hidden fields are shown
+    // ALT + SHIFT + H
+    if (evt.altKey && evt.shiftKey && evt.key === 'H') {
+      evt.preventDefault();
+      showHiddenFields = !showHiddenFields;
+      return;
+    }
+
+    // show the save doc dialog
+    // CTRL + S
+    if (evt.ctrlKey && evt.key === 's') {
+      evt.preventDefault();
+      saveDocDialogOpen = true;
+      return;
+    }
+  }
+  onMount(() => {
+    document.addEventListener('keydown', keyboardShortcuts);
+  });
+  onDestroy(() => {
+    if (browser) document.removeEventListener('keydown', keyboardShortcuts);
+  });
 
   //
   $: fullscreen =
@@ -269,7 +296,10 @@
               {/if} -->
 
               {#if !tabsShown || activeTab === 'compose'}
-                {#each data.settings.defs || [] as [key, { field, ...def }]}
+                {#each (data.settings.defs || []).filter(([, { hidden }]) => {
+                  if (hidden) return showHiddenFields;
+                  return true;
+                }) as [key, { field, ...def }]}
                   <FieldWrapper
                     forId={key}
                     label={field.label || key}
