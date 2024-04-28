@@ -25,6 +25,12 @@
   export let ydoc: YStore['ydoc'] | undefined = undefined;
   export let ydocKey: string = '';
 
+  /**
+   * When true, when the component first connects the the ydoc,
+   * it will overwrite the ydoc value with the initial selected options.
+   */
+  export let overwriteYDocValueWithInitialSelectedOptions = false;
+
   // this will be updated by a subsriber to ydoc, which is why this is not marked reactive
   let yarray = $ydoc?.getArray<YDocOption<string>>(ydocKey);
 
@@ -81,15 +87,10 @@
    */
   export let referenceOpts: GetReferenceOptions | undefined = undefined;
 
-  // expose changes to selected options via change event
   const dispatch = createEventDispatcher();
-  $: if (!selectedOptions.some((opt) => opt.isDndShadowItem)) {
-    dispatch('change', selectedOptions);
-  }
 
   let oldSelectedOptions = selectedOptions;
   function handleDragFinalize(evt: CustomEvent<Option[]> | Option[]) {
-    if (!$ydoc) return;
     const newOptions = Array.isArray(evt) ? evt : evt.detail;
 
     // calculate the difference between the old options and the new options
@@ -98,8 +99,13 @@
     const diff = arrayDifferences(oldSelectedOptions, newOptions || selectedOptions);
     if (diff.length === 0) return;
 
+    // expose changes to selected options via change event
+    if (!newOptions.some((opt) => opt.isDndShadowItem)) {
+      dispatch('change', newOptions);
+    }
+
     // update the ydoc shared type value
-    $ydoc.transact(() => {
+    $ydoc?.transact(() => {
       diff.forEach(([diffType, index, maybeOption]) => {
         if (!yarray) return;
 
@@ -166,8 +172,20 @@
       yarray = $ydoc?.getArray<YDocOption<string>>(ydocKey);
       if (!yarray) return;
 
-      // ensure the initial value matches the shared type value
-      if (selectedOptions.length !== yarray.toArray().length) {
+      // ensure the initial value and the shared type value match
+      if (overwriteYDocValueWithInitialSelectedOptions) {
+        $ydoc?.transact(() => {
+          yarray?.delete(0, yarray.length);
+          yarray?.insert(
+            0,
+            selectedOptions.map(({ _id, label, ...option }) => ({
+              ...option,
+              value: _id,
+              label: label || _id,
+            }))
+          );
+        });
+      } else if (selectedOptions.length !== yarray.toArray().length) {
         selectedOptions = yarray.toArray().map(convertToOption);
         oldSelectedOptions = yarray.toArray().map(convertToOption);
       }
