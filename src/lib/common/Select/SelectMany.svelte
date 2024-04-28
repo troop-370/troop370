@@ -83,7 +83,9 @@
 
   // expose changes to selected options via change event
   const dispatch = createEventDispatcher();
-  $: dispatch('change', selectedOptions);
+  $: if (!selectedOptions.some((opt) => opt.isDndShadowItem)) {
+    dispatch('change', selectedOptions);
+  }
 
   let oldSelectedOptions = selectedOptions;
   function handleDragFinalize(evt: CustomEvent<Option[]> | Option[]) {
