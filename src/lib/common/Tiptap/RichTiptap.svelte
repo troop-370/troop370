@@ -4,14 +4,15 @@
   import { SidebarHeader } from '$lib/sidebar';
   import { motionMode } from '$stores/motionMode';
   import { titlebarActions } from '$stores/titlebarActions';
-  import { hasKey } from '$utils';
+  import { debounce, hasKey } from '$utils';
   import { SetDocAttrStep } from '$utils/SetDocAttrStep';
   import type { YStore } from '$utils/y/createYStore';
   import type { ProcessSchemaDef } from '$utils/y/processSchemaDef';
   import type { Editor } from '@tiptap/core';
+  import type { Transaction } from '@tiptap/pm/state';
   import { IconButton, InfoBar, TextBlock, Tooltip } from 'fluent-svelte';
   import less from 'less';
-  import { onDestroy, onMount, type ComponentProps } from 'svelte';
+  import { createEventDispatcher, onDestroy, onMount, type ComponentProps } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import type { Readable } from 'svelte/store';
   import { fade, fly } from 'svelte/transition';
@@ -42,6 +43,10 @@
   export let dynamicPreviewHref = '';
   export let actions: Action[] = [];
   export let connected: YStore['connected'] | undefined = undefined;
+
+  const dispatch = createEventDispatcher<{
+    change: { attrs: Record<string, unknown>; content: any; type: unknown };
+  }>();
 
   $: isManaged = options?.features;
 
@@ -210,6 +215,23 @@
     if (!options?.features.trackChanges && !trackChanges) return;
     ySettingsMap?.set('trackChanges', bool);
   }
+
+  // fire the change event when the document changes
+  const handleEditorChange = ({ transaction }: { transaction: Transaction }) => {
+    dispatch('change', () => transaction.doc.toJSON());
+  };
+  const debouncedHandleEditorChange = debounce(handleEditorChange, 300);
+  const isListeningForChange = false;
+  $: {
+    if (editor && !isListeningForChange) {
+      editor.on('update', debouncedHandleEditorChange);
+    }
+  }
+  onDestroy(() => {
+    if (editor) {
+      editor.off('update', debouncedHandleEditorChange);
+    }
+  });
 
   let docStatsDialogOpen = false;
 

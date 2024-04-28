@@ -12,6 +12,7 @@
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
   import { blocksToProsemirror, notEmpty } from '$utils';
+  import { tiptapToStrapi } from '$utils/tiptapToStrapi';
   import { addToY } from '$utils/y/addTToY';
   import { createYStore } from '$utils/y/createYStore.js';
   import { processSchemaDef } from '$utils/y/processSchemaDef.js';
@@ -49,6 +50,7 @@
   });
 
   const docData = writable<Record<string, any>>(data.docData);
+  $: console.log($docData);
 
   let alertCount = 0;
 
@@ -372,6 +374,10 @@
                           dynamicPreviewHref=""
                           actions={[]}
                           {connected}
+                          on:change={(evt) => {
+                            const blocks = tiptapToStrapi(evt.detail.content);
+                            $docData[key] = blocks;
+                          }}
                         >
                           <svelte:fragment slot="alerts">
                             <slot name="alerts" />
