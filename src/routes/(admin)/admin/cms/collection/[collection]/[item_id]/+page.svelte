@@ -3,6 +3,7 @@
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import FieldWrapper from '$components/admin/FieldWrapper.svelte';
+  import { DateTime } from '$lib/common/DateTime';
   import { FileExplorerDialog } from '$lib/common/FileExplorer';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { SelectMany, SelectOne } from '$lib/common/Select';
@@ -22,6 +23,7 @@
   import { expoOut } from 'svelte/easing';
   import { derived, writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
+  import { map } from 'zod';
   import Sidebar from './Sidebar.svelte';
 
   export let data;
@@ -388,6 +390,20 @@
                           Error: The collaborative document or websocket was not found ({key}).
                         </p>
                       {/if}
+                    {:else if def.type === 'date'}
+                      {@const [year, month, day] = $docData[key].split('-').map(Number)}
+                      <DateTime
+                        disabled={false}
+                        {ydoc}
+                        ydocKey={key}
+                        hideTime={true}
+                        {year}
+                        {month}
+                        {day}
+                        on:change={(evt) => {
+                          $docData[key] = evt.detail.split('T')[0];
+                        }}
+                      />
                     {:else}
                       Unsupported content type: "{def.type}"
                       <pre>{JSON.stringify(def, null, 2)}</pre>
