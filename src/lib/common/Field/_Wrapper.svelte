@@ -1,6 +1,10 @@
 <script lang="ts">
-  import dompurify from 'dompurify';
+  import DOMPurify from 'dompurify';
   import { TextBlock } from 'fluent-svelte';
+  import { JSDOM } from 'jsdom';
+
+  const window = new JSDOM('').window;
+  const dompurify = DOMPurify(window);
 
   export let label: string;
   export let forId: string;
