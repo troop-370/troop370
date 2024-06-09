@@ -1,6 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { isObjectId } from '$utils';
+  import { isObjectId, notEmpty } from '$utils';
   import type { YStore } from '$utils/y/createYStore';
   import { ComboBox } from 'fluent-svelte';
   import { createEventDispatcher, tick } from 'svelte';
@@ -23,6 +23,12 @@
    */
   export let ydoc: YStore['ydoc'] | undefined = undefined;
   export let ydocKey: string = '';
+
+  /**
+   * When true, when the component first connects the the ydoc,
+   * it will overwrite the ydoc value with the initial selected options.
+   */
+  export let overwriteYDocValueWithInitialSelectedOptions = false;
 
   // this will be updated by a subscription to ydoc, which is why this is not marked reactive
   let yarray = $ydoc?.getArray<YDocOption<string>>(ydocKey);
@@ -69,21 +75,19 @@
    */
   export let hideSelected = true;
 
-  // expose changes to selected options via change event
   const dispatch = createEventDispatcher();
-  $: dispatch('change', selectedOption);
 
   let oldSelectedOption = selectedOption;
   function handleUpdateOption(newOption: Option | null) {
-    if (!$ydoc) return;
-
     // don't attempt to update the shared type value if there is no difference
-    const isDifferent =
-      JSON.stringify(oldSelectedOption) !== JSON.stringify(newOption || selectedOption);
+    const isDifferent = JSON.stringify(oldSelectedOption) !== JSON.stringify(newOption);
     if (!isDifferent) return;
 
+    // expose changes to selected options via change event
+    dispatch('change', newOption);
+
     // update the ydoc shared type value
-    $ydoc.transact(() => {
+    $ydoc?.transact(() => {
       if (!yarray) return;
 
       // check that the old option was not already null so that
@@ -108,7 +112,7 @@
     });
 
     // finally, update the old selected option
-    oldSelectedOption = newOption || selectedOption;
+    oldSelectedOption = newOption;
   }
 
   /**
@@ -118,7 +122,7 @@
     const yarray = $ydoc?.getArray<YDocOption<string>>(ydocKey);
 
     if (yarray && evt.changes.delta) {
-      const sharedOption = yarray.toArray().map(convertToOption)[0] || null;
+      const sharedOption = yarray.toArray().filter(notEmpty).map(convertToOption)[0] || null;
       selectedOption = sharedOption;
       oldSelectedOption = sharedOption;
     }
@@ -140,10 +144,33 @@
       yarray = $ydoc?.getArray<YDocOption<string>>(ydocKey);
       if (!yarray) return;
 
-      // ensure the initial value matches the shared type value
-      const sharedOption = yarray.toArray().map(convertToOption)[0] || null;
+      // check whether the initial value and the shared type value match
+      const sharedOption = yarray.toArray().filter(notEmpty).map(convertToOption)[0] || null;
       const isDifferent = JSON.stringify(selectedOption) !== JSON.stringify(sharedOption);
-      if (isDifferent) {
+
+      // ensure the initial value and the shared type value match
+      if (overwriteYDocValueWithInitialSelectedOptions) {
+        $ydoc?.transact(() => {
+          // check that the old option was not already null so that
+          // we do not try to delete an array entry that does not exist
+          if (yarray && yarray.toArray().length > 0) {
+            yarray.delete(0, yarray.length);
+          }
+
+          // leave the array empty if the selected option is null
+          if (selectedOption === null) return;
+
+          const { _id, ..._option } = selectedOption;
+          const option: YDocOption<string> = {
+            ..._option,
+            label: _option.label || _id,
+            value: _id,
+          };
+
+          // add to yarray
+          yarray?.insert(0, [option]);
+        });
+      } else if (isDifferent) {
         selectedOption = sharedOption;
         oldSelectedOption = sharedOption;
       }
