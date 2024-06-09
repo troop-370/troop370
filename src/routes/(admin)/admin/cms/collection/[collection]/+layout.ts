@@ -4,7 +4,7 @@ import { deconstructSchema } from '$utils/y/deconstructSchema';
 import { error } from '@sveltejs/kit';
 import { derived, get } from 'svelte/store';
 import { z } from 'zod';
-import type { LayoutLoad } from './$types';
+import type { LayoutData, LayoutLoad } from './$types';
 
 export const load = (async ({ fetch, parent, params }) => {
   const { session, contentManagerSettings, userPermissions, previewConfig } = await parent();
@@ -143,6 +143,9 @@ export const load = (async ({ fetch, parent, params }) => {
     deconstructedSchema,
   };
 }) satisfies LayoutLoad;
+
+export type CollectionFieldDef = LayoutData['settings']['defs'][number][1];
+export type CollectionSettings = LayoutData['settings'];
 
 const collectionConfigurationSchema = z.object({
   contentType: z.object({

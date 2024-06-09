@@ -1,48 +1,33 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { afterNavigate } from '$app/navigation';
-  import { page } from '$app/stores';
-  import FieldWrapper from '$components/admin/FieldWrapper.svelte';
-  import { DateTime } from '$lib/common/DateTime';
-  import { FileExplorerDialog } from '$lib/common/FileExplorer';
+  import { SchemaField } from '$lib/common/Field';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
-  import { SelectMany, SelectOne } from '$lib/common/Select';
-  import StrapiUidField from '$lib/common/StrapiUIDField/StrapiUIDField.svelte';
   import PreviewFrame from '$lib/common/Tiptap/PreviewFrame.svelte';
-  import { RichTiptap } from '$lib/common/Tiptap/index.js';
+  import PublishDocDialog from '$lib/dialogs/PublishDocDialog.svelte';
   import { motionMode } from '$stores/motionMode.js';
   import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing.js';
   import { blocksToProsemirror, notEmpty } from '$utils';
-  import { tiptapToStrapi } from '$utils/tiptapToStrapi';
   import { addToY } from '$utils/y/addTToY';
   import { createYStore } from '$utils/y/createYStore.js';
-  import { processSchemaDef } from '$utils/y/processSchemaDef.js';
   import { copy } from 'copy-anything';
-  import { Button, TextBlock, TextBox, ToggleSwitch } from 'fluent-svelte';
+  import { Button, TextBlock, ToggleSwitch } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import { derived, writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
-  import { map } from 'zod';
+  import type { Action } from './+layout';
   import Sidebar from './Sidebar.svelte';
 
   export let data;
   $: ({ collectionConfig } = data);
+  const isOldVersion = false;
+  const disabled = false;
 
   const { collection, item_id } = data.params;
 
   const deconstructedSchema = copy(data.deconstructedSchema);
 
-  const {
-    ydoc,
-    webProvider,
-    wsProvider,
-    awareness,
-    synced,
-    connected,
-    sharedData,
-    fullSharedData,
-  } = createYStore({
+  const ystore = createYStore({
     collection: collection,
     id: item_id,
     user: data.yuser,
@@ -50,9 +35,11 @@
     // disable syncing via providers (disables collaborative editing)
     providerOpts: { noWebRtcConn: true, noWebsocketConn: true },
   });
+  $: ({ ydoc, webProvider, wsProvider, awareness, synced, connected, sharedData, fullSharedData } =
+    ystore);
 
-  const docData = writable<Record<string, any>>(data.docData);
-  $: console.log($docData);
+  $: docData = writable<Record<string, any>>(copy(data.docData));
+  $: console.log(data.docData);
 
   let alertCount = 0;
 
@@ -189,6 +176,29 @@
     // },
   ].filter(notEmpty);
 
+  $: coreSidebarProps = {
+    docInfo: {
+      id: $docData.id,
+      createdAt: $docData.createdAt,
+      modifiedAt: $docData.updatedAt,
+      collectionName: data.settings.uid,
+    },
+    disabled: false,
+    ydoc,
+    sharedData,
+    fullSharedData: derived([docData, fullSharedData], ([$docData, fullSharedData]) => ({
+      ...$docData,
+      ...fullSharedData,
+    })),
+    awareness,
+    preview: {
+      previewUrl: previewSrc,
+      refreshDocData: $docData.refetch,
+    },
+    hideVersions: true,
+    actions: actions,
+  };
+
   function keyboardShortcuts(evt: KeyboardEvent) {
     // trigger whether hidden fields are shown
     // ALT + SHIFT + H
@@ -211,18 +221,6 @@
   });
   onDestroy(() => {
     if (browser) document.removeEventListener('keydown', keyboardShortcuts);
-  });
-
-  //
-  $: fullscreen =
-    $page.url.searchParams.get('fs') === '1' ||
-    $page.url.searchParams.get('fs') === '3' ||
-    $page.url.searchParams.get('fs') === 'force';
-  afterNavigate(() => {
-    fullscreen =
-      new URL(window.location.href).searchParams.get('fs') === '1' ||
-      new URL(window.location.href).searchParams.get('fs') === '3' ||
-      $page.url.searchParams.get('fs') === 'force';
   });
 
   // update shared rich text with doc data
@@ -249,29 +247,6 @@
       console.error(error);
     });
   }
-
-  $: coreSidebarProps = {
-    docInfo: {
-      id: $docData.id,
-      createdAt: $docData.createdAt,
-      modifiedAt: $docData.updatedAt,
-      collectionName: data.settings.uid,
-    },
-    disabled: false,
-    ydoc,
-    sharedData,
-    fullSharedData: derived([docData, fullSharedData], ([$docData, fullSharedData]) => ({
-      ...$docData,
-      ...fullSharedData,
-    })),
-    awareness,
-    preview: {
-      previewUrl: previewSrc,
-      refreshDocData: $docData.refetch,
-    },
-    hideVersions: true,
-    actions: [],
-  };
 </script>
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
@@ -380,119 +355,22 @@
               {/if}
 
               {#if !tabsShown || activeTab === 'compose'}
-                {#each (data.settings.defs || []).filter(([, { hidden }]) => {
+                {#each (data.settings.defs || []).filter(([key, { hidden }]) => {
+                  if (!data.docPermissions.check('read', key)) return false;
                   if (hidden) return showHiddenFields;
                   return true;
-                }) as [key, { field, ...def }]}
-                  <FieldWrapper
-                    forId={key}
-                    label={field.label || key}
-                    description={field.description}
-                  >
-                    {#if def.type === 'string'}
-                      <TextBox id={key} bind:value={$docData[key]} />
-                    {:else if def.type === 'boolean'}
-                      <ToggleSwitch id={key} bind:checked={$docData[key]} />
-                    {:else if def.type === 'uid'}
-                      <StrapiUidField
-                        {key}
-                        {docData}
-                        collectionUID={data.settings.uid}
-                        sessionAdminToken={data.session.adminToken}
-                      />
-                    {:else if def.type === 'relation' && def.target && field.mainField}
-                      {#if !!$ydoc && def.relationType === 'oneToOne'}
-                        <SelectOne
-                          referenceOpts={{
-                            collectionUid: data.settings.uid,
-                            targetCollectionUid: def.target,
-                            fieldId: key,
-                            entityId: data.docData.id,
-                            token: data.session.adminToken,
-                            mainField: field.mainField,
-                            idsToInclude: [$docData[key]?.id],
-                            searchImmediately: true,
-                          }}
-                          selectedOption={{
-                            _id: $docData[key]?.id,
-                            label: $docData[key]?.[field.mainField],
-                          }}
-                        />
-                      {:else if !!$ydoc && def.relationType === 'oneToMany'}
-                        <SelectMany
-                          referenceOpts={{
-                            collectionUid: data.settings.uid,
-                            targetCollectionUid: def.target,
-                            fieldId: key,
-                            entityId: data.docData.id,
-                            token: data.session.adminToken,
-                            mainField: field.mainField,
-                            pageSize: 100,
-                            idsToInclude: [$docData[key]?.id],
-                            searchImmediately: true,
-                          }}
-                          selectedOptions={$docData[key].map((opt) => {
-                            if (!field.mainField) return { _id: opt.id };
-                            return {
-                              _id: opt.id,
-                              label: opt?.[field.mainField],
-                            };
-                          })}
-                        />
-                      {:else}
-                        <p>Error: The reference field could not be loaded.</p>
-                        <pre>{JSON.stringify($docData[key], null, 2)}</pre>
-                      {/if}
-                    {:else if def.type === 'blocks'}
-                      {#if !!$ydoc && !!$wsProvider && !!fullSharedData}
-                        <RichTiptap
-                          disabled={false}
-                          {ydoc}
-                          ydocKey={key}
-                          {wsProvider}
-                          user={data.yuser}
-                          options={deconstructedSchema.find(([_key]) => _key === key)?.[1].field
-                            ?.tiptap}
-                          {fullscreen}
-                          {processSchemaDef}
-                          {fullSharedData}
-                          dynamicPreviewHref=""
-                          actions={[]}
-                          {connected}
-                          on:change={(evt) => {
-                            const blocks = tiptapToStrapi(evt.detail.content);
-                            $docData[key] = blocks;
-                          }}
-                        >
-                          <svelte:fragment slot="alerts">
-                            <slot name="alerts" />
-                          </svelte:fragment>
-                        </RichTiptap>
-                      {:else}
-                        <p>
-                          Error: The collaborative document or websocket was not found ({key}).
-                        </p>
-                      {/if}
-                    {:else if def.type === 'date'}
-                      {@const [year, month, day] = $docData[key].split('-').map(Number)}
-                      <DateTime
-                        disabled={false}
-                        {ydoc}
-                        ydocKey={key}
-                        hideTime={true}
-                        {year}
-                        {month}
-                        {day}
-                        on:change={(evt) => {
-                          $docData[key] = evt.detail.split('T')[0];
-                        }}
-                      />
-                    {:else}
-                      Unsupported content type: "{def.type}"
-                      <pre>{JSON.stringify(def, null, 2)}</pre>
-                      <pre>{JSON.stringify($docData[key], null, 2)}</pre>
-                    {/if}
-                  </FieldWrapper>
+                }) as [key, def]}
+                  <SchemaField
+                    {key}
+                    {def}
+                    {docData}
+                    collectionUID={data.settings.uid}
+                    session={data.session}
+                    {ystore}
+                    yuser={data.yuser}
+                    {deconstructedSchema}
+                    {actions}
+                  />
                 {/each}
               {/if}
 
@@ -537,6 +415,17 @@
 <pre>
   {JSON.stringify($collectionConfig, null, 2)}
 </pre>
+
+<PublishDocDialog
+  bind:open={publishDialogOpen}
+  collectionUID={data.settings.uid}
+  {docData}
+  session={data.session}
+  user={data.yuser}
+  {ystore}
+  {disabled}
+  handleSumbit={(publishedAt) => data.actions.publishDoc({ docData: $docData, publishedAt })}
+/>
 
 <style>
   .content-wrapper {
