@@ -6,6 +6,7 @@
   export let docData: Writable<Record<string, any>>;
   export let collectionUID: string;
   export let sessionAdminToken: string | undefined;
+  export let disabled = false;
 
   let loading = false;
 
@@ -30,9 +31,10 @@
   }
 </script>
 
-<TextBox id={key} bind:value={$docData[key]} />
+<TextBox id={key} bind:value={$docData[key]} {disabled} />
 <div class="actions">
   <Button
+    {disabled}
     on:click={() => {
       loading = true;
       generateStrapiUID(collectionUID, key, $docData, sessionAdminToken)
