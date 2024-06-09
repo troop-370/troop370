@@ -9,6 +9,7 @@
   import type { DeconstructedSchemaDefType } from '$utils/y/deconstructSchema';
   import { processSchemaDef } from '$utils/y/processSchemaDef';
   import { TextBox, ToggleSwitch } from 'fluent-svelte';
+  import type { ComponentProps } from 'svelte';
   import type { Writable } from 'svelte/store';
   import { FieldWrapper } from '.';
   import type { CollectionFieldDef } from '../../../routes/(admin)/admin/cms/collection/[collection]/+layout';
@@ -28,6 +29,7 @@
   export let actions: Action[];
   export let disabled = false;
   export let style = '';
+  export let chips: ComponentProps<FieldWrapper>['chips'] = [];
 
   $: ({ ydoc, webProvider, wsProvider, awareness, synced, connected, sharedData, fullSharedData } =
     ystore);
@@ -44,7 +46,13 @@
   });
 </script>
 
-<FieldWrapper forId={key} label={field.label || key} description={field.description} {style}>
+<FieldWrapper
+  forId={key}
+  label={field.label || key}
+  description={field.description}
+  {style}
+  {chips}
+>
   {#if def.type === 'blocks'}
     {#if mode === 'sidebar'}
       <!-- hide field so it is not rendered in a sidebar, which would create infinite nesting -->
@@ -143,7 +151,7 @@
           idsToInclude: [$docData[key]?.id],
           searchImmediately: true,
         }}
-        selectedOptions={$docData[key].map((opt) => {
+        selectedOptions={$docData[key]?.map((opt) => {
           if (!field.mainField) return { _id: opt.id };
           return {
             _id: opt.id,

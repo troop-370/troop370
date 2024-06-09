@@ -158,22 +158,22 @@
     //     loading ||
     //     disconnected,
     // },
-    // {
-    //   id: 'duplicate',
-    //   label: 'Duplicate',
-    //   type: 'button',
-    //   icon: 'DocumentCopy24Regular',
-    //   action: async () => {
-    //     loadingCloneAction = true;
-    //     await data.actions.cloneDoc();
-    //     setTimeout(() => {
-    //       loadingCloneAction = false;
-    //     }, 1000);
-    //   },
-    //   loading: loadingCloneAction,
-    //   disabled:
-    //     loadingCloneAction || !data.docPermissions.canCreate || !data.docPermissions.canRead,
-    // },
+    {
+      id: 'duplicate',
+      label: 'Duplicate',
+      type: 'button',
+      icon: 'DocumentCopy24Regular',
+      action: async () => {
+        loadingCloneAction = true;
+        await data.actions.cloneDoc();
+        setTimeout(() => {
+          loadingCloneAction = false;
+        }, 1000);
+      },
+      loading: loadingCloneAction,
+      disabled:
+        loadingCloneAction || !data.docPermissions.canCreate || !data.docPermissions.canRead,
+    },
   ].filter(notEmpty);
 
   $: coreSidebarProps = {

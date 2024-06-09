@@ -121,7 +121,7 @@ function getReferenceOptions(referenceOpts: GetReferenceOptions | undefined) {
           docsPath: 'results',
         },
         variables: {
-          entityId: `${entityId}`,
+          entityId: entityId ? `${entityId}` : undefined,
           pageSize,
           idsToInclude,
           idsToOmit: idsToExclude,

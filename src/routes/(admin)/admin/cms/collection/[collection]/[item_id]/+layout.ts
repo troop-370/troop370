@@ -1,4 +1,4 @@
-import { invalidate } from '$app/navigation';
+import { goto, invalidate } from '$app/navigation';
 import { genAvatar } from '$utils';
 import type { AwarenessUser } from '$utils/y/createYStore';
 import arrayDifferences from 'array-differences';
@@ -35,7 +35,7 @@ export const load = (async ({ parent, params }) => {
   const actionInfo = { itemId: params.item_id, collection: params.collection, settings, session };
   const actions = {
     saveDoc: saveDoc.bind(null, actionInfo),
-    cloneDoc: cloneDoc.bind(null, params.item_id),
+    cloneDoc: cloneDoc.bind(null, actionInfo),
     publishDoc: publishDoc.bind(null, actionInfo),
     unpublishDoc: unpublishDoc.bind(null, actionInfo),
     deleteDoc: deleteDoc.bind(null, params.item_id),
@@ -69,6 +69,7 @@ function checkPermission(
   if (!field) return true;
   return info.properties.fields?.includes(field);
 }
+export { checkPermission as _checkPermission };
 
 function parsePermissions(
   type: 'read' | 'create' | 'update' | 'publish' | 'delete',
@@ -93,7 +94,7 @@ export interface Action {
   // showChevron?: boolean;
 }
 
-interface ActionInfo {
+export interface ActionInfo {
   itemId: string;
   collection: string;
   settings: LayoutParentData['settings'];
@@ -157,8 +158,8 @@ async function saveDoc(
     });
 }
 
-function cloneDoc(itemId: string | number) {
-  console.log('cloned');
+function cloneDoc({ itemId, collection }: ActionInfo) {
+  goto(`/admin/cms/collection/${collection}/create?clone=${itemId}`);
 }
 
 async function publishDoc(

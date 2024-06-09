@@ -1,7 +1,9 @@
 <script lang="ts">
+  import type { colorType } from '$utils/theme/theme';
   import DOMPurify from 'dompurify';
   import { TextBlock } from 'fluent-svelte';
   import { JSDOM } from 'jsdom';
+  import { Chip } from '../Chip';
 
   const window = new JSDOM('').window;
   const dompurify = DOMPurify(window);
@@ -16,6 +18,8 @@
   export let description: string = '';
 
   export let mode: 'default' | 'checkbox' = 'default';
+
+  export let chips: { label: string; color?: colorType }[] = [];
 
   export let style = '';
 
@@ -50,6 +54,11 @@
         </TextBlock>
       </label>
     {/if}
+    <div class="chips">
+      {#each chips as chip}
+        <Chip color={chip.color || 'neutral'} compact>{chip.label}</Chip>
+      {/each}
+    </div>
   </div>
   {#if mode === 'default'}
     <slot />
@@ -69,13 +78,12 @@
     display: flex;
     flex-direction: column;
     user-select: none;
+    margin-bottom: 6px;
   }
   div.field.nocaption .field-label {
-    margin-bottom: 6px;
     white-space: break-spaces;
   }
   div.field .caption {
-    margin-bottom: 6px;
     opacity: 0.8;
     white-space: break-spaces;
     white-space: pre-line;
@@ -103,5 +111,12 @@
     /* display: inline-block; */
     opacity: 0.5;
     transition-delay: 500ms;
+  }
+
+  .chips {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    margin-top: 4px;
   }
 </style>

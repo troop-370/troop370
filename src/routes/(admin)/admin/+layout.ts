@@ -204,6 +204,9 @@ const contentTypeSchema = z
           visible: z.boolean().optional(),
           useJoinTable: z.boolean().optional(),
           private: z.boolean().optional(),
+          required: z.boolean().optional(),
+          default: z.any().optional(),
+          unique: z.boolean().optional(),
         })
         .passthrough()
     ),

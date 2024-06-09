@@ -43,6 +43,7 @@
    * when a drag operation is not in progess.
    */
   export let selectedOptions: Option[] = [];
+  $: if (!Array.isArray(selectedOptions)) selectedOptions = [];
   let populating = false;
   $: if (referenceOpts) {
     const valuesAreMissingLabels = selectedOptions.some((opt) => !opt.label);
