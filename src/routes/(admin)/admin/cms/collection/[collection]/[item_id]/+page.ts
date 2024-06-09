@@ -2,8 +2,9 @@ import { query } from '$utils/query';
 import { z } from 'zod';
 import type { PageLoad } from './$types';
 
-export const load = (async ({ fetch, params, parent, url }) => {
+export const load = (async ({ fetch, params, parent, url, depends }) => {
   const { session, settings } = await parent();
+  depends('collection-item:page-load');
 
   const docData = await query<any>({
     fetch,

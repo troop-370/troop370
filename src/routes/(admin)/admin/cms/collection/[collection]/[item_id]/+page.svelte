@@ -102,9 +102,92 @@
     else mouseOverActiveTab = false;
   }
 
+  $: isPublished = $docData.publishedAt ? new Date($docData.publishedAt) < new Date() : false;
+  $: publishDialogDisabled = isOldVersion || data.docPermissions.canPublish !== true;
+
   let filesDialogOpen = false;
-  let saveDocDialogOpen = false;
+  let publishDialogOpen = false;
+  let showCollapsedFields = false;
   let showHiddenFields = false;
+  let saveDocDialogOpen = false;
+
+  let actions: Action[] = [];
+  let loadingCloneAction = false;
+  let loadingPublishAction = false;
+  $: actions = [
+    {
+      id: 'save',
+      label: 'Save',
+      icon: 'Save20Regular',
+      action: async () => {
+        saveDocDialogOpen = !saveDocDialogOpen;
+        await data.actions.saveDoc({ old: data.docData, new: $docData });
+      },
+      disabled: disabled,
+      hint: 'Ctrl + S',
+    },
+    {
+      id: 'publish',
+      label: isPublished ? 'Unpublish' : 'Publish',
+      type: 'button',
+      icon: isPublished ? 'CloudDismiss24Regular' : 'CloudArrowUp24Regular',
+      action: async () => {
+        if (isPublished) {
+          loadingPublishAction = true;
+          await data.actions.unpublishDoc({ docData: $docData });
+          setTimeout(() => {
+            loadingPublishAction = false;
+          }, 1000);
+        } else {
+          publishDialogOpen = !publishDialogOpen;
+        }
+      },
+      loading: loadingPublishAction,
+      disabled: loadingPublishAction || publishDialogDisabled,
+      tooltip:
+        data.docPermissions.canPublish !== true
+          ? `You cannot publish this document because you do not have permission.`
+          : undefined,
+      hint: 'Ctrl + Shift + P',
+    },
+    // {
+    //   id: 'delete',
+    //   label: hidden ? 'Restore from deleted items' : 'Delete',
+    //   type: 'button',
+    //   icon: hidden ? 'DeleteOff24Regular' : 'Delete24Regular',
+    //   action: async () => {
+    //     loadingHideAction = true;
+    //     await data.actions.hideDoc(!hidden);
+    //     setTimeout(() => {
+    //       loadingHideAction = false;
+    //     }, 1000);
+    //   },
+    //   loading: loadingHideAction,
+    //   disabled:
+    //     loadingHideAction ||
+    //     isOldVersion ||
+    //     $docData.data?.actionAccess?.hide !== true ||
+    //     locked ||
+    //     loading ||
+    //     disconnected,
+    // },
+    // {
+    //   id: 'duplicate',
+    //   label: 'Duplicate',
+    //   type: 'button',
+    //   icon: 'DocumentCopy24Regular',
+    //   action: async () => {
+    //     loadingCloneAction = true;
+    //     await data.actions.cloneDoc();
+    //     setTimeout(() => {
+    //       loadingCloneAction = false;
+    //     }, 1000);
+    //   },
+    //   loading: loadingCloneAction,
+    //   disabled:
+    //     loadingCloneAction || !data.docPermissions.canCreate || !data.docPermissions.canRead,
+    // },
+  ].filter(notEmpty);
 
   function keyboardShortcuts(evt: KeyboardEvent) {
     // trigger whether hidden fields are shown
