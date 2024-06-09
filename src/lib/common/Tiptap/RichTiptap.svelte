@@ -218,7 +218,7 @@
 
   // fire the change event when the document changes
   const handleEditorChange = ({ transaction }: { transaction: Transaction }) => {
-    dispatch('change', () => transaction.doc.toJSON());
+    dispatch('change', transaction.doc.toJSON());
   };
   const debouncedHandleEditorChange = debounce(handleEditorChange, 300);
   const isListeningForChange = false;
