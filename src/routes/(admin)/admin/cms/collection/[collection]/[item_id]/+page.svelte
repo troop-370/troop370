@@ -232,7 +232,7 @@
       (data.settings.defs || [])
         .map(([key, { type }]) => {
           if (type === 'blocks') {
-            return [key, JSON.stringify(blocksToProsemirror($docData[key]) || [])];
+            return [key, JSON.stringify(blocksToProsemirror($docData[key] || []) || [])];
           }
         })
         .filter(notEmpty)
