@@ -1,3 +1,4 @@
+import { PUBLIC_API_URL } from '$env/static/public';
 import { paramsToStrapiFilter } from '$utils';
 import { queryWithStore } from '$utils/query';
 import { derived } from 'svelte/store';
@@ -99,7 +100,13 @@ export async function getFileExplorerData({
           ...$files.data,
           docs:
             $files.data?.docs?.map((file) => {
-              const url = new URL(file.url);
+              if (file.url.startsWith('/')) {
+                const url = new URL(file.url, PUBLIC_API_URL);
+                return {
+                  ...file,
+                  url: 'http://localhost:370/admin/strapi' + url.pathname + url.search,
+                };
+              }
               return {
                 ...file,
                 url: 'https://troop370atlanta.org/filestore' + url.pathname + url.search,
