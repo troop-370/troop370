@@ -136,7 +136,13 @@ export const load = (async ({ parent, url, fetch }) => {
         icon: 'ShoppingBag24Regular',
         disabled: !(userRoles?.includes('Super Admin') || userRoles?.includes('Store Manager')),
         href: '/admin/ecommerce/orders',
-        selected: (url: URL) => url.pathname.startsWith('/admin/ecommerce/orders'),
+        selected: (url: URL) => url.pathname.startsWith('/admin/ecommerce'),
+      },
+      {
+        label: 'Vault',
+        icon: 'Key24Regular',
+        href: '/admin/vault/logins',
+        selected: (url: URL) => url.pathname.startsWith('/admin/vault'),
       },
       {
         label: 'Administration',

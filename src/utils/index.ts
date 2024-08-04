@@ -1,5 +1,3 @@
-export { Markdown } from './Markdown';
-export { MarkdownToStrapi } from './MarkdownToStrapi';
 export { camelToDashCase } from './camelToDashCase';
 export { capitalize } from './capitalize';
 export { debounce } from './debounce';
@@ -8,7 +6,11 @@ export { formatISODate } from './formatISODate';
 export { genAvatar } from './genAvatar';
 export { hasKey } from './hasKey';
 export { isIsoDate, isShortIsoDate } from './isIsoDate';
+export { isURL } from './isURL';
+export { jsOTP } from './jsOTP';
 export { listOxford } from './listOxford';
+export { Markdown } from './Markdown';
+export { MarkdownToStrapi } from './MarkdownToStrapi';
 export { notEmpty } from './notEmpty';
 export { get, getProperty, set, setProperty } from './objectPath';
 export { openWindow } from './openWindow';
