@@ -32,7 +32,11 @@ export async function fetchOrders_server(fetch: Fetch, url: URL) {
   )
     .then((res) => res.json())
     .then((data) => {
-      return ordersSchema.parse(data);
+      try {
+        return ordersSchema.parse(data);
+      } catch {
+        return { total: 0, count: 0, offset: 0, limit: 100, items: [], error: data };
+      }
     });
 
   return orders;

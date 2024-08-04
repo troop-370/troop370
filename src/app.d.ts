@@ -20,6 +20,9 @@ interface SessionData {
   adminPass: string;
   adminToken: string;
   adminUser: import('./routes/(admin)/admin/login/tryCredentials').UserData;
+  admin: Partial<{
+    ecwidActive: boolean;
+  }>;
   authenticated: boolean;
   protectedPass: string;
   constantContactAccessToken: string;
