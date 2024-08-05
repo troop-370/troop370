@@ -17,6 +17,12 @@ const adminProxyHandler = (async ({ event, resolve }) => {
     if (event.url.pathname.startsWith('/admin/strapi')) {
       // this is the pathname to use for the proxy to the strapi server (remove the prefix path)
       const strapiPathname = event.url.pathname.replace('/admin/strapi', '');
+      console.log(strapiPathname);
+
+      // if the user is trying to access the strapi admin panel, redirect them to the dashboard page
+      if (strapiPathname === '/admin') {
+        return Response.redirect(event.url.origin + '/admin', 302);
+      }
 
       // get the headers as an object so we can pass them to the strapi server
       const requestHeaders = (() => {
