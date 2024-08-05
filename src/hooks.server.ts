@@ -156,6 +156,34 @@ const adminProxyHandler = (async ({ event, resolve }) => {
             aside:has(> button path[d="M5.08 4.1c0-1.19 1.18-2.17 2.42-2.17s2.43.98 2.43 2.17c0 1.1-.56 1.61-1.31 2.28l-.03.03c-.75.65-1.66 1.47-1.66 3.09a.57.57 0 1 0 1.15 0c0-1.08.55-1.6 1.3-2.26l.02-.02c.75-.66 1.67-1.48 1.67-3.12C11.07 2.13 9.22.78 7.5.78 5.78.78 3.93 2.13 3.93 4.1a.57.57 0 1 0 1.15 0Zm2.42 9.26a.88.88 0 1 0 0-1.75.88.88 0 0 0 0 1.75Z"]) {
               display: none;
             }
+
+            /* hide register page logo */
+            .sc-bdvvtL.sc-jlsrNB.gCrDBG.bHCmnc img {
+              display: none !important;
+            }
+
+            /* hide register page keep me updated checkbox */
+            .sc-bdvvtL.sc-jlsrNB.gCrDBG.bHCmnc form > main > div > div:last-of-type {
+              display: none !important;
+            }
+
+            /* change register page heading */
+            .sc-bdvvtL.sc-jlsrNB.gCrDBG.bHCmnc h1 {
+              font-size: 0;
+            }
+            .sc-bdvvtL.sc-jlsrNB.gCrDBG.bHCmnc h1::after {
+              content: 'Register your Troop 370 Admin account';
+              font-size: 1.5rem;
+            }
+
+            /* change register page caption */
+            .sc-bdvvtL.sc-jlsrNB.gCrDBG.bHCmnc h1 + span {
+              font-size: 0;
+            }
+            .sc-bdvvtL.sc-jlsrNB.gCrDBG.bHCmnc h1 + span::after {
+              content: 'If you need help, contact the Webmaster.';
+              font-size: 1rem;
+            }
           </style>`
         );
       }
