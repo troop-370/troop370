@@ -1,6 +1,20 @@
 import { CONSTANT_CONTACT_CLIENT_ID } from '$env/static/private';
-import { redirect } from '@sveltejs/kit';
+import { redirect, type ServerLoad } from '@sveltejs/kit';
 import type { Actions } from './$types';
+
+export const load: ServerLoad = async ({ parent, url }) => {
+  const { session } = await parent();
+
+  // redirect to destination if there is an access token that is not expired
+  if (
+    session.ccToken &&
+    session.ccTokenExpires &&
+    new Date(session.ccTokenExpires) > new Date() &&
+    url.searchParams.has('from')
+  ) {
+    throw redirect(302, url.searchParams.get('from')!);
+  }
+};
 
 export const actions: Actions = {
   default: async ({ url }) => {
