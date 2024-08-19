@@ -11,6 +11,7 @@ export const load = (async ({ fetch, locals }) => {
     adminPass: undefined,
     adminToken: undefined,
     adminUser: undefined,
+    admin: undefined,
   });
 
   return {};

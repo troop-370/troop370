@@ -38,6 +38,7 @@ export const actions: Actions = {
       adminPass: data.get('password')?.toString() || '',
       adminToken: credentials?.token,
       adminUser: credentials?.user,
+      admin: {},
     });
 
     const from = url.searchParams.get('from');
@@ -76,6 +77,7 @@ export const load: PageServerLoad = async ({ parent, url, fetch, locals }) => {
     adminPass: undefined,
     adminToken: undefined,
     adminUser: undefined,
+    admin: undefined,
   });
 
   return {};
