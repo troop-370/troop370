@@ -19,14 +19,14 @@ interface SessionData {
   adminEmail: string;
   adminPass: string;
   adminToken: string;
-  adminUser: import('./routes/(admin)/admin/login/tryCredentials').UserData;
+  adminUser: import('./routes/(admin)/admin/login/tryCredentials').PartialUserData;
   admin: Partial<{
     ecwidActive: boolean;
   }>;
   authenticated: boolean;
   protectedPass: string;
-  constantContactAccessToken: string;
-  constantContactAccessTokenExpires: Date;
+  ccToken: string;
+  ccTokenExpires: Date;
   counter: number;
   authStrings: Partial<{
     password_message_when_authenticated: string;

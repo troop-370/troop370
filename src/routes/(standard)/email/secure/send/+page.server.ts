@@ -4,7 +4,7 @@ import type { Actions } from './$types';
 
 export const load: Load = async ({ parent }) => {
   const { session } = await parent();
-  const accessToken = session.constantContactAccessToken;
+  const accessToken = session.ccToken;
 
   const headers = {
     'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export const actions: Actions = {
 
     const data = validator.parse(json);
 
-    const accessToken = locals.session.data.constantContactAccessToken;
+    const accessToken = locals.session.data.ccToken;
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,

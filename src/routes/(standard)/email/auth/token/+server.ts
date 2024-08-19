@@ -7,11 +7,11 @@ export const POST: RequestHandler = async ({ url, locals }) => {
   const code = url.searchParams.get('access_token');
   const expires_in = parseInt(url.searchParams.get('expires_in') || '7200');
   if (!code) throw error(500, 'Expected an authorization code');
-  await locals.session.set({ ...locals.session.data, constantContactAccessToken: code || '' });
+  await locals.session.set({ ...locals.session.data, ccToken: code || '' });
   await locals.session.set({
     ...locals.session.data,
-    constantContactAccessToken: code,
-    constantContactAccessTokenExpires: new Date(new Date().getTime() + expires_in * 1000),
+    ccToken: code,
+    ccTokenExpires: new Date(new Date().getTime() + expires_in * 1000),
   });
 
   return new Response(String(redirectURL));

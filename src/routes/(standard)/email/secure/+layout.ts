@@ -4,15 +4,12 @@ export const load: Load = async ({ parent, url }) => {
   const { session } = await parent();
 
   // redirect if there is no access token
-  if (!session.constantContactAccessToken) {
+  if (!session.ccToken) {
     throw redirect(302, `/email/auth?from=${encodeURIComponent(url.href)}`);
   }
 
   // redirect if access token expired
-  if (
-    !session.constantContactAccessTokenExpires ||
-    session.constantContactAccessTokenExpires < new Date()
-  ) {
+  if (!session.ccTokenExpires || session.ccTokenExpires < new Date()) {
     throw redirect(302, `/email/auth?from=${encodeURIComponent(url.href)}`);
   }
 };

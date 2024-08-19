@@ -38,7 +38,14 @@ async function tryCredentials(
       .then((res) => res.json())
       .then(({ data }) => data.roles);
 
-    return [200, null, { token: credentials.token, user: { ...credentials.user, roles } }];
+    const partialUser: AdminUser = {
+      id: credentials.user.id,
+      firstname: credentials.user.firstname,
+      lastname: credentials.user.lastname,
+      username: credentials.user.username,
+    };
+
+    return [200, null, { token: credentials.token, user: { ...partialUser, roles } }];
   }
 
   return [400, 'UNKNOWN_ERROR', null];
@@ -60,6 +67,15 @@ interface UserData {
   roles?: Roles[];
 }
 
+interface PartialUserData
+  extends Omit<
+    Omit<
+      Omit<Omit<Omit<Omit<UserData, 'blocked'>, 'perferedLanguage'>, 'createdAt'>, 'updatedAt'>,
+      'isActive'
+    >,
+    'email'
+  > {}
+
 interface Roles {
   id: number;
   name: string;
@@ -69,7 +85,7 @@ interface Roles {
 
 interface Credentials {
   token: string;
-  user: UserData;
+  user: PartialUserData;
 }
 
 type ErrorCodes =
@@ -80,4 +96,4 @@ type ErrorCodes =
   | 'RATE_LIMIT';
 
 export { tryCredentials };
-export type { UserData };
+export type { PartialUserData, UserData };
