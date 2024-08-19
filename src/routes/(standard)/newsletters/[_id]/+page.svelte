@@ -118,7 +118,8 @@
         sessionStorage.setItem('email.body', text);
 
         if (data.session.adminUser) {
-          const { firstname, email } = data.session.adminUser;
+          const { firstname } = data.session.adminUser;
+          const email = data.session.adminEmail;
           if (firstname) sessionStorage.setItem('email.senderName', `${firstname} from Troop 370`);
           if (email) sessionStorage.setItem('email.senderEmail', email);
           if (email) sessionStorage.setItem('email.replyEmail', email);
