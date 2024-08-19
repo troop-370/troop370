@@ -9,7 +9,7 @@ export const load: Load = async ({ parent, url }) => {
   }
 
   // redirect if access token expired
-  if (!session.ccTokenExpires || session.ccTokenExpires < new Date()) {
+  if (!session.ccTokenExpires || new Date(session.ccTokenExpires) < new Date()) {
     throw redirect(302, `/email/auth?from=${encodeURIComponent(url.href)}`);
   }
 };
