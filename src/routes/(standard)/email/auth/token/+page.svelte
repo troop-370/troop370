@@ -9,7 +9,7 @@
     url.search = searchParams.toString();
     fetch(url, { method: 'POST' }).then(async (res) => {
       const redirectTo = await res.text();
-      goto(redirectTo);
+      window.location.href = redirectTo;
     });
   });
 </script>
