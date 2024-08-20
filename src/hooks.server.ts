@@ -203,6 +203,7 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       });
     }
   } catch (error) {
+    console.error('Error with Strapi proxy:', error);
     if (error instanceof Error) {
       return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
