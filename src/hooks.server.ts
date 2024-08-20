@@ -25,7 +25,7 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       }
 
       // get the headers as an object so we can pass them to the strapi server
-      const requestHeaders = (() => {
+      const requestHeaders = await (async () => {
         const headers: Record<string, string> = {};
         for (const [header, value] of request.headers.entries()) {
           // An error similar to this one from nextjs was occuring
@@ -40,24 +40,13 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         return headers;
       })();
 
-      // parse the request body so that we can pass it to the strapi server
-      // (we cannot provided a readable stream to the server via fetch)
-      const requestBody = (async () => {
-        if (request.method !== 'POST' && request.method !== 'PUT') {
-          return undefined;
-        }
-        if (request.headers.get('Content-Type') === 'application/json') {
-          return JSON.stringify(await request.json());
-        }
-        return request.text();
-      })();
-
       // get the resource from the strapi server
       const cmsAdminUrl = new URL(STRAPI_URL + strapiPathname + event.url.search);
       const cmsAdminRes = await fetch(cmsAdminUrl, {
         headers: { ...requestHeaders },
         method: request.method,
-        body: await requestBody,
+        body:
+          request.method === 'GET' || request.method === 'HEAD' ? null : await event.request.blob(),
         cache: request.cache,
         credentials: request.credentials,
         integrity: request.integrity,
