@@ -2,6 +2,7 @@ import { COOKIE_SESSION_SECRET, STRAPI_URL } from '$env/static/private';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { handleSession } from 'svelte-kit-cookie-session';
+import { fetch } from 'undici';
 
 const sessionHandler = handleSession(
   { secret: [{ id: 1, secret: COOKIE_SESSION_SECRET, chunked: true }] },
@@ -11,7 +12,7 @@ const sessionHandler = handleSession(
 );
 
 const adminProxyHandler = (async ({ event, resolve }) => {
-  const { fetch, request, locals } = event;
+  const { request, locals } = event;
 
   try {
     if (event.url.pathname.startsWith('/strapi')) {
@@ -44,9 +45,8 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       const cmsAdminRes = await fetch(cmsAdminUrl, {
         headers: { ...requestHeaders },
         method: request.method,
-        body:
-          request.method === 'GET' || request.method === 'HEAD' ? null : await event.request.blob(),
-        cache: request.cache,
+        body: request.body as any,
+        duplex: 'half',
         credentials: request.credentials,
         integrity: request.integrity,
         keepalive: request.keepalive,
@@ -56,6 +56,9 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         referrerPolicy: request.referrerPolicy,
         signal: request.signal,
         window: null,
+      }).catch((error) => {
+        console.error(`Failed to fetch from ${cmsAdminUrl.href}: `, error);
+        throw new Error(`Failed to fetch from ${cmsAdminUrl.href}: ${error}`);
       });
 
       // properly parse the response body from the strapi server
@@ -123,15 +126,16 @@ const adminProxyHandler = (async ({ event, resolve }) => {
             }
 
             /* hide content manager side nav */
-            :has(> nav[aria-label='Content']) {
+            :has(> nav[aria-label='Content Manager']) {
               grid-template-columns: 1fr;
             }
-            nav[aria-label='Content'] {
+            nav[aria-label='Content Manager'] {
               display: none;
             }
 
             /* hide strapi-provider spinner */
-            div[data-testid="loader"] {
+            div[data-testid="loader"],
+            main > div > div[role="alert"] > span + img[src^="data:image/svg+xml,%3csvg%20width='63'%20height='63'%20viewBox='0%200%2063%2063'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M42.5563%2011.9816C39.484%2010.3071%2035.8575%209.29097%2032.3354%209.13521C28.6443%"] {
               display: none;
             }
 
