@@ -19,8 +19,8 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       const strapiPathname = event.url.pathname.replace('/strapi', '');
 
       // if the user is trying to access the strapi admin panel, redirect them to the dashboard page
-      if (strapiPathname === '/admin') {
-        return Response.redirect(event.url.origin + '/admin', 302);
+      if (strapiPathname === '/poptart') {
+        return Response.redirect(event.url.origin + '/poptart', 302);
       }
 
       // get the headers as an object so we can pass them to the strapi server
@@ -177,7 +177,7 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       }
 
       // whenever the strapi app requests a renewal token, we should update that in the session data
-      if (cmsAdminRes.status === 200 && cmsAdminUrl.pathname === '/admin/renew-token') {
+      if (cmsAdminRes.status === 200 && cmsAdminUrl.pathname === '/poptart/renew-token') {
         await locals.session.set({
           ...locals.session.data,
           adminToken: JSON.parse(responseBody)?.data?.token,

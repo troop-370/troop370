@@ -19,7 +19,7 @@ interface SessionData {
   adminEmail: string;
   adminPass: string;
   adminToken: string;
-  adminUser: import('./routes/(admin)/admin/login/tryCredentials').PartialUserData;
+  adminUser: import('./routes/(admin)/poptart/login/tryCredentials').PartialUserData;
   admin: Partial<{
     ecwidActive: boolean;
   }>;
