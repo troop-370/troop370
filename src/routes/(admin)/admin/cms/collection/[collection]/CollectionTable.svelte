@@ -42,7 +42,7 @@
   // row links behaviors
   $: links = {
     href: `/admin/content-manager/collection-types/${settings.uid}`,
-    hrefSuffixKey: 'id',
+    hrefSuffixKey: 'documentId',
     hrefSearch: undefined,
     windowName: `editor-troop-370-${settings.uid}-`,
   };

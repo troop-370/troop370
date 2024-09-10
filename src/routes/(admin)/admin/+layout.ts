@@ -34,7 +34,7 @@ export const load = (async ({ parent, url, fetch }) => {
   const cmsSettings = await queryWithStore<z.infer<typeof contentManagerInitSchema>>({
     fetch,
     query: {
-      location: '/admin/strapi/content-manager/init',
+      location: '/strapi/content-manager/init',
       opName: 'strapiContentManagerInit',
       docsPath: 'data',
       paginationPath: '',
@@ -56,7 +56,7 @@ export const load = (async ({ parent, url, fetch }) => {
   const userPermissions = await queryWithStore<z.infer<typeof userPermissionsSchema>>({
     fetch,
     query: {
-      location: '/admin/strapi/admin/users/me/permissions',
+      location: '/strapi/admin/users/me/permissions',
       opName: 'strapiUserPermissions',
       docsPath: 'data',
       paginationPath: '',

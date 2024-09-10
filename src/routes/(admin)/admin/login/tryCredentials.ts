@@ -3,7 +3,7 @@ async function tryCredentials(
   email: string | FormDataEntryValue,
   password: string | FormDataEntryValue
 ): Promise<[200 | 400 | 401 | 429, ErrorCodes | null, Credentials | null]> {
-  const res = await fetch('/admin/strapi/admin/login', {
+  const res = await fetch('/strapi/admin/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -30,7 +30,7 @@ async function tryCredentials(
   if (res.status === 200) {
     const credentials = (await res.json())?.data as Credentials;
 
-    const roles = await fetch('/admin/strapi/admin/users/me', {
+    const roles = await fetch('/strapi/admin/users/me', {
       headers: {
         Authorization: `Bearer ${credentials.token}`,
       },

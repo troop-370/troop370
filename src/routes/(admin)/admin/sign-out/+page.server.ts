@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ fetch, locals }) => {
-  await fetch('/admin/strapi/admin/logout', {
+  await fetch('/strapi/admin/logout', {
     headers: { Authorization: `Bearer ${locals.session.data.adminToken}` },
   });
 

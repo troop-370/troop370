@@ -19,7 +19,7 @@
         const pathname = args[2]?.toString();
 
         if (pathname) {
-          probablyPath = pathname.replace('/admin/strapi', '');
+          probablyPath = pathname.replace('/strapi', '');
           if (probablyPath === '/admin/') goto('/admin/cms');
           history.replaceState(args[0], args[1], probablyPath);
           originalPushState.apply(this, args);
@@ -31,7 +31,7 @@
         const pathname = args[2]?.toString();
 
         if (pathname) {
-          probablyPath = pathname.replace('/admin/strapi', '');
+          probablyPath = pathname.replace('/strapi', '');
           history.replaceState(args[0], args[1], probablyPath);
           originalReplaceState.apply(this, args);
         }
@@ -42,7 +42,7 @@
 
         if (frameLocation) {
           const pathname = frameLocation.href.replace(frameLocation.origin, '');
-          probablyPath = pathname.replace('/admin/strapi', '');
+          probablyPath = pathname.replace('/strapi', '');
           history.replaceState(null, '', probablyPath);
         }
       };
@@ -66,7 +66,7 @@
   <iframe
     id="content-iframe"
     title="strapi"
-    src="/admin/strapi{$page.url.pathname}"
+    src="/strapi{$page.url.pathname.replace('/admin', '/admin')}"
     bind:this={iframe}
     allowtransparency
   />

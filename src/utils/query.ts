@@ -237,8 +237,8 @@ export function getQueryStore<DataType = unknown, VariablesType = unknown>(opts:
 
   return derived([cache, loading], ([$cache, $loading]) => {
     return {
-      data: $cache[opts.queryName]?.[varKey]?.value.data,
-      errors: $cache[opts.queryName]?.[varKey]?.value.errors,
+      data: $cache[opts.queryName]?.[varKey]?.value?.data,
+      errors: $cache[opts.queryName]?.[varKey]?.value?.errors,
       loading: $loading[opts.queryName]?.[varKey] || false,
       refetch: async (updatedVariables) => {
         if (!$cache[opts.queryName]) return;

@@ -8,7 +8,36 @@ import type { PageLoad } from './$types';
 export const load = (async ({ fetch, parent, params, url, depends }) => {
   depends('collection-table');
 
-  const { session, collectionConfig } = await parent();
+  const { session, contentManagerSettings, userPermissions } = await parent();
+  if (!contentManagerSettings) throw error(404, 'failed to find content manager settings');
+
+  const settings = get(contentManagerSettings)?.data?.docs?.contentTypes.find(
+    (type) => type.uid === params.uid
+  );
+  if (!settings) throw error(404, 'failed to find content type settings');
+
+  if (!userPermissions) throw error(404, 'failed to find user permissions');
+  const permissions = get(userPermissions)?.raw.filter((p) => p.subject === params.uid);
+  if (!settings) throw error(404, 'failed to find content type permissions');
+
+  const collectionConfig = await queryWithStore<z.infer<typeof collectionConfigurationSchema>>({
+    fetch,
+    query: {
+      location: '/strapi/content-manager/content-types/' + params.uid + '/configuration',
+      opName: `strapiContentTypeConfig_${params.uid}`,
+      docsPath: 'data',
+      paginationPath: '',
+    },
+    validator: collectionConfigurationSchema,
+    Authorization: `Bearer ${session.adminToken}`,
+    waitForQuery: true, // ensure that data is available before continuing since we need it in this function
+    useCache: true,
+    expireCache: 15 * 60 * 1000, // require refetch if it has been 15 minutes
+  }).then((store) => {
+    return derived([store], ([$store]) => {
+      return $store.data?.docs;
+    });
+  });
 
   const sort = (() => {
     // prefer to use the sort defined in localstorage
@@ -41,8 +70,8 @@ export const load = (async ({ fetch, parent, params, url, depends }) => {
   const collectionDocsData = queryWithStore<CollectionDocs>({
     fetch,
     query: {
-      location: '/admin/strapi/content-manager/collection-types/' + params.collection,
-      opName: `collectionTableData${params.collection}`,
+      location: '/strapi/content-manager/collection-types/' + params.uid,
+      opName: `collectionTableData${params.uid}`,
     },
     variables: {
       page: 1,
