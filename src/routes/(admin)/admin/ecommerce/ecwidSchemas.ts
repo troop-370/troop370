@@ -467,6 +467,14 @@ export const productSchema = z.object({
   wholesalePrices: z.array(wholesalePriceSchema).optional(),
 });
 
+export const productsSchema = z.object({
+  total: z.number(),
+  count: z.number(),
+  offset: z.number(),
+  limit: z.number(),
+  items: productSchema.array(),
+});
+
 export const orderEntrySchema = z.object({
   id: z.string(),
   subtotal: z.number().optional(),

@@ -1,3 +1,4 @@
+export { awaited } from './awaited';
 export { camelToDashCase } from './camelToDashCase';
 export { capitalize } from './capitalize';
 export { debounce } from './debounce';
