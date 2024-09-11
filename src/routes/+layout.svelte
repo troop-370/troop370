@@ -1,9 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { themeMode } from '$stores/themeMode';
-  import { theme as themeFunction } from '$utils/theme';
   import 'fluent-svelte/theme.css';
-  import { toCustomPropertiesString } from 'object-to-css-variables';
   import { onDestroy, onMount } from 'svelte';
 
   // update meta theme color to match titlebar based on theme mode
@@ -19,10 +17,6 @@
       }
     }
   }
-
-  // get the theme
-  $: theme = themeFunction($themeMode);
-  $: themeVars = toCustomPropertiesString(theme);
 
   // listen for when user changes system theme preference
   function setCorrectThemeMode(evt: MediaQueryListEvent) {
@@ -42,23 +36,20 @@
         .removeEventListener('change', setCorrectThemeMode);
   });
 
-  // inject the theme variables as custom properties
-  $: {
-    if (themeVars && browser) {
-      const styleElem = (() => {
-        const existing = document.querySelector('style#theme');
-        if (existing) return existing;
-        const newElem = document.createElement('style');
-        newElem.id = 'theme';
-        document.head.appendChild(newElem);
-        return newElem;
-      })();
-      styleElem.innerHTML = `:root { ${themeVars} }`;
-    }
-  }
+  // TODO: figure out how to impliment this without it flickering in light mode first
+  // themeMode.subscribe((value) => {
+  //   if (!browser) return;
+  //   if (value === 'dark') {
+  //     document.documentElement.setAttribute('data-theme', 'dark');
+  //     document.documentElement.classList.add('dark');
+  //   } else {
+  //     document.documentElement.setAttribute('data-theme', 'light');
+  //     document.documentElement.classList.remove('dark');
+  //   }
+  // });
 </script>
 
-<slot />
+<slot></slot>
 
 <style>
   /* links */
@@ -253,7 +244,8 @@
   :global(:root .button.style-standard) {
     border: none !important;
     --fds-control-stroke-secondary-overlay: hsla(0, 0%, 0%, 10.44%);
-    box-shadow: inset 0 0 0 1px var(--fds-control-stroke-default),
+    box-shadow:
+      inset 0 0 0 1px var(--fds-control-stroke-default),
       inset 0 -1px 0 0 var(--fds-control-stroke-secondary-overlay);
     /* padding: 5px 12px 6.5px 12px; */
   }

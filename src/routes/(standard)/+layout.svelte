@@ -1,11 +1,34 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import TopNav from '$components/TopNavigation/TopNav.svelte';
   import { scrollTop } from '$stores/scrollTop';
+  import { themeMode } from '$stores/themeMode.js';
   import { title } from '$stores/title';
+  import { theme as themeFunction } from '$utils/theme';
   import NProgress from 'nprogress';
+  import { toCustomPropertiesString } from 'object-to-css-variables';
   import { afterUpdate, onMount } from 'svelte';
+
+  // get the theme
+  $: theme = themeFunction($themeMode);
+  $: themeVars = toCustomPropertiesString(theme);
+
+  // inject the theme variables as custom properties
+  $: {
+    if (themeVars && browser) {
+      const styleElem = (() => {
+        const existing = document.querySelector('style#theme');
+        if (existing) return existing;
+        const newElem = document.createElement('style');
+        newElem.id = 'theme';
+        document.head.appendChild(newElem);
+        return newElem;
+      })();
+      styleElem.innerHTML = `:root { ${themeVars} }`;
+    }
+  }
 
   export let data;
 

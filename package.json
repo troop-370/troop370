@@ -69,6 +69,7 @@
     "@fluentui/svg-icons": "1.1.192",
     "@iwsio/json-csv-core": "^1.1.4",
     "@tanstack/svelte-table": "^8.20.5",
+    "bits-ui": "^0.21.13",
     "blocks-html-renderer": "^1.0.4",
     "clsx": "^2.1.1",
     "color": "^4.2.3",
@@ -81,6 +82,7 @@
     "flatten-anything": "^3.0.5",
     "fluent-svelte": "^1.6.0",
     "jwt-decode": "^4.0.0",
+    "lucide-svelte": "^0.439.0",
     "luxon": "^3.1.0",
     "marked": "^4.2.2",
     "nprogress": "^0.2.0",
@@ -90,8 +92,10 @@
     "qs": "^6.11.2",
     "rrule": "^2.7.1",
     "svelte-kit-cookie-session": "^3.2.2",
+    "svelte-legos": "^0.2.5",
     "tailwind-merge": "^2.5.2",
     "tailwind-variants": "^0.2.1",
+    "vaul-svelte": "^0.3.2",
     "xmldom": "^0.6.0",
     "zod": "^3.19.1"
   }
