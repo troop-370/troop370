@@ -9,11 +9,11 @@ export const load: PageServerLoad = async ({ params, url }) => {
 
   const { result } = getEventsPageConfig({ populate: 'nav_items, nav_items.photo' }, fetch);
   const resolved = await result;
-  if (!resolved.ok) throw error(resolved.status, 'server error');
-  if (!resolved.data.data) throw error(404, 'not found');
+  if (!resolved.ok) error(resolved.status, 'server error');
+  if (!resolved.data.data) error(404, 'not found');
 
   const eventCards = resolved.data.data.attributes?.nav_items;
-  if (!eventCards) throw error(404, 'items not found');
+  if (!eventCards) error(404, 'items not found');
 
   return { eventCards };
 };

@@ -13,7 +13,7 @@ export const load = (async ({ parent, url, fetch }) => {
   if (url.pathname === '/admin/login') return {};
 
   if (!session.adminToken) {
-    throw redirect(302, `/admin/login?from=${encodeURIComponent(url.href)}`);
+    redirect(302, `/admin/login?from=${encodeURIComponent(url.href)}`);
   }
 
   const tokenExpiresAt = new Date((jwtDecode(session.adminToken).exp || 0) * 1000);
@@ -48,7 +48,7 @@ export const load = (async ({ parent, url, fetch }) => {
     .then((store) => [store, get(store)] as const)
     .then(([store, $store]) => {
       if ($store.errors?.[0]?.status === 401) {
-        throw redirect(302, '/admin/login');
+        redirect(302, '/admin/login');
       }
       return store;
     });

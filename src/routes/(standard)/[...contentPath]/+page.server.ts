@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
   const endsHtml = params.contentPath.endsWith('.html');
   const endsHtm = params.contentPath.endsWith('.htm');
   if (endsHtml || endsHtm) {
-    throw redirect(307, `/${params.contentPath.slice(0, endsHtml ? -5 : -4)}`);
+    redirect(307, `/${params.contentPath.slice(0, endsHtml ? -5 : -4)}`);
   }
 
   const { redirects, session } = await parent();
@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
     return path === redirectFrom || path.slice(0, -1) === redirectFrom;
   });
   if (foundRedirect) {
-    throw redirect(307, foundRedirect.to);
+    redirect(307, foundRedirect.to);
   }
 
   // construct the matching path with a leading forward slash and no trailing slash
@@ -40,15 +40,15 @@ export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
     fetch
   );
   const resolved = await result;
-  if (!resolved.ok) throw error(resolved.status, 'server error');
-  if (!resolved.data.data || resolved.data.data.length < 1) throw error(404, 'not found');
-  if (!resolved.data.data[0].attributes) throw error(404, 'missing');
+  if (!resolved.ok) error(resolved.status, 'server error');
+  if (!resolved.data.data || resolved.data.data.length < 1) error(404, 'not found');
+  if (!resolved.data.data[0].attributes) error(404, 'missing');
   const page = resolved.data.data[0].attributes;
 
   // redirect to login if password authentication is required
   if (page.enable_password_protection) {
     if (session.authenticated !== true) {
-      throw redirect(302, `/basic-login?from=${encodeURIComponent(url.href)}`);
+      redirect(302, `/basic-login?from=${encodeURIComponent(url.href)}`);
     }
   }
 

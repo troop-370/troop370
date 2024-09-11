@@ -516,8 +516,8 @@
             {#if !waiting}
               <div
                 id="admin-content"
-                in:fly={{ y: 40, duration, easing: expoOut, delay }}
-                out:customFade={{ duration: delay }}
+                in:fly|global={{ y: 40, duration, easing: expoOut, delay }}
+                out:customFade|global={{ duration: delay }}
               >
                 <slot />
               </div>
@@ -525,8 +525,8 @@
               <div
                 id="admin-content"
                 style="display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center;"
-                in:fade={{ duration: delay }}
-                out:fade={{ duration: delay }}
+                in:fade|global={{ duration: delay }}
+                out:fade|global={{ duration: delay }}
               >
                 <ProgressRing size={32} />
                 <TextBlock variant="bodyStrong">Please wait</TextBlock>

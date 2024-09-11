@@ -41,9 +41,9 @@
     max-width: 1000px;
   }
 
-  .margin-bottom {
+  /* .margin-bottom {
     margin-bottom: 30px;
-  }
+  } */
 
   .apps {
     display: flex;
