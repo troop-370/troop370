@@ -31,6 +31,14 @@ interface SessionData {
   authStrings: Partial<{
     password_message_when_authenticated: string;
   }>;
+  'store.pinestraw.checkout.breadcrumbs'?: { label: string; href?: string }[];
+  'store.pinestraw.checkout.email'?: string;
+  'store.pinestraw.checkout.conf1'?: string;
+  'store.pinestraw.checkout.conf2'?: string;
+  'store.pinestraw.checkout.conf3'?: string;
+  'store.pinestraw.checkout.name'?: string;
+  'store.pinestraw.checkout.phone'?: string;
+  'store.pinestraw.checkout.payment_method'?: string;
 }
 
 declare module '@tanstack/table-core' {

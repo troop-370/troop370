@@ -35,6 +35,8 @@ type Size = VariantProps<typeof buttonVariants>['size'];
 type Props = ButtonPrimitive.Props & {
   variant?: Variant;
   size?: Size;
+  disabled?: boolean;
+  href?: string;
 };
 
 type Events = ButtonPrimitive.Events;

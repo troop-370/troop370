@@ -1,24 +1,20 @@
-import { apity } from '$api';
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
 import { awaited } from '$utils';
 import { productsSchema } from '../../../(admin)/admin/ecommerce/ecwidSchemas';
 import type { PageServerLoad } from './$types';
 
-const getContentPages = apity.path('/pages').method('get').create();
-
-export const load = (async ({ fetch, parent, url }) => {
-  const { session } = await parent();
-  const previewId = url.searchParams.get('previewId');
-
-  // get the pine straw page
-  const page = getContentPages(
-    {
-      filters: { path: '/events/pinestraw', previewId },
-      publicationState: previewId ? 'preview' : 'live',
-      populate: 'quick_links',
-    },
-    fetch
-  ).result.then((resolved) => resolved?.data?.data?.[0]?.attributes);
+export const load = (async ({ fetch, locals }) => {
+  await locals.session.update((session) => ({
+    ...session,
+    'store.pinestraw.checkout.breadcrumbs': [
+      { label: 'Home', href: '/' },
+      { label: 'Payments' },
+      {
+        label: 'Pine straw fundraiser',
+        href: '/pay/pinestraw',
+      },
+    ],
+  }));
 
   // get data on pine straw products
   const baleId = 149009997;
@@ -46,8 +42,5 @@ export const load = (async ({ fetch, parent, url }) => {
       }
     });
 
-  return {
-    ...(await awaited({ page, products })),
-    authStrings: session.authStrings,
-  };
+  return await awaited({ products });
 }) satisfies PageServerLoad;

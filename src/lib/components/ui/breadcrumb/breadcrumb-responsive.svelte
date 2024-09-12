@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Drawer from '$lib/components/ui/drawer/index.js';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
@@ -19,19 +20,27 @@
     { label: 'Caching and Revalidating' },
   ];
 
-  const ITEMS_TO_DISPLAY = 3;
+  const ITEMS_TO_DISPLAY = 4;
 
   let open = false;
 
   const isDesktop = mediaQuery('(min-width: 768px)');
+
+  $: lastSectionItems = items.slice(Math.max(-ITEMS_TO_DISPLAY, -items.length) + 1);
 </script>
 
 <Root>
   <List>
     <Item>
-      <Link href={items[0].href}>
-        {items[0].label}
-      </Link>
+      {#if items[0].href}
+        <Link href={items[0].href}>
+          {items[0].label}
+        </Link>
+      {:else}
+        <Page>
+          {items[0].label}
+        </Page>
+      {/if}
     </Item>
     <Separator />
     {#if items.length > ITEMS_TO_DISPLAY}
@@ -78,17 +87,19 @@
       <Separator />
     {/if}
 
-    {#each items.slice(-ITEMS_TO_DISPLAY + 1) as item}
+    {#each lastSectionItems as item, index}
       <Item>
-        {#if item.href}
+        {#if item.href && item.href !== $page.url.pathname}
           <Link href={item.href} class="max-w-20 truncate md:max-w-none">
             {item.label}
           </Link>
-          <Separator />
         {:else}
           <Page class="max-w-20 truncate md:max-w-none">
             {item.label}
           </Page>
+        {/if}
+        {#if index < lastSectionItems.length - 1}
+          <Separator />
         {/if}
       </Item>
     {/each}

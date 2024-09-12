@@ -7,7 +7,7 @@ import type { LayoutServerLoad } from './$types';
 const getRedirects = apity.path('/redirects').method('get').create();
 const getNavigation = apity.path('/navigation').method('get').create();
 
-export const load: LayoutServerLoad = async () => {
+export const load: LayoutServerLoad = async ({ locals }) => {
   // get the redirects
   const { result: redirectsResult } = getRedirects({}, fetch);
   const resolvedRedirects = await redirectsResult;
