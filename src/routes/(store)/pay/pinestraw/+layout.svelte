@@ -1,47 +1,5 @@
-<script lang="ts">
-  import { afterNavigate, invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
-  import { Breadcrumbs } from '$lib/components/ui/breadcrumb';
-  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-
-  export let data;
-
-  afterNavigate(({ from, to }) => {
-    if (!from?.route.id || !to?.route.id) return;
-
-    // if we have navigated here from a child route
-    // (likely via breadcrumbs)
-    // invalidate this route to prevent stale data
-    if (from.route.id.startsWith(to.route.id)) {
-      console.log('invalidating');
-      invalidateAll();
-    }
-  });
-</script>
-
 <div class="wrapper">
   <div id="content">
-    <div class="breadcrumbs">
-      <Breadcrumbs items={data.session['store.pinestraw.checkout.breadcrumbs']} />
-    </div>
-
-    {#if $page.form?.error}
-      <aside style="margin-bottom: 1rem;">
-        <Card
-          style="border-color: hsla(var(--destructive) / 50%); background-color: hsla(var(--destructive) / 8%);"
-        >
-          <CardHeader>
-            <CardTitle tag="h1">Error</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>
-              {$page.form?.error}
-            </p>
-          </CardContent>
-        </Card>
-      </aside>
-    {/if}
-
     <slot></slot>
   </div>
 </div>
@@ -51,10 +9,6 @@
     background-color: hsl(0, 0%, 98.5%);
     height: 100%;
     min-height: calc(100vh - 56px);
-  }
-
-  .breadcrumbs {
-    margin-bottom: 1rem;
   }
 
   #content {

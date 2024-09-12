@@ -39,6 +39,8 @@ interface SessionData {
   'store.pinestraw.checkout.name'?: string;
   'store.pinestraw.checkout.phone'?: string;
   'store.pinestraw.checkout.payment_method'?: string;
+  'store.pinestraw.checkout.bale_quantity'?: string;
+  'store.pinestraw.checkout.spread_quantity'?: string;
 }
 
 declare module '@tanstack/table-core' {

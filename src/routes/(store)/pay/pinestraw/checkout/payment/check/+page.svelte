@@ -24,7 +24,7 @@
         <li>
           Mail the check to:
           <address>
-            BSA Troop 370 Fundraiser<br />
+            Troop 370 Fundraiser<br />
             270 Beachland Dr<br />
             Sandy Springs, GA 30342
           </address>

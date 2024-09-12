@@ -1,7 +1,5 @@
-import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
-import { awaited } from '$utils';
-import { productsSchema } from '../../../(admin)/admin/ecommerce/ecwidSchemas';
-import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ fetch, locals }) => {
   await locals.session.update((session) => ({
@@ -16,31 +14,19 @@ export const load = (async ({ fetch, locals }) => {
     ],
   }));
 
-  // get data on pine straw products
-  const baleId = 149009997;
-  const spreadId = 148999309;
-  const products = await fetch(
-    `https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/products?productId=${baleId},${spreadId}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      try {
-        const parsed = productsSchema.parse(data);
-        return {
-          bale: parsed.items.find((product) => product.id === baleId),
-          spread: parsed.items.find((product) => product.id === spreadId),
-        };
-      } catch {
-        console.error(data);
-      }
-    });
-
-  return await awaited({ products });
+  return {};
 }) satisfies PageServerLoad;
+
+export const actions = {
+  default: async ({ request, locals }) => {
+    const data = await request.formData();
+
+    await locals.session.update((session) => ({
+      ...session,
+      'store.pinestraw.checkout.bale_quantity': data.get('bale_quantity')?.toString() || '1',
+      'store.pinestraw.checkout.spread_quantity': data.get('spread_quantity')?.toString() || '0',
+    }));
+
+    redirect(303, '/pay/pinestraw/checkout');
+  },
+} satisfies Actions;

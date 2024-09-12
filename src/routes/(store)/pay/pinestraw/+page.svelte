@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
@@ -68,109 +69,120 @@
 </div>
 
 <div class="grid">
-  <Card>
-    <CardHeader>
-      <CardTitle style="font-size: 1.5rem; line-height: 2rem;">Order pine straw</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <img
-        src={data.products?.bale?.imageUrl || '/photos/backgrounds/pineneedles_l.jpg'}
-        alt="Pine Straw"
-        class="thumbnail"
-      />
-      <div class="unit-price">${price.toFixed(2)} / bale</div>
-      <form>
-        <div class="quantity">
-          <Label for="quantity" style="flex-shrink: 0;">Quantity:</Label>
-          <Input
-            id="quantity"
-            type="number"
-            min="1"
-            bind:value={$pinestrawStore.quantity}
-            style="width: 6rem;"
-          />
+  <form method="POST" use:enhance>
+    <Card>
+      <CardHeader>
+        <CardTitle style="font-size: 1.5rem; line-height: 2rem;">Order pine straw</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <img
+          src={data.products?.bale?.imageUrl || '/photos/backgrounds/pineneedles_l.jpg'}
+          alt="Pine Straw"
+          class="thumbnail"
+        />
+        <div class="unit-price">${price.toFixed(2)} / bale</div>
+        <div class="form">
+          <div class="quantity">
+            <Label for="quantity" style="flex-shrink: 0;">Quantity:</Label>
+            <Input
+              id="quantity"
+              type="number"
+              min="1"
+              bind:value={$pinestrawStore.quantity}
+              style="width: 6rem;"
+              name="bale_quantity"
+            />
+          </div>
+          <div class="select">
+            <Label>Delivery Option</Label>
+            <Select bind:selected={$pinestrawStore.deliveryOption}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select delivery option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pickup">
+                  <div class="select-item">
+                    <MapPin class="mr-2 h-4 w-4" />
+                    Pickup
+                  </div>
+                </SelectItem>
+                <SelectItem value="delivery">
+                  <div class="select-item">
+                    <Truck class="mr-2 h-4 w-4" />
+                    Delivery (+$10 for orders under 30 bales)
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div class="select">
+            <Label>Bale Spreading</Label>
+            {#if $pinestrawStore.spreadingOption?.value === 'yes'}
+              <input
+                type="text"
+                name="spread_quantity"
+                bind:value={$pinestrawStore.quantity}
+                hidden
+              />
+            {/if}
+            <Select bind:selected={$pinestrawStore.spreadingOption}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select spreading option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="no">
+                  <div class="select-item">
+                    <ShoppingBag class="mr-2 h-4 w-4" />
+                    No Spreading
+                  </div>
+                </SelectItem>
+                <SelectItem value="yes">
+                  <div class="select-item">
+                    <Leaf class="mr-2 h-4 w-4" />
+                    Spreading (+${spreadingPrice.toFixed(2)}/bale)
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div class="select">
+            <Label>Payment Method</Label>
+            <Select bind:selected={$pinestrawStore.paymentMethod}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="cash">
+                  <div class="select-item">
+                    <Landmark class="mr-2 h-4 w-4" />
+                    Check
+                  </div>
+                </SelectItem>
+                <SelectItem value="paypal">
+                  <div class="select-item">
+                    <CreditCard class="mr-2 h-4 w-4" />
+                    Credit Card (+3.5%)
+                  </div>
+                </SelectItem>
+                <SelectItem value="venmo">
+                  <div class="select-item">
+                    <Coins class="mr-2 h-4 w-4" />
+                    Venmo (+1.9%)
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <div class="select">
-          <Label>Delivery Option</Label>
-          <Select bind:selected={$pinestrawStore.deliveryOption}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select delivery option" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pickup">
-                <div class="select-item">
-                  <MapPin class="mr-2 h-4 w-4" />
-                  Pickup
-                </div>
-              </SelectItem>
-              <SelectItem value="delivery">
-                <div class="select-item">
-                  <Truck class="mr-2 h-4 w-4" />
-                  Delivery (+$10 for orders under 30 bales)
-                </div>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+      </CardContent>
+      <CardFooter style="display: flex; justify-content: space-between;">
+        <div class="summed-price">
+          Total: ${total.toFixed(2)}
         </div>
-        <div class="select">
-          <Label>Bale Spreading</Label>
-          <Select bind:selected={$pinestrawStore.spreadingOption}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select spreading option" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="no">
-                <div class="select-item">
-                  <ShoppingBag class="mr-2 h-4 w-4" />
-                  No Spreading
-                </div>
-              </SelectItem>
-              <SelectItem value="yes">
-                <div class="select-item">
-                  <Leaf class="mr-2 h-4 w-4" />
-                  Spreading (+${spreadingPrice.toFixed(2)}/bale)
-                </div>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div class="select">
-          <Label>Payment Method</Label>
-          <Select bind:selected={$pinestrawStore.paymentMethod}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select payment method" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="cash">
-                <div class="select-item">
-                  <Landmark class="mr-2 h-4 w-4" />
-                  Check
-                </div>
-              </SelectItem>
-              <SelectItem value="paypal">
-                <div class="select-item">
-                  <CreditCard class="mr-2 h-4 w-4" />
-                  Credit Card (+3.5%)
-                </div>
-              </SelectItem>
-              <SelectItem value="venmo">
-                <div class="select-item">
-                  <Coins class="mr-2 h-4 w-4" />
-                  Venmo (+1.9%)
-                </div>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </form>
-    </CardContent>
-    <CardFooter style="display: flex; justify-content: space-between;">
-      <div class="summed-price">
-        Total: ${total.toFixed(2)}
-      </div>
-      <Button href="/pay/pinestraw/checkout">Proceed to checkout</Button>
-    </CardFooter>
-  </Card>
+        <Button type="submit">Proceed to checkout</Button>
+      </CardFooter>
+    </Card>
+  </form>
 
   <div style="display: flex; flex-direction: column; gap: 1rem;">
     <Card>
@@ -375,7 +387,7 @@
     margin-bottom: 1rem;
   }
 
-  form {
+  .form {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
