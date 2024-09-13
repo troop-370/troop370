@@ -37,6 +37,7 @@ export const personSchema = z.object({
 });
 
 export const shippingOptionInfoSchema = z.object({
+  shippingMethodId: z.string(),
   shippingCarrierName: z.string().optional(),
   shippingMethodName: z.string().optional(),
   shippingRate: z.number().optional(),

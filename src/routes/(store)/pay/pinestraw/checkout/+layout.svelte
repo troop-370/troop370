@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { afterNavigate, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
   import { Breadcrumbs } from '$lib/components/ui/breadcrumb';
@@ -11,6 +12,8 @@
 
   const balesPrice = data.products?.bale?.price || 0;
   const spreadPrice = data.products?.spread?.price || 0;
+
+  $: browser && console.log('checkout', data.orderDetails);
 
   afterNavigate(({ from, to }) => {
     if (!from?.route.id || !to?.route.id) return;
@@ -42,91 +45,177 @@
           <br />
           <div class="centered">ORDER</div>
           <br />
-          <table>
-            <thead>
-              <tr>
-                <th class="quantity">Quan.</th>
-                <th class="description">Description</th>
-                <th class="price">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#if balesQuantity}
-                {#if balesQuantity > 0 && balesPrice}
+          {#if data.orderDetails}
+            {@const orderDetails = data.orderDetails}
+            <table>
+              <thead>
+                <tr>
+                  <th class="quantity">Quan.</th>
+                  <th class="description">Description</th>
+                  <th class="price">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each orderDetails.items || [] as item}
                   <tr>
-                    <td class="quantity">{balesQuantity}</td>
-                    <td class="description">PINE STRAW BALE</td>
-                    <td class="price">${(balesQuantity * balesPrice).toFixed(2)}</td>
+                    <td class="quantity">{item.quantity || 0}</td>
+                    <td class="description">{item.name?.toUpperCase()}</td>
+                    <td class="price">${((item.price || 0) * (item.quantity || 0)).toFixed(2)}</td>
+                  </tr>
+                {/each}
+                <tr></tr>
+                <br />
+                {#if orderDetails.subtotal}
+                  <tr style="border-top: none;">
+                    <td class="quantity" style="border-top: none;"></td>
+                    <td class="description" style="border-top: none; text-align: right;">
+                      SUBTOTAL&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td class="price" style="border-top: none;">
+                      ${orderDetails.subtotal.toFixed(2)}
+                    </td>
                   </tr>
                 {/if}
-              {/if}
-              {#if spreadQuantity}
-                {#if spreadQuantity > 0 && spreadPrice}
-                  <tr>
-                    <td class="quantity">{spreadQuantity}</td>
-                    <td class="description">SPREAD PINE STRAW</td>
-                    <td class="price">${(spreadQuantity * spreadPrice).toFixed(2)}</td>
+                {#if orderDetails.shippingOption?.shippingRate}
+                  <tr style="border-top: none;">
+                    <td class="quantity" style="border-top: none;"></td>
+                    <td class="description" style="border-top: none; text-align: right;">
+                      DELIVERY FEE&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td class="price" style="border-top: none;">
+                      ${orderDetails.shippingOption.shippingRate.toFixed(2)}
+                    </td>
                   </tr>
                 {/if}
+                {#if orderDetails.customSurcharges}
+                  {#each orderDetails.customSurcharges as surcharge}
+                    <tr style="border-top: none;">
+                      <td class="quantity" style="border-top: none;"></td>
+                      <td class="description" style="border-top: none; text-align: right;">
+                        {surcharge.id?.toUpperCase()}&nbsp;&nbsp;&nbsp;
+                      </td>
+                      <td class="price" style="border-top: none;">
+                        {#if surcharge.type === 'PERCENT'}
+                          {((orderDetails.subtotal || 0) * ((surcharge.value || 0) * 0.01)).toFixed(
+                            2
+                          )}
+                        {:else}
+                          {surcharge.value.toFixed(2)}
+                        {/if}
+                      </td>
+                    </tr>
+                  {/each}
+                {/if}
+                {#if orderDetails.discountInfo}
+                  {#each orderDetails.discountInfo as discount}
+                    <tr style="border-top: none;">
+                      <td class="quantity" style="border-top: none;"></td>
+                      <td class="description" style="border-top: none; text-align: right;">
+                        {discount.description?.toUpperCase()}&nbsp;&nbsp;&nbsp;
+                      </td>
+                      <td class="price" style="border-top: none;">
+                        {#if discount.type === 'PERCENT'}
+                          (${(
+                            (orderDetails.subtotal || 0) *
+                            ((discount.value || 0) * 0.01)
+                          ).toFixed(2)})
+                        {:else}
+                          (${discount.value?.toFixed(2)})
+                        {/if}
+                      </td>
+                    </tr>
+                  {/each}
+                {/if}
+                {#if orderDetails.tax}
+                  <tr style="border-top: none;">
+                    <td class="quantity" style="border-top: none;"></td>
+                    <td class="description" style="border-top: none; text-align: right;">
+                      TAX&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td class="price" style="border-top: none;">${orderDetails.tax.toFixed(2)}</td>
+                  </tr>
+                {/if}
+                {#if orderDetails.total}
+                  <tr style="border-top: none;">
+                    <td class="quantity" style="border-top: none;"></td>
+                    <td class="description" style="border-top: none; text-align: right;">
+                      TOTAL&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td class="price" style="border-top: none;">${orderDetails.total.toFixed(2)}</td
+                    >
+                  </tr>
+                {/if}
+              </tbody>
+            </table>
+
+            <br />
+
+            {#if orderDetails.billingPerson}
+              <b>Billing Details</b>
+              {#if orderDetails.billingPerson.name}
+                <div>{orderDetails.billingPerson.name.toUpperCase()}</div>
               {/if}
-              <tr></tr>
-              <br />
-              <tr style="border-top: none;">
-                <td class="quantity" style="border-top: none;"></td>
-                <td class="description" style="border-top: none; text-align: right;">
-                  SUBTOTAL&nbsp;&nbsp;&nbsp;
-                </td>
-                <td class="price" style="border-top: none;">
-                  ${(balesQuantity * balesPrice + spreadQuantity * spreadPrice).toFixed(2)}
-                </td>
-              </tr>
-              <tr style="border-top: none;">
-                <td class="quantity" style="border-top: none;"></td>
-                <td class="description" style="border-top: none; text-align: right;">
-                  TAX&nbsp;&nbsp;&nbsp;
-                </td>
-                <td class="price" style="border-top: none;"> </td>
-              </tr>
-              <tr style="border-top: none;">
-                <td class="quantity" style="border-top: none;"></td>
-                <td class="description" style="border-top: none; text-align: right;">
-                  TRANSACT FEE&nbsp;&nbsp;&nbsp;
-                </td>
-                <td class="price" style="border-top: none;">0</td>
-              </tr>
-              <tr style="border-top: none;">
-                <td class="quantity" style="border-top: none;"></td>
-                <td class="description" style="border-top: none; text-align: right;">
-                  TOTAL&nbsp;&nbsp;&nbsp;
-                </td>
-                <td class="price" style="border-top: none;">
-                  ${(balesQuantity * balesPrice + spreadQuantity * spreadPrice).toFixed(2)}
-                </td>
-              </tr>
-              <tr style="border-top: none;">
-                <td class="quantity" style="border-top: none;"></td>
-                <td class="description" style="border-top: none; text-align: right;">
-                  CHECK DELAY&nbsp;&nbsp;&nbsp;
-                </td>
-                <td class="price" style="border-top: none;">
-                  ${(balesQuantity * balesPrice + spreadQuantity * spreadPrice).toFixed(2)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              {#if orderDetails.billingPerson.phone}
+                <div>{orderDetails.billingPerson.phone}</div>
+              {/if}
+            {/if}
+            {#if orderDetails.email}
+              <div>{orderDetails.email.toUpperCase()}</div>
+            {/if}
+            {#if orderDetails.billingPerson}
+              {#if orderDetails.billingPerson.street}
+                <div>{orderDetails.billingPerson.street}</div>
+              {/if}
+              {#if orderDetails.billingPerson.city}
+                <div>
+                  {orderDetails.billingPerson.city}
+                  {#if orderDetails.billingPerson.stateOrProvinceName}
+                    <span>{orderDetails.billingPerson.stateOrProvinceName}</span>
+                  {/if}
+                  {#if orderDetails.billingPerson.postalCode}
+                    <span>{orderDetails.billingPerson.postalCode}</span>
+                  {/if}
+                </div>
+              {/if}
+            {/if}
 
-          <br />
-          {#if data.session['store.pinestraw.checkout.name']}
-            <div>{data.session['store.pinestraw.checkout.name'].toUpperCase()}</div>
-          {/if}
-          {#if data.session['store.pinestraw.checkout.email']}
-            <div>{data.session['store.pinestraw.checkout.email'].toUpperCase()}</div>
-          {/if}
-          {#if data.session['store.pinestraw.checkout.phone']}
-            <div>{data.session['store.pinestraw.checkout.phone'].toUpperCase()}</div>
+            <br />
+
+            {#if orderDetails.shippingPerson}
+              <b>Shipping Details</b>
+              {#if orderDetails.shippingPerson.name}
+                <div>{orderDetails.shippingPerson.name.toUpperCase()}</div>
+              {/if}
+              {#if orderDetails.shippingPerson.phone}
+                <div>{orderDetails.shippingPerson.phone}</div>
+              {/if}
+            {/if}
+            {#if orderDetails.email}
+              <div>{orderDetails.email.toUpperCase()}</div>
+            {/if}
+            {#if orderDetails.shippingPerson}
+              {#if orderDetails.shippingPerson.street}
+                <div>{orderDetails.shippingPerson.street}</div>
+              {/if}
+              {#if orderDetails.shippingPerson.city}
+                <div>
+                  {orderDetails.shippingPerson.city}
+                  {#if orderDetails.shippingPerson.stateOrProvinceName}
+                    <span>{orderDetails.shippingPerson.stateOrProvinceName}</span>
+                  {/if}
+                  {#if orderDetails.shippingPerson.postalCode}
+                    <span>{orderDetails.shippingPerson.postalCode}</span>
+                  {/if}
+                </div>
+              {/if}
+            {/if}
+
+            <br />
+          {:else}
+            {'<incomplete>'}
           {/if}
 
-          <br />
+          <!-- <br />
           <b>PICKUP DATE</b>
           <br />
           {data.dates.nextDelivery.toUpperCase()}
@@ -141,7 +230,7 @@
           <br />
           <b>SHIP ADDRESS</b>
           <br />
-          {'<missing>'}
+          {'<missing>'} -->
         </article>
       </CardContent>
     </Card>
@@ -184,6 +273,10 @@
     .grid {
       grid-template-columns: 1fr;
     }
+
+    .grid > div {
+      order: -1;
+    }
   }
 
   article.receipt {
@@ -222,8 +315,8 @@
 
   td.price,
   th.price {
-    width: 50px;
-    max-width: 50px;
+    width: 60px;
+    max-width: 60px;
     word-break: break-all;
     text-align: right;
   }

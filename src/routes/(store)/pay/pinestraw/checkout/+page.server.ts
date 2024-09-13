@@ -25,6 +25,6 @@ export const actions = {
       'store.pinestraw.checkout.email': email,
     }));
 
-    redirect(303, '/pay/pinestraw/checkout/pickup');
+    redirect(303, '/pay/pinestraw/checkout/distribution-method');
   },
 } satisfies Actions;

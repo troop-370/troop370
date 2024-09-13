@@ -1,6 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { enhance } from '$app/forms';
+  import { applyAction, enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
@@ -10,7 +11,18 @@
   let email = data.session['store.pinestraw.checkout.email'] || '';
 </script>
 
-<form method="POST" use:enhance>
+<form
+  method="POST"
+  use:enhance={() => {
+    return async ({ result }) => {
+      if (result.type === 'redirect') {
+        goto(result.location);
+      } else {
+        await applyAction(result);
+      }
+    };
+  }}
+>
   <Card>
     <CardHeader>
       <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
