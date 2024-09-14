@@ -44,7 +44,7 @@
                 </tr>
               </thead>
               <tbody>
-                {#each orderDetails.items || [] as item}
+                {#each orderDetails.items?.filter((item) => item.quantity && item.quantity > 0) || [] as item}
                   <tr>
                     <td class="quantity">{item.quantity || 0}</td>
                     <td class="description">{item.name?.toUpperCase()}</td>

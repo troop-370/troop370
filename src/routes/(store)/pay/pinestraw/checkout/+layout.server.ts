@@ -109,7 +109,6 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     .then((res) => res.json())
     .then((data) => {
       try {
-        console.log(data);
         if (data.errorMessage) {
           throw new Error(data.errorMessage);
         }
