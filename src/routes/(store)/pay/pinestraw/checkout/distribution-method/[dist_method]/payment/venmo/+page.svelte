@@ -4,8 +4,10 @@
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
 
-  const orderId = 'ORDER-000';
-  const amount = 0.01;
+  export let data;
+
+  const orderId = 'PS-' + data.session['store.pinestraw.checkout.orderId'];
+  const amount = data.orderDetails.total;
 
   // see https://blog.alexbeals.com/posts/venmo-deeplinking for more info
   $: venmoLink = `https://account.venmo.com/pay?audience=private&amount=${amount}&note=${orderId}&recipients=%2CTroop-ThreeSeventy&txn=pay`;

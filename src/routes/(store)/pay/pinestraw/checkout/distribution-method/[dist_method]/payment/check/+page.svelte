@@ -3,6 +3,11 @@
   import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
+
+  export let data;
+
+  const orderId = 'PS-' + data.session['store.pinestraw.checkout.orderId'];
+  const amount = data.orderDetails.total;
 </script>
 
 <form
@@ -31,8 +36,10 @@
       </p>
 
       <ol>
-        <li>Write a check for <code>$0.00</code> payable to <code>Troop 370</code>.</li>
-        <li>For the memo, specify <code>ORDER-000</code></li>
+        <li>
+          Write a check for <code>${amount?.toFixed(2)}</code> payable to <code>Troop 370</code>.
+        </li>
+        <li>For the memo, specify <code>{orderId}</code></li>
         <li>
           Mail the check to:
           <address>
