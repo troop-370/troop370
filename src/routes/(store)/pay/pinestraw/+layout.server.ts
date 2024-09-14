@@ -6,7 +6,7 @@ import type { LayoutServerLoad } from './$types';
 
 const getContentPages = apity.path('/pages').method('get').create();
 
-export const load = (async ({ fetch, url }) => {
+export const load = (async ({ fetch, url, locals }) => {
   const previewId = url.searchParams.get('previewId');
 
   // get the pine straw page

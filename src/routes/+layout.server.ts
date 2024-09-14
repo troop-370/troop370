@@ -1,7 +1,9 @@
 import { PROTECTED_PAGE_PASSWORD } from '$env/static/private';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, depends }) => {
+  depends('session:locals');
+
   // handle authentication
   const { counter = 0, protectedPass = '' } = locals.session.data;
   const authenticated = protectedPass === PROTECTED_PAGE_PASSWORD;

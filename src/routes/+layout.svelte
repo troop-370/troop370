@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { afterNavigate, invalidate } from '$app/navigation';
   import { themeMode } from '$stores/themeMode';
   import 'fluent-svelte/theme.css';
   import { onDestroy, onMount } from 'svelte';
@@ -47,6 +48,11 @@
   //     document.documentElement.classList.remove('dark');
   //   }
   // });
+
+  // force locals to be updated on navigation
+  afterNavigate(() => {
+    invalidate('session:locals');
+  });
 </script>
 
 <slot></slot>
