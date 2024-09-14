@@ -40,12 +40,20 @@ export const load = (async ({ fetch, parent, locals, url }) => {
         shippingOption: {
           shippingMethodId: locals.session.data['store.pinestraw.checkout.shipping_method'],
         },
-        // customSurcharges: [
-        //   {
-        //     value: 50,
-        //     type: 'PERCENT',
-        //   },
-        // ],
+        customSurcharges: [
+          {
+            value:
+              locals.session.data['store.pinestraw.checkout.payment_method'] === 'venmo' ? 1.9 : 0,
+            type: 'PERCENT',
+            id: 'Venmo fee',
+          },
+          {
+            value:
+              locals.session.data['store.pinestraw.checkout.payment_method'] === 'paypal' ? 3.5 : 0,
+            type: 'PERCENT',
+            id: 'PayPal fee',
+          },
+        ],
         items: [
           {
             productId: products.bale.id,
@@ -101,6 +109,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     .then((res) => res.json())
     .then((data) => {
       try {
+        console.log(data);
         if (data.errorMessage) {
           throw new Error(data.errorMessage);
         }

@@ -76,7 +76,7 @@
                   </tr>
                 {/if}
                 {#if orderDetails.customSurcharges}
-                  {#each orderDetails.customSurcharges as surcharge}
+                  {#each orderDetails.customSurcharges.filter((surcharge) => surcharge.total > 0) as surcharge}
                     <tr style="border-top: none;">
                       <td class="quantity" style="border-top: none;"></td>
                       <td class="description" style="border-top: none; text-align: right;">
@@ -84,9 +84,7 @@
                       </td>
                       <td class="price" style="border-top: none;">
                         {#if surcharge.type === 'PERCENT'}
-                          {((orderDetails.subtotal || 0) * ((surcharge.value || 0) * 0.01)).toFixed(
-                            2
-                          )}
+                          {surcharge.total.toFixed(2)}
                         {:else}
                           {surcharge.value.toFixed(2)}
                         {/if}

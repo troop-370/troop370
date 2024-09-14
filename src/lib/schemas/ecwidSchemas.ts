@@ -91,6 +91,10 @@ export const calculateOrderSchema = z
            * Controls tax application for the surcharge. If not specified default value: false
            */
           taxable: z.boolean().optional(),
+          /**
+           * The calculated amount for this surcharge.
+           */
+          total: z.number(),
         })
       )
       .optional(),
