@@ -30,27 +30,20 @@
 
   let aboutSectionInnerHTML = Markdown.parse(data.aboutSectionText || '')[1];
 
-  let basePriceCash = data.products?.bale?.price || 6.0;
-  let basePricePayPal = basePriceCash * 1.035;
-  let basePriceVenmo = basePriceCash * 1.019;
-  let spreadingPriceCash = data.products?.spread?.price || 5.0;
-  let spreadingPricePayPal = spreadingPriceCash * 1.035;
-  let spreadingPriceVenmo = spreadingPriceCash * 1.019;
+  let balePrice = data.products?.bale?.price || 6.0;
+  let spreadingPrice = data.products?.spread?.price || 5.0;
 
-  $: basePrice =
-    $pinestrawStore.paymentMethod?.value === 'paypal'
-      ? basePricePayPal
-      : $pinestrawStore.paymentMethod?.value === 'venmo'
-        ? basePriceVenmo
-        : basePriceCash;
-  $: spreadingPrice =
-    $pinestrawStore.paymentMethod?.value === 'paypal'
-      ? spreadingPricePayPal
-      : $pinestrawStore.paymentMethod?.value === 'venmo'
-        ? spreadingPriceVenmo
-        : spreadingPriceCash;
-  $: price =
-    $pinestrawStore.spreadingOption?.value === 'yes' ? basePrice + spreadingPrice : basePrice;
+  $: price = (() => {
+    const cashPrice =
+      $pinestrawStore.spreadingOption?.value === 'yes' ? balePrice + spreadingPrice : balePrice;
+    if ($pinestrawStore.paymentMethod?.value === 'paypal') {
+      return cashPrice * 1.035;
+    } else if ($pinestrawStore.paymentMethod?.value === 'venmo') {
+      return cashPrice * 1.019;
+    } else {
+      return cashPrice;
+    }
+  })();
   $: total =
     ($pinestrawStore.deliveryOption?.value === 'delivery' && $pinestrawStore.quantity < 30
       ? 10
