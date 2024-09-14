@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { Breadcrumbs } from '$lib/components/ui/breadcrumb';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { error } from '@sveltejs/kit';
 
   export let data;
 
@@ -12,7 +13,7 @@
   const balesPrice = data.products?.bale?.price || 0;
   const spreadPrice = data.products?.spread?.price || 0;
 
-  $: browser && console.log('checkout', data.orderDetails);
+  // $: browser && console.log('checkout', data.orderDetails);
 </script>
 
 <div class="breadcrumbs">
@@ -224,7 +225,7 @@
   </aside>
 
   <div>
-    {#if $page.form?.error}
+    {#if $page.form?.error || data.hasOrderUpdateError}
       <aside style="margin-bottom: 1rem;">
         <Card
           style="border-color: hsla(var(--destructive) / 50%); background-color: hsla(var(--destructive) / 8%);"
@@ -234,7 +235,12 @@
           </CardHeader>
           <CardContent>
             <p>
-              {$page.form?.error}
+              {#if data.hasOrderUpdateError}
+                There was an error updating your order. Please try again. If you continue to see
+                this error, please contact pinestraw@troop370atlanta.org.
+              {:else}
+                {$page.form?.error}
+              {/if}
             </p>
           </CardContent>
         </Card>

@@ -168,3 +168,14 @@ export const calculateOrderSchema = z
     giftCardRedemption: z.number().optional(),
   })
   .passthrough();
+
+export const createOrderSchema = z.object({
+  /**
+   * @deprecated Use orderId instead
+   *
+   * If the order payment stauts is INCOMPLETE, this is the `internalId` of the order
+   * because id and orderId are not created until the order is not marked as INCOMPLETE.
+   */
+  id: z.number(),
+  orderId: z.string().optional(), // only included when the order is not incomplete
+});

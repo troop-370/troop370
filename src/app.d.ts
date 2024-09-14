@@ -32,6 +32,7 @@ interface SessionData {
     password_message_when_authenticated: string;
   }>;
   'store.pinestraw.checkout.email'?: string;
+  'store.pinestraw.checkout.orderId'?: string;
   'store.pinestraw.checkout.conf1'?: string;
   'store.pinestraw.checkout.conf2'?: string;
   'store.pinestraw.checkout.conf3'?: string;

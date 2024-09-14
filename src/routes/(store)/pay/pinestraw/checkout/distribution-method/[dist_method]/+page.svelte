@@ -8,11 +8,8 @@
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
-  import { onMount } from 'svelte';
 
   export let data;
-
-  $: console.log(data);
 
   const isBuyingSpreading =
     parseInt(data.session['store.pinestraw.checkout.spread_quantity'] || '0') > 0;

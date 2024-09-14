@@ -1,5 +1,6 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
 import { calculateOrderSchema } from '$lib/schemas/ecwidSchemas';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ fetch, parent, locals, url }) => {
@@ -23,6 +24,9 @@ export const load = (async ({ fetch, parent, locals, url }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        // prevent the order from being displayed in the Ecwid control panel
+        // (we will set it to false once the order is submitted)
+        hidden: true,
         email: locals.session.data['store.pinestraw.checkout.email'],
         billingPerson: {
           name: locals.session.data['store.pinestraw.checkout.name'],
@@ -107,6 +111,49 @@ export const load = (async ({ fetch, parent, locals, url }) => {
       }
     });
 
+  // await locals.session.update((session) => ({
+  //   ...session,
+  //   'store.pinestraw.checkout.orderId': undefined,
+  // }));
+
+  // if the order has already been created, update the order details
+  // so that the order is updated to Ecwid's abonded cart list
+  // and we can handle payment data based on the orderId and
+  // immediately update it in the Ecwid control panel
+  const orderId = locals.session.data['store.pinestraw.checkout.orderId'];
+  let hasOrderUpdateError = false;
+  if (orderId) {
+    // we don't want to update the payment status because it is always 'INCOMPLETE' in `orderDetails`
+    const { paymentStatus, ...newOrderDetails } = orderDetails;
+    // update the order details
+    await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders/${orderId}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...orderDetails,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.errorMessage) {
+          throw new Error(data.errorMessage);
+        }
+      })
+      .catch((error) => {
+        console.error(`Error for order ${orderId}`, error);
+        hasOrderUpdateError = true;
+      });
+  }
+
+  // if the order has not been created and we are past the first step,
+  // redirect the customer back to the first step
+  if (!orderId && url.pathname !== '/pay/pinestraw/checkout') {
+    redirect(303, '/pay/pinestraw/checkout');
+  }
+
   // fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders`, {
   //   method: 'POST',
   //   headers: {
@@ -120,7 +167,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   //   .then(console.log);
   // id: 517874452
 
-  // fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders/517874452`, {
+  // fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders/763`, {
   //   method: 'GET',
   //   headers: {
   //     Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
@@ -131,8 +178,18 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   //   .then((res) => res.json())
   //   .then(console.log);
 
+  // const storeProfile = await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/profile`, {
+  //   method: 'GET',
+  //   headers: {
+  //     Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
+  //     'Content-Type': 'application/json',
+  //     accept: 'application/json',
+  //   },
+  // }).then((res) => res.json());
+
   return {
     orderDetails,
+    hasOrderUpdateError,
     breadcrumbs: [
       { label: 'Store', href: '/pay/pinestraw' },
       { label: 'Checkout', href: '/pay/pinestraw/checkout' },
