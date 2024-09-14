@@ -1,13 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { updateBreadcrumbs } from './updateBreadcrumbs';
 
-export const load = (async ({ locals }) => {
-  await updateBreadcrumbs(locals.session, {
-    label: 'Checkout',
-    href: '/pay/pinestraw/checkout',
-  });
-
+export const load = (async () => {
   return {};
 }) satisfies PageServerLoad;
 

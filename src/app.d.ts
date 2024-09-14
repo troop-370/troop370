@@ -31,7 +31,6 @@ interface SessionData {
   authStrings: Partial<{
     password_message_when_authenticated: string;
   }>;
-  'store.pinestraw.checkout.breadcrumbs'?: { label: string; href?: string }[];
   'store.pinestraw.checkout.email'?: string;
   'store.pinestraw.checkout.conf1'?: string;
   'store.pinestraw.checkout.conf2'?: string;

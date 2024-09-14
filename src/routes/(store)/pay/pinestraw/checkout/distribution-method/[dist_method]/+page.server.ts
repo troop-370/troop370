@@ -2,10 +2,9 @@ import { redirect } from '@sveltejs/kit';
 import validator from 'validator';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
-import { updateBreadcrumbs } from '../../updateBreadcrumbs';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ locals, url, parent }) => {
+export const load = (async ({ parent, locals }) => {
   const { orderDetails } = await parent();
 
   if (
@@ -17,11 +16,6 @@ export const load = (async ({ locals, url, parent }) => {
   }
 
   const distributionMethod = orderDetails.shippingOption;
-
-  await updateBreadcrumbs(locals.session, {
-    label: (distributionMethod.isPickup ? 'Pickup' : 'Delivery') || 'Distribution method',
-    href: url.pathname,
-  });
 
   return { distributionMethod };
 }) satisfies PageServerLoad;

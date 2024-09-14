@@ -2,7 +2,7 @@ import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
 import { calculateOrderSchema } from '$lib/schemas/ecwidSchemas';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ fetch, parent, locals }) => {
+export const load = (async ({ fetch, parent, locals, url }) => {
   const { products } = await parent();
   if (!products || !products.bale || !products.spread) {
     throw new Error('Products not found');
@@ -131,5 +131,11 @@ export const load = (async ({ fetch, parent, locals }) => {
   //   .then((res) => res.json())
   //   .then(console.log);
 
-  return { orderDetails };
+  return {
+    orderDetails,
+    breadcrumbs: [
+      { label: 'Store', href: '/pay/pinestraw' },
+      { label: 'Checkout', href: '/pay/pinestraw/checkout' },
+    ],
+  };
 }) satisfies LayoutServerLoad;

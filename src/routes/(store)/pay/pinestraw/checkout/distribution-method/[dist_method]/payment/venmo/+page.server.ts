@@ -1,13 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { updateBreadcrumbs } from '../../../../updateBreadcrumbs';
 import type { Actions, PageServerLoad } from '../check/$types';
 
-export const load = (async ({ locals, url }) => {
-  await updateBreadcrumbs(locals.session, {
-    label: 'Venmo',
-    href: url.pathname,
-  });
-
+export const load = (async () => {
   return {};
 }) satisfies PageServerLoad;
 

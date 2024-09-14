@@ -1,6 +1,5 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { afterNavigate, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
   import { Breadcrumbs } from '$lib/components/ui/breadcrumb';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -14,22 +13,10 @@
   const spreadPrice = data.products?.spread?.price || 0;
 
   $: browser && console.log('checkout', data.orderDetails);
-
-  afterNavigate(({ from, to }) => {
-    if (!from?.route.id || !to?.route.id) return;
-
-    // if we have navigated here from a child route
-    // (likely via breadcrumbs)
-    // invalidate this route to prevent stale data
-    if (from.route.id.startsWith(to.route.id)) {
-      console.log('invalidating');
-      invalidateAll();
-    }
-  });
 </script>
 
 <div class="breadcrumbs">
-  <Breadcrumbs items={data.session['store.pinestraw.checkout.breadcrumbs']} />
+  <Breadcrumbs items={$page.data.breadcrumbs} />
 </div>
 
 <div class="grid">

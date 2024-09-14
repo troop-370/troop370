@@ -12,7 +12,7 @@
 
   export let data;
 
-  $: console.log($page.form?.data);
+  $: console.log(data);
 
   const isBuyingSpreading =
     parseInt(data.session['store.pinestraw.checkout.spread_quantity'] || '0') > 0;

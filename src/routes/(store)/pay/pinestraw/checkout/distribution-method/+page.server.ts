@@ -1,13 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { updateBreadcrumbs } from '../updateBreadcrumbs';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ locals, url }) => {
-  await updateBreadcrumbs(locals.session, {
-    label: 'Distribution method',
-    href: url.pathname,
-  });
-
+export const load = (async () => {
   return {};
 }) satisfies PageServerLoad;
 
