@@ -92,4 +92,32 @@
     height: 1rem;
     accent-color: hsl(var(--primary) / var(--tw-text-opacity));
   }
+
+  #content :global(select) {
+    align-items: center;
+    background: hsl(var(--background) / var(--tw-bg-opacity)) none;
+    border: 1px solid hsl(var(--input) / var(--tw-border-opacity));
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-family: inherit;
+    height: 2.5rem;
+    justify-content: space-between;
+    margin: 0.5rem 0 0 0;
+    padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+    text-align: left;
+    text-indent: 0;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    word-spacing: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-border-image: none;
+    width: 100%;
+  }
 </style>

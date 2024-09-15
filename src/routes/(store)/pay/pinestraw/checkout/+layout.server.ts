@@ -1,6 +1,7 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
-import { calculateOrderSchema } from '$lib/schemas/ecwidSchemas';
+import { calculateOrderSchema, storeProfileSchema } from '$lib/schemas/ecwidSchemas';
 import { redirect } from '@sveltejs/kit';
+import { fromError } from 'zod-validation-error';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ fetch, parent, locals, url }) => {
@@ -9,11 +10,42 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     throw new Error('Products not found');
   }
 
+  const storeProfile = await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/profile`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.errorMessage) {
+        throw new Error(json.errorMessage);
+      }
+      return storeProfileSchema.parse(json);
+    })
+    .catch((error) => {
+      const validationError = fromError(error);
+      console.error('Failed to fetch store profile', validationError);
+      throw validationError;
+    });
+
   const balesQuantity = parseInt(
     locals.session.data['store.pinestraw.checkout.bale_quantity'] || '0'
   );
   const isPickup =
     locals.session.data['store.pinestraw.checkout.shipping_method'] === '12892-1567962734210';
+
+  const paypalPaymentMethodId = storeProfile.payment.paymentOptions.find(
+    (option) => option.paymentProcessorTitle === 'PayPalStandard'
+  )?.id;
+  const PAYPAL_PERCENT_FEE = 3.5;
+
+  const venmoPaymentMethodId = storeProfile.payment.paymentOptions.find(
+    (option) => option.checkoutTitle === 'Venmo' && option.paymentProcessorId === 'offline'
+  )?.id;
+  const VENMO_PERCENT_FEE = 1.9;
 
   const orderDetails = await fetch(
     `https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/order/calculate`,
@@ -28,28 +60,45 @@ export const load = (async ({ fetch, parent, locals, url }) => {
         // (we will set it to false once the order is submitted)
         hidden: true,
         email: locals.session.data['store.pinestraw.checkout.email'],
-        billingPerson: {
+        shippingPerson: {
           name: locals.session.data['store.pinestraw.checkout.name'],
           phone: locals.session.data['store.pinestraw.checkout.phone'],
           street: locals.session.data['store.pinestraw.checkout.street_address'],
           city: locals.session.data['store.pinestraw.checkout.city'],
           country: 'US',
-          stateOrProvinceCode: 'GA',
+          stateOrProvinceCode: locals.session.data['store.pinestraw.checkout.state'],
           postalCode: locals.session.data['store.pinestraw.checkout.postal_code'],
         },
+        billingPerson: isPickup
+          ? {}
+          : {
+              name: locals.session.data['store.pinestraw.checkout.billing.name'],
+              phone: locals.session.data['store.pinestraw.checkout.billing.phone'],
+              street: locals.session.data['store.pinestraw.checkout.billing.street_address'],
+              city: locals.session.data['store.pinestraw.checkout.billing.city'],
+              country: 'US',
+              stateOrProvinceCode: locals.session.data['store.pinestraw.checkout.billing.state'],
+              postalCode: locals.session.data['store.pinestraw.checkout.billing.postal_code'],
+            },
         shippingOption: {
           shippingMethodId: locals.session.data['store.pinestraw.checkout.shipping_method'],
         },
         customSurcharges: [
           {
             value:
-              locals.session.data['store.pinestraw.checkout.payment_method'] === 'venmo' ? 1.9 : 0,
+              locals.session.data['store.pinestraw.checkout.payment_method'] ===
+              venmoPaymentMethodId
+                ? VENMO_PERCENT_FEE
+                : 0,
             type: 'PERCENT',
             id: 'Venmo fee',
           },
           {
             value:
-              locals.session.data['store.pinestraw.checkout.payment_method'] === 'paypal' ? 3.5 : 0,
+              locals.session.data['store.pinestraw.checkout.payment_method'] ===
+              paypalPaymentMethodId
+                ? PAYPAL_PERCENT_FEE
+                : 0,
             type: 'PERCENT',
             id: 'PayPal fee',
           },
@@ -186,17 +235,13 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   //   .then((res) => res.json())
   //   .then(console.log);
 
-  // const storeProfile = await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/profile`, {
-  //   method: 'GET',
-  //   headers: {
-  //     Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
-  //     'Content-Type': 'application/json',
-  //     accept: 'application/json',
-  //   },
-  // }).then((res) => res.json());
-
   return {
     orderDetails,
+    storeProfile,
+    paypalPaymentMethodId,
+    venmoPaymentMethodId,
+    PAYPAL_PERCENT_FEE,
+    VENMO_PERCENT_FEE,
     hasOrderUpdateError,
     breadcrumbs: [
       { label: 'Store', href: '/pay/pinestraw' },

@@ -35,36 +35,18 @@
       <div class="input">
         <Label>Choose a payment method</Label>
         <RadioGroup.Root>
-          <div class="radio-group">
-            <input
-              type="radio"
-              name="payment_method"
-              id="option-paypal"
-              value="paypal"
-              bind:group={paymentMethod}
-            />
-            <Label for="option-paypal">PayPal (+3.5% transaction fee)</Label>
-          </div>
-          <div class="radio-group">
-            <input
-              type="radio"
-              name="payment_method"
-              id="option-venmo"
-              value="venmo"
-              bind:group={paymentMethod}
-            />
-            <Label for="option-venmo">Venmo (+1.9% transaction fee)</Label>
-          </div>
-          <div class="radio-group">
-            <input
-              type="radio"
-              name="payment_method"
-              id="option-check"
-              value="check"
-              bind:group={paymentMethod}
-            />
-            <Label for="option-check">Check</Label>
-          </div>
+          {#each data.availablePaymentMethods as method}
+            <div class="radio-group">
+              <input
+                type="radio"
+                name="payment_method"
+                id={`option-${method.id}`}
+                value={method.id}
+                bind:group={paymentMethod}
+              />
+              <Label for={`option-${method.id}`}>{method.checkoutTitleLong}</Label>
+            </div>
+          {/each}
         </RadioGroup.Root>
       </div>
     </CardContent>

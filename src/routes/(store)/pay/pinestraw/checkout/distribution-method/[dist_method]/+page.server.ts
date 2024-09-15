@@ -57,10 +57,11 @@ export const actions = {
         phone: z.string().refine(validator.isMobilePhone),
         street_address: z.string().nonempty(),
         city: z.string().nonempty(),
+        state: z.string().nonempty(),
         postal_code: z.string().refine((val) => validator.isPostalCode(val, 'US')),
         deliver_location: z.string().nonempty(),
         spread_location: z.string().nonempty().optional(),
-        special_instructions: z.string().nonempty().optional(),
+        special_instructions: z.string().optional(),
       }).parse(data);
     } catch (error) {
       const validationError = fromError(error);
@@ -73,6 +74,7 @@ export const actions = {
       'store.pinestraw.checkout.phone': data.phone.toString(),
       'store.pinestraw.checkout.street_address': data.street_address.toString(),
       'store.pinestraw.checkout.city': data.city.toString(),
+      'store.pinestraw.checkout.state': data.state.toString(),
       'store.pinestraw.checkout.postal_code': data.postal_code.toString(),
       'store.pinestraw.checkout.deliver_location': data.deliver_location.toString(),
       'store.pinestraw.checkout.spread_location': data.spread_location?.toString(),

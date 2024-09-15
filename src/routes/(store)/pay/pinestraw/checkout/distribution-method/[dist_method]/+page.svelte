@@ -8,6 +8,7 @@
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
+  import { usStatesAndTerritories } from '$utils/usStatesAndTerritories.js';
 
   export let data;
 
@@ -24,6 +25,7 @@
     data.session['store.pinestraw.checkout.street_address'] ||
     '';
   let city = $page.form?.data?.city || data.session['store.pinestraw.checkout.city'] || '';
+  let state = $page.form?.data?.state || data.session['store.pinestraw.checkout.state'] || '';
   let postalCode =
     $page.form?.data?.postal_code || data.session['store.pinestraw.checkout.postal_code'] || '';
   let deliverLocation =
@@ -183,6 +185,15 @@
         </div>
 
         <div class="input">
+          <Label for="state">State</Label>
+          <select id="state" name="state" bind:value={state} autocomplete="address-level1">
+            {#each usStatesAndTerritories.sort( (a, b) => (a === 'Georgia (GA)' ? -1 : 0) ) as usState}
+              <option value={usState.slice(-3, -1)}>{usState.slice(0, -5)}</option>
+            {/each}
+          </select>
+        </div>
+
+        <div class="input">
           <Label for="postal-code">ZIP or ZIP+4</Label>
           <Input id="postal-code" name="postal_code" type="text" bind:value={postalCode} />
         </div>
@@ -242,6 +253,7 @@
           disabled={browser &&
             (!streetAddress ||
               !city ||
+              !state ||
               !postalCode ||
               !name ||
               !phone ||

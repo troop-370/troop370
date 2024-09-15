@@ -183,3 +183,78 @@ export const createOrderSchema = z.object({
   id: z.number(),
   orderId: z.string().optional(), // only included when the order is not incomplete
 });
+
+export const storeProfilePaymentOptionSchema = z.object({
+  /** Payment method ID in a store */
+  id: z.string(),
+
+  /** True if payment method is enabled and shown in storefront, false otherwise */
+  enabled: z.boolean(),
+
+  /** Contains the payment method setup status. Read-only for in-built payment methods (where "appClientId": ""). Can be set for payment applications and will affect the payment method list in a store dashboard */
+  configured: z.boolean(),
+
+  /** Payment method title at checkout */
+  checkoutTitle: z.string(),
+
+  /** Available translations for payment option title */
+  checkoutTitleTranslated: z.record(z.string(), z.string()),
+
+  /** Payment method description at checkout (subtitle) */
+  checkoutDescription: z.string(),
+
+  /** Payment processor ID in Ecwid */
+  paymentProcessorId: z.string(),
+
+  /** Payment processor title. The same as paymentModule in order details in REST API */
+  paymentProcessorTitle: z.string(),
+
+  /** Payment method position at checkout and in Ecwid Control Panel. The smaller the number, the higher the position is */
+  orderBy: z.number(),
+
+  /** client_id value of payment application. "" if not an application */
+  appClientId: z.string(),
+
+  /** Payment method fee added to the order as a set amount or as a percentage of the order total */
+  paymentSurcharges: z
+    .array(
+      z.object({
+        /** Supported values: ABSOLUTE, PERCENT */
+        type: z.enum(['ABSOLUTE', 'PERCENT']),
+        /** Surcharge value */
+        value: z.number(),
+      })
+    )
+    .optional(),
+
+  /** Payment instructions details */
+  instructionsForCustomer: z.object({
+    /** Payment instructions title */
+    instructionsTitle: z.string(),
+    /** Payment instructions content. Can contain HTML tags */
+    instructions: z.string(),
+    /** Available translations for instructions */
+    instructionsTranslated: z.record(z.string(), z.string()), // translations by ISO language code
+  }),
+
+  /** Shipping settings of the payment option */
+  shippingSettings: z
+    .object({
+      /** Contains IDs of shipping methods, if payment method is available for certain shipping methods only ("Payment Per Shipping" feature) */
+      enabledShippingMethods: z.array(z.string()),
+    })
+    .optional(),
+});
+
+export const storeProfilePaymentSchema = z
+  .object({
+    /** Details about all payment methods set up in that store */
+    paymentOptions: z.array(storeProfilePaymentOptionSchema),
+  })
+  .passthrough();
+
+export const storeProfileSchema = z
+  .object({
+    payment: storeProfilePaymentSchema,
+  })
+  .passthrough();
