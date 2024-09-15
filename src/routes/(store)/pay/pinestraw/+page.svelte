@@ -3,6 +3,8 @@
   import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Checkbox } from '$lib/components/ui/checkbox';
+  import * as Dialog from '$lib/components/ui/dialog';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import {
@@ -49,6 +51,9 @@
       ? 10
       : 0) +
     $pinestrawStore.quantity * price;
+
+  let addSpreadQuantity = 1;
+  let conf = false;
 </script>
 
 <svelte:head>
@@ -63,131 +68,200 @@
 </div>
 
 <div class="grid">
-  <form
-    method="POST"
-    use:enhance={() => {
-      return async ({ result }) => {
-        if (result.type === 'redirect') {
-          goto(result.location);
-        } else {
-          await applyAction(result);
-        }
-      };
-    }}
-  >
+  <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <form
+      method="POST"
+      action="?/order"
+      use:enhance={() => {
+        return async ({ result }) => {
+          if (result.type === 'redirect') {
+            goto(result.location);
+          } else {
+            await applyAction(result);
+          }
+        };
+      }}
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle style="font-size: 1.5rem; line-height: 2rem;">Order pine straw</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <img
+            src={data.products?.bale?.imageUrl || '/photos/backgrounds/pineneedles_l.jpg'}
+            alt="Pine Straw"
+            class="thumbnail"
+          />
+          <div class="unit-price">${price.toFixed(2)} / bale</div>
+          <div class="form">
+            <div class="quantity">
+              <Label for="quantity" style="flex-shrink: 0;">Quantity:</Label>
+              <Input
+                id="quantity"
+                type="number"
+                min="1"
+                bind:value={$pinestrawStore.quantity}
+                style="width: 6rem;"
+                name="bale_quantity"
+              />
+            </div>
+            <div class="select">
+              <Label>Delivery Option</Label>
+              <Select bind:selected={$pinestrawStore.deliveryOption}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select delivery option" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pickup">
+                    <div class="select-item">
+                      <MapPin class="mr-2 h-4 w-4" />
+                      Pickup
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="delivery">
+                    <div class="select-item">
+                      <Truck class="mr-2 h-4 w-4" />
+                      Delivery (+$10 for orders under 30 bales)
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div class="select">
+              <Label>Bale Spreading</Label>
+              {#if $pinestrawStore.spreadingOption?.value === 'yes'}
+                <input
+                  type="text"
+                  name="spread_quantity"
+                  bind:value={$pinestrawStore.quantity}
+                  hidden
+                />
+              {/if}
+              <Select bind:selected={$pinestrawStore.spreadingOption}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select spreading option" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="no">
+                    <div class="select-item">
+                      <ShoppingBag class="mr-2 h-4 w-4" />
+                      No Spreading
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="yes">
+                    <div class="select-item">
+                      <Leaf class="mr-2 h-4 w-4" />
+                      Spreading (+${spreadingPrice.toFixed(2)}/bale)
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div class="select">
+              <Label>Payment Method</Label>
+              <Select bind:selected={$pinestrawStore.paymentMethod}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select payment method" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cash">
+                    <div class="select-item">
+                      <Landmark class="mr-2 h-4 w-4" />
+                      Check
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="paypal">
+                    <div class="select-item">
+                      <CreditCard class="mr-2 h-4 w-4" />
+                      Credit Card (+3.5%)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="venmo">
+                    <div class="select-item">
+                      <Coins class="mr-2 h-4 w-4" />
+                      Venmo (+1.9%)
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter style="display: flex; justify-content: space-between;">
+          <div class="summed-price">
+            Total: ${total.toFixed(2)}
+          </div>
+          <Button type="submit">Proceed to checkout</Button>
+        </CardFooter>
+      </Card>
+    </form>
+
     <Card>
       <CardHeader>
-        <CardTitle style="font-size: 1.5rem; line-height: 2rem;">Order pine straw</CardTitle>
+        <CardTitle>Add spreading later</CardTitle>
       </CardHeader>
       <CardContent>
-        <img
-          src={data.products?.bale?.imageUrl || '/photos/backgrounds/pineneedles_l.jpg'}
-          alt="Pine Straw"
-          class="thumbnail"
-        />
-        <div class="unit-price">${price.toFixed(2)} / bale</div>
-        <div class="form">
-          <div class="quantity">
-            <Label for="quantity" style="flex-shrink: 0;">Quantity:</Label>
-            <Input
-              id="quantity"
-              type="number"
-              min="1"
-              bind:value={$pinestrawStore.quantity}
-              style="width: 6rem;"
-              name="bale_quantity"
-            />
-          </div>
-          <div class="select">
-            <Label>Delivery Option</Label>
-            <Select bind:selected={$pinestrawStore.deliveryOption}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select delivery option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="pickup">
-                  <div class="select-item">
-                    <MapPin class="mr-2 h-4 w-4" />
-                    Pickup
-                  </div>
-                </SelectItem>
-                <SelectItem value="delivery">
-                  <div class="select-item">
-                    <Truck class="mr-2 h-4 w-4" />
-                    Delivery (+$10 for orders under 30 bales)
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div class="select">
-            <Label>Bale Spreading</Label>
-            {#if $pinestrawStore.spreadingOption?.value === 'yes'}
-              <input
-                type="text"
-                name="spread_quantity"
-                bind:value={$pinestrawStore.quantity}
-                hidden
-              />
-            {/if}
-            <Select bind:selected={$pinestrawStore.spreadingOption}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select spreading option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="no">
-                  <div class="select-item">
-                    <ShoppingBag class="mr-2 h-4 w-4" />
-                    No Spreading
-                  </div>
-                </SelectItem>
-                <SelectItem value="yes">
-                  <div class="select-item">
-                    <Leaf class="mr-2 h-4 w-4" />
-                    Spreading (+${spreadingPrice.toFixed(2)}/bale)
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div class="select">
-            <Label>Payment Method</Label>
-            <Select bind:selected={$pinestrawStore.paymentMethod}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select payment method" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="cash">
-                  <div class="select-item">
-                    <Landmark class="mr-2 h-4 w-4" />
-                    Check
-                  </div>
-                </SelectItem>
-                <SelectItem value="paypal">
-                  <div class="select-item">
-                    <CreditCard class="mr-2 h-4 w-4" />
-                    Credit Card (+3.5%)
-                  </div>
-                </SelectItem>
-                <SelectItem value="venmo">
-                  <div class="select-item">
-                    <Coins class="mr-2 h-4 w-4" />
-                    Venmo (+1.9%)
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        <p>
+          If you did not order spreading in your order of pine straw bales, you can order it
+          separately.
+        </p>
       </CardContent>
       <CardFooter style="display: flex; justify-content: space-between;">
-        <div class="summed-price">
-          Total: ${total.toFixed(2)}
-        </div>
-        <Button type="submit">Proceed to checkout</Button>
+        <Dialog.Root>
+          <Dialog.Trigger>
+            <Button variant="outline">Order spreading</Button>
+          </Dialog.Trigger>
+          <Dialog.Content>
+            <form
+              method="POST"
+              action="?/spread"
+              use:enhance={() => {
+                return async ({ result }) => {
+                  if (result.type === 'redirect') {
+                    goto(result.location);
+                  } else {
+                    await applyAction(result);
+                  }
+                };
+              }}
+            >
+              <Dialog.Header>
+                <Dialog.Title>Add spreading</Dialog.Title>
+                <Dialog.Description>
+                  Add spreading service to your existing order of pine straw bales. We cannot spread
+                  third-party pine staw.
+                </Dialog.Description>
+              </Dialog.Header>
+              <div style="margin-top: 1rem;">
+                <div class="quantity">
+                  <Label for="spread_quantity" style="flex-shrink: 0;">Quantity:</Label>
+                  <Input
+                    id="spread_quantity"
+                    type="number"
+                    min="1"
+                    style="width: 6rem;"
+                    name="spread_quantity"
+                    bind:value={addSpreadQuantity}
+                  />
+                </div>
+
+                <div
+                  style="display: flex; flex-direction: row; gap: 0.5rem; align-items: center; margin: 1rem 0;"
+                >
+                  <Checkbox id="conf" name="conf" bind:checked={conf} />
+                  <input name="conf" type="hidden" bind:value={conf} />
+                  <Label for="conf">I have already ordered pine straw bales from Troop 370.</Label>
+                </div>
+              </div>
+              <Dialog.Footer>
+                <Button type="submit">Proceed to checkout</Button>
+              </Dialog.Footer>
+            </form>
+          </Dialog.Content>
+        </Dialog.Root>
       </CardFooter>
     </Card>
-  </form>
+  </div>
 
   <div style="display: flex; flex-direction: column; gap: 1rem;">
     <Card>

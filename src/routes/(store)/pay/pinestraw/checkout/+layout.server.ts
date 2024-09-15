@@ -34,6 +34,10 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   const balesQuantity = parseInt(
     locals.session.data['store.pinestraw.checkout.bale_quantity'] || '0'
   );
+  const spreadQuantity = parseInt(
+    locals.session.data['store.pinestraw.checkout.spread_quantity'] || '0'
+  );
+  const isOnlySpreading = spreadQuantity > 0 && balesQuantity === 0;
   const isPickup =
     locals.session.data['store.pinestraw.checkout.shipping_method'] === '12892-1567962734210';
 
@@ -126,9 +130,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
             price: products.spread.price,
             weight: products.spread.weight,
             sku: products.spread.sku,
-            quantity: parseInt(
-              locals.session.data['store.pinestraw.checkout.spread_quantity'] || '0'
-            ),
+            quantity: spreadQuantity,
             name: products.spread.name,
             selectedOptions: [
               {
@@ -243,6 +245,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     PAYPAL_PERCENT_FEE,
     VENMO_PERCENT_FEE,
     hasOrderUpdateError,
+    isOnlySpreading,
     breadcrumbs: [
       { label: 'Store', href: '/pay/pinestraw' },
       { label: 'Checkout', href: '/pay/pinestraw/checkout' },

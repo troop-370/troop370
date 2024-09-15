@@ -150,22 +150,30 @@
     >
       <CardHeader>
         <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
-          Delivery on {data.dates.nextDelivery}
+          {#if data.isOnlySpreading}
+            Spreading details
+          {:else}
+            Delivery on {data.dates.nextDelivery}
+          {/if}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p>
-          You must be within our delivery area in order to choose this option. If you are not within
-          a reasonable distance of <a
-            href="https://www.google.com/maps/dir//33.8750142,-84.3581275/@33.8748033,-84.3583349,20.75z/data=!4m2!4m1!3e0"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            St. James UMC</a
-          >, please choose the pickup option.
-        </p>
+        {#if !data.isOnlySpreading}
+          <p>
+            You must be within our delivery area in order to choose this option. If you are not
+            within a reasonable distance of <a
+              href="https://www.google.com/maps/dir//33.8750142,-84.3581275/@33.8748033,-84.3583349,20.75z/data=!4m2!4m1!3e0"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              St. James UMC</a
+            >, please choose the pickup option.
+          </p>
+        {/if}
 
-        <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">Contact information</CardTitle>
+        <CardTitle style="margin: {data.isOnlySpreading ? 0 : 1.5}rem 0 0.5rem 0;" tag="h2">
+          Contact information
+        </CardTitle>
 
         <div class="input">
           <Label for="name">First and last name</Label>
@@ -177,8 +185,18 @@
           <Input id="phone" name="phone" type="tel" bind:value={phone} />
         </div>
 
+        <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
+          {#if isBuyingSpreading && !data.isOnlySpreading}
+            Delivery and spreading address
+          {:else if data.isOnlySpreading}
+            Spreading address
+          {:else}
+            Delivery address
+          {/if}
+        </CardTitle>
+
         <div class="input">
-          <Label for="street-address">Address</Label>
+          <Label for="street-address">Street address</Label>
           <Input id="street-address" name="street_address" type="text" bind:value={streetAddress} />
         </div>
 
@@ -202,33 +220,37 @@
         </div>
 
         <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
-          {#if isBuyingSpreading}
+          {#if isBuyingSpreading && !data.isOnlySpreading}
             Delivery and spreading details
+          {:else if data.isOnlySpreading}
+            Spreading details
           {:else}
             Delivery details
           {/if}
         </CardTitle>
 
-        <div class="input">
-          <Label for="deliver-location">
-            Where in your yard should we stack the pine straw
-            {#if isBuyingSpreading}
-              bales prior to spreading?
-            {:else}
-              bales?
-            {/if}
-          </Label>
-          <Input
-            id="deliver-location"
-            name="deliver_location"
-            type="text"
-            bind:value={deliverLocation}
-          />
-        </div>
+        {#if !data.isOnlySpreading}
+          <div class="input">
+            <Label for="deliver-location">
+              Where in your yard should we stack the pine straw
+              {#if isBuyingSpreading}
+                bales prior to spreading?
+              {:else}
+                bales?
+              {/if}
+            </Label>
+            <Input
+              id="deliver-location"
+              name="deliver_location"
+              type="text"
+              bind:value={deliverLocation}
+            />
+          </div>
+        {/if}
 
         {#if isBuyingSpreading}
           <div class="input">
-            <Label for="spread-location">Where should the pine straw be spread?</Label>
+            <Label for="spread-location">Where in your yard should the pine straw be spread?</Label>
             <Input
               id="spread-location"
               name="spread_location"
@@ -263,7 +285,7 @@
               !postalCode ||
               !name ||
               !phone ||
-              !deliverLocation ||
+              (!data.isOnlySpreading && !deliverLocation) ||
               (isBuyingSpreading && !spreadLocation))}
         >
           Continue
