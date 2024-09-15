@@ -93,6 +93,16 @@
     accent-color: hsl(var(--primary) / var(--tw-text-opacity));
   }
 
+  :global([data-has-touchscreen='true'] #content div[role='radiogroup']) {
+    gap: 0rem;
+  }
+
+  :global([data-has-touchscreen='true'] #content div[role='radiogroup'] label) {
+    line-height: 3rem;
+    padding-left: 0.5rem;
+    width: 100%;
+  }
+
   #content :global(select) {
     align-items: center;
     background: hsl(var(--background) / var(--tw-bg-opacity)) none;

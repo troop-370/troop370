@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { Header } from '$lib/components/ui/header';
   import NProgress from 'nprogress';
@@ -25,9 +26,11 @@
   afterNavigate(() => {
     NProgress.done();
   });
+
+  const hasTouchscreen = browser && 'ontouchstart' in document.documentElement;
 </script>
 
-<div class="frame">
+<div class="frame" data-has-touchscreen={hasTouchscreen}>
   <Header navigation={data.navConfig} />
   <div class="content">
     <slot></slot>
