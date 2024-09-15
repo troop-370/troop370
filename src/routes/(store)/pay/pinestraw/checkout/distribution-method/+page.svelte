@@ -55,6 +55,9 @@
       </div>
     </CardContent>
     <CardFooter style="display: flex; justify-content: space-between;">
+      <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
+        Back
+      </Button>
       <Button type="submit" disabled={browser && !shippingMethod}>Continue</Button>
     </CardFooter>
   </Card>

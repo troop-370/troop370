@@ -126,6 +126,9 @@
         </div>
       </CardContent>
       <CardFooter style="display: flex; justify-content: space-between;">
+        <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
+          Back
+        </Button>
         <Button type="submit" disabled={browser && (!conf1 || !conf2 || !conf3 || !name || !phone)}>
           Continue
         </Button>
@@ -248,6 +251,9 @@
         </div>
       </CardContent>
       <CardFooter style="display: flex; justify-content: space-between;">
+        <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
+          Back
+        </Button>
         <Button
           type="submit"
           disabled={browser &&
