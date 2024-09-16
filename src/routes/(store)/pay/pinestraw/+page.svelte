@@ -194,22 +194,22 @@
                   <SelectValue placeholder="Select payment method" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cash">
-                    <div class="select-item">
-                      <Landmark class="mr-2 h-4 w-4" />
-                      Check
-                    </div>
-                  </SelectItem>
                   <SelectItem value="paypal">
                     <div class="select-item">
                       <CreditCard class="mr-2 h-4 w-4" />
-                      Credit Card (+3.5%)
+                      PayPal (+3.5%)
                     </div>
                   </SelectItem>
                   <SelectItem value="venmo">
                     <div class="select-item">
                       <Coins class="mr-2 h-4 w-4" />
                       Venmo (+1.9%)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="cash">
+                    <div class="select-item">
+                      <Landmark class="mr-2 h-4 w-4" />
+                      Check
                     </div>
                   </SelectItem>
                 </SelectContent>
