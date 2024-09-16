@@ -74,77 +74,73 @@
     };
   }}
 >
-  <Card>
-    <CardHeader>
-      <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
-        Pay with {data.paymentMethod.checkoutTitle}
-      </CardTitle>
-    </CardHeader>
-    <CardContent>
-      {#if instructions}
-        <section>
-          <CardTitle tag="h2">Payment instructions</CardTitle>
-          {@html instructions}
-        </section>
-      {/if}
-      {#if isVenmo}
-        <PayWithVenmo {amount} {orderId} bind:venmoLinkUsed />
-        <p>
-          <strong>Important:</strong> Please make sure you complete the Venmo payment before submitting
-          your order.
-        </p>
-      {/if}
-
+  <CardHeader>
+    <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
+      Pay with {data.paymentMethod.checkoutTitle}
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    {#if instructions}
       <section>
-        <CardTitle tag="h2" style="margin-bottom: 0.5rem;">Billing details</CardTitle>
-
-        <div class="input">
-          <Label for="name">First and last name</Label>
-          <Input id="name" name="name" bind:value={name} />
-        </div>
-
-        <div class="input">
-          <Label for="phone">Phone number</Label>
-          <Input id="phone" name="phone" type="tel" bind:value={phone} />
-        </div>
-
-        <div class="input">
-          <Label for="street-address">Address</Label>
-          <Input id="street-address" name="street_address" type="text" bind:value={streetAddress} />
-        </div>
-
-        <div class="input">
-          <Label for="city">City</Label>
-          <Input id="city" name="city" type="text" bind:value={city} />
-        </div>
-
-        <div class="input">
-          <Label for="postal-code">ZIP or ZIP+4</Label>
-          <Input id="postal-code" name="postal_code" type="text" bind:value={postalCode} />
-        </div>
-
-        <div class="input">
-          <Label for="state">State</Label>
-          <select id="state" name="state" bind:value={state} autocomplete="address-level1">
-            {#each usStatesAndTerritories.sort( (a, b) => (a === 'Georgia (GA)' ? -1 : 0) ) as usState}
-              <option value={usState.slice(-3, -1)}>{usState.slice(0, -5)}</option>
-            {/each}
-          </select>
-        </div>
+        <CardTitle tag="h2">Payment instructions</CardTitle>
+        {@html instructions}
       </section>
-    </CardContent>
-    <CardFooter style="display: flex; justify-content: space-between;">
-      <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
-        Back
-      </Button>
-      <Button
-        type="submit"
-        disabled={(isVenmo && !venmoLinkUsed) || !streetAddress || !city || !postalCode}
-      >
-        Submit order
-      </Button>
-    </CardFooter>
-  </Card>
+    {/if}
+    {#if isVenmo}
+      <PayWithVenmo {amount} {orderId} bind:venmoLinkUsed />
+      <p>
+        <strong>Important:</strong> Please make sure you complete the Venmo payment before submitting
+        your order.
+      </p>
+    {/if}
+
+    <section>
+      <CardTitle tag="h2" style="margin-bottom: 0.5rem;">Billing details</CardTitle>
+
+      <div class="input">
+        <Label for="name">First and last name</Label>
+        <Input id="name" name="name" bind:value={name} />
+      </div>
+
+      <div class="input">
+        <Label for="phone">Phone number</Label>
+        <Input id="phone" name="phone" type="tel" bind:value={phone} />
+      </div>
+
+      <div class="input">
+        <Label for="street-address">Address</Label>
+        <Input id="street-address" name="street_address" type="text" bind:value={streetAddress} />
+      </div>
+
+      <div class="input">
+        <Label for="city">City</Label>
+        <Input id="city" name="city" type="text" bind:value={city} />
+      </div>
+
+      <div class="input">
+        <Label for="postal-code">ZIP or ZIP+4</Label>
+        <Input id="postal-code" name="postal_code" type="text" bind:value={postalCode} />
+      </div>
+
+      <div class="input">
+        <Label for="state">State</Label>
+        <select id="state" name="state" bind:value={state} autocomplete="address-level1">
+          {#each usStatesAndTerritories.sort((a, b) => (a === 'Georgia (GA)' ? -1 : 0)) as usState}
+            <option value={usState.slice(-3, -1)}>{usState.slice(0, -5)}</option>
+          {/each}
+        </select>
+      </div>
+    </section>
+  </CardContent>
+  <CardFooter style="display: flex; justify-content: space-between;">
+    <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>Back</Button>
+    <Button
+      type="submit"
+      disabled={(isVenmo && !venmoLinkUsed) || !streetAddress || !city || !postalCode}
+    >
+      Submit order
+    </Button>
+  </CardFooter>
 </form>
 
 <style>

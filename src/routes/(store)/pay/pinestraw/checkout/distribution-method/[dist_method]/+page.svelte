@@ -39,255 +39,253 @@
     '';
 </script>
 
-<Card>
-  {#if data.distributionMethod.isPickup}
-    <form
-      method="POST"
-      action="?/pickup"
-      use:enhance={() => {
-        return async ({ result }) => {
-          if (result.type === 'redirect') {
-            goto(result.location);
-          } else {
-            await applyAction(result);
-          }
-        };
-      }}
-    >
-      <CardHeader>
-        <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
-          Pickup on {data.dates.nextDelivery}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardTitle tag="h2">Confirmation</CardTitle>
+{#if data.distributionMethod.isPickup}
+  <form
+    method="POST"
+    action="?/pickup"
+    use:enhance={() => {
+      return async ({ result }) => {
+        if (result.type === 'redirect') {
+          goto(result.location);
+        } else {
+          await applyAction(result);
+        }
+      };
+    }}
+  >
+    <CardHeader>
+      <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
+        Pickup on {data.dates.nextDelivery}
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      <CardTitle tag="h2">Confirmation</CardTitle>
 
+      <p>
+        Pickup will be between 9:00 AM and 12:00 PM on {data.dates.nextDelivery} at St. James UMC (Peachtree-Dunwood
+        Road parking lot).
+        <br />
+        <a
+          href="https://www.google.com/maps/dir//33.8750142,-84.3581275/@33.8748033,-84.3583349,20.75z/data=!4m2!4m1!3e0"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View directions on map
+        </a>
+      </p>
+
+      <p>
+        You must bring a vehicle that can accommodate the number of bales you ordered. Bring a copy
+        of your order confirmation or receipt.
+      </p>
+
+      <div class="checkbox-group">
+        <Label>
+          Do you confirm that you or your representative can pick up your ordered bales at the
+          designated time and address?
+        </Label>
+        <div class="checkbox">
+          <Checkbox id="conf1" name="conf1" bind:checked={conf1} />
+          <input name="conf1" bind:value={conf1} type="hidden" />
+          <Label for="conf1">
+            Yes, I or my representative will be able to pick up my order at the designated time and
+            address.
+          </Label>
+        </div>
+        <div class="checkbox">
+          <Checkbox id="conf2" name="conf2" bind:checked={conf2} />
+          <input name="conf2" bind:value={conf2} type="hidden" />
+          <Label for="conf2">
+            I or my representative will bring a vehicle that can accommodate the number of bales I
+            ordered.
+          </Label>
+        </div>
+        <div class="checkbox">
+          <Checkbox id="conf3" name="conf3" bind:checked={conf3} />
+          <input name="conf3" bind:value={conf3} type="hidden" />
+          <Label for="conf3">
+            I or my representative will bring a copy of the order confirmation or receipt.
+          </Label>
+        </div>
+      </div>
+
+      <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">Contact information</CardTitle>
+
+      <div class="input">
+        <Label for="name">First and last name</Label>
+        <Input id="name" name="name" bind:value={name} />
+      </div>
+
+      <div class="input">
+        <Label for="phone">Phone number</Label>
+        <Input id="phone" name="phone" type="tel" bind:value={phone} />
+      </div>
+    </CardContent>
+    <CardFooter style="display: flex; justify-content: space-between;">
+      <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
+        Back
+      </Button>
+      <Button type="submit" disabled={browser && (!conf1 || !conf2 || !conf3 || !name || !phone)}>
+        Continue
+      </Button>
+    </CardFooter>
+  </form>
+{:else}
+  <form
+    method="POST"
+    action="?/delivery"
+    use:enhance={({ formElement, formData, action, cancel }) => {
+      return async ({ result }) => {
+        if (result.type === 'redirect') {
+          goto(result.location);
+        } else {
+          await applyAction(result);
+        }
+      };
+    }}
+  >
+    <CardHeader>
+      <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
+        {#if data.isOnlySpreading}
+          Spreading details
+        {:else}
+          Delivery on {data.dates.nextDelivery}
+        {/if}
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      {#if !data.isOnlySpreading}
         <p>
-          Pickup will be between 9:00 AM and 12:00 PM on {data.dates.nextDelivery} at St. James UMC (Peachtree-Dunwood
-          Road parking lot).
-          <br />
-          <a
+          You must be within our delivery area in order to choose this option. If you are not within
+          a reasonable distance of <a
             href="https://www.google.com/maps/dir//33.8750142,-84.3581275/@33.8748033,-84.3583349,20.75z/data=!4m2!4m1!3e0"
             target="_blank"
             rel="noopener noreferrer"
           >
-            View directions on map
-          </a>
+            St. James UMC</a
+          >, please choose the pickup option.
         </p>
+      {/if}
 
-        <p>
-          You must bring a vehicle that can accommodate the number of bales you ordered. Bring a
-          copy of your order confirmation or receipt.
-        </p>
+      <CardTitle style="margin: {data.isOnlySpreading ? 0 : 1.5}rem 0 0.5rem 0;" tag="h2">
+        Contact information
+      </CardTitle>
 
-        <div class="checkbox-group">
-          <Label>
-            Do you confirm that you or your representative can pick up your ordered bales at the
-            designated time and address?
-          </Label>
-          <div class="checkbox">
-            <Checkbox id="conf1" name="conf1" bind:checked={conf1} />
-            <input name="conf1" bind:value={conf1} type="hidden" />
-            <Label for="conf1">
-              Yes, I or my representative will be able to pick up my order at the designated time
-              and address.
-            </Label>
-          </div>
-          <div class="checkbox">
-            <Checkbox id="conf2" name="conf2" bind:checked={conf2} />
-            <input name="conf2" bind:value={conf2} type="hidden" />
-            <Label for="conf2">
-              I or my representative will bring a vehicle that can accommodate the number of bales I
-              ordered.
-            </Label>
-          </div>
-          <div class="checkbox">
-            <Checkbox id="conf3" name="conf3" bind:checked={conf3} />
-            <input name="conf3" bind:value={conf3} type="hidden" />
-            <Label for="conf3">
-              I or my representative will bring a copy of the order confirmation or receipt.
-            </Label>
-          </div>
-        </div>
+      <div class="input">
+        <Label for="name">First and last name</Label>
+        <Input id="name" name="name" bind:value={name} />
+      </div>
 
-        <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">Contact information</CardTitle>
+      <div class="input">
+        <Label for="phone">Phone number</Label>
+        <Input id="phone" name="phone" type="tel" bind:value={phone} />
+      </div>
 
-        <div class="input">
-          <Label for="name">First and last name</Label>
-          <Input id="name" name="name" bind:value={name} />
-        </div>
-
-        <div class="input">
-          <Label for="phone">Phone number</Label>
-          <Input id="phone" name="phone" type="tel" bind:value={phone} />
-        </div>
-      </CardContent>
-      <CardFooter style="display: flex; justify-content: space-between;">
-        <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
-          Back
-        </Button>
-        <Button type="submit" disabled={browser && (!conf1 || !conf2 || !conf3 || !name || !phone)}>
-          Continue
-        </Button>
-      </CardFooter>
-    </form>
-  {:else}
-    <form
-      method="POST"
-      action="?/delivery"
-      use:enhance={({ formElement, formData, action, cancel }) => {
-        return async ({ result }) => {
-          if (result.type === 'redirect') {
-            goto(result.location);
-          } else {
-            await applyAction(result);
-          }
-        };
-      }}
-    >
-      <CardHeader>
-        <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">
-          {#if data.isOnlySpreading}
-            Spreading details
-          {:else}
-            Delivery on {data.dates.nextDelivery}
-          {/if}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {#if !data.isOnlySpreading}
-          <p>
-            You must be within our delivery area in order to choose this option. If you are not
-            within a reasonable distance of <a
-              href="https://www.google.com/maps/dir//33.8750142,-84.3581275/@33.8748033,-84.3583349,20.75z/data=!4m2!4m1!3e0"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              St. James UMC</a
-            >, please choose the pickup option.
-          </p>
+      <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
+        {#if data.hasSpreading && !data.isOnlySpreading}
+          Delivery and spreading address
+        {:else if data.isOnlySpreading}
+          Spreading address
+        {:else}
+          Delivery address
         {/if}
+      </CardTitle>
 
-        <CardTitle style="margin: {data.isOnlySpreading ? 0 : 1.5}rem 0 0.5rem 0;" tag="h2">
-          Contact information
-        </CardTitle>
+      <div class="input">
+        <Label for="street-address">Street address</Label>
+        <Input id="street-address" name="street_address" type="text" bind:value={streetAddress} />
+      </div>
 
-        <div class="input">
-          <Label for="name">First and last name</Label>
-          <Input id="name" name="name" bind:value={name} />
-        </div>
+      <div class="input">
+        <Label for="city">City</Label>
+        <Input id="city" name="city" type="text" bind:value={city} />
+      </div>
 
-        <div class="input">
-          <Label for="phone">Phone number</Label>
-          <Input id="phone" name="phone" type="tel" bind:value={phone} />
-        </div>
+      <div class="input">
+        <Label for="state">State</Label>
+        <select id="state" name="state" bind:value={state} autocomplete="address-level1">
+          {#each usStatesAndTerritories.sort((a, b) => (a === 'Georgia (GA)' ? -1 : 0)) as usState}
+            <option value={usState.slice(-3, -1)}>{usState.slice(0, -5)}</option>
+          {/each}
+        </select>
+      </div>
 
-        <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
-          {#if data.hasSpreading && !data.isOnlySpreading}
-            Delivery and spreading address
-          {:else if data.isOnlySpreading}
-            Spreading address
-          {:else}
-            Delivery address
-          {/if}
-        </CardTitle>
+      <div class="input">
+        <Label for="postal-code">ZIP or ZIP+4</Label>
+        <Input id="postal-code" name="postal_code" type="text" bind:value={postalCode} />
+      </div>
 
-        <div class="input">
-          <Label for="street-address">Street address</Label>
-          <Input id="street-address" name="street_address" type="text" bind:value={streetAddress} />
-        </div>
-
-        <div class="input">
-          <Label for="city">City</Label>
-          <Input id="city" name="city" type="text" bind:value={city} />
-        </div>
-
-        <div class="input">
-          <Label for="state">State</Label>
-          <select id="state" name="state" bind:value={state} autocomplete="address-level1">
-            {#each usStatesAndTerritories.sort( (a, b) => (a === 'Georgia (GA)' ? -1 : 0) ) as usState}
-              <option value={usState.slice(-3, -1)}>{usState.slice(0, -5)}</option>
-            {/each}
-          </select>
-        </div>
-
-        <div class="input">
-          <Label for="postal-code">ZIP or ZIP+4</Label>
-          <Input id="postal-code" name="postal_code" type="text" bind:value={postalCode} />
-        </div>
-
-        <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
-          {#if data.hasSpreading && !data.isOnlySpreading}
-            Delivery and spreading details
-          {:else if data.isOnlySpreading}
-            Spreading details
-          {:else}
-            Delivery details
-          {/if}
-        </CardTitle>
-
-        {#if !data.isOnlySpreading}
-          <div class="input">
-            <Label for="deliver-location">
-              Where in your yard should we stack the pine straw
-              {#if data.hasSpreading}
-                bales prior to spreading?
-              {:else}
-                bales?
-              {/if}
-            </Label>
-            <Input
-              id="deliver-location"
-              name="deliver_location"
-              type="text"
-              bind:value={deliverLocation}
-            />
-          </div>
+      <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
+        {#if data.hasSpreading && !data.isOnlySpreading}
+          Delivery and spreading details
+        {:else if data.isOnlySpreading}
+          Spreading details
+        {:else}
+          Delivery details
         {/if}
+      </CardTitle>
 
-        {#if data.hasSpreading}
-          <div class="input">
-            <Label for="spread-location">Where in your yard should the pine straw be spread?</Label>
-            <Input
-              id="spread-location"
-              name="spread_location"
-              type="text"
-              bind:value={spreadLocation}
-            />
-          </div>
-        {/if}
-
+      {#if !data.isOnlySpreading}
         <div class="input">
-          <Label for="special_instructions">
-            Is there anything else we should know? (e.g., gate code) (optional)
+          <Label for="deliver-location">
+            Where in your yard should we stack the pine straw
+            {#if data.hasSpreading}
+              bales prior to spreading?
+            {:else}
+              bales?
+            {/if}
           </Label>
           <Input
-            id="special_instructions"
-            name="special_instructions"
+            id="deliver-location"
+            name="deliver_location"
             type="text"
-            bind:value={specialInstructions}
+            bind:value={deliverLocation}
           />
         </div>
-      </CardContent>
-      <CardFooter style="display: flex; justify-content: space-between;">
-        <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
-          Back
-        </Button>
-        <Button
-          type="submit"
-          disabled={browser &&
-            (!streetAddress ||
-              !city ||
-              !state ||
-              !postalCode ||
-              !name ||
-              !phone ||
-              (!data.isOnlySpreading && !deliverLocation) ||
-              (data.hasSpreading && !spreadLocation))}
-        >
-          Continue
-        </Button>
-      </CardFooter>
-    </form>
-  {/if}
-</Card>
+      {/if}
+
+      {#if data.hasSpreading}
+        <div class="input">
+          <Label for="spread-location">Where in your yard should the pine straw be spread?</Label>
+          <Input
+            id="spread-location"
+            name="spread_location"
+            type="text"
+            bind:value={spreadLocation}
+          />
+        </div>
+      {/if}
+
+      <div class="input">
+        <Label for="special_instructions">
+          Is there anything else we should know? (e.g., gate code) (optional)
+        </Label>
+        <Input
+          id="special_instructions"
+          name="special_instructions"
+          type="text"
+          bind:value={specialInstructions}
+        />
+      </div>
+    </CardContent>
+    <CardFooter style="display: flex; justify-content: space-between;">
+      <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
+        Back
+      </Button>
+      <Button
+        type="submit"
+        disabled={browser &&
+          (!streetAddress ||
+            !city ||
+            !state ||
+            !postalCode ||
+            !name ||
+            !phone ||
+            (!data.isOnlySpreading && !deliverLocation) ||
+            (data.hasSpreading && !spreadLocation))}
+      >
+        Continue
+      </Button>
+    </CardFooter>
+  </form>
+{/if}

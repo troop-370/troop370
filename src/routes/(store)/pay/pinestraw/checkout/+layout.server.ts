@@ -37,7 +37,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   const spreadQuantity = parseInt(
     locals.session.data['store.pinestraw.checkout.spread_quantity'] || '0'
   );
-  const hasSpreading = spreadQuantity > 0 ;
+  const hasSpreading = spreadQuantity > 0;
   const isOnlySpreading = hasSpreading && balesQuantity === 0;
   const isPickup =
     locals.session.data['store.pinestraw.checkout.shipping_method'] === '12892-1567962734210';
@@ -252,5 +252,6 @@ export const load = (async ({ fetch, parent, locals, url }) => {
       { label: 'Store', href: '/pay/pinestraw' },
       { label: 'Checkout', href: '/pay/pinestraw/checkout' },
     ],
+    pathname: url.pathname,
   };
 }) satisfies LayoutServerLoad;

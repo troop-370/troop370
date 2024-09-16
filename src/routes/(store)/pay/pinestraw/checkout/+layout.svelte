@@ -3,17 +3,58 @@
   import { page } from '$app/stores';
   import { Breadcrumbs } from '$lib/components/ui/breadcrumb';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-  import { error } from '@sveltejs/kit';
+  import { quartIn, quartOut } from 'svelte/easing';
 
   export let data;
 
-  const balesQuantity = parseInt(data.session['store.pinestraw.checkout.bale_quantity'] || '0');
-  const spreadQuantity = parseInt(data.session['store.pinestraw.checkout.spread_quantity'] || '0');
+  let oldCardHeight = 0;
+  let cardHeight = 0;
 
-  const balesPrice = data.products?.bale?.price || 0;
-  const spreadPrice = data.products?.spread?.price || 0;
+  const prefersReducedMotion = browser
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
 
-  // $: browser && console.log('checkout', data.orderDetails);
+  function tin(node: HTMLElement) {
+    const targetOpacity = +getComputedStyle(node).opacity;
+
+    const _oldCardHeight = oldCardHeight;
+    const _cardHeightToAnimate = cardHeight - _oldCardHeight;
+    oldCardHeight = cardHeight;
+
+    return {
+      duration: prefersReducedMotion ? 0 : 300,
+      delay: prefersReducedMotion ? 0 : 150,
+      css: (t: number) => {
+        const eased = quartOut(t);
+
+        return `
+					height: calc(${eased * _cardHeightToAnimate}px + ${_oldCardHeight}px);
+          opacity: ${eased * targetOpacity};
+          overflow: hidden;
+          grid-column: 1 / 2;
+          grid-row: 1 / 2;
+        `;
+      },
+    };
+  }
+
+  function out(node: HTMLElement) {
+    if (oldCardHeight === 0) {
+      oldCardHeight = node.clientHeight;
+    }
+
+    return {
+      duration: prefersReducedMotion ? 0 : 150,
+      css: (t: number) => {
+        const eased = quartIn(t);
+        return `
+          opacity: ${eased};
+          grid-column: 1 / 2;
+          grid-row: 1 / 2;
+        `;
+      },
+    };
+  }
 </script>
 
 <div class="breadcrumbs">
@@ -245,7 +286,15 @@
       </aside>
     {/if}
 
-    <slot></slot>
+    <Card>
+      <div class="main-checkout-card-wrapper">
+        {#key data.pathname}
+          <div out:out in:tin bind:clientHeight={cardHeight}>
+            <slot></slot>
+          </div>
+        {/key}
+      </div>
+    </Card>
   </div>
 </div>
 
@@ -269,6 +318,16 @@
       order: -1;
     }
   }
+
+  .main-checkout-card-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+  /* .main-checkout-card-wrapper > :global(*) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  } */
 
   article.receipt {
     border: 1px solid gray;

@@ -27,34 +27,30 @@
     };
   }}
 >
-  <Card>
-    <CardHeader>
-      <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">Payment method</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div class="input">
-        <Label>Choose a payment method</Label>
-        <RadioGroup.Root>
-          {#each data.availablePaymentMethods as method}
-            <div class="radio-group">
-              <input
-                type="radio"
-                name="payment_method"
-                id={`option-${method.id}`}
-                value={method.id}
-                bind:group={paymentMethod}
-              />
-              <Label for={`option-${method.id}`}>{method.checkoutTitleLong}</Label>
-            </div>
-          {/each}
-        </RadioGroup.Root>
-      </div>
-    </CardContent>
-    <CardFooter style="display: flex; justify-content: space-between;">
-      <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>
-        Back
-      </Button>
-      <Button type="submit" disabled={browser && !paymentMethod}>Continue</Button>
-    </CardFooter>
-  </Card>
+  <CardHeader>
+    <CardTitle style="font-size: 1.5rem; line-height: 2rem;" tag="h1">Payment method</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div class="input">
+      <Label>Choose a payment method</Label>
+      <RadioGroup.Root>
+        {#each data.availablePaymentMethods as method}
+          <div class="radio-group">
+            <input
+              type="radio"
+              name="payment_method"
+              id={`option-${method.id}`}
+              value={method.id}
+              bind:group={paymentMethod}
+            />
+            <Label for={`option-${method.id}`}>{method.checkoutTitleLong}</Label>
+          </div>
+        {/each}
+      </RadioGroup.Root>
+    </div>
+  </CardContent>
+  <CardFooter style="display: flex; justify-content: space-between;">
+    <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>Back</Button>
+    <Button type="submit" disabled={browser && !paymentMethod}>Continue</Button>
+  </CardFooter>
 </form>
