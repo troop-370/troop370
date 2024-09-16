@@ -37,7 +37,8 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   const spreadQuantity = parseInt(
     locals.session.data['store.pinestraw.checkout.spread_quantity'] || '0'
   );
-  const isOnlySpreading = spreadQuantity > 0 && balesQuantity === 0;
+  const hasSpreading = spreadQuantity > 0 ;
+  const isOnlySpreading = hasSpreading && balesQuantity === 0;
   const isPickup =
     locals.session.data['store.pinestraw.checkout.shipping_method'] === '12892-1567962734210';
 
@@ -245,6 +246,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     PAYPAL_PERCENT_FEE,
     VENMO_PERCENT_FEE,
     hasOrderUpdateError,
+    hasSpreading,
     isOnlySpreading,
     breadcrumbs: [
       { label: 'Store', href: '/pay/pinestraw' },

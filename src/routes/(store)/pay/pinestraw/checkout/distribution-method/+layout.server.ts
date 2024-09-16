@@ -2,15 +2,16 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ parent, url, locals }) => {
-  const { breadcrumbs, isOnlySpreading, orderDetails } = await parent();
+  const { breadcrumbs, hasSpreading, orderDetails } = await parent();
 
-  // if only ordering spreading, direct to the delivery page
+  // if ordering spreading, direct to the delivery page
   // because it has the question about where to spread
+  // and it is not possible to pick up spreading service
   const deliveryMethodId = orderDetails.availableShippingOptions?.find(
     (detail) => detail.shippingMethodName === 'Delivery'
   )?.shippingMethodId;
   if (
-    isOnlySpreading &&
+    hasSpreading &&
     deliveryMethodId &&
     url.pathname === '/pay/pinestraw/checkout/distribution-method'
   ) {
@@ -25,7 +26,7 @@ export const load = (async ({ parent, url, locals }) => {
   }
 
   return {
-    breadcrumbs: isOnlySpreading
+    breadcrumbs: hasSpreading
       ? breadcrumbs
       : [
           ...breadcrumbs,

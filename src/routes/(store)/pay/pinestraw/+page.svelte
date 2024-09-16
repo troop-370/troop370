@@ -35,6 +35,13 @@
   let balePrice = data.products?.bale?.price || 6.0;
   let spreadingPrice = data.products?.spread?.price || 5.0;
 
+  $: if ($pinestrawStore.spreadingOption?.value === 'yes') {
+    $pinestrawStore.deliveryOption = {
+      value: 'delivery',
+      label: 'Delivery (+$10 for orders under 30 bales)',
+    };
+  }
+
   $: price = (() => {
     const cashPrice =
       $pinestrawStore.spreadingOption?.value === 'yes' ? balePrice + spreadingPrice : balePrice;
@@ -46,10 +53,18 @@
       return cashPrice;
     }
   })();
+  $: shippingPrice = (() => {
+    const cashPrice = $pinestrawStore.quantity < 30 ? 10 : 0;
+    if ($pinestrawStore.paymentMethod?.value === 'paypal') {
+      return cashPrice * 1.035;
+    } else if ($pinestrawStore.paymentMethod?.value === 'venmo') {
+      return cashPrice * 1.019;
+    } else {
+      return cashPrice;
+    }
+  })();
   $: total =
-    ($pinestrawStore.deliveryOption?.value === 'delivery' && $pinestrawStore.quantity < 30
-      ? 10
-      : 0) +
+    ($pinestrawStore.deliveryOption?.value === 'delivery' ? shippingPrice : 0) +
     $pinestrawStore.quantity * price;
 
   let addSpreadQuantity = 1;
@@ -105,28 +120,7 @@
                 name="bale_quantity"
               />
             </div>
-            <div class="select">
-              <Label>Delivery Option</Label>
-              <Select bind:selected={$pinestrawStore.deliveryOption}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select delivery option" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pickup">
-                    <div class="select-item">
-                      <MapPin class="mr-2 h-4 w-4" />
-                      Pickup
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="delivery">
-                    <div class="select-item">
-                      <Truck class="mr-2 h-4 w-4" />
-                      Delivery (+$10 for orders under 30 bales)
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+
             <div class="select">
               <Label>Bale Spreading</Label>
               {#if $pinestrawStore.spreadingOption?.value === 'yes'}
@@ -157,6 +151,42 @@
                 </SelectContent>
               </Select>
             </div>
+
+            <div class="select">
+              <Label>Delivery Option</Label>
+              {#if $pinestrawStore.spreadingOption?.value === 'yes'}
+                <div class="delivery-force-message">
+                  <i>Delivery is required when spreading is selected.</i>
+                  <br />
+                  <span>Selected delivery option:</span>
+                  {$pinestrawStore.deliveryOption?.label}
+                </div>
+              {:else}
+                <Select
+                  bind:selected={$pinestrawStore.deliveryOption}
+                  disabled={$pinestrawStore.spreadingOption?.value === 'yes'}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select delivery option" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pickup">
+                      <div class="select-item">
+                        <MapPin class="mr-2 h-4 w-4" />
+                        Pickup
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="delivery">
+                      <div class="select-item">
+                        <Truck class="mr-2 h-4 w-4" />
+                        Delivery (+$10 for orders under 30 bales)
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              {/if}
+            </div>
+
             <div class="select">
               <Label>Payment Method</Label>
               <Select bind:selected={$pinestrawStore.paymentMethod}>
@@ -496,5 +526,16 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     font-size: 0.875rem;
+  }
+
+  .delivery-force-message {
+    font-size: 0.875rem;
+    padding-left: 0.875rem;
+    height: 40px;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+  .delivery-force-message span {
+    font-weight: 500;
   }
 </style>

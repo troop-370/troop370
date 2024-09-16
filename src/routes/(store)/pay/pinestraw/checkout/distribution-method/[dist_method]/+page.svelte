@@ -12,9 +12,6 @@
 
   export let data;
 
-  const isBuyingSpreading =
-    parseInt(data.session['store.pinestraw.checkout.spread_quantity'] || '0') > 0;
-
   let conf1 = $page.form?.data?.conf1 || data.session['store.pinestraw.checkout.conf1'] || false;
   let conf2 = $page.form?.data?.conf2 || data.session['store.pinestraw.checkout.conf2'] || false;
   let conf3 = $page.form?.data?.conf3 || data.session['store.pinestraw.checkout.conf3'] || false;
@@ -186,7 +183,7 @@
         </div>
 
         <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
-          {#if isBuyingSpreading && !data.isOnlySpreading}
+          {#if data.hasSpreading && !data.isOnlySpreading}
             Delivery and spreading address
           {:else if data.isOnlySpreading}
             Spreading address
@@ -220,7 +217,7 @@
         </div>
 
         <CardTitle style="margin: 1.5rem 0 0.5rem 0;" tag="h2">
-          {#if isBuyingSpreading && !data.isOnlySpreading}
+          {#if data.hasSpreading && !data.isOnlySpreading}
             Delivery and spreading details
           {:else if data.isOnlySpreading}
             Spreading details
@@ -233,7 +230,7 @@
           <div class="input">
             <Label for="deliver-location">
               Where in your yard should we stack the pine straw
-              {#if isBuyingSpreading}
+              {#if data.hasSpreading}
                 bales prior to spreading?
               {:else}
                 bales?
@@ -248,7 +245,7 @@
           </div>
         {/if}
 
-        {#if isBuyingSpreading}
+        {#if data.hasSpreading}
           <div class="input">
             <Label for="spread-location">Where in your yard should the pine straw be spread?</Label>
             <Input
@@ -286,7 +283,7 @@
               !name ||
               !phone ||
               (!data.isOnlySpreading && !deliverLocation) ||
-              (isBuyingSpreading && !spreadLocation))}
+              (data.hasSpreading && !spreadLocation))}
         >
           Continue
         </Button>
