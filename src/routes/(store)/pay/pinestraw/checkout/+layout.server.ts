@@ -1,9 +1,8 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
-import { calculateOrderSchema, storeProfileSchema } from '$lib/schemas/ecwidSchemas';
+import { calculateOrderSchema } from '$lib/schemas/ecwidSchemas';
 import { redirect } from '@sveltejs/kit';
-import { fromError } from 'zod-validation-error';
 import type { LayoutServerLoad } from './$types';
-import { getOrder } from './getOrder';
+import { getStoreProfile } from './getStoreProfile';
 import { updateOrder } from './updateOrder';
 
 export const load = (async ({ fetch, parent, locals, url }) => {
@@ -12,26 +11,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     throw new Error('Products not found');
   }
 
-  const storeProfile = await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/profile`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.errorMessage) {
-        throw new Error(json.errorMessage);
-      }
-      return storeProfileSchema.parse(json);
-    })
-    .catch((error) => {
-      const validationError = fromError(error);
-      console.error('Failed to fetch store profile', validationError);
-      throw validationError;
-    });
+  const storeProfile = await getStoreProfile();
 
   const balesQuantity = parseInt(
     locals.session.data['store.pinestraw.checkout.bale_quantity'] || '0'

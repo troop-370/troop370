@@ -1,5 +1,5 @@
 import { PAYPAL_BASE_URL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } from '$env/static/private';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { getOrder } from './routes/(store)/pay/pinestraw/checkout/getOrder';
 import { updateOrder } from './routes/(store)/pay/pinestraw/checkout/updateOrder';
 
@@ -135,6 +135,33 @@ export default (async function ({ event, resolve }) {
     try {
       const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
 
+      // Three cases to handle:
+      //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+      //   (2) Other non-recoverable errors -> Show a failure message
+      //   (3) Successful transaction -> Show confirmation or thank you message
+      const errorDetail = jsonResponse?.details?.[0];
+      if (errorDetail) {
+        return new Response(JSON.stringify(jsonResponse), {
+          status: httpStatusCode,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+
+      // there should be a purchase unit with the amount for the order
+      if (!jsonResponse.purchase_units) {
+        return new Response(
+          JSON.stringify({ details: [{ description: 'There should be a purchase_unit' }] }),
+          {
+            status: 500,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+      }
+
       const update = {
         externalTransactionId: jsonResponse.id,
         paymentMessage: jsonResponse.status,
@@ -143,13 +170,26 @@ export default (async function ({ event, resolve }) {
         paymentStatus: jsonResponse.status === 'COMPLETED' ? 'PAID' : 'AWAITING_PAYMENT',
       };
 
-      await updateOrder(jsonResponse.purchase_units[0].reference_id, update);
+      return await updateOrder(jsonResponse.purchase_units[0].reference_id, update, {
+        returnUpdatedOrder: true,
+      }).then((orderDetails) => {
+        const searchParams = new URLSearchParams();
+        searchParams.set(
+          'payment_method',
+          orderDetails.paymentMethod || orderDetails.paymentModule || ''
+        );
+        searchParams.set('order_id', orderDetails.id);
+        searchParams.set('order', JSON.stringify(orderDetails));
 
-      return new Response(JSON.stringify(jsonResponse), {
-        status: httpStatusCode,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        return new Response(
+          JSON.stringify({ thanks: `/pay/pinestraw/thank-you?${searchParams}` }),
+          {
+            status: httpStatusCode,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
       });
     } catch (error) {
       console.error('Failed to capture order:', error);

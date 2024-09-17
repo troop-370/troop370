@@ -2,6 +2,7 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { CardTitle } from '$lib/components/ui/card';
+  import { error } from '@sveltejs/kit';
   import type { PageData } from './$types';
 
   export let data: PageData;
@@ -63,12 +64,13 @@
             });
 
             const orderData = await response.json();
+            console.log(orderData);
             // Three cases to handle:
             //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
             //   (2) Other non-recoverable errors -> Show a failure message
             //   (3) Successful transaction -> Show confirmation or thank you message
 
-            const errorDetail = orderData?.details?.[0];
+            const errorDetail = orderData?.details?.[0] || orderData?.error;
 
             if (errorDetail?.issue === 'INSTRUMENT_DECLINED') {
               // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
@@ -77,14 +79,12 @@
               return actions.restart();
             } else if (errorDetail) {
               // (2) Other non-recoverable errors -> Show a failure message
-              throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
-            } else if (!orderData.purchase_units) {
-              throw new Error(JSON.stringify(orderData));
+              throw new Error(
+                `${errorDetail.description || errorDetail.message} (${orderData.debug_id || orderData.type})`
+              );
             } else {
               // (3) Successful transaction -> Show confirmation or thank you message
-              // Or go to another URL:  actions.redirect('thank_you.html');
-              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-              goto(`/pay/pinestraw/thank-you?method=paypal`);
+              goto(orderData.thanks);
             }
           } catch (error) {
             console.error(error);
