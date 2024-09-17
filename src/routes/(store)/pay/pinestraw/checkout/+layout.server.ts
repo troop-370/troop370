@@ -181,12 +181,15 @@ export const load = (async ({ fetch, parent, locals, url }) => {
   // and we can handle payment data based on the orderId and
   // immediately update it in the Ecwid control panel
   const orderId = locals.session.data['store.pinestraw.checkout.orderId'];
+  const plainOrderId = orderId
+    ?.replace(storeProfile.formatsAndUnits.orderNumberPrefix || '', '')
+    .replace(storeProfile.formatsAndUnits.orderNumberSuffix || '', '');
   let hasOrderUpdateError = false;
   if (orderId) {
     // we don't want to update the payment status because it is always 'INCOMPLETE' in `orderDetails`
     const { paymentStatus, ...newOrderDetails } = orderDetails;
     // update the order details
-    await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders/${orderId}`, {
+    await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders/${plainOrderId}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
@@ -248,6 +251,8 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     hasOrderUpdateError,
     hasSpreading,
     isOnlySpreading,
+    orderId,
+    plainOrderId,
     breadcrumbs: [
       { label: 'Store', href: '/pay/pinestraw' },
       { label: 'Checkout', href: '/pay/pinestraw/checkout' },

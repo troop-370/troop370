@@ -72,10 +72,15 @@
           <div class="centered">TROOP 370 STORE</div>
           <div class="centered">Pine Straw Fundraiser</div>
           <br />
-          <div class="centered">ORDER</div>
-          <br />
           {#if data.orderDetails}
             {@const orderDetails = data.orderDetails}
+            <div class="centered">
+              ORDER
+              {#if data.orderId}
+                {data.orderId}
+              {/if}
+            </div>
+            <br />
             <table>
               <thead>
                 <tr>

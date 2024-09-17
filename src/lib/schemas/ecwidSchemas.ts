@@ -256,5 +256,11 @@ export const storeProfilePaymentSchema = z
 export const storeProfileSchema = z
   .object({
     payment: storeProfilePaymentSchema,
+    formatsAndUnits: z
+      .object({
+        orderNumberPrefix: z.string().optional(),
+        orderNumberSuffix: z.string().optional(),
+      })
+      .passthrough(),
   })
   .passthrough();

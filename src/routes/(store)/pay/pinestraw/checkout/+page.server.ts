@@ -46,7 +46,7 @@ export const actions = {
         if (json.errorCode) throw new Error(json.errorMessage || json.errorCode);
         return createOrderSchema.parse(json);
       })
-      .then((data) => data.id)
+      .then((data) => data.orderId)
       .then(async (id) => {
         await locals.session.update((session) => ({
           ...session,
