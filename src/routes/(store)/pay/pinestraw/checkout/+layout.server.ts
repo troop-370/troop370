@@ -3,6 +3,8 @@ import { calculateOrderSchema, storeProfileSchema } from '$lib/schemas/ecwidSche
 import { redirect } from '@sveltejs/kit';
 import { fromError } from 'zod-validation-error';
 import type { LayoutServerLoad } from './$types';
+import { getOrder } from './getOrder';
+import { updateOrder } from './updateOrder';
 
 export const load = (async ({ fetch, parent, locals, url }) => {
   const { products } = await parent();
@@ -185,30 +187,14 @@ export const load = (async ({ fetch, parent, locals, url }) => {
     ?.replace(storeProfile.formatsAndUnits.orderNumberPrefix || '', '')
     .replace(storeProfile.formatsAndUnits.orderNumberSuffix || '', '');
   let hasOrderUpdateError = false;
-  if (orderId) {
+  if (plainOrderId) {
     // we don't want to update the payment status because it is always 'INCOMPLETE' in `orderDetails`
     const { paymentStatus, ...newOrderDetails } = orderDetails;
     // update the order details
-    await fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders/${plainOrderId}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${ECWID_SECRET_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...orderDetails,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.errorMessage) {
-          throw new Error(data.errorMessage);
-        }
-      })
-      .catch((error) => {
-        console.error(`Error for order ${orderId}`, error);
-        hasOrderUpdateError = true;
-      });
+    await updateOrder(plainOrderId, newOrderDetails).catch((error) => {
+      console.error(`Error for order ${orderId}`, error);
+      hasOrderUpdateError = true;
+    });
   }
 
   // if the order has not been created and we are past the first step,

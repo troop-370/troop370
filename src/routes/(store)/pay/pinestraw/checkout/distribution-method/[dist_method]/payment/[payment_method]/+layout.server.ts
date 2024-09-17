@@ -7,7 +7,9 @@ export const load = (async ({ parent, params }) => {
   const paymentMethod = availablePaymentMethods.find(
     (method) => method.id === params.payment_method
   );
-  const isSupportedPaymentMethod = paymentMethod?.paymentProcessorId === 'offline';
+  const isSupportedPaymentMethod = ['offline', 'paypalStandard'].includes(
+    paymentMethod?.paymentProcessorId || ''
+  );
   if (!paymentMethod || !isSupportedPaymentMethod) {
     throw redirect(
       307,

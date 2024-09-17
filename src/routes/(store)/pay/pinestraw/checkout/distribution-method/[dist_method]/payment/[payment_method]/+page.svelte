@@ -8,6 +8,7 @@
   import { Label } from '$lib/components/ui/label';
   import { usStatesAndTerritories } from '$utils/usStatesAndTerritories';
   import type { PageData } from './$types';
+  import PayPal from './PayPal.svelte';
   import PayWithVenmo from './PayWithVenmo.svelte';
 
   export let data: PageData;
@@ -94,6 +95,10 @@
       </p>
     {/if}
 
+    {#if data.paymentMethod.paymentProcessorId === 'paypalStandard'}
+      <PayPal {data} />
+    {/if}
+
     <section>
       <CardTitle tag="h2" style="margin-bottom: 0.5rem;">Billing details</CardTitle>
 
@@ -134,12 +139,14 @@
   </CardContent>
   <CardFooter style="display: flex; justify-content: space-between;">
     <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>Back</Button>
-    <Button
-      type="submit"
-      disabled={(isVenmo && !venmoLinkUsed) || !streetAddress || !city || !postalCode}
-    >
-      Submit order
-    </Button>
+    {#if data.paymentMethod?.paymentProcessorId === 'offline'}
+      <Button
+        type="submit"
+        disabled={(isVenmo && !venmoLinkUsed) || !streetAddress || !city || !postalCode}
+      >
+        Submit order
+      </Button>
+    {/if}
   </CardFooter>
 </form>
 

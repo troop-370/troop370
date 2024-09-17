@@ -2,6 +2,7 @@ import { COOKIE_SESSION_SECRET, STRAPI_URL } from '$env/static/private';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { handleSession } from 'svelte-kit-cookie-session';
+import paypalStandardHandler from './paypalStandard.hook.server';
 
 const sessionHandler = handleSession(
   { secret: [{ id: 1, chunked: true, secret: COOKIE_SESSION_SECRET }] },
@@ -205,4 +206,4 @@ const adminProxyHandler = (async ({ event, resolve }) => {
   return resolve(event);
 }) satisfies Handle;
 
-export const handle = sequence(sessionHandler, adminProxyHandler);
+export const handle = sequence(sessionHandler, adminProxyHandler, paypalStandardHandler);
