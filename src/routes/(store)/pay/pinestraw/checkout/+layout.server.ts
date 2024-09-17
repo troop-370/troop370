@@ -173,19 +173,30 @@ export const load = (async ({ fetch, parent, locals, url }) => {
       }
     });
 
-  // await locals.session.update((session) => ({
-  //   ...session,
-  //   'store.pinestraw.checkout.orderId': undefined,
-  // }));
+  // if the order has no items, go back to the storefront
+  const orderQuantity = (orderDetails.items || []).reduce(
+    (sum, item) => sum + (item.quantity || 0),
+    0
+  );
+  if (orderQuantity === 0) {
+    redirect(303, '/pay/pinestraw');
+  }
+
+  const orderId = locals.session.data['store.pinestraw.checkout.orderId'];
+  const plainOrderId = orderId
+    ?.replace(storeProfile.formatsAndUnits.orderNumberPrefix || '', '')
+    .replace(storeProfile.formatsAndUnits.orderNumberSuffix || '', '');
+
+  // if the order has not been created and we are past the first step,
+  // redirect the customer back to the first step
+  if (!orderId && url.pathname !== '/pay/pinestraw/checkout') {
+    redirect(303, '/pay/pinestraw/checkout');
+  }
 
   // if the order has already been created, update the order details
   // so that the order is updated to Ecwid's abonded cart list
   // and we can handle payment data based on the orderId and
   // immediately update it in the Ecwid control panel
-  const orderId = locals.session.data['store.pinestraw.checkout.orderId'];
-  const plainOrderId = orderId
-    ?.replace(storeProfile.formatsAndUnits.orderNumberPrefix || '', '')
-    .replace(storeProfile.formatsAndUnits.orderNumberSuffix || '', '');
   let hasOrderUpdateError = false;
   if (plainOrderId) {
     // we don't want to update the payment status because it is always 'INCOMPLETE' in `orderDetails`
@@ -195,12 +206,6 @@ export const load = (async ({ fetch, parent, locals, url }) => {
       console.error(`Error for order ${orderId}`, error);
       hasOrderUpdateError = true;
     });
-  }
-
-  // if the order has not been created and we are past the first step,
-  // redirect the customer back to the first step
-  if (!orderId && url.pathname !== '/pay/pinestraw/checkout') {
-    redirect(303, '/pay/pinestraw/checkout');
   }
 
   // fetch(`https://app.ecwid.com/api/v3/${ECWID_STORE_ID}/orders`, {
