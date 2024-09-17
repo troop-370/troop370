@@ -46,7 +46,7 @@ export const actions = {
       'store.pinestraw.checkout.conf3': data.conf3.toString(),
     }));
 
-    redirect(303, url.pathname + '/payment');
+    redirect(303, url.pathname + '/billing-details');
   },
   delivery: async ({ request, locals, url }) => {
     const data = Object.fromEntries((await request.formData()).entries());
@@ -81,6 +81,6 @@ export const actions = {
       'store.pinestraw.checkout.special_instructions': data.special_instructions?.toString(),
     }));
 
-    redirect(303, url.pathname + '/payment');
+    redirect(303, url.pathname + '/billing-details');
   },
 } satisfies Actions;

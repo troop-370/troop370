@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { applyAction, enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
@@ -30,37 +31,6 @@
     }
     return instructions;
   })();
-
-  let name =
-    $page.form?.data?.name ||
-    data.session['store.pinestraw.checkout.billing.name'] ||
-    data.session['store.pinestraw.checkout.name'] ||
-    '';
-  let phone =
-    $page.form?.data?.phone ||
-    data.session['store.pinestraw.checkout.billing.phone'] ||
-    data.session['store.pinestraw.checkout.phone'] ||
-    '';
-  let streetAddress =
-    $page.form?.data?.street_address ||
-    data.session['store.pinestraw.checkout.billing.street_address'] ||
-    data.session['store.pinestraw.checkout.street_address'];
-  ('');
-  let city =
-    $page.form?.data?.city ||
-    data.session['store.pinestraw.checkout.billing.city'] ||
-    data.session['store.pinestraw.checkout.city'] ||
-    '';
-  let state =
-    $page.form?.data?.state ||
-    data.session['store.pinestraw.checkout.billing.state'] ||
-    data.session['store.pinestraw.checkout.state'] ||
-    '';
-  let postalCode =
-    $page.form?.data?.postal_code ||
-    data.session['store.pinestraw.checkout.billing.postal_code'] ||
-    data.session['store.pinestraw.checkout.postal_code'] ||
-    '';
 </script>
 
 <form
@@ -87,65 +57,26 @@
         {@html instructions}
       </section>
     {/if}
+
     {#if isVenmo}
-      <PayWithVenmo {amount} {orderId} bind:venmoLinkUsed />
-      <p>
-        <strong>Important:</strong> Please make sure you complete the Venmo payment before submitting
-        your order.
-      </p>
+      <section>
+        <CardTitle tag="h2" style="margin-bottom: 1rem;">Pay</CardTitle>
+        <PayWithVenmo {amount} {orderId} bind:venmoLinkUsed />
+        <p>
+          <strong>Important:</strong> Please make sure you complete the Venmo payment before submitting
+          your order.
+        </p>
+      </section>
     {/if}
 
     {#if data.paymentMethod.paymentProcessorId === 'paypalStandard'}
       <PayPal {data} />
     {/if}
-
-    <section>
-      <CardTitle tag="h2" style="margin-bottom: 0.5rem;">Billing details</CardTitle>
-
-      <div class="input">
-        <Label for="name">First and last name</Label>
-        <Input id="name" name="name" bind:value={name} />
-      </div>
-
-      <div class="input">
-        <Label for="phone">Phone number</Label>
-        <Input id="phone" name="phone" type="tel" bind:value={phone} />
-      </div>
-
-      <div class="input">
-        <Label for="street-address">Address</Label>
-        <Input id="street-address" name="street_address" type="text" bind:value={streetAddress} />
-      </div>
-
-      <div class="input">
-        <Label for="city">City</Label>
-        <Input id="city" name="city" type="text" bind:value={city} />
-      </div>
-
-      <div class="input">
-        <Label for="postal-code">ZIP or ZIP+4</Label>
-        <Input id="postal-code" name="postal_code" type="text" bind:value={postalCode} />
-      </div>
-
-      <div class="input">
-        <Label for="state">State</Label>
-        <select id="state" name="state" bind:value={state} autocomplete="address-level1">
-          {#each usStatesAndTerritories.sort((a, b) => (a === 'Georgia (GA)' ? -1 : 0)) as usState}
-            <option value={usState.slice(-3, -1)}>{usState.slice(0, -5)}</option>
-          {/each}
-        </select>
-      </div>
-    </section>
   </CardContent>
   <CardFooter style="display: flex; justify-content: space-between;">
     <Button type="button" variant="outline" href={data.breadcrumbs.slice(-2)[0].href}>Back</Button>
     {#if data.paymentMethod?.paymentProcessorId === 'offline'}
-      <Button
-        type="submit"
-        disabled={(isVenmo && !venmoLinkUsed) || !streetAddress || !city || !postalCode}
-      >
-        Submit order
-      </Button>
+      <Button type="submit" disabled={browser && isVenmo && !venmoLinkUsed}>Submit order</Button>
     {/if}
   </CardFooter>
 </form>

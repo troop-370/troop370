@@ -44,7 +44,7 @@ export const load = (async ({ parent, params, route }) => {
       ...breadcrumbs,
       {
         label: 'Payment',
-        href: `/pay/pinestraw/checkout/distribution-method/${params.dist_method}/payment`,
+        href: `/pay/pinestraw/checkout/distribution-method/${params.dist_method}/billing-details/payment`,
       },
     ],
   };

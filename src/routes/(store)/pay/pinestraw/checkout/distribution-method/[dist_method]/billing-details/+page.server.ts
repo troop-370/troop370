@@ -9,7 +9,7 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-  default: async ({ request, locals, params }) => {
+  default: async ({ request, locals, url }) => {
     const data = Object.fromEntries((await request.formData()).entries());
 
     try {
@@ -36,9 +36,6 @@ export const actions = {
       'store.pinestraw.checkout.billing.state': data.state.toString(),
     }));
 
-    redirect(
-      303,
-      `/pay/pinestraw/thank-you?payment_method=${params.payment_method}&order_id=${locals.session.data['store.pinestraw.checkout.orderId']}`
-    );
+    redirect(303, url.pathname + '/payment');
   },
 } satisfies Actions;
