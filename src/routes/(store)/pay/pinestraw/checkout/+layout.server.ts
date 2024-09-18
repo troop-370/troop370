@@ -1,5 +1,6 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
 import { calculateOrderSchema } from '$lib/schemas/ecwidSchemas';
+import { notEmpty } from '$utils';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { getStoreProfile } from './getStoreProfile';
@@ -91,52 +92,57 @@ export const load = (async ({ fetch, parent, locals, url }) => {
           },
         ],
         items: [
-          {
-            productId: products.bale.id,
-            categoryId: products.bale.categoryIds?.[0],
-            price: products.bale.price,
-            weight: products.bale.weight,
-            sku: products.bale.sku,
-            quantity: balesQuantity,
-            name: products.bale.name,
-            selectedOptions: [
-              {
-                name: 'Delivery Only: Where should the pine straw bales be placed in your yard?',
-                type: 'TEXT',
-                value: locals.session.data['store.pinestraw.checkout.deliver_location'] || '',
-              },
-            ],
-          },
-          {
-            productId: products.spread.id,
-            categoryId: products.spread.categoryIds?.[0],
-            price: products.spread.price,
-            weight: products.spread.weight,
-            sku: products.spread.sku,
-            quantity: spreadQuantity,
-            name: products.spread.name,
-            selectedOptions: [
-              {
-                name: 'Where should the pine straw be spread in your yard? (include the address when checking out)',
-                type: 'TEXT',
-                value: locals.session.data['store.pinestraw.checkout.spread_location'] || '',
-              },
-              {
-                name: 'Confirmation (REQUIRED)',
-                type: 'CHOICES',
-                value: 'I have already ordered or plan to order pine straw from this fundraiser',
-                selections: [
+          balesQuantity > 0
+            ? {
+                productId: products.bale.id,
+                categoryId: products.bale.categoryIds?.[0],
+                price: products.bale.price,
+                weight: products.bale.weight,
+                sku: products.bale.sku,
+                quantity: balesQuantity,
+                name: products.bale.name,
+                selectedOptions: [
                   {
-                    selectionModifier: 0,
-                    selectionModifierType: 'ABSOLUTE',
-                    selectionTitle:
-                      'I have already ordered or plan to order pine straw from this fundraiser',
+                    name: 'Delivery Only: Where should the pine straw bales be placed in your yard?',
+                    type: 'TEXT',
+                    value: locals.session.data['store.pinestraw.checkout.deliver_location'] || '',
                   },
                 ],
-              },
-            ],
-          },
-        ],
+              }
+            : null,
+          spreadQuantity > 0
+            ? {
+                productId: products.spread.id,
+                categoryId: products.spread.categoryIds?.[0],
+                price: products.spread.price,
+                weight: products.spread.weight,
+                sku: products.spread.sku,
+                quantity: spreadQuantity,
+                name: products.spread.name,
+                selectedOptions: [
+                  {
+                    name: 'Where should the pine straw be spread in your yard? (include the address when checking out)',
+                    type: 'TEXT',
+                    value: locals.session.data['store.pinestraw.checkout.spread_location'] || '',
+                  },
+                  {
+                    name: 'Confirmation (REQUIRED)',
+                    type: 'CHOICES',
+                    value:
+                      'I have already ordered or plan to order pine straw from this fundraiser',
+                    selections: [
+                      {
+                        selectionModifier: 0,
+                        selectionModifierType: 'ABSOLUTE',
+                        selectionTitle:
+                          'I have already ordered or plan to order pine straw from this fundraiser',
+                      },
+                    ],
+                  },
+                ],
+              }
+            : null,
+        ].filter(notEmpty),
       }),
     }
   )
@@ -146,7 +152,7 @@ export const load = (async ({ fetch, parent, locals, url }) => {
         if (data.errorMessage) {
           throw new Error(data.errorMessage);
         }
-        return calculateOrderSchema.parse(data);
+        return calculateOrderSchema.passthrough().parse(data);
       } catch {
         console.error(data);
         throw new Error(data.message || 'Failed to calculate order');
