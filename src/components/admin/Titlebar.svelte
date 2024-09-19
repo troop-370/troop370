@@ -140,7 +140,7 @@
     width: env(titlebar-area-width, 100%);
     height: env(titlebar-area-height, 33px);
     -webkit-app-region: drag;
-    app-region: drag;
+    /* app-region: drag; */
     user-select: none;
     justify-content: space-between;
     background-color: var(--titlebar-bg);
@@ -153,9 +153,9 @@
   .titlebar.browserFocused .account.tauri :global(.icon-button) {
     color: #000000;
   }
-  .titlebar.browserFocused .window-controls.windows {
+  /* .titlebar.browserFocused .window-controls.windows {
     opacity: 1;
-  }
+  } */
 
   @media (prefers-color-scheme: dark) {
     .titlebar.browserFocused,
@@ -194,25 +194,25 @@
   }
 
   /* mica styles */
-  .titlebar.mica {
+  /* .titlebar.mica {
     background-color: transparent;
     padding-right: 0;
-  }
+  } */
 
   /* acrylic styles */
-  .titlebar.acrylic {
+  /* .titlebar.acrylic {
     background-color: rgba(255, 255, 255, 0.8);
   }
   @media (prefers-color-scheme: dark) {
     .titlebar.acrylic {
       background-color: rgba(0, 0, 0, 0.4);
     }
-  }
+  } */
 
   /* account picker */
   .account {
     -webkit-app-region: no-drag;
-    app-region: no-drag;
+    /* app-region: no-drag; */
   }
   .account :global(.flyout) {
     min-inline-size: 300px;
@@ -228,19 +228,19 @@
   }
 
   /* vertical divider */
-  div.divider {
+  /* div.divider {
     width: 0;
     height: calc(env(titlebar-area-height, 33px) * 0.6);
     border-left: 1px solid rgba(255, 255, 255, 0.4);
     margin: 0 8px;
-  }
+  } */
 
   /* action icons */
   div.left :global(.icon-button) {
     --rgb: 0, 0, 0;
     padding: 2px;
     -webkit-app-region: no-drag;
-    app-region: no-drag;
+    /* app-region: no-drag; */
   }
   @media (prefers-color-scheme: dark) {
     div.left :global(.icon-button) {
@@ -261,8 +261,8 @@
     inline-size: var(--inline-size, 16px);
   }
 
-  div.left.tauri :global(.icon-button) {
+  /* div.left.tauri :global(.icon-button) {
     border-radius: 0;
     block-size: env(titlebar-area-height, 33px);
-  }
+  } */
 </style>

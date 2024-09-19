@@ -6,16 +6,16 @@ import type { LayoutLoad } from './$types';
 
 export const load = (async ({ fetch, parent, params }) => {
   const { session, contentManagerSettings, userPermissions } = await parent();
-  if (!contentManagerSettings) throw error(404, 'failed to find content manager settings');
+  if (!contentManagerSettings) error(404, 'failed to find content manager settings');
 
   const settings = get(contentManagerSettings)?.data?.docs?.contentTypes.find(
     (type) => type.uid === params.collection
   );
-  if (!settings) throw error(404, 'failed to find content type settings');
+  if (!settings) error(404, 'failed to find content type settings');
 
-  if (!userPermissions) throw error(404, 'failed to find user permissions');
+  if (!userPermissions) error(404, 'failed to find user permissions');
   const permissions = get(userPermissions)?.raw.filter((p) => p.subject === params.collection);
-  if (!settings) throw error(404, 'failed to find content type permissions');
+  if (!settings) error(404, 'failed to find content type permissions');
 
   const collectionConfig = await queryWithStore<z.infer<typeof collectionConfigurationSchema>>({
     fetch,

@@ -42,8 +42,8 @@ export const actions: Actions = {
     });
 
     const from = url.searchParams.get('from');
-    if (from) throw redirect(302, from);
-    throw redirect(302, '/admin');
+    if (from) redirect(302, from);
+    redirect(302, '/admin');
   },
 };
 
@@ -66,8 +66,8 @@ export const load: PageServerLoad = async ({ parent, url, fetch, locals }) => {
 
     if (status === 200) {
       const from = url.searchParams.get('from');
-      if (from) throw redirect(302, from);
-      throw redirect(302, '/admin');
+      if (from) redirect(302, from);
+      redirect(302, '/admin');
     }
   }
 

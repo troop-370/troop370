@@ -19,8 +19,8 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
     fetch
   );
   const resolved = await result;
-  if (!resolved.ok) throw error(resolved.status, 'server error');
-  if (!resolved.data.data) throw error(404, 'not found');
+  if (!resolved.ok) error(resolved.status, 'server error');
+  if (!resolved.data.data) error(404, 'not found');
 
   const docs = resolved.data.data
     .map((d) => d.attributes)

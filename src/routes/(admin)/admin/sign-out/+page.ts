@@ -9,5 +9,5 @@ export const load = (async ({ fetch }) => {
   localStorage.removeItem('userInfo');
   sessionStorage.removeItem('jwtToken');
 
-  throw redirect(302, '/admin/login');
+  redirect(302, '/admin/login');
 }) satisfies PageLoad;

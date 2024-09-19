@@ -9,12 +9,12 @@ export const load = (async ({ parent }) => {
     if ($cmsContentTypes && $cmsContentTypes.length > 0) {
       const uids = $cmsContentTypes.map(({ uid }) => uid);
       if (uids.includes('api::post.post')) {
-        throw redirect(302, `/admin/cms/collection/api::post.post?publishedAt={"$null":true}`);
+        redirect(302, `/admin/cms/collection/api::post.post?publishedAt={"$null":true}`);
       } else {
-        throw redirect(302, `/admin/cms/collection/${$cmsContentTypes[0].uid}`);
+        redirect(302, `/admin/cms/collection/${$cmsContentTypes[0].uid}`);
       }
     }
   }
 
-  throw redirect(302, `/admin/cms`);
+  redirect(302, `/admin/cms`);
 }) satisfies PageLoad;

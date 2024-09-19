@@ -12,7 +12,7 @@ export const load: ServerLoad = async ({ parent, url }) => {
     new Date(session.ccTokenExpires) > new Date() &&
     url.searchParams.has('from')
   ) {
-    throw redirect(302, url.searchParams.get('from')!);
+    redirect(302, url.searchParams.get('from')!);
   }
 };
 
@@ -22,7 +22,7 @@ export const actions: Actions = {
     const to = url.origin + url.pathname + '/token';
 
     const redirectUrl = createAuthorizationRequest(from, to);
-    throw redirect(302, redirectUrl.href);
+    redirect(302, redirectUrl.href);
   },
 };
 

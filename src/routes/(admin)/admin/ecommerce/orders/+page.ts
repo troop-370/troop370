@@ -28,7 +28,7 @@ export const load = (async ({ fetch, url, depends, parent }) => {
 
   const response = await fetch(url).then((res) => res.json());
   if (response.error?.errorCode) {
-    throw redirect(307, `/admin/ecommerce/unavailable?data=${JSON.stringify(response.error)}`);
+    redirect(307, `/admin/ecommerce/unavailable?data=${JSON.stringify(response.error)}`);
   } else {
     const data = ordersSchema.parse(response);
     orders.set({ ...get(orders), [url.search]: { ...data, loading: false } });

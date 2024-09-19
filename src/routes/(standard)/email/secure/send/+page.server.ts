@@ -2,6 +2,8 @@ import { error, type Load } from '@sveltejs/kit';
 import z from 'zod';
 import type { Actions } from './$types';
 
+export const ssr = false;
+
 export const load: Load = async ({ parent }) => {
   const { session } = await parent();
   const accessToken = session.ccToken;
@@ -180,7 +182,7 @@ export const actions: Actions = {
       })
       .catch((err) => {
         console.error(err);
-        throw error(400);
+        error(400);
       });
 
     return `https://app.constantcontact.com/pages/campaigns/email-details/details/activity/${result.campaign_activity_id}`;

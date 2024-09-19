@@ -4,7 +4,7 @@
   import PostCard from '$components/PostCard.svelte';
   import { title } from '$stores/title';
   import { notEmpty } from '$utils';
-  import Button from '@smui/button/src/Button.svelte';
+  import Button from '@smui/button';
   import CategoriesList from './CategoriesList.svelte';
 
   export let data;
@@ -168,7 +168,10 @@
   .category-warning a {
     color: var(--color-primary);
     box-shadow: 0 1px 0 0 var(--color-primary);
-    transition: background-color 0.2s, box-shadow 0.1s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.1s,
+      color 0.2s;
     text-decoration: none;
   }
   .category-warning a:hover {

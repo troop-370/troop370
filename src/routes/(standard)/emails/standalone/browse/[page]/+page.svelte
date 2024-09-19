@@ -3,7 +3,7 @@
   import Banner from '$components/Banner.svelte';
   import NewsletterCard from '$components/NewsletterCard.svelte';
   import { title } from '$stores/title';
-  import Button from '@smui/button/src/Button.svelte';
+  import Button from '@smui/button';
 
   export let data;
 

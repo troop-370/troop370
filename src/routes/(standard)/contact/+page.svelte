@@ -1,8 +1,7 @@
 <script>
   import Banner from '$components/Banner.svelte';
   import { title } from '$stores/title';
-  import { Icon, Label } from '@smui/button';
-  import Button from '@smui/button/src/Button.svelte';
+  import Button, { Icon, Label } from '@smui/button';
   import Textfield from '@smui/textfield';
 
   $: title.set('Contact Webmaster');

@@ -7,8 +7,8 @@ export const load = (async ({ parent, route, locals }) => {
 
   // throw error unless there is access to ecommerce routes
   const userRoles = session.adminUser?.roles?.map((role) => role.name);
-  if (!userRoles) throw error(403);
-  if (!userRoles.includes('Super Admin') && !userRoles.includes('Store Manager')) throw error(403);
+  if (!userRoles) error(403);
+  if (!userRoles.includes('Super Admin') && !userRoles.includes('Store Manager')) error(403);
 
   // handle case where ecwid api is not active because
   // we do not have the premium plan
@@ -31,7 +31,7 @@ export const load = (async ({ parent, route, locals }) => {
       });
 
     if (potentialError?.errorCode) {
-      throw redirect(307, `/admin/ecommerce/unavailable?data=${JSON.stringify(potentialError)}`);
+      redirect(307, `/admin/ecommerce/unavailable?data=${JSON.stringify(potentialError)}`);
     } else {
       await locals.session.set({
         ...locals.session.data,

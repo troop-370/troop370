@@ -15,8 +15,8 @@ export const actions: Actions = {
     }
 
     const from = url.searchParams.get('from');
-    if (from) throw redirect(302, from);
-    throw redirect(302, '/');
+    if (from) redirect(302, from);
+    redirect(302, '/');
   },
 };
 
@@ -25,8 +25,8 @@ export const load: PageServerLoad = async ({ parent, url }) => {
 
   if (session.authenticated === true) {
     const from = url.searchParams.get('from');
-    if (from) throw redirect(302, from);
-    throw redirect(302, '/');
+    if (from) redirect(302, from);
+    redirect(302, '/');
   }
 
   return {};
