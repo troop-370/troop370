@@ -126,7 +126,7 @@
   <div class="header">
     {#key pageTitle}
       <div
-        in:fly={{ y: 26, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+        in:fly|global={{ y: 26, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
         style="
           margin: 32px 0 20px 0;
           min-height: 40px;

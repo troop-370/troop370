@@ -10,11 +10,11 @@ export const load: PageServerLoad = async ({ params, url }) => {
     fetch
   );
   const resolved = await result;
-  if (!resolved.ok) throw error(resolved.status, 'server error');
-  if (!resolved.data.data) throw error(404, 'not found');
+  if (!resolved.ok) error(resolved.status, 'server error');
+  if (!resolved.data.data) error(404, 'not found');
 
   const fileGroups = resolved.data.data.attributes?.file_group;
-  if (!fileGroups) throw error(404, 'file groups not found');
+  if (!fileGroups) error(404, 'file groups not found');
 
   return { fileGroups };
 };

@@ -15,8 +15,12 @@
   "svelteSortOrder": "options-scripts-markup-styles",
   "bracketSameLine": false,
   "svelteIndentScriptAndStyle": true,
-  "plugins": ["prettier-plugin-svelte"],
-  "pluginSearchDirs": ["."],
+  "plugins": [
+    "prettier-plugin-svelte"
+  ],
+  "pluginSearchDirs": [
+    "."
+  ],
   "overrides": [
     {
       "files": "*.svelte",

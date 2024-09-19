@@ -587,7 +587,7 @@
             on:dblclick={(evt) => {
               if (!isInputElem(evt.target) && !isCheckbox(evt.target)) goto(href);
             }}
-            in:fly={{ y: 40, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+            in:fly|global={{ y: 40, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
           >
             {#each row.getVisibleCells() as cell}
               {@const columnSize =

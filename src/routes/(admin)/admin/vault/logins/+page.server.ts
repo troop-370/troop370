@@ -7,7 +7,7 @@ export const load = (async ({ parent }) => {
 
   // get the user roles for the currently authenticated user
   const userRoles = session.adminUser?.roles?.map((role) => role.name);
-  if (!userRoles) throw error(403);
+  if (!userRoles) error(403);
 
   // get the accounts
   const accounts = JSON.parse(VAULT_LOGINS || '[]') as VaultLogin[];

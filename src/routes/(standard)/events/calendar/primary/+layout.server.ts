@@ -82,6 +82,6 @@ export const load: LayoutServerLoad = async ({ parent }) => {
     return { calendar };
   } catch (err) {
     console.error(err);
-    throw error(500, err instanceof Error ? err : undefined);
+    error(500, err instanceof Error ? err : undefined);
   }
 };

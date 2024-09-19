@@ -6,8 +6,7 @@
     PUBLIC_NEW_FILESTORE_PATH,
     PUBLIC_OLD_FILESTORE_PATH,
   } from '$env/static/public';
-  import { Label } from '@smui/button';
-  import Button from '@smui/button/src/Button.svelte';
+  import Button, { Label } from '@smui/button';
   import { afterUpdate } from 'svelte';
 
   export let announcements: ApiTypes['schemas']['NavigationAnnouncementCardComponent'][];
@@ -80,7 +79,9 @@
   }
 
   .main-carousel .carousel-title {
-    font-family: ibm plex sans, sans-serif;
+    font-family:
+      ibm plex sans,
+      sans-serif;
     font-weight: 500;
     font-size: 34px;
     margin: 0;
