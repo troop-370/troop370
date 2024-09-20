@@ -16,6 +16,9 @@ const config = {
       $pm: './src/pm',
       $api: './src/api',
     },
+    csrf: {
+      checkOrigin: process.env.NODE_ENV === 'production',
+    },
   },
 };
 

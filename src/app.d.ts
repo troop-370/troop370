@@ -31,6 +31,8 @@ interface SessionData {
   authStrings: Partial<{
     password_message_when_authenticated: string;
   }>;
+  'checkout.venmo.referenceTransactionId': string;
+  'checkout.venmo.returnUrl': string;
 }
 
 declare module '@tanstack/table-core' {
