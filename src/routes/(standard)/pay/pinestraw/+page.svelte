@@ -16,8 +16,6 @@
 
   title.set('Pine Straw Store');
 
-  let active = 'Pine Straw';
-
   $: [, _bodyMD] = Markdown.parse(data.page?.body || '');
 
   $: bodyMD = (() => {
@@ -58,18 +56,22 @@
 
   let currentHash = $page.url.hash;
 
+  let active = 'Pine Straw';
+
+  $: {
+    if (currentHash === hashes.cart) active = 'Cart';
+    else if (currentHash === hashes.checkoutAddress) active = 'Cart';
+    else if (currentHash === hashes.checkoutDelivery) active = 'Cart';
+    else if (currentHash === hashes.checkoutPD) active = 'Cart';
+    else if (currentHash === hashes.accountSettings) active = 'Account';
+    else if (currentHash === hashes.accountChangeEmail) active = 'Account';
+    else if (currentHash.slice(0, 31) === hashes.orderConfirmationPrefix) active = 'Account';
+    else active = 'Pine Straw';
+  }
+
   const hashListener = (ev: HashChangeEvent) => {
     const { hash } = new URL(ev.newURL);
     currentHash = hash;
-
-    if (hash === hashes.cart) active = 'Cart';
-    else if (hash === hashes.checkoutAddress) active = 'Cart';
-    else if (hash === hashes.checkoutDelivery) active = 'Cart';
-    else if (hash === hashes.checkoutPD) active = 'Cart';
-    else if (hash === hashes.accountSettings) active = 'Account';
-    else if (hash === hashes.accountChangeEmail) active = 'Account';
-    else if (hash.slice(0, 31) === hashes.orderConfirmationPrefix) active = 'Account';
-    else active = 'Pine Straw';
   };
   onMount(() => {
     if (browser && window) window.addEventListener('hashchange', hashListener);
@@ -167,9 +169,13 @@
     top: 0;
     z-index: 98;
     background-color: var(--color-neutral-10);
-    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 10%), 0 4px 5px 0 rgb(0 0 0 / 7%),
+    box-shadow:
+      0 2px 4px -1px rgb(0 0 0 / 10%),
+      0 4px 5px 0 rgb(0 0 0 / 7%),
       0 1px 10px 0 rgb(0 0 0 / 6%);
-    transition: background-color 100ms, box-shadow 200ms;
+    transition:
+      background-color 100ms,
+      box-shadow 200ms;
   }
 
   :global(.tabbar.transparent) {
@@ -232,7 +238,10 @@
   .wrapper :global(article a:not(.mdc-button)) {
     color: var(--color-primary) !important;
     box-shadow: 0 1px 0 0 var(--color-primary) !important;
-    transition: background-color 0.2s, box-shadow 0.1s, color 0.2s !important;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.1s,
+      color 0.2s !important;
     text-decoration: none !important;
   }
   .wrapper :global(p a:hover:not(.mdc-button)),
