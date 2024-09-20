@@ -1,3 +1,7 @@
+import { goto } from '$app/navigation';
+import { injectInstructionValues } from './injectInstructionValues';
+import { setCustomFields } from './setCustomFields';
+
 export function mountStore(storeDivId: string, defaultCategoryId: string) {
   let ecwidLoaded = false;
 
@@ -16,6 +20,20 @@ export function mountStore(storeDivId: string, defaultCategoryId: string) {
           );
         }
       });
+
+      // Ecwid.OnPageLoaded.add(function (page) {
+      //   console.log('loaded', page);
+      // });
+
+      // Ecwid.OnCartChanged.add(function (cart) {
+      //   console.log(JSON.stringify(cart));
+      // });
+
+      // poll for existence of div with class ec-cart-step__section--description
+      // whenever we are on the CHECKOUT_PAYMENT_DETAILS page
+      injectInstructionValues();
+
+      setCustomFields();
     }
   }
 
@@ -23,7 +41,10 @@ export function mountStore(storeDivId: string, defaultCategoryId: string) {
   window.ec.config = window.ec.config || {};
   window.ec.config.storefrontUrls = window.ec.config.storefrontUrls || {};
   window.ec.config.storefrontUrls.cleanUrls = false;
+  window.ec.config.baseUrl = '/pay/pinestraw';
   window.ec.config.storefrontUrls.queryBasedCleanUrls = false;
+  window.ec.order = window.ec.order || {};
+  window.ec.order.extraFields = window.ec.order.extraFields || {};
 
   window.ecwid_script_defer = true;
   window.ecwid_dynamic_widgets = true;
