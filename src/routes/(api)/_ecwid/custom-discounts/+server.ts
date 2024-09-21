@@ -16,13 +16,13 @@ export const POST: RequestHandler = async ({ request }) => {
           value: paymentMethod?.startsWith('PayPal')
             ? 3.5
             : paymentMethod?.startsWith('Venmo')
-              ? 1.9
+              ? 0
               : 0,
           type: 'PERCENT',
           description: paymentMethod?.startsWith('PayPal')
             ? '+3.5 % for PayPal payments'
             : paymentMethod?.startsWith('Venmo')
-              ? '+1.9 % for Venmo payments'
+              ? ''
               : '',
           taxable: true,
         },
