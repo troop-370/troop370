@@ -86,6 +86,7 @@
     "qs": "^6.11.2",
     "rrule": "^2.7.1",
     "svelte-kit-cookie-session": "^3.2.2",
+    "undici": "^6.19.8",
     "xmldom": "^0.6.0",
     "zod": "^3.19.1"
   }
