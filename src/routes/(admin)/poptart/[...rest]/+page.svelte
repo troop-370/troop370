@@ -4,7 +4,7 @@
 
   let key = 0;
   afterNavigate(() => {
-    key++;
+    // key++;
   });
 </script>
 

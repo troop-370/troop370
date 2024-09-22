@@ -1,10 +1,10 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { goto } from '$app/navigation';
+  import { afterNavigate, goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { ProgressRing, TextBlock } from 'fluent-svelte';
   import { onMount } from 'svelte';
-  ('svelte');
+  import type { NavigateFunction } from './types';
 
   let probablyPath = `/poptart/${$page.params.rest}`;
   onMount(() => {
@@ -19,21 +19,26 @@
         const pathname = args[2]?.toString();
 
         if (pathname) {
-          probablyPath = pathname.replace('/strapi', '');
-          if (probablyPath === '/poptart/') goto('/poptart/cms');
-          history.replaceState(args[0], args[1], probablyPath);
-          originalPushState.apply(this, args);
+          const newProbablyPath = pathname.replace('/strapi', '');
+          if (newProbablyPath === '/poptart/') goto('/poptart/cms');
+          // originalPushState.apply(this, args);
+          if (newProbablyPath.split('?')[0] === probablyPath) {
+            goto(newProbablyPath, { replaceState: true });
+          } else {
+            goto(newProbablyPath);
+          }
+          probablyPath = newProbablyPath;
         }
       };
 
       iframe.contentWindow.history.replaceState = function () {
-        const args = arguments as unknown as Parameters<typeof originalPushState>;
+        const args = arguments as unknown as Parameters<typeof originalReplaceState>;
         const pathname = args[2]?.toString();
 
         if (pathname) {
           probablyPath = pathname.replace('/strapi', '');
-          history.replaceState(args[0], args[1], probablyPath);
-          originalReplaceState.apply(this, args);
+          // originalReplaceState.apply(this, args);
+          goto(probablyPath, { replaceState: true });
         }
       };
 
@@ -43,7 +48,6 @@
         if (frameLocation) {
           const pathname = frameLocation.href.replace(frameLocation.origin, '');
           probablyPath = pathname.replace('/strapi', '');
-          history.replaceState(null, '', probablyPath);
         }
       };
     }
@@ -55,6 +59,56 @@
       goto(`/poptart/login?from=${encodeURIComponent($page.url.href)}`);
     }
   }
+
+  // keep the sveltekit route in sync with the iframe
+  // (this happens when the iframe navigates to a new page)
+  // $: browser && goto(probablyPath);
+
+  // if the sveltekit route changes (and not due to the `goto`
+  // above this), navigate the iframe
+  afterNavigate(({ to }) => {
+    if (
+      to?.route.id === '/(admin)/poptart/[...rest]' &&
+      to.url.pathname !== probablyPath.split('?')[0]
+    ) {
+      console.log({ to: to?.url.pathname, probablyPath });
+      navigate?.('/' + $page.params.rest, { replace: true });
+    }
+  });
+
+  // react-router `navigate` function from the iframe
+  let navigate: NavigateFunction | null = null;
+
+  /**
+   * Once the iframe is loaded, listen for the `navigateready` event.
+   *
+   * The `navigateready` event is dispatched by the iframe when the
+   * iframe's react-router `navigate` function is ready to be used.
+   *
+   * Then, we use the `navigate` function to navigate the iframe
+   * to the correct page.
+   */
+  function handleIframeLoad(
+    evt: Event & {
+      currentTarget: EventTarget;
+    }
+  ) {
+    (evt.currentTarget as HTMLIFrameElement).contentWindow?.addEventListener(
+      'navigateready',
+      (evt) => {
+        const currentTarget = evt.currentTarget as EventTarget &
+          HTMLIFrameElement & { navigate: NavigateFunction | undefined };
+
+        // get the navigate function from the iframe
+        navigate = currentTarget.navigate ?? null;
+
+        // navigate from /strapi/poptart/_wait to the actual page
+        if ($page.params.rest) {
+          navigate?.('/' + $page.params.rest, { replace: true });
+        }
+      }
+    );
+  }
 </script>
 
 <div class="wrapper">
@@ -63,12 +117,15 @@
     <TextBlock variant="bodyStrong">Please wait</TextBlock>
   </div>
 
+  <!-- We start on /strapi/poptart/_wait because matching the src to the current
+    pathname or url would cause the iframe to reload -->
   <iframe
     id="content-iframe"
     title="strapi"
-    src="/strapi{$page.url.pathname.replace('/poptart', '/poptart')}"
+    src="/strapi/poptart/_wait"
     bind:this={iframe}
     allowtransparency
+    on:load={handleIframeLoad}
   />
 </div>
 

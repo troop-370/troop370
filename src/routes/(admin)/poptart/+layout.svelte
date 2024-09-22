@@ -281,89 +281,89 @@
             : []),
         ]
       : $page.url.pathname.startsWith('/poptart/ecommerce')
-      ? [
-          {
-            label: 'hr',
-          },
-          {
-            label: 'All store orders',
-            icon: 'Receipt24Regular',
-            href: '/poptart/ecommerce/orders',
-            selected: $page.url.pathname + $page.url.search === '/poptart/ecommerce/orders',
-          },
-          {
-            label: 'hr',
-          },
-          {
-            label: 'Pine straw fundraiser',
-            type: 'category',
-          },
-          {
-            label: 'All orders',
-            icon: 'CircleSmall24Filled',
-            href: '/poptart/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
-            selected:
-              $page.url.pathname + $page.url.search ===
-              '/poptart/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
-          },
-          (() => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - 3);
-            const shortIsoDate = date.toISOString().split('T')[0];
-            const location = `/poptart/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}&__pageTitle=Recent%20pine%20straw%20fundraiser%20orders`;
-            return {
-              label: 'Recent orders (last three months)',
-              icon: 'Clock24Regular',
-              href: location,
-              selected: $page.url.pathname + $page.url.search === location,
-            };
-          })(),
-          {
-            label: 'Pine straw bales',
-            icon: 'CircleSmall24Filled',
-            href: '/poptart/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
-            selected:
-              $page.url.pathname + $page.url.search ===
-              '/poptart/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
-          },
-          {
-            label: 'Spread pine straw',
-            icon: 'CircleSmall24Filled',
-            href: '/poptart/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
-            selected:
-              $page.url.pathname + $page.url.search ===
-              '/poptart/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
-          },
-          {
-            label: 'Holiday wreaths fundraiser',
-            type: 'category',
-          },
-          {
-            label: 'All orders',
-            icon: 'CircleSmall24Filled',
-            href: '/poptart/ecommerce/orders?productId=153658178%2C153614606&__pageTitle=All%20holiday%20wreath%20orders',
-            selected:
-              $page.url.pathname + $page.url.search ===
-              '/poptart/ecommerce/orders?productId=153658178%2C153614606&__pageTitle=All%20holiday%20wreath%20orders',
-          },
-          {
-            label: 'Classic wreaths',
-            icon: 'CircleSmall24Filled',
-            href: '/poptart/ecommerce/orders?productId=153658178&__pageTitle=All%20classic%20wreath%20orders',
-            selected:
-              $page.url.pathname + $page.url.search ===
-              '/poptart/ecommerce/orders?productId=153658178&__pageTitle=All%20classic%20wreath%20orders',
-          },
-          {
-            label: 'Wintergreen wreaths',
-            icon: 'CircleSmall24Filled',
-            href: '/poptart/ecommerce/orders?productId=153614606&__pageTitle=All%20wintergreen%20wreath%20orders',
-            selected:
-              $page.url.pathname + $page.url.search ===
-              '/poptart/ecommerce/orders?productId=153614606&__pageTitle=All%20wintergreen%20wreath%20orders',
-          },
-        ]
-      : [];
+        ? [
+            {
+              label: 'hr',
+            },
+            {
+              label: 'All store orders',
+              icon: 'Receipt24Regular',
+              href: '/poptart/ecommerce/orders',
+              selected: $page.url.pathname + $page.url.search === '/poptart/ecommerce/orders',
+            },
+            {
+              label: 'hr',
+            },
+            {
+              label: 'Pine straw fundraiser',
+              type: 'category',
+            },
+            {
+              label: 'All orders',
+              icon: 'CircleSmall24Filled',
+              href: '/poptart/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
+              selected:
+                $page.url.pathname + $page.url.search ===
+                '/poptart/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
+            },
+            (() => {
+              const date = new Date();
+              date.setMonth(date.getMonth() - 3);
+              const shortIsoDate = date.toISOString().split('T')[0];
+              const location = `/poptart/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}&__pageTitle=Recent%20pine%20straw%20fundraiser%20orders`;
+              return {
+                label: 'Recent orders (last three months)',
+                icon: 'Clock24Regular',
+                href: location,
+                selected: $page.url.pathname + $page.url.search === location,
+              };
+            })(),
+            {
+              label: 'Pine straw bales',
+              icon: 'CircleSmall24Filled',
+              href: '/poptart/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
+              selected:
+                $page.url.pathname + $page.url.search ===
+                '/poptart/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
+            },
+            {
+              label: 'Spread pine straw',
+              icon: 'CircleSmall24Filled',
+              href: '/poptart/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
+              selected:
+                $page.url.pathname + $page.url.search ===
+                '/poptart/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
+            },
+            {
+              label: 'Holiday wreaths fundraiser',
+              type: 'category',
+            },
+            {
+              label: 'All orders',
+              icon: 'CircleSmall24Filled',
+              href: '/poptart/ecommerce/orders?productId=153658178%2C153614606&__pageTitle=All%20holiday%20wreath%20orders',
+              selected:
+                $page.url.pathname + $page.url.search ===
+                '/poptart/ecommerce/orders?productId=153658178%2C153614606&__pageTitle=All%20holiday%20wreath%20orders',
+            },
+            {
+              label: 'Classic wreaths',
+              icon: 'CircleSmall24Filled',
+              href: '/poptart/ecommerce/orders?productId=153658178&__pageTitle=All%20classic%20wreath%20orders',
+              selected:
+                $page.url.pathname + $page.url.search ===
+                '/poptart/ecommerce/orders?productId=153658178&__pageTitle=All%20classic%20wreath%20orders',
+            },
+            {
+              label: 'Wintergreen wreaths',
+              icon: 'CircleSmall24Filled',
+              href: '/poptart/ecommerce/orders?productId=153614606&__pageTitle=All%20wintergreen%20wreath%20orders',
+              selected:
+                $page.url.pathname + $page.url.search ===
+                '/poptart/ecommerce/orders?productId=153614606&__pageTitle=All%20wintergreen%20wreath%20orders',
+            },
+          ]
+        : [];
 
   $: menuFooterItems = [
     {
@@ -414,6 +414,15 @@
   function handleTransition(navigation: BeforeNavigate) {
     // skip if user wants no motion
     if ($motionMode === 'reduced') return handleEndTransition();
+
+    // do not trigger a transition when navigating between pages
+    // that are embedded in a strapi iframe
+    if (
+      navigation.from?.route.id === '/(admin)/poptart/[...rest]' &&
+      navigation.to?.route.id === '/(admin)/poptart/[...rest]'
+    ) {
+      return handleEndTransition();
+    }
 
     // skip transition if pathname does not change
     if (navigation.from?.url.pathname === navigation.to?.url.pathname) return handleEndTransition();
