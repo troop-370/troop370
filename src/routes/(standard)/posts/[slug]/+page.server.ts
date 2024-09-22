@@ -11,7 +11,8 @@ export const load: PageServerLoad = async ({ params, url }) => {
     {
       sort: 'shortPublishedAt:desc',
       filters: { slug: params.slug, previewId },
-      publicationState: previewId ? 'preview' : 'live',
+      // @ts-expect-error status is not in the type definition because it is not in the openapi.json schema
+      status: previewId ? 'draft' : 'published',
     },
     fetch
   );
@@ -19,8 +20,8 @@ export const load: PageServerLoad = async ({ params, url }) => {
   if (!resolved.ok) error(resolved.status, 'server error');
   if (!resolved.data.data || resolved.data.data.length < 1) error(404, 'not found');
 
-  if (resolved.data.data[0].attributes?.shortPublishedAt) {
-    const date = new Date(resolved.data.data[0].attributes.shortPublishedAt);
+  if (resolved.data.data[0]?.shortPublishedAt) {
+    const date = new Date(resolved.data.data[0].shortPublishedAt);
     const yyyy = date.getUTCFullYear();
     const mm = date.getUTCMonth() + 1;
     const dd = date.getUTCDate();

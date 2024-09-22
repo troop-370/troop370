@@ -12,13 +12,14 @@ export const load: PageServerLoad = async ({ fetch, parent, url }) => {
   const { result } = getContentPages(
     {
       filters: { path: '/events/pinestraw', previewId },
-      publicationState: previewId ? 'preview' : 'live',
+      // @ts-expect-error status is not in the type definition because it is not in the openapi.json schema
+      status: previewId ? 'draft' : 'published',
       populate: 'quick_links',
     },
     fetch
   );
   const resolved = await result;
-  const page = resolved?.data?.data?.[0]?.attributes;
+  const page = resolved?.data?.data?.[0];
 
   return {
     page: page,

@@ -47,7 +47,7 @@
             : ''}
           <PostCard
             name={post.name}
-            href="/posts{datePath}/{post.slug}"
+            href={post.href || `/posts${datePath}/${post.slug}`}
             authors={(post.submitted_by || []).filter(notEmpty)}
             {date}
             body={post.body}

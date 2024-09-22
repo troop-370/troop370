@@ -33,8 +33,9 @@ export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
   // get the page with the matching path
   const { result } = getContentPages(
     {
-      filters: { path: matchPath, previewId },
-      publicationState: previewId ? 'preview' : 'live',
+      filters: { path: matchPath, previewId,  },
+      // @ts-expect-error status is not in the type definition because it is not in the openapi.json schema
+      status: previewId ? 'draft' : 'published',
       populate: 'quick_links',
     },
     fetch
@@ -42,8 +43,8 @@ export const load: PageServerLoad = async ({ params, fetch, parent, url }) => {
   const resolved = await result;
   if (!resolved.ok) error(resolved.status, 'server error');
   if (!resolved.data.data || resolved.data.data.length < 1) error(404, 'not found');
-  if (!resolved.data.data[0].attributes) error(404, 'missing');
-  const page = resolved.data.data[0].attributes;
+  if (!resolved.data.data[0]) error(404, 'missing');
+  const page = resolved.data.data[0];
 
   // redirect to login if password authentication is required
   if (page.enable_password_protection) {

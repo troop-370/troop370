@@ -14,10 +14,10 @@ export { MarkdownToStrapi } from './MarkdownToStrapi';
 export { notEmpty } from './notEmpty';
 export { get, getProperty, set, setProperty } from './objectPath';
 export { openWindow } from './openWindow';
-export { parseDoc } from './parseDoc';
 export { query } from './query';
 export { replaceLast } from './replaceLast';
 export { slugify } from './slugify';
 export { stateNameToAbbreviation } from './stateNameToAbbreviation';
 export { unflatten } from './unflatten';
 export { withoutImageNodes } from './withoutImageNodes';
+
