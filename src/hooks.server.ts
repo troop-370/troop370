@@ -24,26 +24,19 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         return Response.redirect(event.url.origin + '/poptart', 302);
       }
 
-      // get the headers as an object so we can pass them to the strapi server
-      const requestHeaders = await (async () => {
-        const headers: Record<string, string> = {};
-        for (const [header, value] of request.headers.entries()) {
-          // An error similar to this one from nextjs was occuring
-          // https://github.com/vercel/next.js/issues/48214
-          // and the solution is to remove the tranfer-encoding
-          // header when making POST requests so that fetch
-          // does not fail.
-          if (request.method === 'POST' && header.toLowerCase() === 'transfer-encoding') continue;
-
-          headers[header] = value;
-        }
-        return headers;
-      })();
+      // An error similar to this one from nextjs was occuring
+      // https://github.com/vercel/next.js/issues/48214
+      // and the solution is to remove the tranfer-encoding
+      // header when making POST requests so that fetch
+      // does not fail.
+      if (request.method === 'POST' && request.headers.has('transfer-encoding')) {
+        request.headers.delete('transfer-encoding');
+      }
 
       // get the resource from the strapi server
       const cmsAdminUrl = new URL(STRAPI_URL + strapiPathname + event.url.search);
       const cmsAdminRes = await fetch(cmsAdminUrl, {
-        headers: { ...requestHeaders },
+        headers: request.headers,
         method: request.method,
         body: request.body as any,
         duplex: 'half',
@@ -67,12 +60,16 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         if (cmsAdminRes.headers.get('Content-Type')?.includes('application/json')) {
           return JSON.stringify(await cmsAdminRes.json());
         }
-        return cmsAdminRes.text();
+        if (cmsAdminRes.headers.get('Content-Type')?.includes('text/')) {
+          return cmsAdminRes.text();
+        }
+        return cmsAdminRes.arrayBuffer();
       })();
 
       if (
         cmsAdminRes.status === 200 &&
-        cmsAdminRes.headers.get('Content-Type')?.startsWith('text/html')
+        cmsAdminRes.headers.get('Content-Type')?.startsWith('text/html') &&
+        typeof responseBody === 'string'
       ) {
         responseBody = responseBody.replace(
           '</head>',
@@ -181,7 +178,11 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       }
 
       // whenever the strapi app requests a renewal token, we should update that in the session data
-      if (cmsAdminRes.status === 200 && cmsAdminUrl.pathname === '/poptart/renew-token') {
+      if (
+        cmsAdminRes.status === 200 &&
+        cmsAdminUrl.pathname === '/poptart/renew-token' &&
+        typeof responseBody === 'string'
+      ) {
         await locals.session.set({
           ...locals.session.data,
           adminToken: JSON.parse(responseBody)?.data?.token,
