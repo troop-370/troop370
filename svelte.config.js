@@ -17,7 +17,8 @@ const config = {
       $api: './src/api',
     },
     csrf: {
-      checkOrigin: process.env.NODE_ENV === 'production',
+      // TODO: disable this once we are not using Ecwid
+      checkOrigin: false,
     },
   },
 };
