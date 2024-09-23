@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser, dev } from '$app/environment';
 import { queryWithStore } from '$utils/query';
 import { redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
@@ -85,6 +85,194 @@ export const load = (async ({ parent, url, fetch }) => {
           p.action.startsWith('plugin::upload.read')
         ),
       },
+      contentReleases: {
+        read: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.read'
+        ),
+        publish: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.publish'
+        ),
+        delete: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.delete'
+        ),
+        settings: {
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.settings.read'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.settings.update'
+          ),
+        },
+        update: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.update'
+        ),
+        deleteAction: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.delete-action'
+        ),
+        createAction: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.create-action'
+        ),
+        create: !!$userPermissions.data?.docs?.find(
+          ({ action }) => action === 'plugin::content-releases.create'
+        ),
+      },
+      admin: {
+        raw: ($userPermissions.data?.docs || []).filter(({ action }) =>
+          action.startsWith('admin::')
+        ),
+        contentReleases: {
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.read'
+          ),
+          publish: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.publish'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.delete'
+          ),
+          settings: {
+            read: !!$userPermissions.data?.docs?.find(
+              ({ action }) => action === 'plugin::content-releases.settings.read'
+            ),
+            update: !!$userPermissions.data?.docs?.find(
+              ({ action }) => action === 'plugin::content-releases.settings.update'
+            ),
+          },
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.update'
+          ),
+          deleteAction: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.delete-action'
+          ),
+          createAction: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.create-action'
+          ),
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'plugin::content-releases.create'
+          ),
+        },
+        apiTokens: {
+          access: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::api-tokens.access'
+          ),
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::api-ttokens.create'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::api-tokens.delete'
+          ),
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::api-tokens.read'
+          ),
+          regenerate: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::api-tokens.regenerate'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::api-tokens.update'
+          ),
+        },
+        auditLogs: {
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::audit-logs.read'
+          ),
+        },
+        marketplace: {
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::marketplace.read'
+          ),
+        },
+        projectSettings: {
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::project-settings.read'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::project-settings.update'
+          ),
+        },
+        providerLogin: {
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::provider-login.read'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::provider-login.update'
+          ),
+        },
+        reviewWorkflows: {
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::review-workflows.create'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::review-workflows.delete'
+          ),
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::review-workflows.read'
+          ),
+          stageTransition: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::review-workflows.stage.transition'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::review-workflows.update'
+          ),
+        },
+        roles: {
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::roles.create'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::roles.delete'
+          ),
+          read: !!$userPermissions.data?.docs?.find(({ action }) => action === 'admin::roles.read'),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::roles.update'
+          ),
+        },
+        transferTokens: {
+          access: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::transfer.tokens.access'
+          ),
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::transfer.tokens.create'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::transfer.tokens.delete'
+          ),
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::transfer.tokens.read'
+          ),
+          regenerate: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::transfer.tokens.regenerate'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::transfer.tokens.update'
+          ),
+        },
+        users: {
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::users.create'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::users.delete'
+          ),
+          read: !!$userPermissions.data?.docs?.find(({ action }) => action === 'admin::users.read'),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::users.update'
+          ),
+        },
+        webhooks: {
+          create: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::webhooks.create'
+          ),
+          delete: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::webhooks.delete'
+          ),
+          read: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::webhooks.read'
+          ),
+          update: !!$userPermissions.data?.docs?.find(
+            ({ action }) => action === 'admin::webhooks.update'
+          ),
+        },
+      },
     };
   });
 
@@ -109,7 +297,7 @@ export const load = (async ({ parent, url, fetch }) => {
     return [
       {
         label: 'Content manager',
-        icon: 'ContentView32Regular',
+        icon: 'LeafTwo32Regular',
         disabled: !cmsContentTypes || $cmsContentTypes.length === 0,
         href: (() => {
           if ($cmsContentTypes?.[0]) {
@@ -125,6 +313,13 @@ export const load = (async ({ parent, url, fetch }) => {
         selected: (url: URL) =>
           url.pathname.startsWith('/poptart/content-manager') ||
           url.pathname.startsWith('/poptart/cms'),
+      },
+      {
+        label: 'Releases',
+        icon: 'Send24Regular',
+        disabled: !$permissions.contentReleases.read,
+        href: '/poptart/plugins/content-releases',
+        selected: (url: URL) => url.pathname.startsWith('/poptart/plugins/content-releases'),
       },
       {
         label: 'Media library',
@@ -147,9 +342,28 @@ export const load = (async ({ parent, url, fetch }) => {
         selected: (url: URL) => url.pathname.startsWith('/poptart/vault'),
       },
       {
+        label: 'Playground',
+        icon: 'Play24Regular',
+        href: '/poptart/strapi/documentation/v1.0.0',
+        disabled: (() => {
+          if ($permissions.admin.apiTokens.read) return false;
+          if ($permissions.admin.apiTokens.create) return false;
+          return true;
+        })(),
+        selected: (url: URL) => url.pathname.startsWith('/poptart/strapi/documentation'),
+      },
+      {
+        label: 'Schemas',
+        icon: 'DesignIdeas24Regular',
+        href: '/poptart/plugins/content-type-builder',
+        disabled: !dev,
+        selected: (url: URL) => url.pathname.startsWith('/poptart/plugins/content-type-builder'),
+      },
+      {
         label: 'Administration',
         icon: 'Options24Regular',
         href: '/poptart/settings',
+        disabled: $permissions.admin.raw.length === 0,
         selected: (url: URL) => url.pathname.startsWith('/poptart/settings'),
       },
     ];
