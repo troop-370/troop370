@@ -1,18 +1,31 @@
 diff --git a/node_modules/@cocreators-ee/apity/dist/fetcher.js b/node_modules/@cocreators-ee/apity/dist/fetcher.js
-index 8399670..6b5c289 100644
+index 8399670..157a22c 100644
 --- a/node_modules/@cocreators-ee/apity/dist/fetcher.js
 +++ b/node_modules/@cocreators-ee/apity/dist/fetcher.js
-@@ -37,11 +37,37 @@ function getQuery(method, payload, query) {
+@@ -37,11 +37,50 @@ function getQuery(method, payload, query) {
              delete payload[key];
          });
      }
-+    // support filters from strapi endpoints
-+    else if (payload.filters) {
-+        const { filters, ...rest } = payload;
++    // support filters and populations from strapi endpoints
++    else if (payload.filters || payload.populate) {
++        let { filters = {}, populate = [],  ...rest } = payload;
 +        queryObj = {  ...rest };
++        
 +        Object.entries(flattenObj(filters)).forEach(([key, value]) => {
 +            queryObj[convertDotsToBrackets(`filters.${key}`)] = value
 +        })
++
++        // see https://docs.strapi.io/dev-docs/api/rest/guides/understanding-populate#populate-components
++        if (typeof populate === 'string') {
++            if (populate.includes(',')) {
++                populate = populate.split(',').map((value) => value.trim());
++            } else {
++                populate = [populate];
++            }
++        }
++        populate.forEach((value, index) => {
++            queryObj[`populate[${index}]`] = value;
++        });
 +    }
      else {
          queryObj = { ...payload };
@@ -40,7 +53,7 @@ index 8399670..6b5c289 100644
  function getHeaders(body, init) {
      const headers = new Headers(init);
      if (body !== undefined && !headers.has('Content-Type')) {
-@@ -83,7 +109,7 @@ export function getFetchParams(request) {
+@@ -83,7 +122,7 @@ export function getFetchParams(request) {
      return { url, init };
  }
  async function getResponseData(response) {
