@@ -6,7 +6,7 @@ export const GET: RequestHandler = async () => {
 
 export const POST: RequestHandler = async ({ request }) => {
   const data = await request.json();
-  const paymentMethod = data.cart.paymentMethod;
+  const paymentMethod = data?.cart?.paymentMethod;
 
   return new Response(
     JSON.stringify({
