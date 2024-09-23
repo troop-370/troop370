@@ -2,9 +2,14 @@
   import { browser } from '$app/environment';
   import { afterNavigate, goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import { motionMode } from '$stores/motionMode';
   import { ProgressRing, TextBlock } from 'fluent-svelte';
   import { onMount } from 'svelte';
+  import { expoOut } from 'svelte/easing';
+  import { fly } from 'svelte/transition';
   import type { NavigateFunction } from './types';
+  // @ts-expect-error
+  import { create_in_transition } from 'svelte/internal';
 
   let probablyPath = `/poptart/${$page.params.rest}`;
   onMount(() => {
@@ -26,6 +31,7 @@
             goto(newProbablyPath, { replaceState: true });
           } else {
             goto(newProbablyPath);
+            animate();
           }
           probablyPath = newProbablyPath;
         }
@@ -73,6 +79,7 @@
     ) {
       console.log({ to: to?.url.pathname, probablyPath });
       navigate?.('/' + $page.params.rest, { replace: true });
+      animate();
     }
   });
 
@@ -105,9 +112,21 @@
         // navigate from /strapi/poptart/_wait to the actual page
         if ($page.params.rest) {
           navigate?.('/' + $page.params.rest, { replace: true });
+          animate();
         }
       }
     );
+  }
+
+  $: delay = $motionMode === 'reduced' ? 0 : 130;
+  $: duration = $motionMode === 'reduced' ? 0 : 270;
+
+  // trigger a svelte transition on the iframe
+  let intro: any;
+  function animate() {
+    if (intro) intro.end();
+    intro = create_in_transition(iframe, fly, { y: 40, duration, easing: expoOut, delay });
+    intro.start();
   }
 </script>
 
