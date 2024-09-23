@@ -64,7 +64,8 @@
     },
     ...($collectionConfig?.contentType.layouts.list || [])
       .map((key) => {
-        if (['id', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'].includes(key)) return null;
+        if (['id', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'stage'].includes(key))
+          return null;
 
         const sortable = $collectionConfig?.contentType.metadatas[key]?.list?.sortable;
         const label = $collectionConfig?.contentType.metadatas[key]?.list?.label;
@@ -80,8 +81,8 @@
                 type: isIsoDate(info.getValue(key))
                   ? 'date'
                   : isShortIsoDate(info.getValue(key))
-                  ? 'shortdate'
-                  : 'passthrough',
+                    ? 'shortdate'
+                    : 'passthrough',
               },
             });
           },
@@ -89,10 +90,10 @@
             key === 'title' || key === 'name'
               ? 360
               : key === 'subtitle'
-              ? 300
-              : key.endsWith('At')
-              ? 190
-              : 160,
+                ? 300
+                : key.endsWith('At')
+                  ? 190
+                  : 160,
           enableSorting: sortable,
         };
       })
@@ -101,7 +102,7 @@
       header: 'Stage',
       accessorKey: '__stage',
       cell: (info) => {
-        const publishedAt = info.row.original.publishedAt;
+        const status = info.row.original.status;
         const stageName = info.row.original.strapi_stage?.name;
         return renderComponent(ValueCell, {
           info,
@@ -120,7 +121,8 @@
             },
           },
           valueOverride: (() => {
-            if (publishedAt) return 'Published';
+            if (status === 'published') return 'Published';
+            if (status === 'modified') return 'Modified';
             if (stageName) return 'stage__' + stageName;
             return 'Draft';
           })(),
@@ -462,8 +464,8 @@
 
 <style>
   div.wrapper {
-    --border-color: var(--color-neutral-light-200)
-    border: 1px solid var(--fds-divider-stroke-default);
+    --border-color: var(--color-neutral-light-200) border: 1px solid
+      var(--fds-divider-stroke-default);
     box-shadow: 0 0 0 1px var(--border-color);
     border-radius: var(--fds-control-corner-radius);
     width: 100%;
@@ -484,8 +486,6 @@
     font-weight: 400;
     line-height: 20px;
   }
-
-  
 
   /* row style */
   [role='row'] {
@@ -509,23 +509,23 @@
   }
 
   /* row size */
-  div[role='rowgroup'] [role="row"] {
+  div[role='rowgroup'] [role='row'] {
     min-height: 40px;
     height: unset;
   }
-  div[role='table'].compact div[role='rowgroup'] [role="row"] {
+  div[role='table'].compact div[role='rowgroup'] [role='row'] {
     min-height: 30px;
     height: 30px;
   }
 
   /* header row */
-  div[role='rowgroup'].thead div[role="row"] {
+  div[role='rowgroup'].thead div[role='row'] {
     border-bottom: 1px solid var(--border-color);
     min-height: 42px;
     height: 42px;
   }
   div[role='rowgroup'].thead {
-    position:sticky;
+    position: sticky;
     top: 0;
     background-color: #ffffff;
     z-index: 1;
@@ -535,12 +535,13 @@
       background-color: #272727;
     }
   }
-  div[role='table'].compact div[role='rowgroup'].thead div[role="row"] {
+  div[role='table'].compact div[role='rowgroup'].thead div[role='row'] {
     min-height: 36px;
   }
 
   /* cell */
-  span[role='columnheader'], span[role='cell'] {
+  span[role='columnheader'],
+  span[role='cell'] {
     padding: 4px 0 4px 10px;
     box-sizing: border-box;
     height: 100%;
@@ -569,9 +570,9 @@
     height: 16px;
   }
   .sort-chevron > :global(svg) {
-    fill: currentColor
+    fill: currentColor;
   }
-  
+
   /* disable text wrapping of cell content when compact mode is enabled */
   span[role='cell'] {
     overflow: hidden;
@@ -591,6 +592,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 10px
+    padding: 20px 10px;
   }
 </style>

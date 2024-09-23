@@ -74,10 +74,10 @@
                     {
                       label: 'Unpublished posts',
                       icon: 'SlideText24Regular',
-                      href: '/poptart/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={"$null":true}',
+                      href: '/poptart/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&stage={"$ne":"published"}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/poptart/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&publishedAt={%22$null%22:true}',
+                        '/poptart/cms/collection/api::post.post?__pageTitle=Unpublished%20posts&stage={%22$ne%22:%22published%22}',
                     },
                     {
                       label: 'All posts',
@@ -125,10 +125,10 @@
                     {
                       label: 'Unpublished standalone emails',
                       icon: 'MailMultiple24Regular',
-                      href: '/poptart/cms/collection/api::standalone-email.standalone-email?__pageTitle=Unpublished%20standalone%20emails&publishedAt={"$null":true}',
+                      href: '/poptart/cms/collection/api::standalone-email.standalone-email?__pageTitle=Unpublished%20standalone%20emails&stage={"$ne":"published"}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/poptart/cms/collection/api::standalone-email.standalone-email?__pageTitle=Unpublished%20standalone%20emails&publishedAt={%22$null%22:true}',
+                        '/poptart/cms/collection/api::standalone-email.standalone-email?__pageTitle=Unpublished%20standalone%20emails&stage={%22$ne%22:%22published%22}',
                     },
                   ]
                 : []),
@@ -145,10 +145,10 @@
                     {
                       label: 'Unpublished newsletters',
                       icon: 'MailTemplate24Regular',
-                      href: '/poptart/cms/collection/api::newsletter.newsletter?__pageTitle=Unpublished%20newsletters&publishedAt={"$null":true}',
+                      href: '/poptart/cms/collection/api::newsletter.newsletter?__pageTitle=Unpublished%20newsletters&stage={"$ne":"published"}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/poptart/cms/collection/api::newsletter.newsletter?__pageTitle=Unpublished%20newsletters&publishedAt={%22$null%22:true}',
+                        '/poptart/cms/collection/api::newsletter.newsletter?__pageTitle=Unpublished%20newsletters&stage={%22$ne%22:%22published%22}',
                     },
                   ]
                 : []),
@@ -176,10 +176,10 @@
                     {
                       label: 'Unpublished pages',
                       icon: 'DocumentBulletList24Regular',
-                      href: '/poptart/cms/collection/api::page.page?__pageTitle=Unpublished%20pages&publishedAt={"$null":true}',
+                      href: '/poptart/cms/collection/api::page.page?__pageTitle=Unpublished%20pages&stage={"$ne":"published"}',
                       selected:
                         $page.url.pathname + $page.url.search ===
-                        '/poptart/cms/collection/api::page.page?__pageTitle=Unpublished%20pages&publishedAt={%22$null%22:true}',
+                        '/poptart/cms/collection/api::page.page?__pageTitle=Unpublished%20pages&stage={%22$ne%22:%22published%22}',
                     },
                   ]
                 : []),
