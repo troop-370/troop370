@@ -7,25 +7,26 @@ const getStandaloneEmails = apity.path('/standalone-emails').method('get').creat
 
 export const load: PageServerLoad = async ({ params }) => {
   const { result } = getStandaloneEmails(
-    { sort: 'shortPublishedAt:desc', 'pagination[page]': params.page },
+    {
+      sort: 'shortPublishedAt:desc',
+      'pagination[page]': parseInt(params.page),
+      'pagination[pageSize]': 25,
+    },
     fetch
   );
   const resolved = await result;
   if (!resolved.ok) error(resolved.status, 'server error');
   if (!resolved.data.data) error(404, 'not found');
 
-  const docs = resolved.data.data
-    .map((d) => d.attributes)
-    .filter(notEmpty)
-    .map((d) => {
-      return {
-        _id: d.object_id,
-        name: d.name,
-        timestamps: {
-          published_at: d.publishedAt,
-        },
-      };
-    });
+  const docs = resolved.data.data.filter(notEmpty).map((d) => {
+    return {
+      _id: d.object_id,
+      name: d.name,
+      timestamps: {
+        published_at: d.publishedAt,
+      },
+    };
+  });
 
   const pagination = resolved.data.meta?.pagination;
   const page = pagination?.page || parseInt(params.page);

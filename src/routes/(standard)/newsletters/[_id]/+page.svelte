@@ -8,6 +8,7 @@
 
   export let data;
   $: newsletter = data.newsletter;
+  $: console.log(newsletter);
 
   let newsletterElement: HTMLHtmlElement;
 

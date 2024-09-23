@@ -1,6 +1,6 @@
 import { apity } from '$api';
 import type { NavigationGroup, NavigationGroupItem } from '$components/TopNavigation';
-import { notEmpty, parseDoc } from '$utils';
+import { notEmpty } from '$utils';
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
@@ -14,18 +14,17 @@ export const load: LayoutServerLoad = async () => {
   if (!resolvedRedirects.ok) error(resolvedRedirects.status, 'server error');
   if (!resolvedRedirects.data.data) error(404, 'redirects not found');
   const redirects = resolvedRedirects.data.data
-    .map(parseDoc)
     .filter(notEmpty)
     .map((doc) => {
       return { from: doc.from, to: doc.to, code: 307 };
     });
 
   // get the navigation config
-  const { result: navResult } = getNavigation({ populate: 'nav_groups, nav_groups.items' }, fetch);
+  const { result: navResult } = getNavigation({ populate: 'nav_groups.items' }, fetch);
   const resolvedNav = await navResult;
 
   const navConfig = resolvedNav.ok
-    ? (resolvedNav?.data?.data?.attributes?.nav_groups?.filter(notEmpty) || [])
+    ? (resolvedNav?.data?.data?.nav_groups?.filter(notEmpty) || [])
         // ensure that only groups that have defined fields and at least one item are returned
         .filter((group): group is NavigationGroup => {
           return (

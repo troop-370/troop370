@@ -11,7 +11,8 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   const { result } = getEmailNewsletters(
     {
       filters: { object_id: params._id, previewId },
-      publicationState: previewId ? 'preview' : 'live',
+      // @ts-expect-error status is not in the type definition because it is not in the openapi.json schema
+      status: previewId ? 'draft' : 'published',
       populate:
         'version3.pinned_mini_posts, version3.pinned_mini_posts.category, ' +
         'version3.announcements, version3.announcements.category, ' +
@@ -30,8 +31,8 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   const resolved = await result;
   if (!resolved.ok) error(resolved.status, 'server error');
   if (!resolved.data.data || resolved.data.data.length < 1) error(404, 'not found');
-  if (!resolved.data.data[0].attributes) error(404, 'missing');
-  const newsletter = resolved.data.data[0].attributes;
+  if (!resolved.data.data[0]) error(404, 'missing');
+  const newsletter = resolved.data.data[0];
 
   // redirect to login
   if (newsletter) {

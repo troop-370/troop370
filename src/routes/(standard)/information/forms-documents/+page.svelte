@@ -37,8 +37,7 @@
       return {
         ...group,
         documents: [
-          ...(group.documents?.data || [])
-            .map((d) => d.attributes)
+          ...(group.documents || [])
             .filter(notEmpty)
             .filter(
               (doc) =>
@@ -75,7 +74,7 @@
     }
     return {
       ...group,
-      documents: (group.documents?.data || []).map((d) => d.attributes).filter(notEmpty),
+      documents: (group.documents || []).filter(notEmpty),
     };
   }
 </script>
@@ -105,7 +104,7 @@
                 doc.name ||
                 ''}
               {@const slug = slugger.slug(name)}
-              {@const size_bytes = doc.size * 1000 || 0}
+              {@const size_bytes = (doc.size || 0) * 1000}
               {@const url = doc.url
                 ? doc.url.startsWith('/')
                   ? `${PUBLIC_API_URL.replace('/api', '')}${doc.url}`

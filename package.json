@@ -12,7 +12,8 @@
     "format": "prettier --plugin-search-dir . --write .",
     "prepare": "npm run smui-theme",
     "smui-theme": "smui-theme compile static/smui.css -i src/theme",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "openapi": "npx openapi-typescript@6 http://localhost:370/strapi/api/openapi.json --output src/api/types.ts"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.513.0",
@@ -86,6 +87,7 @@
     "qs": "^6.11.2",
     "rrule": "^2.7.1",
     "svelte-kit-cookie-session": "^3.2.2",
+    "undici": "^6.19.8",
     "xmldom": "^0.6.0",
     "zod": "^3.19.1"
   }

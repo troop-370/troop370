@@ -34,7 +34,7 @@
   {#each announcements as annoucement}
     <div
       class="carousel-cell"
-      style="background-image:url('{annoucement.background_photo?.data?.attributes?.url?.replace(
+      style="background-image:url('{annoucement.background_photo?.url?.replace(
         PUBLIC_OLD_FILESTORE_PATH,
         PUBLIC_NEW_FILESTORE_PATH
       )}');"

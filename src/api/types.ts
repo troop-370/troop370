@@ -816,14 +816,16 @@ export interface components {
       data: {
         label: string;
         value: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    CategoryListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Category"];
-    };
     CategoryListResponse: {
-      data?: components["schemas"]["CategoryListResponseDataItem"][];
+      data?: components["schemas"]["Category"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -834,137 +836,229 @@ export interface components {
       };
     };
     Category: {
+      id?: number;
+      documentId?: string;
       label: string;
       value: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: {
-            firstname?: string;
-            lastname?: string;
-            username?: string;
-            /** Format: email */
-            email?: string;
-            resetPasswordToken?: string;
-            registrationToken?: string;
-            isActive?: boolean;
-            roles?: {
-              data?: {
+        id?: number;
+        documentId?: string;
+        firstname?: string;
+        lastname?: string;
+        username?: string;
+        /** Format: email */
+        email?: string;
+        resetPasswordToken?: string;
+        registrationToken?: string;
+        isActive?: boolean;
+        roles?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            code?: string;
+            description?: string;
+            users?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            permissions?: {
+                id?: number;
+                documentId?: string;
+                action?: string;
+                actionParameters?: unknown;
+                subject?: string;
+                properties?: unknown;
+                conditions?: unknown;
+                role?: {
                   id?: number;
-                  attributes?: {
-                    name?: string;
-                    code?: string;
-                    description?: string;
-                    users?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    permissions?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            action?: string;
-                            actionParameters?: unknown;
-                            subject?: string;
-                            properties?: unknown;
-                            conditions?: unknown;
-                            role?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                }[];
-            };
-            blocked?: boolean;
-            preferedLanguage?: string;
+                  documentId?: string;
+                };
+                /** Format: date-time */
+                createdAt?: string;
+                /** Format: date-time */
+                updatedAt?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+                createdBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                updatedBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                locale?: string;
+                localizations?: {
+                    id?: number;
+                    documentId?: string;
+                  }[];
+              }[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
             createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
             updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
-          };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          }[];
+        blocked?: boolean;
+        preferedLanguage?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
         };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          label?: string;
+          value?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    CategoryResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Category"];
-    };
     CategoryResponse: {
-      data?: components["schemas"]["CategoryResponseDataObject"];
+      data?: components["schemas"]["Category"];
       meta?: Record<string, never>;
     };
     EventsPageRequest: {
       data: {
         nav_items?: components["schemas"]["NavigationEventCardComponent"][];
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    EventsPageListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["EventsPage"];
-    };
     EventsPageListResponse: {
-      data?: components["schemas"]["EventsPageListResponseDataItem"][];
+      data?: components["schemas"]["EventsPage"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -975,30 +1069,121 @@ export interface components {
       };
     };
     EventsPage: {
+      id?: number;
+      documentId?: string;
       nav_items?: components["schemas"]["NavigationEventCardComponent"][];
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
+        id?: number;
+        documentId?: string;
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          nav_items?: components["schemas"]["NavigationEventCardComponent"][];
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    EventsPageResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["EventsPage"];
-    };
     EventsPageResponse: {
-      data?: components["schemas"]["EventsPageResponseDataObject"];
+      data?: components["schemas"]["EventsPage"];
       meta?: Record<string, never>;
     };
     NavigationEventCardComponent: {
@@ -1007,244 +1192,68 @@ export interface components {
       caption?: string;
       path?: string;
       photo?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+        name?: string;
+        alternativeText?: string;
+        caption?: string;
+        width?: number;
+        height?: number;
+        formats?: unknown;
+        hash?: string;
+        ext?: string;
+        mime?: string;
+        /** Format: float */
+        size?: number;
+        url?: string;
+        previewUrl?: string;
+        provider?: string;
+        provider_metadata?: unknown;
+        related?: {
+            id?: number;
+            documentId?: string;
+          }[];
+        folder?: {
           id?: number;
-          attributes?: {
-            name?: string;
-            alternativeText?: string;
-            caption?: string;
-            width?: number;
-            height?: number;
-            formats?: unknown;
-            hash?: string;
-            ext?: string;
-            mime?: string;
-            /** Format: float */
-            size?: number;
-            url?: string;
-            previewUrl?: string;
-            provider?: string;
-            provider_metadata?: unknown;
-            related?: {
-              data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                }[];
-            };
-            folder?: {
-              data?: {
-                id?: number;
-                attributes?: {
-                  name?: string;
-                  pathId?: number;
-                  parent?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
-                  };
-                  children?: {
-                    data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      }[];
-                  };
-                  files?: {
-                    data?: {
-                        id?: number;
-                        attributes?: {
-                          name?: string;
-                          alternativeText?: string;
-                          caption?: string;
-                          width?: number;
-                          height?: number;
-                          formats?: unknown;
-                          hash?: string;
-                          ext?: string;
-                          mime?: string;
-                          /** Format: float */
-                          size?: number;
-                          url?: string;
-                          previewUrl?: string;
-                          provider?: string;
-                          provider_metadata?: unknown;
-                          related?: {
-                            data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              }[];
-                          };
-                          folder?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                          folderPath?: string;
-                          /** Format: date-time */
-                          createdAt?: string;
-                          /** Format: date-time */
-                          updatedAt?: string;
-                          createdBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: {
-                                firstname?: string;
-                                lastname?: string;
-                                username?: string;
-                                /** Format: email */
-                                email?: string;
-                                resetPasswordToken?: string;
-                                registrationToken?: string;
-                                isActive?: boolean;
-                                roles?: {
-                                  data?: {
-                                      id?: number;
-                                      attributes?: {
-                                        name?: string;
-                                        code?: string;
-                                        description?: string;
-                                        users?: {
-                                          data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            }[];
-                                        };
-                                        permissions?: {
-                                          data?: {
-                                              id?: number;
-                                              attributes?: {
-                                                action?: string;
-                                                actionParameters?: unknown;
-                                                subject?: string;
-                                                properties?: unknown;
-                                                conditions?: unknown;
-                                                role?: {
-                                                  data?: {
-                                                    id?: number;
-                                                    attributes?: Record<string, never>;
-                                                  };
-                                                };
-                                                /** Format: date-time */
-                                                createdAt?: string;
-                                                /** Format: date-time */
-                                                updatedAt?: string;
-                                                createdBy?: {
-                                                  data?: {
-                                                    id?: number;
-                                                    attributes?: Record<string, never>;
-                                                  };
-                                                };
-                                                updatedBy?: {
-                                                  data?: {
-                                                    id?: number;
-                                                    attributes?: Record<string, never>;
-                                                  };
-                                                };
-                                              };
-                                            }[];
-                                        };
-                                        /** Format: date-time */
-                                        createdAt?: string;
-                                        /** Format: date-time */
-                                        updatedAt?: string;
-                                        createdBy?: {
-                                          data?: {
-                                            id?: number;
-                                            attributes?: Record<string, never>;
-                                          };
-                                        };
-                                        updatedBy?: {
-                                          data?: {
-                                            id?: number;
-                                            attributes?: Record<string, never>;
-                                          };
-                                        };
-                                      };
-                                    }[];
-                                };
-                                blocked?: boolean;
-                                preferedLanguage?: string;
-                                /** Format: date-time */
-                                createdAt?: string;
-                                /** Format: date-time */
-                                updatedAt?: string;
-                                createdBy?: {
-                                  data?: {
-                                    id?: number;
-                                    attributes?: Record<string, never>;
-                                  };
-                                };
-                                updatedBy?: {
-                                  data?: {
-                                    id?: number;
-                                    attributes?: Record<string, never>;
-                                  };
-                                };
-                              };
-                            };
-                          };
-                          updatedBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                        };
-                      }[];
-                  };
-                  path?: string;
-                  /** Format: date-time */
-                  createdAt?: string;
-                  /** Format: date-time */
-                  updatedAt?: string;
-                  createdBy?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
-                  };
-                  updatedBy?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
-                  };
-                };
-              };
-            };
-            folderPath?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
-            };
-            updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
-            };
-          };
+          documentId?: string;
         };
+        folderPath?: string;
+        sourceName?: string;
+        sourceUrl?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
     };
     FormsAndDocumentsPageRequest: {
       data: {
         file_group?: components["schemas"]["TablesFileDetailsComponent"][];
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    FormsAndDocumentsPageListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["FormsAndDocumentsPage"];
-    };
     FormsAndDocumentsPageListResponse: {
-      data?: components["schemas"]["FormsAndDocumentsPageListResponseDataItem"][];
+      data?: components["schemas"]["FormsAndDocumentsPage"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -1255,275 +1264,190 @@ export interface components {
       };
     };
     FormsAndDocumentsPage: {
+      id?: number;
+      documentId?: string;
       file_group?: components["schemas"]["TablesFileDetailsComponent"][];
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
+        id?: number;
+        documentId?: string;
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          file_group?: components["schemas"]["TablesFileDetailsComponent"][];
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    FormsAndDocumentsPageResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["FormsAndDocumentsPage"];
-    };
     FormsAndDocumentsPageResponse: {
-      data?: components["schemas"]["FormsAndDocumentsPageResponseDataObject"];
+      data?: components["schemas"]["FormsAndDocumentsPage"];
       meta?: Record<string, never>;
     };
     TablesFileDetailsComponent: {
       id?: number;
       label?: string;
       documents?: {
-        data?: {
+          id?: number;
+          documentId?: string;
+          name?: string;
+          alternativeText?: string;
+          caption?: string;
+          width?: number;
+          height?: number;
+          formats?: unknown;
+          hash?: string;
+          ext?: string;
+          mime?: string;
+          /** Format: float */
+          size?: number;
+          url?: string;
+          previewUrl?: string;
+          provider?: string;
+          provider_metadata?: unknown;
+          related?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          folder?: {
             id?: number;
-            attributes?: {
-              name?: string;
-              alternativeText?: string;
-              caption?: string;
-              width?: number;
-              height?: number;
-              formats?: unknown;
-              hash?: string;
-              ext?: string;
-              mime?: string;
-              /** Format: float */
-              size?: number;
-              url?: string;
-              previewUrl?: string;
-              provider?: string;
-              provider_metadata?: unknown;
-              related?: {
-                data?: {
-                    id?: number;
-                    attributes?: Record<string, never>;
-                  }[];
-              };
-              folder?: {
-                data?: {
-                  id?: number;
-                  attributes?: {
-                    name?: string;
-                    pathId?: number;
-                    parent?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    children?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    files?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            name?: string;
-                            alternativeText?: string;
-                            caption?: string;
-                            width?: number;
-                            height?: number;
-                            formats?: unknown;
-                            hash?: string;
-                            ext?: string;
-                            mime?: string;
-                            /** Format: float */
-                            size?: number;
-                            url?: string;
-                            previewUrl?: string;
-                            provider?: string;
-                            provider_metadata?: unknown;
-                            related?: {
-                              data?: {
-                                  id?: number;
-                                  attributes?: Record<string, never>;
-                                }[];
-                            };
-                            folder?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            folderPath?: string;
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: {
-                                  firstname?: string;
-                                  lastname?: string;
-                                  username?: string;
-                                  /** Format: email */
-                                  email?: string;
-                                  resetPasswordToken?: string;
-                                  registrationToken?: string;
-                                  isActive?: boolean;
-                                  roles?: {
-                                    data?: {
-                                        id?: number;
-                                        attributes?: {
-                                          name?: string;
-                                          code?: string;
-                                          description?: string;
-                                          users?: {
-                                            data?: {
-                                                id?: number;
-                                                attributes?: Record<string, never>;
-                                              }[];
-                                          };
-                                          permissions?: {
-                                            data?: {
-                                                id?: number;
-                                                attributes?: {
-                                                  action?: string;
-                                                  actionParameters?: unknown;
-                                                  subject?: string;
-                                                  properties?: unknown;
-                                                  conditions?: unknown;
-                                                  role?: {
-                                                    data?: {
-                                                      id?: number;
-                                                      attributes?: Record<string, never>;
-                                                    };
-                                                  };
-                                                  /** Format: date-time */
-                                                  createdAt?: string;
-                                                  /** Format: date-time */
-                                                  updatedAt?: string;
-                                                  createdBy?: {
-                                                    data?: {
-                                                      id?: number;
-                                                      attributes?: Record<string, never>;
-                                                    };
-                                                  };
-                                                  updatedBy?: {
-                                                    data?: {
-                                                      id?: number;
-                                                      attributes?: Record<string, never>;
-                                                    };
-                                                  };
-                                                };
-                                              }[];
-                                          };
-                                          /** Format: date-time */
-                                          createdAt?: string;
-                                          /** Format: date-time */
-                                          updatedAt?: string;
-                                          createdBy?: {
-                                            data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            };
-                                          };
-                                          updatedBy?: {
-                                            data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            };
-                                          };
-                                        };
-                                      }[];
-                                  };
-                                  blocked?: boolean;
-                                  preferedLanguage?: string;
-                                  /** Format: date-time */
-                                  createdAt?: string;
-                                  /** Format: date-time */
-                                  updatedAt?: string;
-                                  createdBy?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                  updatedBy?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                };
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    path?: string;
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                };
-              };
-              folderPath?: string;
-              /** Format: date-time */
-              createdAt?: string;
-              /** Format: date-time */
-              updatedAt?: string;
-              createdBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-              updatedBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-            };
-          }[];
-      };
+            documentId?: string;
+          };
+          folderPath?: string;
+          sourceName?: string;
+          sourceUrl?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+        }[];
       manual?: unknown;
     };
     HomePageRequest: {
       data: {
         announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    HomePageListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["HomePage"];
-    };
     HomePageListResponse: {
-      data?: components["schemas"]["HomePageListResponseDataItem"][];
+      data?: components["schemas"]["HomePage"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -1534,30 +1458,121 @@ export interface components {
       };
     };
     HomePage: {
+      id?: number;
+      documentId?: string;
       announcement_cards: components["schemas"]["NavigationAnnouncementCardComponent"][];
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
+        id?: number;
+        documentId?: string;
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          announcement_cards?: components["schemas"]["NavigationAnnouncementCardComponent"][];
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    HomePageResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["HomePage"];
-    };
     HomePageResponse: {
-      data?: components["schemas"]["HomePageResponseDataObject"];
+      data?: components["schemas"]["HomePage"];
       meta?: Record<string, never>;
     };
     NavigationAnnouncementCardComponent: {
@@ -1567,244 +1582,68 @@ export interface components {
       link?: string;
       link_text?: string;
       background_photo?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+        name?: string;
+        alternativeText?: string;
+        caption?: string;
+        width?: number;
+        height?: number;
+        formats?: unknown;
+        hash?: string;
+        ext?: string;
+        mime?: string;
+        /** Format: float */
+        size?: number;
+        url?: string;
+        previewUrl?: string;
+        provider?: string;
+        provider_metadata?: unknown;
+        related?: {
+            id?: number;
+            documentId?: string;
+          }[];
+        folder?: {
           id?: number;
-          attributes?: {
-            name?: string;
-            alternativeText?: string;
-            caption?: string;
-            width?: number;
-            height?: number;
-            formats?: unknown;
-            hash?: string;
-            ext?: string;
-            mime?: string;
-            /** Format: float */
-            size?: number;
-            url?: string;
-            previewUrl?: string;
-            provider?: string;
-            provider_metadata?: unknown;
-            related?: {
-              data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                }[];
-            };
-            folder?: {
-              data?: {
-                id?: number;
-                attributes?: {
-                  name?: string;
-                  pathId?: number;
-                  parent?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
-                  };
-                  children?: {
-                    data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      }[];
-                  };
-                  files?: {
-                    data?: {
-                        id?: number;
-                        attributes?: {
-                          name?: string;
-                          alternativeText?: string;
-                          caption?: string;
-                          width?: number;
-                          height?: number;
-                          formats?: unknown;
-                          hash?: string;
-                          ext?: string;
-                          mime?: string;
-                          /** Format: float */
-                          size?: number;
-                          url?: string;
-                          previewUrl?: string;
-                          provider?: string;
-                          provider_metadata?: unknown;
-                          related?: {
-                            data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              }[];
-                          };
-                          folder?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                          folderPath?: string;
-                          /** Format: date-time */
-                          createdAt?: string;
-                          /** Format: date-time */
-                          updatedAt?: string;
-                          createdBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: {
-                                firstname?: string;
-                                lastname?: string;
-                                username?: string;
-                                /** Format: email */
-                                email?: string;
-                                resetPasswordToken?: string;
-                                registrationToken?: string;
-                                isActive?: boolean;
-                                roles?: {
-                                  data?: {
-                                      id?: number;
-                                      attributes?: {
-                                        name?: string;
-                                        code?: string;
-                                        description?: string;
-                                        users?: {
-                                          data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            }[];
-                                        };
-                                        permissions?: {
-                                          data?: {
-                                              id?: number;
-                                              attributes?: {
-                                                action?: string;
-                                                actionParameters?: unknown;
-                                                subject?: string;
-                                                properties?: unknown;
-                                                conditions?: unknown;
-                                                role?: {
-                                                  data?: {
-                                                    id?: number;
-                                                    attributes?: Record<string, never>;
-                                                  };
-                                                };
-                                                /** Format: date-time */
-                                                createdAt?: string;
-                                                /** Format: date-time */
-                                                updatedAt?: string;
-                                                createdBy?: {
-                                                  data?: {
-                                                    id?: number;
-                                                    attributes?: Record<string, never>;
-                                                  };
-                                                };
-                                                updatedBy?: {
-                                                  data?: {
-                                                    id?: number;
-                                                    attributes?: Record<string, never>;
-                                                  };
-                                                };
-                                              };
-                                            }[];
-                                        };
-                                        /** Format: date-time */
-                                        createdAt?: string;
-                                        /** Format: date-time */
-                                        updatedAt?: string;
-                                        createdBy?: {
-                                          data?: {
-                                            id?: number;
-                                            attributes?: Record<string, never>;
-                                          };
-                                        };
-                                        updatedBy?: {
-                                          data?: {
-                                            id?: number;
-                                            attributes?: Record<string, never>;
-                                          };
-                                        };
-                                      };
-                                    }[];
-                                };
-                                blocked?: boolean;
-                                preferedLanguage?: string;
-                                /** Format: date-time */
-                                createdAt?: string;
-                                /** Format: date-time */
-                                updatedAt?: string;
-                                createdBy?: {
-                                  data?: {
-                                    id?: number;
-                                    attributes?: Record<string, never>;
-                                  };
-                                };
-                                updatedBy?: {
-                                  data?: {
-                                    id?: number;
-                                    attributes?: Record<string, never>;
-                                  };
-                                };
-                              };
-                            };
-                          };
-                          updatedBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                        };
-                      }[];
-                  };
-                  path?: string;
-                  /** Format: date-time */
-                  createdAt?: string;
-                  /** Format: date-time */
-                  updatedAt?: string;
-                  createdBy?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
-                  };
-                  updatedBy?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
-                  };
-                };
-              };
-            };
-            folderPath?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
-            };
-            updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
-            };
-          };
+          documentId?: string;
         };
+        folderPath?: string;
+        sourceName?: string;
+        sourceUrl?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
     };
     NavigationRequest: {
       data: {
         nav_groups: components["schemas"]["NavigationNavigationGroupComponent"][];
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    NavigationListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Navigation"];
-    };
     NavigationListResponse: {
-      data?: components["schemas"]["NavigationListResponseDataItem"][];
+      data?: components["schemas"]["Navigation"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -1815,134 +1654,224 @@ export interface components {
       };
     };
     Navigation: {
+      id?: number;
+      documentId?: string;
       nav_groups: components["schemas"]["NavigationNavigationGroupComponent"][];
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: {
-            firstname?: string;
-            lastname?: string;
-            username?: string;
-            /** Format: email */
-            email?: string;
-            resetPasswordToken?: string;
-            registrationToken?: string;
-            isActive?: boolean;
-            roles?: {
-              data?: {
+        id?: number;
+        documentId?: string;
+        firstname?: string;
+        lastname?: string;
+        username?: string;
+        /** Format: email */
+        email?: string;
+        resetPasswordToken?: string;
+        registrationToken?: string;
+        isActive?: boolean;
+        roles?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            code?: string;
+            description?: string;
+            users?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            permissions?: {
+                id?: number;
+                documentId?: string;
+                action?: string;
+                actionParameters?: unknown;
+                subject?: string;
+                properties?: unknown;
+                conditions?: unknown;
+                role?: {
                   id?: number;
-                  attributes?: {
-                    name?: string;
-                    code?: string;
-                    description?: string;
-                    users?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    permissions?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            action?: string;
-                            actionParameters?: unknown;
-                            subject?: string;
-                            properties?: unknown;
-                            conditions?: unknown;
-                            role?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                }[];
-            };
-            blocked?: boolean;
-            preferedLanguage?: string;
+                  documentId?: string;
+                };
+                /** Format: date-time */
+                createdAt?: string;
+                /** Format: date-time */
+                updatedAt?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+                createdBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                updatedBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                locale?: string;
+                localizations?: {
+                    id?: number;
+                    documentId?: string;
+                  }[];
+              }[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
             createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
             updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
-          };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          }[];
+        blocked?: boolean;
+        preferedLanguage?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
         };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          nav_groups?: components["schemas"]["NavigationNavigationGroupComponent"][];
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    NavigationResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Navigation"];
-    };
     NavigationResponse: {
-      data?: components["schemas"]["NavigationResponseDataObject"];
+      data?: components["schemas"]["Navigation"];
       meta?: Record<string, never>;
+    };
+    NavigationNavigationItemComponent: {
+      id?: number;
+      label?: string;
+      path?: string;
     };
     NavigationNavigationGroupComponent: {
       id?: number;
       label?: string;
       show_in_horizontal_nav?: boolean;
-      items?: {
-          id?: number;
-          label?: string;
-          path?: string;
-        }[];
+      items?: components["schemas"]["NavigationNavigationItemComponent"][];
     };
     NewsletterRequest: {
       data: {
@@ -1954,14 +1883,16 @@ export interface components {
         /** Format: date */
         shortPublishedAt?: string;
         previewId?: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    NewsletterListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Newsletter"];
-    };
     NewsletterListResponse: {
-      data?: components["schemas"]["NewsletterListResponseDataItem"][];
+      data?: components["schemas"]["Newsletter"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -1972,6 +1903,8 @@ export interface components {
       };
     };
     Newsletter: {
+      id?: number;
+      documentId?: string;
       version3?: components["schemas"]["EmailAnnouncementsV3Component"];
       version2?: components["schemas"]["EmailAnnouncementsV2Component"];
       name: string;
@@ -1987,265 +1920,111 @@ export interface components {
       /** Format: date-time */
       publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
+        id?: number;
+        documentId?: string;
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          version3?: components["schemas"]["EmailAnnouncementsV3Component"];
+          version2?: components["schemas"]["EmailAnnouncementsV2Component"];
+          name?: string;
+          manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
+          object_id?: string;
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    NewsletterResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Newsletter"];
-    };
     NewsletterResponse: {
-      data?: components["schemas"]["NewsletterResponseDataObject"];
+      data?: components["schemas"]["Newsletter"];
       meta?: Record<string, never>;
     };
     EmailAnnouncementsV3Component: {
       id?: number;
       pinned_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: {
-              title?: string;
-              subtitle?: string;
-              body?: unknown;
-              enable_password_protection?: boolean;
-              button_text?: string;
-              category?: {
-                data?: {
-                  id?: number;
-                  attributes?: {
-                    label?: string;
-                    value?: string;
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: {
-                          firstname?: string;
-                          lastname?: string;
-                          username?: string;
-                          /** Format: email */
-                          email?: string;
-                          resetPasswordToken?: string;
-                          registrationToken?: string;
-                          isActive?: boolean;
-                          roles?: {
-                            data?: {
-                                id?: number;
-                                attributes?: {
-                                  name?: string;
-                                  code?: string;
-                                  description?: string;
-                                  users?: {
-                                    data?: {
-                                        id?: number;
-                                        attributes?: Record<string, never>;
-                                      }[];
-                                  };
-                                  permissions?: {
-                                    data?: {
-                                        id?: number;
-                                        attributes?: {
-                                          action?: string;
-                                          actionParameters?: unknown;
-                                          subject?: string;
-                                          properties?: unknown;
-                                          conditions?: unknown;
-                                          role?: {
-                                            data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            };
-                                          };
-                                          /** Format: date-time */
-                                          createdAt?: string;
-                                          /** Format: date-time */
-                                          updatedAt?: string;
-                                          createdBy?: {
-                                            data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            };
-                                          };
-                                          updatedBy?: {
-                                            data?: {
-                                              id?: number;
-                                              attributes?: Record<string, never>;
-                                            };
-                                          };
-                                        };
-                                      }[];
-                                  };
-                                  /** Format: date-time */
-                                  createdAt?: string;
-                                  /** Format: date-time */
-                                  updatedAt?: string;
-                                  createdBy?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                  updatedBy?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                };
-                              }[];
-                          };
-                          blocked?: boolean;
-                          preferedLanguage?: string;
-                          /** Format: date-time */
-                          createdAt?: string;
-                          /** Format: date-time */
-                          updatedAt?: string;
-                          createdBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                          updatedBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                        };
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                };
-              };
-              slug?: string;
-              tags?: {
-                data?: {
-                    id?: number;
-                    attributes?: {
-                      label?: string;
-                      value?: string;
-                      /** Format: date-time */
-                      createdAt?: string;
-                      /** Format: date-time */
-                      updatedAt?: string;
-                      createdBy?: {
-                        data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        };
-                      };
-                      updatedBy?: {
-                        data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        };
-                      };
-                    };
-                  }[];
-              };
-              relationLabel?: string;
-              object_id?: string;
-              /** Format: date */
-              shortPublishedAt?: string;
-              previewId?: string;
-              submitted_by?: string;
-              /** Format: date-time */
-              createdAt?: string;
-              /** Format: date-time */
-              updatedAt?: string;
-              /** Format: date-time */
-              publishedAt?: string;
-              createdBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-              updatedBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
-              };
-            };
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       announcements?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       past_announcements?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
     };
     EmailAnnouncementsV2Component: {
       id?: number;
       pinned_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       fundraiser_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       camping_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       service_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       advancement_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
       high_adventure_mini_posts?: {
-        data?: {
-            id?: number;
-            attributes?: Record<string, never>;
-          }[];
-      };
+          id?: number;
+          documentId?: string;
+        }[];
     };
     EmailManualCalendarMonthComponent: {
       id?: number;
@@ -2267,14 +2046,16 @@ export interface components {
         show_table_of_contents?: boolean;
         cristata_id?: string;
         previewId?: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    PageListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Page"];
-    };
     PageListResponse: {
-      data?: components["schemas"]["PageListResponseDataItem"][];
+      data?: components["schemas"]["Page"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -2285,6 +2066,8 @@ export interface components {
       };
     };
     Page: {
+      id?: number;
+      documentId?: string;
       title: string;
       path: string;
       enable_password_protection: boolean;
@@ -2304,117 +2087,213 @@ export interface components {
       /** Format: date-time */
       publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: {
-            firstname?: string;
-            lastname?: string;
-            username?: string;
-            /** Format: email */
-            email?: string;
-            resetPasswordToken?: string;
-            registrationToken?: string;
-            isActive?: boolean;
-            roles?: {
-              data?: {
+        id?: number;
+        documentId?: string;
+        firstname?: string;
+        lastname?: string;
+        username?: string;
+        /** Format: email */
+        email?: string;
+        resetPasswordToken?: string;
+        registrationToken?: string;
+        isActive?: boolean;
+        roles?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            code?: string;
+            description?: string;
+            users?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            permissions?: {
+                id?: number;
+                documentId?: string;
+                action?: string;
+                actionParameters?: unknown;
+                subject?: string;
+                properties?: unknown;
+                conditions?: unknown;
+                role?: {
                   id?: number;
-                  attributes?: {
-                    name?: string;
-                    code?: string;
-                    description?: string;
-                    users?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    permissions?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            action?: string;
-                            actionParameters?: unknown;
-                            subject?: string;
-                            properties?: unknown;
-                            conditions?: unknown;
-                            role?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                }[];
-            };
-            blocked?: boolean;
-            preferedLanguage?: string;
+                  documentId?: string;
+                };
+                /** Format: date-time */
+                createdAt?: string;
+                /** Format: date-time */
+                updatedAt?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+                createdBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                updatedBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                locale?: string;
+                localizations?: {
+                    id?: number;
+                    documentId?: string;
+                  }[];
+              }[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
             createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
             updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
-          };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          }[];
+        blocked?: boolean;
+        preferedLanguage?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
         };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          title?: string;
+          path?: string;
+          enable_password_protection?: boolean;
+          dual_columns?: boolean;
+          body?: string;
+          quick_links?: components["schemas"]["PagesQuickLinkTopOfPageComponent"][];
+          alert?: string;
+          toc_h3_enabled?: boolean;
+          center_text?: boolean;
+          show_table_of_contents?: boolean;
+          cristata_id?: string;
+          previewId?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    PageResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Page"];
-    };
     PageResponse: {
-      data?: components["schemas"]["PageResponseDataObject"];
+      data?: components["schemas"]["Page"];
       meta?: Record<string, never>;
     };
     PagesQuickLinkTopOfPageComponent: {
@@ -2439,14 +2318,16 @@ export interface components {
         shortPublishedAt?: string;
         previewId?: string;
         submitted_by: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    PostListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Post"];
-    };
     PostListResponse: {
-      data?: components["schemas"]["PostListResponseDataItem"][];
+      data?: components["schemas"]["Post"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -2457,155 +2338,225 @@ export interface components {
       };
     };
     Post: {
+      id?: number;
+      documentId?: string;
       title: string;
       subtitle?: string;
       body?: unknown;
       enable_password_protection: boolean;
       button_text: string;
       category?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+        label?: string;
+        value?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
           id?: number;
-          attributes?: {
-            label?: string;
-            value?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: {
-                  firstname?: string;
-                  lastname?: string;
-                  username?: string;
-                  /** Format: email */
-                  email?: string;
-                  resetPasswordToken?: string;
-                  registrationToken?: string;
-                  isActive?: boolean;
-                  roles?: {
-                    data?: {
-                        id?: number;
-                        attributes?: {
-                          name?: string;
-                          code?: string;
-                          description?: string;
-                          users?: {
-                            data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              }[];
-                          };
-                          permissions?: {
-                            data?: {
-                                id?: number;
-                                attributes?: {
-                                  action?: string;
-                                  actionParameters?: unknown;
-                                  subject?: string;
-                                  properties?: unknown;
-                                  conditions?: unknown;
-                                  role?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                  /** Format: date-time */
-                                  createdAt?: string;
-                                  /** Format: date-time */
-                                  updatedAt?: string;
-                                  createdBy?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                  updatedBy?: {
-                                    data?: {
-                                      id?: number;
-                                      attributes?: Record<string, never>;
-                                    };
-                                  };
-                                };
-                              }[];
-                          };
-                          /** Format: date-time */
-                          createdAt?: string;
-                          /** Format: date-time */
-                          updatedAt?: string;
-                          createdBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                          updatedBy?: {
-                            data?: {
-                              id?: number;
-                              attributes?: Record<string, never>;
-                            };
-                          };
-                        };
-                      }[];
+          documentId?: string;
+          firstname?: string;
+          lastname?: string;
+          username?: string;
+          /** Format: email */
+          email?: string;
+          resetPasswordToken?: string;
+          registrationToken?: string;
+          isActive?: boolean;
+          roles?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              code?: string;
+              description?: string;
+              users?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              permissions?: {
+                  id?: number;
+                  documentId?: string;
+                  action?: string;
+                  actionParameters?: unknown;
+                  subject?: string;
+                  properties?: unknown;
+                  conditions?: unknown;
+                  role?: {
+                    id?: number;
+                    documentId?: string;
                   };
-                  blocked?: boolean;
-                  preferedLanguage?: string;
                   /** Format: date-time */
                   createdAt?: string;
                   /** Format: date-time */
                   updatedAt?: string;
+                  /** Format: date-time */
+                  publishedAt?: string;
                   createdBy?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
+                    id?: number;
+                    documentId?: string;
                   };
                   updatedBy?: {
-                    data?: {
-                      id?: number;
-                      attributes?: Record<string, never>;
-                    };
+                    id?: number;
+                    documentId?: string;
                   };
-                };
-              };
-            };
-            updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
-            };
-          };
-        };
-      };
-      slug: string;
-      tags?: {
-        data?: {
-            id?: number;
-            attributes?: {
-              label?: string;
-              value?: string;
+                  locale?: string;
+                  localizations?: {
+                      id?: number;
+                      documentId?: string;
+                    }[];
+                }[];
               /** Format: date-time */
               createdAt?: string;
               /** Format: date-time */
               updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
               createdBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
+                id?: number;
+                documentId?: string;
               };
               updatedBy?: {
-                data?: {
-                  id?: number;
-                  attributes?: Record<string, never>;
-                };
+                id?: number;
+                documentId?: string;
               };
-            };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            }[];
+          blocked?: boolean;
+          preferedLanguage?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+        };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
           }[];
+        strapi_stage?: {
+          id?: number;
+          documentId?: string;
+          name?: string;
+          color?: string;
+          workflow?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            stages?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            contentTypes?: unknown;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          permissions?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+        };
+        strapi_assignee?: {
+          id?: number;
+          documentId?: string;
+        };
       };
+      slug: string;
+      tags?: {
+          id?: number;
+          documentId?: string;
+          label?: string;
+          value?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
       relationLabel?: string;
       object_id?: string;
       /** Format: date */
@@ -2619,38 +2570,92 @@ export interface components {
       /** Format: date-time */
       publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: Record<string, never>;
-        };
+        id?: number;
+        documentId?: string;
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          title?: string;
+          subtitle?: string;
+          body?: unknown;
+          enable_password_protection?: boolean;
+          button_text?: string;
+          category?: {
+            id?: number;
+            documentId?: string;
+          };
+          slug?: string;
+          tags?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          relationLabel?: string;
+          object_id?: string;
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          submitted_by?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    PostResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Post"];
-    };
     PostResponse: {
-      data?: components["schemas"]["PostResponseDataObject"];
+      data?: components["schemas"]["Post"];
       meta?: Record<string, never>;
     };
     RedirectRequest: {
       data: {
         from: string;
         to: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    RedirectListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Redirect"];
-    };
     RedirectListResponse: {
-      data?: components["schemas"]["RedirectListResponseDataItem"][];
+      data?: components["schemas"]["Redirect"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -2661,124 +2666,214 @@ export interface components {
       };
     };
     Redirect: {
+      id?: number;
+      documentId?: string;
       from: string;
       to: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: {
-            firstname?: string;
-            lastname?: string;
-            username?: string;
-            /** Format: email */
-            email?: string;
-            resetPasswordToken?: string;
-            registrationToken?: string;
-            isActive?: boolean;
-            roles?: {
-              data?: {
+        id?: number;
+        documentId?: string;
+        firstname?: string;
+        lastname?: string;
+        username?: string;
+        /** Format: email */
+        email?: string;
+        resetPasswordToken?: string;
+        registrationToken?: string;
+        isActive?: boolean;
+        roles?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            code?: string;
+            description?: string;
+            users?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            permissions?: {
+                id?: number;
+                documentId?: string;
+                action?: string;
+                actionParameters?: unknown;
+                subject?: string;
+                properties?: unknown;
+                conditions?: unknown;
+                role?: {
                   id?: number;
-                  attributes?: {
-                    name?: string;
-                    code?: string;
-                    description?: string;
-                    users?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    permissions?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            action?: string;
-                            actionParameters?: unknown;
-                            subject?: string;
-                            properties?: unknown;
-                            conditions?: unknown;
-                            role?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                }[];
-            };
-            blocked?: boolean;
-            preferedLanguage?: string;
+                  documentId?: string;
+                };
+                /** Format: date-time */
+                createdAt?: string;
+                /** Format: date-time */
+                updatedAt?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+                createdBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                updatedBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                locale?: string;
+                localizations?: {
+                    id?: number;
+                    documentId?: string;
+                  }[];
+              }[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
             createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
             updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
-          };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          }[];
+        blocked?: boolean;
+        preferedLanguage?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
         };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          from?: string;
+          to?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    RedirectResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Redirect"];
-    };
     RedirectResponse: {
-      data?: components["schemas"]["RedirectResponseDataObject"];
+      data?: components["schemas"]["Redirect"];
       meta?: Record<string, never>;
     };
     StandaloneEmailRequest: {
@@ -2792,14 +2887,16 @@ export interface components {
         /** Format: date */
         shortPublishedAt?: string;
         previewId?: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    StandaloneEmailListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["StandaloneEmail"];
-    };
     StandaloneEmailListResponse: {
-      data?: components["schemas"]["StandaloneEmailListResponseDataItem"][];
+      data?: components["schemas"]["StandaloneEmail"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -2810,6 +2907,8 @@ export interface components {
       };
     };
     StandaloneEmail: {
+      id?: number;
+      documentId?: string;
       name: string;
       sender_name: string;
       /** Format: date */
@@ -2826,131 +2925,226 @@ export interface components {
       /** Format: date-time */
       publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: {
-            firstname?: string;
-            lastname?: string;
-            username?: string;
-            /** Format: email */
-            email?: string;
-            resetPasswordToken?: string;
-            registrationToken?: string;
-            isActive?: boolean;
-            roles?: {
-              data?: {
+        id?: number;
+        documentId?: string;
+        firstname?: string;
+        lastname?: string;
+        username?: string;
+        /** Format: email */
+        email?: string;
+        resetPasswordToken?: string;
+        registrationToken?: string;
+        isActive?: boolean;
+        roles?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            code?: string;
+            description?: string;
+            users?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            permissions?: {
+                id?: number;
+                documentId?: string;
+                action?: string;
+                actionParameters?: unknown;
+                subject?: string;
+                properties?: unknown;
+                conditions?: unknown;
+                role?: {
                   id?: number;
-                  attributes?: {
-                    name?: string;
-                    code?: string;
-                    description?: string;
-                    users?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    permissions?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            action?: string;
-                            actionParameters?: unknown;
-                            subject?: string;
-                            properties?: unknown;
-                            conditions?: unknown;
-                            role?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                }[];
-            };
-            blocked?: boolean;
-            preferedLanguage?: string;
+                  documentId?: string;
+                };
+                /** Format: date-time */
+                createdAt?: string;
+                /** Format: date-time */
+                updatedAt?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+                createdBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                updatedBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                locale?: string;
+                localizations?: {
+                    id?: number;
+                    documentId?: string;
+                  }[];
+              }[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
             createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
             updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
-          };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          }[];
+        blocked?: boolean;
+        preferedLanguage?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
         };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          name?: string;
+          sender_name?: string;
+          /** Format: date */
+          header_date?: string;
+          body?: unknown;
+          object_id?: string;
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    StandaloneEmailResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["StandaloneEmail"];
-    };
     StandaloneEmailResponse: {
-      data?: components["schemas"]["StandaloneEmailResponseDataObject"];
+      data?: components["schemas"]["StandaloneEmail"];
       meta?: Record<string, never>;
     };
     TagRequest: {
       data: {
         label: string;
         value: string;
+        locale?: string;
+        localizations?: (number | string)[];
+        /** @example string or id */
+        strapi_stage?: number | string;
+        /** @example string or id */
+        strapi_assignee?: number | string;
       };
     };
-    TagListResponseDataItem: {
-      id?: number;
-      attributes?: components["schemas"]["Tag"];
-    };
     TagListResponse: {
-      data?: components["schemas"]["TagListResponseDataItem"][];
+      data?: components["schemas"]["Tag"][];
       meta?: {
         pagination?: {
           page?: number;
@@ -2961,124 +3155,214 @@ export interface components {
       };
     };
     Tag: {
+      id?: number;
+      documentId?: string;
       label: string;
       value: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      publishedAt?: string;
       createdBy?: {
-        data?: {
-          id?: number;
-          attributes?: {
-            firstname?: string;
-            lastname?: string;
-            username?: string;
-            /** Format: email */
-            email?: string;
-            resetPasswordToken?: string;
-            registrationToken?: string;
-            isActive?: boolean;
-            roles?: {
-              data?: {
+        id?: number;
+        documentId?: string;
+        firstname?: string;
+        lastname?: string;
+        username?: string;
+        /** Format: email */
+        email?: string;
+        resetPasswordToken?: string;
+        registrationToken?: string;
+        isActive?: boolean;
+        roles?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            code?: string;
+            description?: string;
+            users?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            permissions?: {
+                id?: number;
+                documentId?: string;
+                action?: string;
+                actionParameters?: unknown;
+                subject?: string;
+                properties?: unknown;
+                conditions?: unknown;
+                role?: {
                   id?: number;
-                  attributes?: {
-                    name?: string;
-                    code?: string;
-                    description?: string;
-                    users?: {
-                      data?: {
-                          id?: number;
-                          attributes?: Record<string, never>;
-                        }[];
-                    };
-                    permissions?: {
-                      data?: {
-                          id?: number;
-                          attributes?: {
-                            action?: string;
-                            actionParameters?: unknown;
-                            subject?: string;
-                            properties?: unknown;
-                            conditions?: unknown;
-                            role?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            /** Format: date-time */
-                            createdAt?: string;
-                            /** Format: date-time */
-                            updatedAt?: string;
-                            createdBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                            updatedBy?: {
-                              data?: {
-                                id?: number;
-                                attributes?: Record<string, never>;
-                              };
-                            };
-                          };
-                        }[];
-                    };
-                    /** Format: date-time */
-                    createdAt?: string;
-                    /** Format: date-time */
-                    updatedAt?: string;
-                    createdBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                    updatedBy?: {
-                      data?: {
-                        id?: number;
-                        attributes?: Record<string, never>;
-                      };
-                    };
-                  };
-                }[];
-            };
-            blocked?: boolean;
-            preferedLanguage?: string;
+                  documentId?: string;
+                };
+                /** Format: date-time */
+                createdAt?: string;
+                /** Format: date-time */
+                updatedAt?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+                createdBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                updatedBy?: {
+                  id?: number;
+                  documentId?: string;
+                };
+                locale?: string;
+                localizations?: {
+                    id?: number;
+                    documentId?: string;
+                  }[];
+              }[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
             createdBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
             updatedBy?: {
-              data?: {
-                id?: number;
-                attributes?: Record<string, never>;
-              };
+              id?: number;
+              documentId?: string;
             };
-          };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          }[];
+        blocked?: boolean;
+        preferedLanguage?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
         };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
       };
       updatedBy?: {
-        data?: {
+        id?: number;
+        documentId?: string;
+      };
+      locale?: string;
+      localizations?: {
           id?: number;
-          attributes?: Record<string, never>;
-        };
+          documentId?: string;
+          label?: string;
+          value?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          strapi_stage?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            color?: string;
+            workflow?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              stages?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              contentTypes?: unknown;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            };
+            permissions?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          strapi_assignee?: {
+            id?: number;
+            documentId?: string;
+          };
+        }[];
+      strapi_stage?: {
+        id?: number;
+        documentId?: string;
+      };
+      strapi_assignee?: {
+        id?: number;
+        documentId?: string;
       };
     };
-    TagResponseDataObject: {
-      id?: number;
-      attributes?: components["schemas"]["Tag"];
-    };
     TagResponse: {
-      data?: components["schemas"]["TagResponseDataObject"];
+      data?: components["schemas"]["Tag"];
       meta?: Record<string, never>;
     };
     UploadFile: {
@@ -3219,7 +3503,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -3468,7 +3754,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -3617,7 +3905,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -3766,7 +4056,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -3915,7 +4207,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -4064,7 +4358,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -4313,7 +4609,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -4562,7 +4860,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -4811,7 +5111,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -5060,7 +5362,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };
@@ -5309,7 +5613,9 @@ export interface operations {
         /** @description Relations to return */
         populate?: string;
         /** @description Filters to apply */
-        filters?: Record<string, never>;
+        filters?: {
+          [key: string]: unknown;
+        };
         /** @description Locale to apply */
         locale?: string;
       };

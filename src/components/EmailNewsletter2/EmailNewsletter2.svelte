@@ -91,8 +91,8 @@
             </HeaderTable>
           </td>
         </tr>
-        {#if newsletter.version2?.pinned_mini_posts?.data && newsletter.version2.pinned_mini_posts.data.filter(notEmpty).length > 0}
-          {#each newsletter.version2.pinned_mini_posts.data.filter(notEmpty) as { attributes: post }}
+        {#if newsletter.version2?.pinned_mini_posts && newsletter.version2.pinned_mini_posts.filter(notEmpty).length > 0}
+          {#each newsletter.version2.pinned_mini_posts.filter(notEmpty) as post}
             <tr>
               <td>
                 <NewsletterPinnedPostCard
@@ -105,11 +105,8 @@
             </tr>
           {/each}
         {/if}
-        {#if newsletter.version2?.posts?.data && newsletter.version2.posts.data.filter(notEmpty).length > 0}
-          {#each newsletter.version2.posts.data
-            .filter(notEmpty)
-            .map((post) => post.attributes)
-            .filter(notEmpty) as post}
+        {#if newsletter.version2?.posts && newsletter.version2.posts.filter(notEmpty).length > 0}
+          {#each newsletter.version2.posts.filter(notEmpty) as post}
             <tr>
               <td>
                 <NewsletterPostCard
@@ -124,44 +121,44 @@
         {#if new Date(newsletter.publishedAt || new Date()) < new Date()}
           <NewsletterMiniPostCard
             label={'Advancement'}
-            posts={newsletter.version2?.advancement_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.advancement_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Camping'}
-            posts={newsletter.version2?.camping_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.camping_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'High Adventure'}
-            posts={newsletter.version2?.high_adventure_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.high_adventure_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Fundraisers'}
-            posts={newsletter.version2?.fundraiser_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.fundraiser_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Service Opportunities'}
-            posts={newsletter.version2?.service_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.service_mini_posts?.filter(notEmpty) || []}
           />
         {:else}
           <NewsletterMiniPostCard
             label={'Camping'}
-            posts={newsletter.version2?.camping_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.camping_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Fundraisers'}
-            posts={newsletter.version2?.fundraiser_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.fundraiser_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Service Opportunities'}
-            posts={newsletter.version2?.service_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.service_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'Advancement'}
-            posts={newsletter.version2?.advancement_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.advancement_mini_posts?.filter(notEmpty) || []}
           />
           <NewsletterMiniPostCard
             label={'High Adventure'}
-            posts={newsletter.version2?.high_adventure_mini_posts?.data?.filter(notEmpty) || []}
+            posts={newsletter.version2?.high_adventure_mini_posts?.filter(notEmpty) || []}
           />
         {/if}
         {#if newsletter.manual_calendar && newsletter.manual_calendar.filter(notEmpty).length > 0}

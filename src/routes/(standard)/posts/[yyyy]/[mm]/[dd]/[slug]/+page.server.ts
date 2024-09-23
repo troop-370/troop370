@@ -23,7 +23,8 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
         previewId,
       },
       populate: 'category, tags',
-      publicationState: previewId ? 'preview' : 'live',
+      // @ts-expect-error status is not in the type definition because it is not in the openapi.json schema
+      status: previewId ? 'draft' : 'published',
     },
     fetch
   );
@@ -31,7 +32,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   if (!resolved.ok) error(resolved.status, 'server error');
   if (!resolved.data.data || resolved.data.data.length < 1) error(404, 'not found');
 
-  const post = resolved.data.data[0].attributes;
+  const post = resolved.data.data[0];
   if (!post) error(404, 'not found');
 
   // redirect to login if password protection is required
@@ -51,8 +52,8 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
     name: post.title,
     body: addRippleDiv(parseBody(post.body as Node[])),
     enable_password_protection: post.enable_password_protection,
-    categories: post.category?.data?.attributes?.value,
-    tags: post.tags?.data?.filter(notEmpty).map((tag) => tag.attributes?.value),
+    categories: post.category?.value,
+    tags: post.tags?.filter(notEmpty).map((tag) => tag?.value),
     description: post.subtitle,
   };
 

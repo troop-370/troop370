@@ -35,12 +35,18 @@
     {/if}
     <div class="nav">
       {#if data.standaloneEmails.hasPrevPage}
-        <Button variant="outlined" href="/newsletters/browse/{parseInt($page.params.page) - 1}">
+        <Button
+          variant="outlined"
+          href="/emails/standalone/browse/{parseInt($page.params.page) - 1}"
+        >
           Previous page
         </Button>
       {/if}
       {#if data.standaloneEmails.hasNextPage}
-        <Button variant="outlined" href="/newsletters/browse/{parseInt($page.params.page) + 1}">
+        <Button
+          variant="outlined"
+          href="/emails/standalone/browse/{parseInt($page.params.page) + 1}"
+        >
           Next page
         </Button>
       {/if}
