@@ -15,6 +15,18 @@ export const load: PageServerLoad = async ({ fetch }) => {
   const announcementCards = resolved.ok ? resolved?.data?.data?.announcement_cards || [] : [];
 
   return {
-    announcementCards,
+    announcementCards: [
+      {
+        id: '1',
+        title: 'Pine Straw Sale',
+        subtitle: 'Order by October 26',
+        link: '/pay/pinestraw',
+        link_text: 'Order now',
+        background_photo: {
+          url: 'https://troop370atlanta.org/photos/backgrounds/pineneedles_l.jpg',
+        },
+      },
+      ...announcementCards,
+    ],
   };
 };
