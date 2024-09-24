@@ -71,6 +71,13 @@ const adminProxyHandler = (async ({ event, resolve }) => {
         cmsAdminRes.headers.get('Content-Type')?.startsWith('text/html') &&
         typeof responseBody === 'string'
       ) {
+        // ensure that the srcipt tag for the admin panel uses the correct URL
+        responseBody = responseBody.replace(
+          '<script type="module" src="/poptart/strapi-',
+          '<script type="module" src="/strapi/poptart/strapi-'
+        );
+
+        // inject css to style the strapi admin panel
         responseBody = responseBody.replace(
           '</head>',
           `<style>
