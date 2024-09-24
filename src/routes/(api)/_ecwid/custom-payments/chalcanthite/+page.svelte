@@ -7,10 +7,11 @@
   $: orderId = payload?.cart?.order?.id;
   $: amount = payload?.cart?.order?.total;
 
-  let venmoLinkUsed = false;
+  $: venmoQR = `venmo://paycharge?audience=private&amount=${amount}&note=${orderId}&recipients=%2CTroop-ThreeSeventy&txn=pay`;
 </script>
 
 <h1>Pay with Venmo</h1>
+<a href="https://troop370atlanta.org/pay/pinestraw#!/~/checkoutPD">⇐ Return to checkout</a>
 
 {#if !orderId || !amount}
   <div class="instruction">
@@ -19,30 +20,34 @@
   </div>
 {:else}
   <div class="instruction">
-    <p>Click the <b>Pay with Venmo</b> button below to pay for your order.</p>
+    <h2>Step 1</h2>
+
+    <p>Click or tap the <b>Pay with Venmo</b> button below to pay for your order.</p>
 
     <p>
-      Before you complete the Venmo payment:
-      <br />
-      <span>Enable the <strong>Turn on for purchases</strong> option.</span>
-      <span>
-        The switch should have a
-        <img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALfSURBVDhPfVNNSFRRFL73/c1MlpZalqOJTqOSQe7KiimiVuFCalMQQpISQX8WoVGOlLYIrTBcGELSIquFRVBBG42wMgMhRZ3RKVMbnci/caaZ9+5P5z5n+nHRB++9e757zjvfuedcjJbBcfVcAWWsjHHu4hwVCA5jNCBh/FqWpNbRy40DpmMMv3+wv6VB8XwbryWcVXLOLTH6H2CMowqWGnLTM2telVcSkxOv4vvN8ief57FOaYmw46CIm1/5Tx4TFll5mp+RdehF2RkiCyK61XnFYPSEWIsQAtqniYFCjM2HOIsEKbFqkowUqEWAcpY/E1xg853vurDz2nnnT0Pvg5pXiO1JIxpFshKqzNk8derAQQq1o+aXT7Q7I/0pQUNfZVctFpEE+LBN1Qpxdu3Zuigl1YL0E4O8OVwxVLgpLyHBaksGKgkegcWIrn//MNQ/52pv2bJB1VSRDEqpl0B6kfBgQjxnxJGemQrB2UDFg1Gfz7tSJ0a2MyNrHfjQpZNBSMRKGOGNwjAPihh4MRwKCLvHM4hmF4Poee9b1NHbjVRFRaFIOIAowZJwAIhYWHMas4GRLJBN2DRq6Kj0XhPyBfyouuQIsmka6/UMQoz0V4s5lRP3bCsGSQ5hEjjpL1MT+tGi3TM569OTXY585CooRBZVRRFD91Y8bF09y3miNdYNmIuPEkxXl2kBkiUJdS/MZDV2PAhDV/z2lLVIUxREGJ2se9QW7QnO2deATxwiVk7bt2ucMHYMVJjSkmQFdUz40ia9w/6c1LSx6dkfgar2VkvTSH9uhmaNjZbZxgWbop40tUArq6CV9eYOwJwHCpOqR3VztDSrZocfx4MFoIXVn2tuXl8qBrDRfboFlByPmf+FIkl3v7pvl4u1OcoC853vn6Xs3alzxLeLnIKLZ4xnAdkhVVbcY+5bF2PUslsCyKu74DAoKYWLtUPG2Ck4yrlXk+VuCG4bvnRj1HQ0gdAvSmo1IDtjQ0UAAAAASUVORK5CYII="
-          alt=""
-        /> green shield when enabled.
-      </span>
-      <span>Per the Venmo User Agreement, we are required to have this option enabled.</span>
+      Because this is a purchase of goods, please enable the <b>Turn on for purchases</b> option on the
+      final payment step in the Venmo app.
     </p>
 
+    <PayWithVenmo {orderId} {amount} />
+
+    <p>
+      Alternatively, you may open the Venmo app and manually enter payment details.
+      <br />
+      <span>
+        Make your payment to <code>@Troop-ThreeSeventy</code> for the amount of
+        <code>${amount.toFixed(2)}</code>.
+      </span>
+      <span>
+        In the order notes, specify the order ID (<code>{orderId}</code>).
+      </span>
+    </p>
+
+    <h2 style="padding-top: 20px;">Step 2</h2>
+
     <p>Once you finish paying, return to this page and click or tap <b>Complete Order</b>.</p>
-  </div>
-
-  <div class="buttons">
-    <PayWithVenmo {orderId} {amount} bind:venmoLinkUsed />
-
     <form method="POST">
-      <Button variant="unelevated" disabled={!venmoLinkUsed}>Complete order</Button>
+      <Button variant="unelevated">Complete order</Button>
     </form>
   </div>
 {/if}
@@ -74,5 +79,37 @@
   span {
     margin-left: 20px;
     display: block;
+  }
+
+  code {
+    background-color: hsla(0, 0%, 0%, 0.1);
+    padding: 0.1rem 0.3rem;
+    border-radius: var(--radius);
+  }
+
+  a {
+    display: inline-block;
+    margin: 10px 20px 0;
+    font-family: var(--font-detail);
+  }
+  a {
+    color: var(--color-primary);
+    box-shadow: 0 1px 0 0 var(--color-primary);
+    transition:
+      background-color 0.2s,
+      box-shadow 0.1s,
+      color 0.2s;
+    text-decoration: none;
+  }
+  a:hover {
+    box-shadow: 0 2px 0 0 var(--color-primary);
+    background-color: hsla(var(--color-primary-hsl), 0.1);
+    color: var(--color-neutral-160);
+  }
+  a:active {
+    background-color: hsla(var(--color-primary-hsl), 0.16);
+  }
+  a:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 </style>
