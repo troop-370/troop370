@@ -6,6 +6,7 @@
   import { compactMode } from '$stores/compactMode.js';
   import { capitalize, formatISODate, openWindow } from '$utils';
   import { stateAbbreviationToName } from '$utils/stateNameToAbbreviation.js';
+  import { copy } from 'copy-anything';
   import {
     Button,
     ContentDialog,
@@ -18,6 +19,7 @@
   import type { z } from 'zod';
   import { fulfillmentStatuses, orderEntrySchema, paymentStatuses } from '../../ecwidSchemas.js';
   import EditShippingAddressDialog from './EditShippingAddressDialog.svelte';
+  import OrderExtraField from './OrderExtraField.svelte';
   import OrderSelectedOption from './OrderSelectedOption.svelte';
 
   export let data;
@@ -31,11 +33,13 @@
   let fulfillmentStatusLoading = false;
   let itemOptionLoading = false;
   let privateAdminNotesLoading = false;
+  let orderExtraFieldsLoading = false;
   $: loading =
     paymentStatusLoading ||
     fulfillmentStatusLoading ||
     itemOptionLoading ||
-    privateAdminNotesLoading;
+    privateAdminNotesLoading ||
+    orderExtraFieldsLoading;
 
   let newPrivateAdminNotesValue = data.order.privateAdminNotes || '';
   function restoreNewPrivateAdminNotes(unused: string | undefined) {
@@ -110,6 +114,24 @@
     });
 
     itemOptionLoading = false;
+  }
+
+  async function updateOrderExtraOption(optionIndex: number, newValue: string) {
+    orderExtraFieldsLoading = true;
+
+    const updatedOrderExtraFields = copy(data.order.orderExtraFields || []);
+    updatedOrderExtraFields[optionIndex].value = newValue;
+
+    const orderUpdate = {
+      id: data.order.id,
+      orderExtraFields: updatedOrderExtraFields,
+    } satisfies z.infer<typeof orderEntrySchema>;
+
+    await fetch('', { method: 'PATCH', body: JSON.stringify(orderUpdate) }).then(async () => {
+      await invalidate('order-page');
+    });
+
+    orderExtraFieldsLoading = false;
   }
 
   async function updatePrivateAdminNotes(newPrivateAdminNotes: string) {
@@ -318,6 +340,16 @@
               Edit
             </Button>
           </TextBlock>
+          {#each data.order.orderExtraFields || [] as option, optionIndex}
+            <OrderExtraField
+              {option}
+              disabled={loading}
+              handleSave={async (newValue) => {
+                updateOrderExtraOption(optionIndex, newValue);
+                return true;
+              }}
+            />
+          {/each}
         </div>
       </div>
     </div>
