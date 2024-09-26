@@ -16,7 +16,5 @@ export const load = (async ({ fetch, params, depends }) => {
       return orderEntrySchema.parse(data);
     });
 
-  console.log(order);
-
   return { order };
 }) satisfies PageServerLoad;
