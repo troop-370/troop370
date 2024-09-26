@@ -116,9 +116,13 @@
     },
   ];
 
-  $: isPineStraw = $page.url.search.includes('148999309') || $page.url.search.includes('149009997');
-  const bales = (d) => d.productId === 149009997;
-  const spread = (d) => d.productId === 148999309;
+  $: isPineStraw =
+    $page.url.search.includes('148999309') ||
+    $page.url.search.includes('149009997') ||
+    $page.url.search.includes('696447273') ||
+    $page.url.search.includes('696427357');
+  const bales = (d) => d.productId === 149009997 || d.productId === 696447273;
+  const spread = (d) => d.productId === 148999309 || d.productId === 696427357;
   const pineStrawColumns: ColumnDef<(typeof data)[0]>[] = [
     {
       accessorKey: '_',
@@ -587,7 +591,11 @@
             on:dblclick={(evt) => {
               if (!isInputElem(evt.target) && !isCheckbox(evt.target)) goto(href);
             }}
-            in:fly|global={{ y: 40, duration: $motionMode === 'reduced' ? 0 : 270, easing: expoOut }}
+            in:fly|global={{
+              y: 40,
+              duration: $motionMode === 'reduced' ? 0 : 270,
+              easing: expoOut,
+            }}
           >
             {#each row.getVisibleCells() as cell}
               {@const columnSize =
@@ -665,8 +673,8 @@
 
 <style>
   div.wrapper {
-    --border-color: var(--color-neutral-light-200)
-    border: 1px solid var(--fds-divider-stroke-default);
+    --border-color: var(--color-neutral-light-200) border: 1px solid
+      var(--fds-divider-stroke-default);
     box-shadow: 0 0 0 1px var(--border-color);
     border-radius: var(--fds-control-corner-radius);
     width: 100%;
@@ -687,8 +695,6 @@
     font-weight: 400;
     line-height: 20px;
   }
-
-  
 
   /* row style */
   [role='row'] {
@@ -712,23 +718,23 @@
   }
 
   /* row size */
-  div[role='rowgroup'] [role="row"] {
+  div[role='rowgroup'] [role='row'] {
     min-height: 40px;
     height: unset;
   }
-  div[role='table'].compact div[role='rowgroup'] [role="row"] {
+  div[role='table'].compact div[role='rowgroup'] [role='row'] {
     min-height: 30px;
     height: 30px;
   }
 
   /* header row */
-  div[role='rowgroup'].thead div[role="row"] {
+  div[role='rowgroup'].thead div[role='row'] {
     border-bottom: 1px solid var(--border-color);
     min-height: 42px;
     height: 42px;
   }
   div[role='rowgroup'].thead {
-    position:sticky;
+    position: sticky;
     top: 0;
     background-color: #ffffff;
     z-index: 1;
@@ -738,12 +744,13 @@
       background-color: #272727;
     }
   }
-  div[role='table'].compact div[role='rowgroup'].thead div[role="row"] {
+  div[role='table'].compact div[role='rowgroup'].thead div[role='row'] {
     min-height: 36px;
   }
 
   /* cell */
-  span[role='columnheader'], span[role='cell'] {
+  span[role='columnheader'],
+  span[role='cell'] {
     padding: 10px 0 10px 10px;
     box-sizing: border-box;
     display: flex;
@@ -761,7 +768,8 @@
   span[role='cell'].noPadding {
     padding: 0;
   }
-  span[role='columnheader'].rightPadding, span[role='cell'].rightPadding {
+  span[role='columnheader'].rightPadding,
+  span[role='cell'].rightPadding {
     padding-right: 10px;
   }
 
@@ -785,9 +793,9 @@
     height: 16px;
   }
   .sort-chevron > :global(svg) {
-    fill: currentColor
+    fill: currentColor;
   }
-  
+
   /* disable text wrapping of cell content when compact mode is enabled */
   span[role='cell'] {
     overflow: hidden;
@@ -808,6 +816,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 10px
+    padding: 20px 10px;
   }
 </style>

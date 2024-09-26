@@ -1879,16 +1879,19 @@ export interface components {
         version2?: components["schemas"]["EmailAnnouncementsV2Component"];
         name: string;
         manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
-        object_id?: string;
-        /** Format: date */
-        shortPublishedAt?: string;
-        previewId?: string;
         locale?: string;
         localizations?: (number | string)[];
         /** @example string or id */
         strapi_stage?: number | string;
         /** @example string or id */
         strapi_assignee?: number | string;
+        /** @enum {string} */
+        stage?: "draft" | "modified" | "published";
+        /** Format: date */
+        shortPublishedAt?: string;
+        previewId?: string;
+        object_id?: string;
+        relationLabel?: string;
       };
     };
     NewsletterListResponse: {
@@ -1909,10 +1912,6 @@ export interface components {
       version2?: components["schemas"]["EmailAnnouncementsV2Component"];
       name: string;
       manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
-      object_id?: string;
-      /** Format: date */
-      shortPublishedAt?: string;
-      previewId?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -1928,17 +1927,13 @@ export interface components {
         documentId?: string;
       };
       locale?: string;
-      localizations?: {
+      localizations?: ({
           id?: number;
           documentId?: string;
           version3?: components["schemas"]["EmailAnnouncementsV3Component"];
           version2?: components["schemas"]["EmailAnnouncementsV2Component"];
           name?: string;
           manual_calendar?: components["schemas"]["EmailManualCalendarMonthComponent"][];
-          object_id?: string;
-          /** Format: date */
-          shortPublishedAt?: string;
-          previewId?: string;
           /** Format: date-time */
           createdAt?: string;
           /** Format: date-time */
@@ -1966,7 +1961,14 @@ export interface components {
             id?: number;
             documentId?: string;
           };
-        }[];
+          /** @enum {string} */
+          stage?: "draft" | "modified" | "published";
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          object_id?: string;
+          relationLabel?: string;
+        })[];
       strapi_stage?: {
         id?: number;
         documentId?: string;
@@ -1975,6 +1977,13 @@ export interface components {
         id?: number;
         documentId?: string;
       };
+      /** @enum {string} */
+      stage?: "draft" | "modified" | "published";
+      /** Format: date */
+      shortPublishedAt?: string;
+      previewId?: string;
+      object_id?: string;
+      relationLabel?: string;
     };
     NewsletterResponse: {
       data?: components["schemas"]["Newsletter"];
@@ -2045,13 +2054,19 @@ export interface components {
         center_text?: boolean;
         show_table_of_contents?: boolean;
         cristata_id?: string;
-        previewId?: string;
         locale?: string;
         localizations?: (number | string)[];
         /** @example string or id */
         strapi_stage?: number | string;
         /** @example string or id */
         strapi_assignee?: number | string;
+        /** @enum {string} */
+        stage?: "draft" | "modified" | "published";
+        /** Format: date */
+        shortPublishedAt?: string;
+        previewId?: string;
+        object_id?: string;
+        relationLabel?: string;
       };
     };
     PageListResponse: {
@@ -2079,7 +2094,6 @@ export interface components {
       center_text?: boolean;
       show_table_of_contents?: boolean;
       cristata_id?: string;
-      previewId?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -2186,7 +2200,7 @@ export interface components {
         documentId?: string;
       };
       locale?: string;
-      localizations?: {
+      localizations?: ({
           id?: number;
           documentId?: string;
           title?: string;
@@ -2200,7 +2214,6 @@ export interface components {
           center_text?: boolean;
           show_table_of_contents?: boolean;
           cristata_id?: string;
-          previewId?: string;
           /** Format: date-time */
           createdAt?: string;
           /** Format: date-time */
@@ -2282,7 +2295,14 @@ export interface components {
             id?: number;
             documentId?: string;
           };
-        }[];
+          /** @enum {string} */
+          stage?: "draft" | "modified" | "published";
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          object_id?: string;
+          relationLabel?: string;
+        })[];
       strapi_stage?: {
         id?: number;
         documentId?: string;
@@ -2291,6 +2311,13 @@ export interface components {
         id?: number;
         documentId?: string;
       };
+      /** @enum {string} */
+      stage?: "draft" | "modified" | "published";
+      /** Format: date */
+      shortPublishedAt?: string;
+      previewId?: string;
+      object_id?: string;
+      relationLabel?: string;
     };
     PageResponse: {
       data?: components["schemas"]["Page"];
@@ -2312,11 +2339,6 @@ export interface components {
         category?: number | string;
         slug: string;
         tags?: (number | string)[];
-        relationLabel?: string;
-        object_id?: string;
-        /** Format: date */
-        shortPublishedAt?: string;
-        previewId?: string;
         submitted_by: string;
         locale?: string;
         localizations?: (number | string)[];
@@ -2324,6 +2346,13 @@ export interface components {
         strapi_stage?: number | string;
         /** @example string or id */
         strapi_assignee?: number | string;
+        /** @enum {string} */
+        stage?: "draft" | "modified" | "published";
+        /** Format: date */
+        shortPublishedAt?: string;
+        previewId?: string;
+        object_id?: string;
+        relationLabel?: string;
       };
     };
     PostListResponse: {
@@ -2557,11 +2586,6 @@ export interface components {
             documentId?: string;
           };
         }[];
-      relationLabel?: string;
-      object_id?: string;
-      /** Format: date */
-      shortPublishedAt?: string;
-      previewId?: string;
       submitted_by: string;
       /** Format: date-time */
       createdAt?: string;
@@ -2578,7 +2602,7 @@ export interface components {
         documentId?: string;
       };
       locale?: string;
-      localizations?: {
+      localizations?: ({
           id?: number;
           documentId?: string;
           title?: string;
@@ -2595,11 +2619,6 @@ export interface components {
               id?: number;
               documentId?: string;
             }[];
-          relationLabel?: string;
-          object_id?: string;
-          /** Format: date */
-          shortPublishedAt?: string;
-          previewId?: string;
           submitted_by?: string;
           /** Format: date-time */
           createdAt?: string;
@@ -2628,7 +2647,14 @@ export interface components {
             id?: number;
             documentId?: string;
           };
-        }[];
+          /** @enum {string} */
+          stage?: "draft" | "modified" | "published";
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          object_id?: string;
+          relationLabel?: string;
+        })[];
       strapi_stage?: {
         id?: number;
         documentId?: string;
@@ -2637,6 +2663,13 @@ export interface components {
         id?: number;
         documentId?: string;
       };
+      /** @enum {string} */
+      stage?: "draft" | "modified" | "published";
+      /** Format: date */
+      shortPublishedAt?: string;
+      previewId?: string;
+      object_id?: string;
+      relationLabel?: string;
     };
     PostResponse: {
       data?: components["schemas"]["Post"];
@@ -2883,16 +2916,19 @@ export interface components {
         /** Format: date */
         header_date: string;
         body: unknown;
-        object_id?: string;
-        /** Format: date */
-        shortPublishedAt?: string;
-        previewId?: string;
         locale?: string;
         localizations?: (number | string)[];
         /** @example string or id */
         strapi_stage?: number | string;
         /** @example string or id */
         strapi_assignee?: number | string;
+        /** @enum {string} */
+        stage?: "draft" | "modified" | "published";
+        /** Format: date */
+        shortPublishedAt?: string;
+        previewId?: string;
+        object_id?: string;
+        relationLabel?: string;
       };
     };
     StandaloneEmailListResponse: {
@@ -2914,10 +2950,6 @@ export interface components {
       /** Format: date */
       header_date: string;
       body: unknown;
-      object_id?: string;
-      /** Format: date */
-      shortPublishedAt?: string;
-      previewId?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -3024,7 +3056,7 @@ export interface components {
         documentId?: string;
       };
       locale?: string;
-      localizations?: {
+      localizations?: ({
           id?: number;
           documentId?: string;
           name?: string;
@@ -3032,10 +3064,6 @@ export interface components {
           /** Format: date */
           header_date?: string;
           body?: unknown;
-          object_id?: string;
-          /** Format: date */
-          shortPublishedAt?: string;
-          previewId?: string;
           /** Format: date-time */
           createdAt?: string;
           /** Format: date-time */
@@ -3117,7 +3145,14 @@ export interface components {
             id?: number;
             documentId?: string;
           };
-        }[];
+          /** @enum {string} */
+          stage?: "draft" | "modified" | "published";
+          /** Format: date */
+          shortPublishedAt?: string;
+          previewId?: string;
+          object_id?: string;
+          relationLabel?: string;
+        })[];
       strapi_stage?: {
         id?: number;
         documentId?: string;
@@ -3126,6 +3161,13 @@ export interface components {
         id?: number;
         documentId?: string;
       };
+      /** @enum {string} */
+      stage?: "draft" | "modified" | "published";
+      /** Format: date */
+      shortPublishedAt?: string;
+      previewId?: string;
+      object_id?: string;
+      relationLabel?: string;
     };
     StandaloneEmailResponse: {
       data?: components["schemas"]["StandaloneEmail"];

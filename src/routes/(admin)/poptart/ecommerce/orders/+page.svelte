@@ -24,7 +24,11 @@
   let exportDialogOpen = false;
   let exportDialogZip4 = false;
 
-  $: isPineStraw = data.url.search.includes('148999309') || data.url.search.includes('149009997');
+  $: isPineStraw =
+    data.url.search.includes('148999309') ||
+    data.url.search.includes('149009997') ||
+    data.url.search.includes('696447273') ||
+    data.url.search.includes('696427357');
 
   $: pageTitle =
     // if defined, attempt to use the page title in the query string

@@ -77,14 +77,22 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
   await getMore();
 
   if (as === 'csv') {
-    const isPineStraw = url.search.includes('148999309') || url.search.includes('149009997');
+    const isPineStraw =
+      url.search.includes('148999309') ||
+      url.search.includes('149009997') ||
+      url.search.includes('696447273') ||
+      url.search.includes('696427357');
 
     let indexWithItem = 0;
     const flatOrders = orders.flatMap(({ id, items, ...rest }, index) => {
       if (isPineStraw) {
         if (items) {
-          const pinestrawItem = items.find((d) => d.productId === 149009997);
-          const spreadItem = items.find((d) => d.productId === 148999309);
+          const pinestrawItem = items.find(
+            (d) => d.productId === 149009997 || d.productId === 696447273
+          );
+          const spreadItem = items.find(
+            (d) => d.productId === 148999309 || d.productId === 696427357
+          );
           const isShipping = rest.shippingOption?.fulfillmentType === 'SHIPPING';
           const { street, city, stateOrProvinceCode, postalCode } = rest.shippingPerson || {};
 

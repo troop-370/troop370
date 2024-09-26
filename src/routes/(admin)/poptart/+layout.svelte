@@ -301,16 +301,16 @@
             {
               label: 'All orders',
               icon: 'CircleSmall24Filled',
-              href: '/poptart/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
+              href: '/poptart/ecommerce/orders?productId=148999309%2C149009997%2C696447273%2C696427357&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
               selected:
                 $page.url.pathname + $page.url.search ===
-                '/poptart/ecommerce/orders?productId=148999309%2C149009997&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
+                '/poptart/ecommerce/orders?productId=148999309%2C149009997%2C696447273%2C696427357&__pageTitle=All%20pine%20straw%20fundraiser%20orders',
             },
             (() => {
               const date = new Date();
               date.setMonth(date.getMonth() - 3);
               const shortIsoDate = date.toISOString().split('T')[0];
-              const location = `/poptart/ecommerce/orders?productId=148999309%2C149009997&createdFrom=${shortIsoDate}&__pageTitle=Recent%20pine%20straw%20fundraiser%20orders`;
+              const location = `/poptart/ecommerce/orders?productId=148999309%2C149009997%2C696447273%2C696427357&createdFrom=${shortIsoDate}&__pageTitle=Recent%20pine%20straw%20fundraiser%20orders`;
               return {
                 label: 'Recent orders (last three months)',
                 icon: 'Clock24Regular',
@@ -321,18 +321,18 @@
             {
               label: 'Pine straw bales',
               icon: 'CircleSmall24Filled',
-              href: '/poptart/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
+              href: '/poptart/ecommerce/orders?productId=149009997%2C696447273&__pageTitle=Pine%20straw%20bales%20orders',
               selected:
                 $page.url.pathname + $page.url.search ===
-                '/poptart/ecommerce/orders?productId=149009997&__pageTitle=Pine%20straw%20bales%20orders',
+                '/poptart/ecommerce/orders?productId=149009997%2C696447273&__pageTitle=Pine%20straw%20bales%20orders',
             },
             {
               label: 'Spread pine straw',
               icon: 'CircleSmall24Filled',
-              href: '/poptart/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
+              href: '/poptart/ecommerce/orders?productId=148999309%2C696427357&__pageTitle=Spread%20pine%20straw%20orders',
               selected:
                 $page.url.pathname + $page.url.search ===
-                '/poptart/ecommerce/orders?productId=148999309&__pageTitle=Spread%20pine%20straw%20orders',
+                '/poptart/ecommerce/orders?productId=148999309%2C696427357&__pageTitle=Spread%20pine%20straw%20orders',
             },
             {
               label: 'Holiday wreaths fundraiser',
