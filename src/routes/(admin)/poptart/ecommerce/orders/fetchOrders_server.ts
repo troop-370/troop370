@@ -158,14 +158,19 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
                 (opt) =>
                   opt.name ===
                   'Where should the pine straw be spread in your yard? (include the address when checking out)'
-              )?.value || '',
+              )?.value ||
+              rest.orderExtraFields?.find((opt) => opt.id === 'where_spread_pine_straw')?.value ||
+              '',
             'delivery time': '',
             'Delivery Instructions':
               pinestrawItem?.selectedOptions?.find(
                 (opt) =>
                   opt.name ===
                   'Delivery Only: Where should the pine straw bales be placed in your yard?'
-              )?.value || '',
+              )?.value ||
+              rest.orderExtraFields?.find((opt) => opt.id === 'where_stack_pine_straw_bales')
+                ?.value ||
+              '',
             Notes: rest.privateAdminNotes || '',
           };
         }
