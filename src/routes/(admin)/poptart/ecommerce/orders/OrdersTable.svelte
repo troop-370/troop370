@@ -155,25 +155,15 @@
     },
     {
       accessorKey: '_',
-      header: 'Address',
+      header: 'Total',
       cell: (info) => {
-        const isShipping = info.row.original.shippingOption?.fulfillmentType === 'SHIPPING';
-        if (!isShipping) return 'PICK UP';
-
-        const shippingPerson = info.row.original.shippingPerson;
-        if (!shippingPerson) return '';
-
-        return (
-          shippingPerson.street +
-          ', ' +
-          shippingPerson.city +
-          ', ' +
-          shippingPerson.stateOrProvinceCode +
-          ', ' +
-          shippingPerson.postalCode
-        );
+        const pinestrawItem = info.row.original.items.find(bales);
+        const spreadItem = info.row.original.items.find(spread);
+        const psCost = pinestrawItem ? pinestrawItem?.quantity * pinestrawItem?.productPrice : 0;
+        const spCost = spreadItem ? spreadItem?.quantity * spreadItem?.productPrice : 0;
+        return `$ ${(psCost + spCost).toFixed(2)}`;
       },
-      size: 350,
+      size: 150,
       enableSorting: false,
     },
     {
