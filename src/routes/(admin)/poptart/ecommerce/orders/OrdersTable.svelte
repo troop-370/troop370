@@ -161,7 +161,8 @@
         const spreadItem = info.row.original.items.find(spread);
         const psCost = pinestrawItem ? pinestrawItem?.quantity * pinestrawItem?.productPrice : 0;
         const spCost = spreadItem ? spreadItem?.quantity * spreadItem?.productPrice : 0;
-        return `$ ${(psCost + spCost).toFixed(2)}`;
+        const shippingRate = info.row.original.shippingOption?.shippingRate || 0;
+        return `$ ${(psCost + spCost + shippingRate).toFixed(2)}`;
       },
       size: 150,
       enableSorting: false,
@@ -381,7 +382,8 @@
         const spreadItem = info.row.original.items.find(spread);
         const psCost = pinestrawItem ? pinestrawItem?.quantity * pinestrawItem?.productPrice : 0;
         const spCost = spreadItem ? spreadItem?.quantity * spreadItem?.productPrice : 0;
-        return `$ ${(psCost + spCost).toFixed(2)}`;
+        const shippingRate = info.row.original.shippingOption?.shippingRate || 0;
+        return `$ ${(psCost + spCost + shippingRate).toFixed(2)}`;
       },
       size: 150,
       enableSorting: false,
