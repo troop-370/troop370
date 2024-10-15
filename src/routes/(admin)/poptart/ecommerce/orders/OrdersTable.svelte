@@ -182,7 +182,7 @@
       accessorKey: 'billingPerson.name',
       header: 'Ordered by',
       cell: (info) => {
-        return info.getValue();
+        return info.getValue() || '';
       },
       size: 200,
       enableSorting: false,
@@ -245,7 +245,7 @@
         const shippingPerson = info.row.original.shippingPerson;
         if (!shippingPerson) return '';
 
-        return shippingPerson.postalCode.slice(0, 5);
+        return shippingPerson.postalCode?.slice(0, 5);
       },
       size: 80,
       enableSorting: false,
