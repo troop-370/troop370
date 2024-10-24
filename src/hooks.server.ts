@@ -5,7 +5,7 @@ import { handleSession } from 'svelte-kit-cookie-session';
 import { fetch } from 'undici';
 
 const sessionHandler = handleSession(
-  { secret: [{ id: 1, secret: COOKIE_SESSION_SECRET, chunked: true }] },
+  { secret: [{ id: 1, secret: COOKIE_SESSION_SECRET }], chunked: true },
   ({ event, resolve }) => {
     return resolve(event);
   }
