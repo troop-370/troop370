@@ -439,9 +439,8 @@
                   if (current && next) {
                     const allDocs = [...(current.docs || []), ...(next.docs || [])];
                     setStore({
-                      ...current,
+                      ...next,
                       docs: allDocs,
-                      totalDocs: current.totalDocs,
                     });
                     loadingMore = false;
                   }
