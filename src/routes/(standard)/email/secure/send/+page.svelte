@@ -61,7 +61,7 @@
       .then(({ data }) => {
         const redirect = JSON.parse(data)[0];
         sendLoading = false;
-        goto(redirect);
+        window.location.href = redirect;
       });
   };
 </script>
