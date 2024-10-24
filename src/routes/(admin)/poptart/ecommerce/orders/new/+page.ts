@@ -2,6 +2,7 @@ import { goto } from '$app/navigation';
 import { PUBLIC_ECWID_STORE_ID, PUBLIC_ECWID_TOKEN } from '$env/static/public';
 import { hasKey } from '$utils';
 import { queryWithStore } from '$utils/query';
+import { get } from 'svelte/store';
 import { z } from 'zod';
 import { createStatusSchema, productSchema } from '../../ecwidSchemas';
 import type { PageLoad } from './$types';
@@ -67,6 +68,7 @@ export const load = (async ({ fetch }) => {
         privateAdminNotes: hasKey(payload, 'privateAdminNotes')
           ? payload.privateAdminNotes
           : undefined,
+        extraFields: hasKey(payload, 'extraFields') ? payload.extraFields : undefined,
       }),
     })
       .then((res) => res.json())

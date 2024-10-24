@@ -20,6 +20,7 @@
     TextBox,
   } from 'fluent-svelte';
   import { z } from 'zod';
+  import { customFields } from '../../../../../(standard)/pay/pinestraw/setCustomFields';
   import {
     fulfillmentStatuses,
     orderEntrySchema,
@@ -29,7 +30,7 @@
 
   export let data;
   $: ({ productsStore, shippingOptionsStore } = data);
-  $: products = $productsStore.data?.docs.filter((doc) => doc.enabled);
+  $: products = $productsStore.data?.docs?.filter((doc) => doc.enabled);
 
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;
@@ -67,6 +68,13 @@
       product.id,
       product.options?.map((opt) => ({ type: opt.type, name: opt.name || '', value: '' })) || [],
     ]);
+  }
+
+  let extraFields: { name: string; value: string; config: (typeof customFields)[number] }[] = [];
+  $: if (customFields && extraFields.length === 0) {
+    extraFields = customFields.map(({ id, ...rest }) => {
+      return { name: rest.title, value: '', config: { id, ...rest } };
+    });
   }
 
   // order
@@ -123,6 +131,11 @@
       shippingMethodId: shippingMethodId ? shippingMethodId : undefined,
     },
     privateAdminNotes,
+    extraFields: Object.fromEntries(
+      extraFields
+        .filter(({ value }) => value.length > 0)
+        .map(({ config, value }) => [config.id, value])
+    ),
   };
 
   const orderDetailsPayloadSchema = orderEntrySchema
@@ -346,6 +359,21 @@
       {/each}
     </section>
   {/if}
+
+  {#if extraFields.length > 0}
+    <PageSubtitle>Extra fields</PageSubtitle>
+    <section>
+      {#each extraFields as opt, optIndex}
+        <FieldWrapper label={`${opt.name} (optional)`} forId={`${opt.config.id}_${optIndex}`}>
+          {#if opt.config.type === 'CHECKBOX'}
+            <Checkbox id={`${opt.config.id}_${optIndex}`} bind:checked={opt.value} />
+          {:else}
+            <TextBox id={`${opt.config.id}_${optIndex}`} bind:value={opt.value} />
+          {/if}
+        </FieldWrapper>
+      {/each}
+    </section>
+  {/if}
 {/if}
 
 <div style="padding-bottom: 60px;" />
@@ -456,7 +484,8 @@
 
   .product-buttons :global(.text-box-container) {
     border-radius: 0 !important;
-    box-shadow: inset 0 1px 0 0 var(--fds-control-stroke-default),
+    box-shadow:
+      inset 0 1px 0 0 var(--fds-control-stroke-default),
       inset 0 -1px 0 0 var(--fds-control-stroke-default);
   }
   .product-buttons :global(.text-box-container input) {

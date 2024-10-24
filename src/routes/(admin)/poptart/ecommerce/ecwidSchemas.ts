@@ -175,8 +175,8 @@ export const shippingSettingsSchema = z.object({
     .optional(),
   methodMarkup: z.number().optional(),
   flatRate: z.number().optional(),
-  disabledMethods: z.array(z.number()).optional(),
-  enabledMethods: z.array(z.number()).optional(),
+  disabledMethods: z.array(z.string()).optional(),
+  enabledMethods: z.array(z.string()).optional(),
 });
 
 export const taxInfoSchema = z.object({
