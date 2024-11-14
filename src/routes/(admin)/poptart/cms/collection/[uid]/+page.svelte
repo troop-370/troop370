@@ -22,11 +22,11 @@
   import CollectionTable from './CollectionTable.svelte';
 
   export let data;
-  $: ({ collectionDocsData, userPermissions } = data);
+  $: ({ collectionDocsData, userPermissions, collectionConfig } = data);
 
-  $: collectionNameSingular = data.settings.info.singularName || data.settings.info.name;
-  $: collectionNamePlural = data.settings.info.pluralName || data.settings.info.name || '';
-  $: displayName = data.settings.info.displayName.split('::').slice(-1)[0];
+  $: collectionNameSingular = $collectionConfig.info.singularName || $collectionConfig.info.name;
+  $: collectionNamePlural = $collectionConfig.info.pluralName || $collectionConfig.info.name || '';
+  $: displayName = $collectionConfig.info.displayName.split('::').slice(-1)[0];
 
   $: pageTitle =
     // if defined, attempt to use the page title in the query string
@@ -106,31 +106,31 @@
 
   // the document list layout for this collection
   $: persistedViewLayout =
-    (browser && localStorage.getItem(`${data.settings.apiID}:viewLayout`)) || '';
+    (browser && localStorage.getItem(`${$collectionConfig.apiID}:viewLayout`)) || '';
   onMount(() => {
     persistedViewLayout =
-      (browser && localStorage.getItem(`${data.settings.apiID}:viewLayout`)) || '';
+      (browser && localStorage.getItem(`${$collectionConfig.apiID}:viewLayout`)) || '';
   });
   let viewLayout: 'table' | 'grid';
   $: viewLayout =
     persistedViewLayout === 'grid' ? 'grid' : persistedViewLayout === 'table' ? 'table' : 'table';
   function setViewLayout(layout: typeof viewLayout) {
-    localStorage.setItem(`${data.settings.apiID}:viewLayout`, layout);
+    localStorage.setItem(`${$collectionConfig.apiID}:viewLayout`, layout);
     viewLayout = layout;
   }
 
   // the details pane setting for this collection
   $: persistedDetailsPane =
-    (browser && localStorage.getItem(`${data.settings.apiID}:detailsPane`)) || '';
+    (browser && localStorage.getItem(`${$collectionConfig.apiID}:detailsPane`)) || '';
   onMount(() => {
     persistedDetailsPane =
-      (browser && localStorage.getItem(`${data.settings.apiID}:detailsPane`)) || '';
+      (browser && localStorage.getItem(`${$collectionConfig.apiID}:detailsPane`)) || '';
   });
   let detailsPane: boolean;
   $: detailsPane =
     persistedDetailsPane === 'true' ? true : persistedDetailsPane === 'false' ? false : false;
   function setDetailsPaneEnabled(enabled: typeof detailsPane) {
-    localStorage.setItem(`${data.settings.apiID}:detailsPane`, `${enabled}`);
+    localStorage.setItem(`${$collectionConfig.apiID}:detailsPane`, `${enabled}`);
     detailsPane = enabled;
   }
 
@@ -177,7 +177,7 @@
           variant="accent"
           disabled={!canCreate || loading || !canCreateAndGet}
           on:click={() => {
-            goto(`/poptart/content-manager/collection-types/${data.settings.uid}/create`);
+            goto(`/poptart/content-manager/collection-types/${$collectionConfig.uid}/create`);
             // createNewDocDialogCounter++;
             // setTimeout(() => {
             //   createNewDocDialogOpen = !createNewDocDialogOpen;
@@ -322,7 +322,7 @@
               )}
               on:click={() =>
                 goto(
-                  `/poptart/content-manager/collection-types/${data.settings.uid}/configurations/list`
+                  `/poptart/content-manager/collection-types/${$collectionConfig.uid}/configurations/list`
                 )}
             >
               <FluentIcon name="Options16Regular" slot="icon" />
@@ -357,7 +357,6 @@
     <div class="new-table-wrapper explorer-main">
       <CollectionTable
         permissions={data.permissions || []}
-        settings={data.settings}
         collectionConfig={data.collectionConfig}
         tableData={data.collectionDocsData}
         tableDataSort={data.table.sort}
@@ -365,7 +364,10 @@
         bind:loadingMore
         on:sort={(evt) => {
           // backup the current sort in localstorage so it can be restored later
-          localStorage.setItem(`table.${data.settings.uid}.sort`, JSON.stringify(evt.detail.new));
+          localStorage.setItem(
+            `table.${$collectionConfig.uid}.sort`,
+            JSON.stringify(evt.detail.new)
+          );
 
           if (JSON.stringify(evt.detail.old) !== JSON.stringify(evt.detail.new)) {
             invalidate('collection-table');

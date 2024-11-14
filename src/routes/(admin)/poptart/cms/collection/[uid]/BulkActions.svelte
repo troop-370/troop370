@@ -8,16 +8,16 @@
   import type { PageData } from './$types';
   import { selectedIds } from './selectedIdsStore';
 
-  export let settings: NonNullable<PageData['settings']>;
+  export let settings: NonNullable<PageData['collectionConfig']>;
   export let tableData: PageData['collectionDocsData'];
 
   $: show = $selectedIds.length > 0;
 
   $: links = {
-    href: `/poptart/content-manager/collection-types/${settings.uid}`,
+    href: `/poptart/content-manager/collection-types/${$settings.uid}`,
     hrefSuffixKey: 'id',
     hrefSearch: '?childWindow=1',
-    windowName: `editor-troop-370-${settings.uid}-`,
+    windowName: `editor-troop-370-${$settings.uid}-`,
   };
 
   $: firstSelectedHref = `${links.href}/${
@@ -103,7 +103,9 @@
     border-radius: var(--fds-control-corner-radius);
     display: flex;
     flex-direction: row;
-    box-shadow: 0px 25.6px 57.6px rgb(0 0 0 / 14%), 0px 0px 16.4px rgb(0 0 0 / 12%);
+    box-shadow:
+      0px 25.6px 57.6px rgb(0 0 0 / 14%),
+      0px 0px 16.4px rgb(0 0 0 / 12%);
     z-index: 1;
     height: 40px;
   }

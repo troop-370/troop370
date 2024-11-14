@@ -28,7 +28,6 @@
   import ValueCell from './ValueCell.svelte';
   import { selectedIds } from './selectedIdsStore';
 
-  export let settings: NonNullable<PageData['settings']>;
   export let collectionConfig: NonNullable<PageData['collectionConfig']>;
   export let permissions: NonNullable<PageData['permissions']>;
   export let tableData: PageData['collectionDocsData'];
@@ -41,10 +40,10 @@
 
   // row links behaviors
   $: links = {
-    href: `/poptart/content-manager/collection-types/${settings.uid}`,
+    href: `/poptart/content-manager/collection-types/${$collectionConfig.uid}`,
     hrefSuffixKey: 'documentId',
     hrefSearch: undefined,
-    windowName: `editor-troop-370-${settings.uid}-`,
+    windowName: `editor-troop-370-${$collectionConfig.uid}-`,
   };
 
   let columns: ColumnDef<Doc>[] = [];
@@ -62,13 +61,13 @@
       size: 42,
       enableSorting: false,
     },
-    ...($collectionConfig?.contentType.layouts.list || [])
+    ...($collectionConfig.layouts.list || [])
       .map((key) => {
         if (['id', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'stage'].includes(key))
           return null;
 
-        const sortable = $collectionConfig?.contentType.metadatas[key]?.list?.sortable;
-        const label = $collectionConfig?.contentType.metadatas[key]?.list?.label;
+        const sortable = $collectionConfig.metadatas[key]?.list?.sortable;
+        const label = $collectionConfig.metadatas[key]?.list?.label;
 
         return {
           header: label || key,
@@ -183,19 +182,19 @@
     },
   ];
 
-  let colName = settings.apiID;
+  let colName = $collectionConfig.apiID;
   let data: Doc[] = [];
   // let filter = JSON.stringify(tableDataFilter);
   let sort = JSON.stringify(tableDataSort);
   $: {
     if (
       data.length !== ($tableData.data?.docs || []).length ||
-      colName !== settings.apiID ||
+      colName !== $collectionConfig.apiID ||
       // filter !== JSON.stringify(tableDataFilter) ||
       sort !== JSON.stringify(tableDataSort)
     ) {
       data = $tableData.data?.docs || [];
-      colName = settings.apiID;
+      colName = $collectionConfig.apiID;
       // filter = JSON.stringify(tableDataFilter);
       sort = JSON.stringify(tableDataSort);
     }
@@ -455,9 +454,9 @@
   {/if}
 </div>
 
-{#if settings}
+{#if $collectionConfig}
   <div style="position: relative;">
-    <BulkActions {settings} {tableData} />
+    <BulkActions settings={collectionConfig} {tableData} />
   </div>
 {/if}
 

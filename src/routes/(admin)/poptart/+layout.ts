@@ -53,6 +53,44 @@ export const load = (async ({ parent, url, fetch }) => {
       return store;
     });
 
+  const contentTypesSettings = await queryWithStore<z.infer<typeof contentTypesSettingsSchema>>({
+    fetch,
+    query: {
+      location: '/strapi/content-manager/content-types-settings',
+      opName: 'contentTypesSettings',
+      docsPath: 'data',
+      paginationPath: '',
+    },
+    validator: contentTypesSettingsSchema,
+    Authorization: `Bearer ${session.adminToken}`,
+    waitForQuery: true, // ensure that data is available before continuing since we need it in this function
+    useCache: true,
+    expireCache: 15 * 60 * 1000, // require refetch if it has been 15 minutes
+  });
+
+  const contentManagerSettings = derived(
+    [cmsSettings, contentTypesSettings],
+    ([$cmsSettings, $contentTypesSettings]) => {
+      return {
+        data: {
+          docs: {
+            contentTypes:
+              $cmsSettings?.data?.docs?.contentTypes?.map((contentType) => {
+                const settings = $contentTypesSettings?.data?.docs?.find(
+                  (s) => s.uid === contentType.uid
+                );
+                return {
+                  ...contentType,
+                  settings: settings?.settings || {},
+                };
+              }) || [],
+            components: $cmsSettings?.data?.docs?.components || [],
+          },
+        },
+      };
+    }
+  );
+
   const userPermissions = await queryWithStore<z.infer<typeof userPermissionsSchema>>({
     fetch,
     query: {
@@ -277,7 +315,7 @@ export const load = (async ({ parent, url, fetch }) => {
   });
 
   const cmsContentTypes = derived(
-    [cmsSettings, permissions],
+    [contentManagerSettings, permissions],
     ([$contentManagerSettings, $permissions]) => {
       return (
         $contentManagerSettings?.data?.docs?.contentTypes
@@ -370,7 +408,7 @@ export const load = (async ({ parent, url, fetch }) => {
   });
 
   return {
-    contentManagerSettings: cmsSettings,
+    contentManagerSettings,
     userPermissions: permissions,
     cmsContentTypes,
     apps,
@@ -396,9 +434,41 @@ const contentTypeSchema = z
   })
   .array();
 
+const componentSchema = z
+  .object({
+    apiID: z.string(),
+    uid: z.string(),
+    attributes: z.object({}).passthrough(),
+    info: z.object({
+      description: z.string().optional(),
+      displayName: z.string(),
+    }),
+    isDisplayed: z.boolean(),
+    category: z.string(),
+    options: z.object({}).passthrough().optional(),
+    pluginOptions: z.object({}).passthrough().optional(),
+  })
+  .array();
+
 const contentManagerInitSchema = z.object({
   contentTypes: contentTypeSchema,
+  components: componentSchema,
 });
+
+const contentTypesSettingsSchema = z
+  .object({
+    uid: z.string(),
+    settings: z.object({
+      bulkable: z.boolean(),
+      filterable: z.boolean(),
+      searchable: z.boolean(),
+      pageSize: z.number(),
+      mainField: z.string(),
+      defaultSortBy: z.string(),
+      defaultSortOrder: z.string(),
+    }),
+  })
+  .array();
 
 const userPermissionsSchema = z
   .object({
