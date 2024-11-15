@@ -219,6 +219,8 @@ interface BaseAttribute extends EditMetadata {
   order: number;
 }
 
+export type SchemaDef = [string, StrapiAttribute];
+
 type StrapiAttribute =
   | StringAttribute
   | NumberAttribute
@@ -287,10 +289,11 @@ interface MediaAttribute extends BaseAttribute {
 
 interface RelationAttribute extends BaseAttribute {
   type: 'relation';
-  relation: 'oneToOne' | 'oneToMany' | 'manyToOne' | 'manyToMany';
+  relationType: 'oneToOne' | 'oneToMany' | 'manyToOne' | 'manyToMany';
   target: string;
   private?: boolean;
   configurable?: boolean;
+  writable?: boolean;
 }
 
 interface ComponentAttribute extends BaseAttribute {
