@@ -214,104 +214,164 @@ type ListMetadata = z.infer<
   typeof collectionConfigurationSchema
 >['contentType']['metadatas'][string]['list'];
 
-interface BaseAttribute extends EditMetadata {
-  table: ListMetadata;
-  order: number;
-}
-
 export type SchemaDef = [string, StrapiAttribute];
 
-type StrapiAttribute =
+// Base Attribute
+export interface BaseAttribute extends EditMetadata {
+  table: ListMetadata;
+  order: number;
+  required?: boolean;
+  unique?: boolean;
+  configurable?: boolean;
+  default?: unknown;
+  private?: boolean;
+}
+
+// Union Type: StrapiAttribute
+export type StrapiAttribute =
   | StringAttribute
-  | NumberAttribute
+  | TextAttribute
+  | RichTextAttribute
+  | IntegerAttribute
+  | BigIntegerAttribute
+  | FloatAttribute
+  | DecimalAttribute
   | BooleanAttribute
+  | DateAttribute
+  | TimeAttribute
   | DateTimeAttribute
-  | JsonAttribute
+  | EmailAttribute
+  | EnumerationAttribute
+  | JSONAttribute
   | MediaAttribute
+  | PasswordAttribute
   | RelationAttribute
+  | UIDAttribute
   | ComponentAttribute
   | DynamicZoneAttribute;
 
-interface StringAttribute extends BaseAttribute {
-  type: 'string';
+// Base Attribute
+export interface BaseAttribute {
   required?: boolean;
   unique?: boolean;
-  default?: string;
-  minLength?: number;
-  maxLength?: number;
-  private?: boolean;
   configurable?: boolean;
-  customField?: string;
-}
-
-interface NumberAttribute extends BaseAttribute {
-  type: 'number';
-  required?: boolean;
-  unique?: boolean;
-  default?: number;
-  min?: number;
-  max?: number;
+  default?: unknown;
   private?: boolean;
-  configurable?: boolean;
-}
-
-interface BooleanAttribute extends BaseAttribute {
-  type: 'boolean';
-  required?: boolean;
-  default?: boolean;
-  private?: boolean;
-  configurable?: boolean;
-}
-
-interface DateTimeAttribute extends BaseAttribute {
-  type: 'datetime';
-  required?: boolean;
-  default?: string;
-  private?: boolean;
-  configurable?: boolean;
-}
-
-interface JsonAttribute extends BaseAttribute {
-  type: 'json';
-  required?: boolean;
-  private?: boolean;
-  configurable?: boolean;
-}
-
-interface MediaAttribute extends BaseAttribute {
-  type: 'media';
-  multiple?: boolean;
-  allowedTypes?: ('images' | 'videos' | 'files')[];
-  required?: boolean;
-  private?: boolean;
-  configurable?: boolean;
-}
-
-interface RelationAttribute extends BaseAttribute {
-  type: 'relation';
-  relationType: 'oneToOne' | 'oneToMany' | 'manyToOne' | 'manyToMany';
-  target: string;
-  private?: boolean;
-  configurable?: boolean;
   writable?: boolean;
 }
 
-interface ComponentAttribute extends BaseAttribute {
+// Attribute: String
+export interface StringAttribute extends BaseAttribute {
+  type: 'string';
+  minLength?: number;
+  maxLength?: number;
+}
+
+// Attribute: Text
+export interface TextAttribute extends BaseAttribute {
+  type: 'text';
+}
+
+// Attribute: Blocks (Rich Text)
+export interface RichTextAttribute extends BaseAttribute {
+  type: 'blocks';
+}
+
+// Attribute: Integer
+export interface IntegerAttribute extends BaseAttribute {
+  type: 'integer';
+}
+
+// Attribute: Big Integer
+export interface BigIntegerAttribute extends BaseAttribute {
+  type: 'biginteger';
+}
+
+// Attribute: Float
+export interface FloatAttribute extends BaseAttribute {
+  type: 'float';
+}
+
+// Attribute: Decimal
+export interface DecimalAttribute extends BaseAttribute {
+  type: 'decimal';
+}
+
+// Attribute: Boolean
+export interface BooleanAttribute extends BaseAttribute {
+  type: 'boolean';
+}
+
+// Attribute: Date
+export interface DateAttribute extends BaseAttribute {
+  type: 'date';
+}
+
+// Attribute: Time
+export interface TimeAttribute extends BaseAttribute {
+  type: 'time';
+}
+
+// Attribute: DateTime
+export interface DateTimeAttribute extends BaseAttribute {
+  type: 'datetime';
+}
+
+// Attribute: Email
+export interface EmailAttribute extends BaseAttribute {
+  type: 'email';
+}
+
+// Attribute: Enumeration
+export interface EnumerationAttribute<T = string> extends BaseAttribute {
+  type: 'enumeration';
+  enum: T[];
+}
+
+// Attribute: JSON
+export interface JSONAttribute extends BaseAttribute {
+  type: 'json';
+}
+
+// Attribute: Media
+export interface MediaAttribute extends BaseAttribute {
+  type: 'media';
+  multiple?: boolean;
+  allowedTypes?: ('images' | 'videos' | 'files')[];
+}
+
+// Attribute: Password
+export interface PasswordAttribute extends BaseAttribute {
+  type: 'password';
+}
+
+// Attribute: Relation
+export interface RelationAttribute extends BaseAttribute {
+  type: 'relation';
+  relation: string; // e.g., 'oneToOne', 'oneToMany', 'manyToOne', etc.
+  target: string; // target model
+  inversedBy?: string;
+  mappedBy?: string;
+}
+
+// Attribute: UID
+export interface UIDAttribute extends BaseAttribute {
+  type: 'uid';
+  targetField?: string;
+}
+
+// Attribute: Component
+export interface ComponentAttribute extends BaseAttribute {
   type: 'component';
-  repeatable: boolean;
   component: string;
-  required?: boolean;
-  private?: boolean;
-  configurable?: boolean;
+  repeatable?: boolean;
   componentDefs?: [string, StrapiAttribute][];
 }
 
-interface DynamicZoneAttribute extends BaseAttribute {
+// Attribute: Dynamic Zone
+export interface DynamicZoneAttribute extends BaseAttribute {
   type: 'dynamiczone';
   components: string[];
-  required?: boolean;
-  private?: boolean;
-  configurable?: boolean;
-  componentDefs?: Record<string, StrapiAttribute[]>;
+  componentDefs?: Record<string, SchemaDef[]>;
   componentSettings?: Record<string, { displayName: string; more: Record<string, unknown> }>;
 }

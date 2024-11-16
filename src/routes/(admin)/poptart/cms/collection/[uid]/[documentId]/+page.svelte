@@ -1,12 +1,35 @@
 <script lang="ts">
-  import { Button, ContentDialog } from 'fluent-svelte';
+  import { copy } from 'copy-anything';
+  import { Button } from 'fluent-svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
+  import Fields from './Fields.svelte';
 
   export let data;
+  $: ({ collectionConfig } = data);
+  $: docData = copy(data.docData) as Record<string, unknown>;
+  let sessionAdminToken = data.session.adminToken;
 
   let developerDialogOpen = false;
+
+  $: visibleFieldDefs = $collectionConfig.defs.filter(([, def]) => def.order < Infinity);
+  $: hiddenFieldDefs = $collectionConfig.defs.filter(([, def]) => def.order === Infinity);
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
 
 <Button on:click={() => (developerDialogOpen = true)}>Open Developer Dialog</Button>
+
+<article>
+  <Fields defs={visibleFieldDefs} {docData} {sessionAdminToken} />
+
+  <hr />
+
+  <Fields defs={hiddenFieldDefs} {docData} {sessionAdminToken} />
+</article>
+
+<style>
+  article {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+</style>
