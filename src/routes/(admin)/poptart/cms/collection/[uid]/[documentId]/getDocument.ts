@@ -37,7 +37,9 @@ export async function getDocument(props: GetDocumentProps) {
         .filter(([, def]) => def.type === 'relation' && def.writable !== false)
         .map(async ([field, def]) => {
           const parentKey = field.split('.').slice(0, -1).join('.');
-          const componentDocumentIdNumber = getProperty(baseData, parentKey)?.id;
+          const componentDocumentIdNumber = def.componentId
+            ? getProperty(baseData, parentKey)?.id
+            : undefined;
 
           const [results] = await getDocumentRelation(
             {
@@ -98,6 +100,9 @@ async function getDocumentRelation(props: GetDocumentProps, field: string) {
   )
     .then((res) => res.json())
     .then((json) => {
+      console.log(
+        `/strapi/content-manager/relations/${collectionID}/${documentId}/${field}?pageSize=100&page=1`
+      );
       return [json.results, json.pagination] as const;
     });
 }
