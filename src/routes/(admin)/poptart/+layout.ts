@@ -2,9 +2,12 @@ import { browser, dev } from '$app/environment';
 import { queryWithStore } from '$utils/query';
 import { redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
+import { overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
 import { derived, get } from 'svelte/store';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
+
+overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
 
 export const load = (async ({ parent, url, fetch }) => {
   const { session } = await parent();
@@ -81,7 +84,9 @@ export const load = (async ({ parent, url, fetch }) => {
                 );
                 return {
                   ...contentType,
-                  settings: settings?.settings || {},
+                  settings: (settings?.settings || {}) as Partial<
+                    NonNullable<typeof settings>['settings']
+                  >,
                 };
               }) || [],
             components: $cmsSettings?.data?.docs?.components || [],

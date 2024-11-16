@@ -11,8 +11,13 @@
 
   let developerDialogOpen = false;
 
-  $: visibleFieldDefs = $collectionConfig.defs.filter(([, def]) => def.order < Infinity);
-  $: hiddenFieldDefs = $collectionConfig.defs.filter(([, def]) => def.order === Infinity);
+  const systemFields = ['id', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  $: visibleFieldDefs = $collectionConfig.defs.filter(
+    ([key, def]) => def.order < Infinity && !systemFields.includes(key)
+  );
+  $: hiddenFieldDefs = $collectionConfig.defs.filter(
+    ([key, def]) => def.order === Infinity && !systemFields.includes(key)
+  );
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />

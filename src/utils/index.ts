@@ -6,6 +6,7 @@ export { formatISODate } from './formatISODate';
 export { genAvatar } from './genAvatar';
 export { hasKey } from './hasKey';
 export { isIsoDate, isShortIsoDate } from './isIsoDate';
+export { isObjectId } from './isObjectId';
 export { isURL } from './isURL';
 export { jsOTP } from './jsOTP';
 export { listOxford } from './listOxford';
@@ -20,4 +21,3 @@ export { slugify } from './slugify';
 export { stateNameToAbbreviation } from './stateNameToAbbreviation';
 export { unflatten } from './unflatten';
 export { withoutImageNodes } from './withoutImageNodes';
-

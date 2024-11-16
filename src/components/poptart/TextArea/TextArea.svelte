@@ -3,7 +3,7 @@
 
   export let style = '';
   export let disabled = false;
-  export let value = '';
+  export let value: string | null = '';
   export let preventLines = false;
 
   export let id = '';
@@ -12,7 +12,7 @@
 
   let height = '1px';
   let textareaElem: HTMLTextAreaElement;
-  $: if (textareaElem) handleChange(value);
+  $: if (textareaElem) handleChange(value ?? '');
 
   function handleChange(value: string) {
     height = `1px`;
