@@ -14,7 +14,7 @@
   export let disabled = false;
   export let referenceOpts: GetReferenceOptions | undefined = undefined;
   export let options: Option[] | undefined = undefined;
-  export let hideIds = false;
+  export let hideIds: boolean | undefined = undefined;
   export let populating = false;
 
   $: (() => {
@@ -120,7 +120,7 @@
     type: (() => {
       if (referenceOpts)
         return slugify(
-          `select-many.reference.${JSON.stringify({ ...referenceOpts, forceLoadFields: [] })}`
+          `select-many.reference.${JSON.stringify({ ...referenceOpts, forceLoadFields: [], fieldId: null, idsToInclude: [], mainField: null })}`
         );
       if (options) return slugify(`select-many.options.${JSON.stringify(options)}`);
       return 'select-many.any-text';

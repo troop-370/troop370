@@ -6,7 +6,7 @@
   import { SelectMany, SelectOne } from '$components/poptart/Select';
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
-  import { notEmpty } from '$utils';
+  import { notEmpty, parseSchemaDefs } from '$utils';
   import { TextBox } from 'fluent-svelte';
   import { isArray, isBoolean, isNull, isNumber, isObject, isString, isUndefined } from 'is-what';
   import type { SchemaDef } from '../+layout';
@@ -14,36 +14,62 @@
   export let defs: SchemaDef[];
   export let docData: Record<string, unknown>;
   export let sessionAdminToken: string | undefined;
+  export let variant: 'normal' | 'show-hidden' | 'hidden-only' = 'normal';
 
-  // TODO: verify if this is a valid input for collectionUID
-  // if the fields that use this are in a component
-  // (e.g., UIDs, relations)
-  $: collectionUID = $page.params.uid;
+  // TODO: require this to always be specified
+  export let collectionUID = $page.params.uid as string;
+  export let relationCurrentDocumentId: string | number = docData.documentId as string;
 
   function isStringOrNull(value: unknown): value is string | null {
     return isString(value) || isNull(value);
   }
+
+  $: ({ visibleFieldDefs, hiddenFieldDefs } = parseSchemaDefs(defs));
+  $: defsToShow = variant === 'hidden-only' ? defs : visibleFieldDefs;
 </script>
 
-{#each defs as [key, def]}
+{#each defsToShow as [key, def]}
   {@const label = def.label ?? key}
   {@const description = def.description}
 
   {#if def.type === 'component'}
     <p>{label}</p>
     <section class="component component--{key}">
-      <svelte:self defs={def.componentDefs} {docData} />
+      <svelte:self
+        defs={def.componentDefs?.map(([componentDefKey, def]) => [
+          key + '.' + componentDefKey,
+          def,
+        ])}
+        {docData}
+        {sessionAdminToken}
+        relationCurrentDocumentId={docData[key + '.id']}
+        collectionUID={def.component}
+        {variant}
+      />
     </section>
   {:else if def.type === 'dynamiczone'}
     {@const zoneComponentDefs = Object.entries(def.componentDefs || {})}
     <p>{label}</p>
     <section class="dynamiczone dynamiczone--{key}">
-      {#each zoneComponentDefs as [componentUID, defs]}
-        <p>{componentUID}</p>
-        <section class="dynamiczone-component dynamiczone-component--{componentUID}">
-          <svelte:self {defs} {docData} />
-        </section>
-      {/each}
+      {#if isArray(docData[key])}
+        {#each docData[key].filter(isObject) as item, index}
+          {@const componentUID = item.__component}
+          {@const component = zoneComponentDefs.find(([key]) => key === componentUID)}
+          {@const componentSchemaDefs = component?.[1] || []}
+          <section
+            class="dynamiczone-component dynamiczone-item--{key} dynamiczone-component--{componentUID}"
+          >
+            <svelte:self
+              defs={componentSchemaDefs}
+              docData={item}
+              {sessionAdminToken}
+              relationCurrentDocumentId={item.id}
+              collectionUID={componentUID}
+              {variant}
+            />
+          </section>
+        {/each}
+      {/if}
     </section>
   {:else if def.type === 'boolean' && (isUndefined(docData[key]) || isBoolean(docData[key]))}
     <FieldWrapper {label} {description} forId={key} mode="checkbox">
@@ -114,8 +140,8 @@
             referenceOpts={{
               collectionUid: collectionUID,
               targetCollectionUid: def.target,
-              fieldId: key,
-              currentDocumentId: docData.documentId,
+              fieldId: key.split('.').slice(-1)[0],
+              currentDocumentId: `${relationCurrentDocumentId}`,
               token: sessionAdminToken,
               mainField: def.mainField,
               idsToInclude: isArray(docData[key])
@@ -133,7 +159,7 @@
               return {
                 _id: `${docData[key][0].documentId}`,
                 ...docData[key][0],
-                label: `${docData[key][0][def.mainField]}`,
+                label: docData[key][0][def.mainField]?.toString(),
               };
             })()}
             on:change={(evt) => {
@@ -150,8 +176,8 @@
             referenceOpts={{
               collectionUid: collectionUID,
               targetCollectionUid: def.target,
-              fieldId: key,
-              currentDocumentId: docData.documentId,
+              fieldId: key.split('.').slice(-1)[0],
+              currentDocumentId: `${relationCurrentDocumentId}`,
               token: sessionAdminToken,
               mainField: def.mainField,
               pageSize: 100,
@@ -174,7 +200,7 @@
                   return {
                     _id: `${opt.documentId}`,
                     ...opt,
-                    label: `${opt[def.mainField]}`,
+                    label: opt[def.mainField]?.toString(),
                   };
                 })
                 .filter(notEmpty);
@@ -211,6 +237,12 @@
     </FieldWrapper>
   {/if}
 {/each}
+
+{#if variant === 'show-hidden' && hiddenFieldDefs.length > 0}
+  <hr />
+  <h1>Hidden fields</h1>
+  <svelte:self {...$$props} defs={hiddenFieldDefs} variant="hidden-only" />
+{/if}
 
 <style>
   section.component {

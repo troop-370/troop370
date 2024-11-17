@@ -17,6 +17,7 @@ export { notEmpty } from './notEmpty';
 export { get, getProperty, set, setProperty } from './objectPath';
 export { openWindow } from './openWindow';
 export { paramsToStrapiFilter } from './paramsToStrapiFilter';
+export { parseSchemaDefs } from './parseSchemaDefs';
 export { query } from './query';
 export { replaceLast } from './replaceLast';
 export { slugify } from './slugify';

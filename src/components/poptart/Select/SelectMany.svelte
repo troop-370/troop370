@@ -84,7 +84,7 @@
   });
   $: if (referenceOpts) {
     const noShadowItems = selectedOptions.every((opt) => opt.isDndShadowItem !== true);
-    if (noShadowItems) {
+    if (noShadowItems && !populating) {
       populate?.(selectedOptions, referenceOpts);
     }
   }

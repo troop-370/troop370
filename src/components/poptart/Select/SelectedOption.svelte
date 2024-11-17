@@ -21,7 +21,8 @@
   export let draggable = false;
   export let dragging = false;
 
-  export let hideId = false;
+  export let hideId: boolean | undefined = undefined;
+  $: implicitHideId = label === undefined || label == _id;
 </script>
 
 <div class="selected-item" on:keydown on:focus on:blur on:mousedown on:touchstart>
@@ -58,7 +59,7 @@
   </div>
   <div class="select-item-detail">
     <div class="selected-item-label">{label || _id}</div>
-    {#if !hideId}
+    {#if (hideId ?? implicitHideId) == false}
       <div class="selected-item-id">{_id}</div>
     {/if}
   </div>

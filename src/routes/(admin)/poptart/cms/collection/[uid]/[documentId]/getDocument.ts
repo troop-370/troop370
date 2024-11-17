@@ -100,9 +100,6 @@ async function getDocumentRelation(props: GetDocumentProps, field: string) {
   )
     .then((res) => res.json())
     .then((json) => {
-      console.log(
-        `/strapi/content-manager/relations/${collectionID}/${documentId}/${field}?pageSize=100&page=1`
-      );
       return [json.results, json.pagination] as const;
     });
 }

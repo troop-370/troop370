@@ -134,17 +134,6 @@ export const load = (async ({ fetch, parent, params }) => {
                 ...merged.metadatas[key].edit,
                 table: merged.metadatas[key].list,
                 order: orderIndex === -1 ? Infinity : orderIndex,
-                ...(() => {
-                  if (attribute.type === 'relation' && contentManagerSettings) {
-                    const targetCollectionSchema = get(
-                      contentManagerSettings
-                    ).data?.docs?.contentTypes.find((type) => type.uid === attribute.target);
-                    const mainField = targetCollectionSchema?.settings?.mainField;
-                    return { mainField };
-                  }
-
-                  return {};
-                })(),
               },
             ] as [string, StrapiAttribute];
           })
@@ -183,18 +172,23 @@ const typeConfigurationSchema = z.object({
   metadatas: z.record(
     z.string(),
     z.object({
-      edit: z.object({
-        description: z.string().optional(),
-        editable: z.boolean().optional(),
-        label: z.string().optional(),
-        placeholder: z.string().optional(),
-        visible: z.boolean().optional(),
-      }),
-      list: z.object({
-        label: z.string(),
-        searchable: z.boolean(),
-        sortable: z.boolean(),
-      }),
+      edit: z
+        .object({
+          description: z.string().optional(),
+          editable: z.boolean().optional(),
+          label: z.string().optional(),
+          placeholder: z.string().optional(),
+          visible: z.boolean().optional(),
+          mainField: z.string().optional(),
+        })
+        .passthrough(),
+      list: z
+        .object({
+          label: z.string(),
+          searchable: z.boolean(),
+          sortable: z.boolean(),
+        })
+        .passthrough(),
     })
   ),
   settings: z.object({
