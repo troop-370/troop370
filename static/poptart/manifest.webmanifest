@@ -1,0 +1,70 @@
+{
+  "name": "Troop 370 Admin",
+  "short_name": "Admin370",
+  "theme_color": "#d9ebff",
+  "background_color": "#d9ebff",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay"],
+  "scope": "/poptart",
+  "start_url": "/poptart",
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://troop370atlanta.org/poptart/manifest.webmanifest"
+    },
+    {
+      "platform": "webapp",
+      "url": "http://localhost:370/poptart/manifest.webmanifest"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/img/troop370-logo/admin/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/troop370-logo/admin/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

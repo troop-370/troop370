@@ -11,7 +11,7 @@
   import { hasKey, notEmpty } from '$utils';
   import type { BeforeNavigate } from '@sveltejs/kit';
   import { Flyout, ProgressRing, TextBlock, ToggleSwitch } from 'fluent-svelte';
-  import { afterUpdate } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
   import { expoOut, linear } from 'svelte/easing';
   import { fade, fly } from 'svelte/transition';
 
@@ -23,6 +23,15 @@
   afterUpdate(() => {
     // keep the path updated when the component changes
     path = $page.url.pathname;
+  });
+
+  // register the service worker so that the PWA can be installed
+  onMount(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/poptart/service-worker.js', { scope: '/poptart/' })
+        .catch((err) => console.error('Service worker registration failed', err));
+    }
   });
 
   $: canReadUploads = !!$userPermissions?.raw.find((p) =>
