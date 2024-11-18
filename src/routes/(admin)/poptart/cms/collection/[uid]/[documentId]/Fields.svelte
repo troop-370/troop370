@@ -8,7 +8,7 @@
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
   import { notEmpty, parseSchemaDefs } from '$utils';
-  import { TextBox } from 'fluent-svelte';
+  import { TextBlock, TextBox } from 'fluent-svelte';
   import {
     isArray,
     isBoolean,
@@ -300,7 +300,20 @@
 {/each}
 
 {#if variant === 'show-hidden' && hiddenFieldDefs.length > 0}
-  <hr />
-  <h1>Hidden fields</h1>
-  <svelte:self {...$$props} defs={hiddenFieldDefs} variant="hidden-only" />
+  <section class="hidden">
+    <TextBlock variant="subtitle">Hidden fields</TextBlock>
+    <br />
+    <br />
+    <svelte:self {...$$props} defs={hiddenFieldDefs} variant="hidden-only" />
+  </section>
 {/if}
+
+<style>
+  section.hidden {
+    background-color: var(--fds-card-background-default);
+    box-shadow: inset 0 0 0 1px var(--fds-control-stroke-default);
+    border-radius: var(--fds-control-corner-radius);
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+</style>

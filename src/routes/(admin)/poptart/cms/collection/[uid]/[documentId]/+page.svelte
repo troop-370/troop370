@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { FileExplorerDialog } from '$components/poptart/FileExplorer';
   import { Button } from 'fluent-svelte';
+  import { onDestroy, onMount } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Fields from './Fields.svelte';
 
@@ -11,6 +13,23 @@
 
   let developerDialogOpen = false;
   let explorerDialogOpen = false;
+  let showHiddenFields = false;
+
+  function keyboardShortcuts(evt: KeyboardEvent) {
+    // trigger whether hidden fields are shown
+    // ALT + SHIFT + H
+    if (evt.altKey && evt.shiftKey && evt.key === 'H') {
+      evt.preventDefault();
+      showHiddenFields = !showHiddenFields;
+      return;
+    }
+  }
+  onMount(() => {
+    document.addEventListener('keydown', keyboardShortcuts);
+  });
+  onDestroy(() => {
+    if (browser) document.removeEventListener('keydown', keyboardShortcuts);
+  });
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
@@ -24,7 +43,7 @@
     defs={$collectionConfig.defs}
     docData={docDataStore}
     {sessionAdminToken}
-    variant="show-hidden"
+    variant={showHiddenFields ? 'show-hidden' : 'normal'}
   />
 </article>
 
