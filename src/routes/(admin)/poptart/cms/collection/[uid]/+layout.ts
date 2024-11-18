@@ -237,6 +237,7 @@ export type StrapiAttribute =
   | StringAttribute
   | TextAttribute
   | RichTextAttribute
+  | BlocksAttribute
   | IntegerAttribute
   | BigIntegerAttribute
   | FloatAttribute
@@ -277,8 +278,13 @@ export interface TextAttribute extends BaseAttribute {
   type: 'text';
 }
 
-// Attribute: Blocks (Rich Text)
+// Attribute: Markdown
 export interface RichTextAttribute extends BaseAttribute {
+  type: 'richtext';
+}
+
+// Attribute: Blocks
+export interface BlocksAttribute extends BaseAttribute {
   type: 'blocks';
 }
 

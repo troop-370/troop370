@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Checkbox from '$components/poptart/Checkbox/Checkbox.svelte';
+  import Code from '$components/poptart/Code/Code.svelte';
   import DateTime from '$components/poptart/DateTime/DateTime.svelte';
   import Components from '$components/poptart/DocArray/Components.svelte';
   import FieldWrapper from '$components/poptart/FieldWrapper.svelte';
@@ -150,7 +151,10 @@
         <!-- Password -->
       {:else if def.type === 'password' && isStringOrNullish($docData[key])}
         <TextBox type="password" bind:value={$docData[key]} id={forId} />
-        <!-- Blocks (RichText) -->
+        <!-- Markdown -->
+      {:else if def.type === 'richtext' && isStringOrNullish($docData[key])}
+        <Code type="md" key={forId} bind:value={$docData[key]} />
+        <!-- Blocks -->
       {:else if def.type === 'blocks'}
         NOT SUPPORTED (blocks)
         <!-- UIDs -->
