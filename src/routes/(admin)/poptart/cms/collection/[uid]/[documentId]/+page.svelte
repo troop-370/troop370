@@ -2,13 +2,14 @@
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { FileExplorerDialog } from '$components/poptart/FileExplorer';
+  import { title } from '$stores/title';
   import { Button } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Fields from './Fields.svelte';
 
   export let data;
-  $: ({ collectionConfig, docDataStore } = data);
+  $: ({ collectionConfig, docDataStore, saveStatus } = data);
   let sessionAdminToken = data.session.adminToken;
 
   let developerDialogOpen = false;
@@ -23,6 +24,14 @@
       showHiddenFields = !showHiddenFields;
       return;
     }
+
+    // save the document
+    // CTRL + S
+    if (evt.ctrlKey && evt.key === 's') {
+      evt.preventDefault();
+      data.save();
+      return;
+    }
   }
   onMount(() => {
     document.addEventListener('keydown', keyboardShortcuts);
@@ -30,6 +39,10 @@
   onDestroy(() => {
     if (browser) document.removeEventListener('keydown', keyboardShortcuts);
   });
+
+  $: if (browser) {
+    title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - ${$saveStatus}`);
+  }
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
@@ -37,6 +50,7 @@
 
 <Button on:click={() => (developerDialogOpen = true)}>Open Developer Dialog</Button>
 <Button on:click={() => (explorerDialogOpen = true)}>Open Explorer Dialog</Button>
+<Button on:click={data.save} disabled={$saveStatus === 'Saved'}>Save</Button>
 
 <article>
   <Fields
@@ -51,5 +65,6 @@
   article {
     max-width: 800px;
     margin: 0 auto;
+    padding: 20px;
   }
 </style>

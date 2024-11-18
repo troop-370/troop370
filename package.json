@@ -88,6 +88,7 @@
     "marked": "^4.2.2",
     "merge-anything": "^6.0.2",
     "monaco-editor": "^0.52.0",
+    "nestify-anything": "^3.0.2",
     "nprogress": "^0.2.0",
     "object-path": "^0.11.8",
     "object-to-css-variables": "^0.2.1",

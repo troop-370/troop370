@@ -13,8 +13,7 @@ interface GetDocumentProps {
 }
 
 export async function getDocument(props: GetDocumentProps): Promise<Record<string, unknown>> {
-  const { fetch, session, collectionID, documentId, defs } = props;
-  const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
+  const { fetch, session, collectionID, documentId } = props;
 
   const [baseData, metaData] = await fetch(
     `/strapi/content-manager/collection-types/${collectionID}/${documentId}`,
@@ -30,6 +29,17 @@ export async function getDocument(props: GetDocumentProps): Promise<Record<strin
     .then((json) => {
       return [json.data, json.meta];
     });
+
+  return withDocumentRelationData({ ...props, baseData });
+}
+
+interface WithDocumentRelationDataProps extends GetDocumentProps {
+  baseData: Record<string, unknown>;
+}
+
+export async function withDocumentRelationData(props: WithDocumentRelationDataProps) {
+  const { documentId, defs, baseData } = props;
+  const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
 
   const flatRelationData = Object.fromEntries(
     await Promise.all(

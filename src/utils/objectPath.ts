@@ -2,6 +2,8 @@ import * as objectPathRaw from 'object-path';
 
 export const objectPath = objectPathRaw.default ?? objectPathRaw;
 
+export const del = objectPath.del;
+export const delProperty = objectPath.del;
 export const get = objectPath.get;
 export const getProperty = objectPath.get;
 export const set = objectPath.set;
