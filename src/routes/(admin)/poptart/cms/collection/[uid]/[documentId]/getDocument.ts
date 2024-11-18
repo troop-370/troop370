@@ -12,7 +12,7 @@ interface GetDocumentProps {
   defs: SchemaDef[];
 }
 
-export async function getDocument(props: GetDocumentProps) {
+export async function getDocument(props: GetDocumentProps): Promise<Record<string, unknown>> {
   const { fetch, session, collectionID, documentId, defs } = props;
   const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
 

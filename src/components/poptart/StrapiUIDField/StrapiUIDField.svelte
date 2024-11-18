@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Button, ProgressRing, TextBox } from 'fluent-svelte';
+  import type { Writable } from 'svelte/store';
 
   export let key: string;
-  export let docData: Record<string, unknown>;
+  export let docData: Writable<Record<string, unknown>>;
   export let collectionUID: string;
   export let sessionAdminToken: string | undefined;
   export let disabled = false;
@@ -30,7 +31,7 @@
   }
 </script>
 
-<TextBox id={key} bind:value={docData[key]} {disabled} />
+<TextBox id={key} bind:value={$docData[key]} {disabled} />
 <div class="actions">
   <Button
     {disabled}
@@ -38,7 +39,7 @@
       loading = true;
       generateStrapiUID(collectionUID, key, docData, sessionAdminToken)
         .then((newUID) => {
-          docData[key] = newUID;
+          $docData[key] = newUID;
         })
         .finally(() => {
           loading = false;

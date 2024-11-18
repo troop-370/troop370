@@ -1468,8 +1468,39 @@ index e0dd9e5..a10fa80 100644
 -export {};
 +export { };
 +
+diff --git a/node_modules/fluent-svelte/Tooltip/TooltipWrapper.svelte b/node_modules/fluent-svelte/Tooltip/TooltipWrapper.svelte
+index 62f95c2..5d2fbea 100644
+--- a/node_modules/fluent-svelte/Tooltip/TooltipWrapper.svelte
++++ b/node_modules/fluent-svelte/Tooltip/TooltipWrapper.svelte
+@@ -24,6 +24,8 @@ export let tooltipElement = null;
+ export let anchorElement = null;
+ /** Obtains a bound reference to the tooltip's content wrapper element. */
+ export let wrapperElement = null;
++export let style = "";
++export let wrapperElementClass = "";
+ let mounted = false;
+ let tooltipDurationTimeout;
+ let currentPosition = {
+@@ -61,7 +63,7 @@ function destroyTooltip() {
+ <svelte:window on:scroll={destroyTooltip} />
+ 
+ <div
+-	class="tooltip-wrapper"
++	class="tooltip-wrapper {wrapperElementClass}"
+ 	title={mounted ? undefined : text}
+ 	bind:this={wrapperElement}
+ 	on:mouseenter={mountTooltip}
+@@ -82,7 +84,7 @@ function destroyTooltip() {
+ 			style="{placement === 'auto'
+ 				? `top: calc(${currentPosition.y}px - var(--fds-tooltip-offset));
+ 				   left: ${currentPosition.x}px;`
+-				: ''} --fds-tooltip-offset: {offset}px"
++				: ''} --fds-tooltip-offset: {offset}px;{style}"
+ 		>
+ 			<TooltipSurface bind:element={tooltipElement} {...$$restProps}>
+ 				{text}
 diff --git a/node_modules/fluent-svelte/internal.js b/node_modules/fluent-svelte/internal.js
-index d603738..994536f 100644
+index d603738..db5cb8c 100644
 --- a/node_modules/fluent-svelte/internal.js
 +++ b/node_modules/fluent-svelte/internal.js
 @@ -1,11 +1,11 @@

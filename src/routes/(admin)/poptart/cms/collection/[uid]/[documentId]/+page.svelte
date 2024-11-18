@@ -1,15 +1,12 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { FileExplorerDialog } from '$components/poptart/FileExplorer';
-  import { copy } from 'copy-anything';
-  import { flatten } from 'flatten-anything';
   import { Button } from 'fluent-svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Fields from './Fields.svelte';
 
   export let data;
-  $: ({ collectionConfig } = data);
-  $: docData = flatten(copy(data.docData)) as Record<string, unknown>;
+  $: ({ collectionConfig, docDataStore } = data);
   let sessionAdminToken = data.session.adminToken;
 
   let developerDialogOpen = false;
@@ -23,7 +20,12 @@
 <Button on:click={() => (explorerDialogOpen = true)}>Open Explorer Dialog</Button>
 
 <article>
-  <Fields defs={$collectionConfig.defs} {docData} {sessionAdminToken} variant="show-hidden" />
+  <Fields
+    defs={$collectionConfig.defs}
+    docData={docDataStore}
+    {sessionAdminToken}
+    variant="show-hidden"
+  />
 </article>
 
 <style>
