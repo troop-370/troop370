@@ -1,21 +1,53 @@
-import { hasKey, notEmpty } from '$utils';
+import { hasKey } from '$utils';
 import { isWritableStore } from '$utils/isWritableStore';
 import { copy } from 'copy-anything';
 import { isArray, isObject, isString } from 'is-what';
 import { derived, get, readable, writable, type Readable, type Writable } from 'svelte/store';
+import type { ComponentAttribute } from '../+layout';
 import type { PageLoad } from './$types';
-import { getDocument, withDocumentRelationData } from './getDocument';
+import {
+  deconstructSchemaDefs,
+  getDocument,
+  reconstructSchemaDefs,
+  withDocumentRelationData,
+} from './getDocument';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
 
 export const load = (async ({ fetch, parent, params }) => {
-  const { session, collectionConfig } = await parent();
+  const { session, collectionConfig, permissions } = await parent();
+
+  const defs = (() => {
+    const deconstructedSchemaDefs = deconstructSchemaDefs(get(collectionConfig).defs);
+
+    // filter out the fields that the user doesn't have permission to read
+    const readableFields = permissions.find(
+      (p) => p.action === 'plugin::content-manager.explorer.read'
+    )?.properties?.fields;
+    const filtered = deconstructedSchemaDefs.filter(([field]) => {
+      if (!isArray(readableFields)) return false;
+      return readableFields.includes(field);
+    });
+
+    return reconstructSchemaDefs(
+      filtered,
+      get(collectionConfig).defs.reduce(
+        (acc, [key, def]) => {
+          if (def.type === 'component') {
+            acc[def.component] = def;
+          }
+          return acc;
+        },
+        {} as Record<string, ComponentAttribute>
+      )
+    );
+  })();
 
   const queryProps = {
     fetch,
     session,
     collectionID: params.uid,
     documentId: params.documentId,
-    defs: get(collectionConfig).defs,
+    defs,
   };
 
   let docData = await getDocument(queryProps);
@@ -49,13 +81,13 @@ export const load = (async ({ fetch, parent, params }) => {
   const saveStatus = derived([docDataStore.docData, saving], ([$currentDocData, $saving]) => {
     if ($saving) return 'Saving…';
 
-    const isUnsaved = checkForUnsavedChanges(docData, $currentDocData, get(collectionConfig).defs);
+    const isUnsaved = checkForUnsavedChanges(docData, $currentDocData, defs);
     if (isUnsaved) return 'Unsaved changes';
 
     return 'Saved';
   });
 
-  return { docData, docDataStore, save, saveStatus };
+  return { docData, docDataStore, save, saveStatus, defs };
 }) satisfies PageLoad;
 
 /**

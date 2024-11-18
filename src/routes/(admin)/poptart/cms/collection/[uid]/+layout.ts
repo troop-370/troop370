@@ -378,7 +378,7 @@ export interface ComponentAttribute extends BaseAttribute {
   type: 'component';
   component: string;
   repeatable?: boolean;
-  componentDefs?: [string, StrapiAttribute][];
+  componentDefs?: SchemaDef[];
 }
 
 // Attribute: Dynamic Zone

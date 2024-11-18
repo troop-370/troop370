@@ -1,6 +1,7 @@
-import { getProperty, setProperty } from '$utils';
+import { getProperty, notEmpty, setProperty } from '$utils';
+import { copy } from 'copy-anything';
 import { merge } from 'merge-anything';
-import type { SchemaDef } from '../+layout';
+import type { ComponentAttribute, SchemaDef } from '../+layout';
 
 type Fetch = typeof fetch;
 
@@ -94,6 +95,47 @@ export function deconstructSchemaDefs(
   });
 }
 type DeconstructedSchemaDefs = [SchemaDef[0], SchemaDef[1] & { componentId?: string }][];
+
+export function reconstructSchemaDefs(
+  defs: DeconstructedSchemaDefs,
+  componentAttrDefs: Record<string, ComponentAttribute>
+): SchemaDef[] {
+  const groupedDefs = defs.reduce(
+    (acc, [field, def]) => {
+      const parentKey = field.split('.').slice(0, -1).join('.');
+      const fieldName = field.split('.').slice(-1)[0];
+      if (!acc[parentKey]) {
+        acc[parentKey] = [];
+      }
+      acc[parentKey].push([fieldName, def]);
+      return acc;
+    },
+    {} as Record<string, SchemaDef[]>
+  );
+
+  return Object.entries(groupedDefs)
+    .flatMap(([field, defs]) => {
+      if (field === '') {
+        return defs;
+      }
+
+      return [
+        [
+          field,
+          {
+            ...componentAttrDefs[defs[0][1].componentId as string],
+            componentDefs: defs.map(([key, _def]) => {
+              const def = copy(_def);
+              delete def.componentId;
+              return [key, def] as const;
+            }) satisfies SchemaDef[],
+          },
+        ] as const satisfies SchemaDef,
+      ];
+    })
+    .filter(notEmpty)
+    .sort(([, a], [, b]) => (a.order > b.order ? 1 : -1));
+}
 
 async function getDocumentRelation(props: GetDocumentProps, field: string) {
   const { fetch, session, collectionID, documentId, defs } = props;

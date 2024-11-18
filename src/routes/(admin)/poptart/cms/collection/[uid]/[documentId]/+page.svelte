@@ -54,7 +54,7 @@
 
 <article>
   <Fields
-    defs={$collectionConfig.defs}
+    defs={data.defs}
     docData={docDataStore}
     {sessionAdminToken}
     variant={showHiddenFields ? 'show-hidden' : 'normal'}
