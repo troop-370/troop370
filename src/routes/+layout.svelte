@@ -200,6 +200,11 @@
     }
   }
 
+  /* combobo box dropdown */
+  :global(.combo-box-dropdown) {
+    overflow: auto;
+  }
+
   /* content dialogs */
   :global(:root .content-dialog-smoke .content-dialog) {
     max-height: calc(100vh - env(titlebar-area-height, 32px) - 40px);
@@ -253,7 +258,8 @@
   :global(:root .button.style-standard) {
     border: none !important;
     --fds-control-stroke-secondary-overlay: hsla(0, 0%, 0%, 10.44%);
-    box-shadow: inset 0 0 0 1px var(--fds-control-stroke-default),
+    box-shadow:
+      inset 0 0 0 1px var(--fds-control-stroke-default),
       inset 0 -1px 0 0 var(--fds-control-stroke-secondary-overlay);
     /* padding: 5px 12px 6.5px 12px; */
   }
