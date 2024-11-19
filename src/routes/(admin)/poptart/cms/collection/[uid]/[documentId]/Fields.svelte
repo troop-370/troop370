@@ -9,7 +9,7 @@
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
   import { notEmpty, parseSchemaDefs } from '$utils';
-  import { InfoBadge, InfoBar, TextBlock, TextBox } from 'fluent-svelte';
+  import { InfoBar, TextBlock, TextBox } from 'fluent-svelte';
   import {
     isArray,
     isBoolean,
@@ -20,7 +20,7 @@
     isString,
     isUndefined,
   } from 'is-what';
-  import { get, readonly } from 'svelte/store';
+  import { get } from 'svelte/store';
   import type { SchemaDef } from '../+layout';
   import { _isDocDataStore, type DocDataStore } from './+page';
 
@@ -73,12 +73,15 @@
     {:else if def.type === 'component' && isArray(def.componentDefs) && (_isDocDataStore($docData[key]) || isNull($docData[key]))}
       {#if isObject($plainDocData[key]) || isNull($docData[key])}
         {@const id = isObject($plainDocData[key]) ? `${$plainDocData[key].id}` : null}
+        {@const isEmpty = Object.keys($plainDocData[key] || {}).length === 0}
         <Components
           {disabled}
           componentUIDs={[def.component]}
           arr={isNull(id) || isNull($docData[key])
             ? []
-            : [{ __uuid: id, _id: id, __docData: $docData[key], __componentUID: def.component }]}
+            : isEmpty
+              ? []
+              : [{ __uuid: id, _id: id, __docData: $docData[key], __componentUID: def.component }]}
           fieldsComponentProps={{
             defs: [{ componentUID: def.component, defs: def.componentDefs }],
             sessionAdminToken,

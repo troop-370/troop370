@@ -1,4 +1,4 @@
-import { getProperty, setProperty } from '$utils';
+import { getProperty, notEmpty, setProperty } from '$utils';
 import { merge } from 'merge-anything';
 import type { SchemaDef } from '../+layout';
 
@@ -47,9 +47,13 @@ export async function withDocumentRelationData(props: WithDocumentRelationDataPr
         .filter(([, def]) => def.type === 'relation' && def.writable !== false)
         .map(async ([field, def]) => {
           const parentKey = field.split('.').slice(0, -1).join('.');
-          const componentDocumentIdNumber = def.componentId
-            ? getProperty(baseData, parentKey)?.id
-            : undefined;
+          const parentData = getProperty(baseData, parentKey);
+
+          // if the parent data is null, we don't need to fetch the relation data
+          // because it's not going to be used
+          if (parentData === null) return null;
+
+          const componentDocumentIdNumber = def.componentId ? parentData?.id : undefined;
 
           const [results] = await getDocumentRelation(
             {
@@ -61,7 +65,8 @@ export async function withDocumentRelationData(props: WithDocumentRelationDataPr
           );
           return [field, results] as const;
         })
-    )
+        .filter(notEmpty)
+    ).then((results) => results.filter(notEmpty))
   );
   const relationData = {};
   Object.entries(flatRelationData).forEach(([field, data]) => {

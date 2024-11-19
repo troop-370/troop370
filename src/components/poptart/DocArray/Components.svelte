@@ -154,7 +154,6 @@
       on:stopdrag={(evt) => stopDrag(evt.detail)}
       on:dismiss={() => {
         const newArr = arr.filter((value) => value._id !== _id);
-        console.log(newArr[0] ?? null);
         dispatch('dismiss', newArr);
       }}
       draggable

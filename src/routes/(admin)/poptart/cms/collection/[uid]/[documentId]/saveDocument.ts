@@ -1,5 +1,5 @@
 import { getProperty, notEmpty, setProperty } from '$utils';
-import { delProperty } from '$utils/objectPath';
+import { delProperty, hasProperty } from '$utils/objectPath';
 import { copy } from 'copy-anything';
 import { flattenObject } from 'flatten-anything';
 import { isArray, isNumber, isObject } from 'is-what';
@@ -35,8 +35,17 @@ export async function saveDocument(props: SaveDocumentProps) {
   deconstructedSchemaDefs
     .filter(([, def]) => def.type === 'relation' && def.writable !== false)
     .forEach(([field, def]) => {
+      const parentKey = field.split('.').slice(0, -1).join('.');
+      if (!hasProperty(docData, parentKey)) {
+        setProperty(docData, parentKey, null);
+      }
+      if (getProperty(docData, parentKey) === null) {
+        return;
+      }
       setProperty(docData, field, connections[field]);
     });
+
+  console.log(JSON.parse(JSON.stringify(docData)));
 
   // remove ids from dynamiczone data that start with NEW_
   const dynamicZoneFields = deconstructedSchemaDefs.filter(
@@ -51,6 +60,20 @@ export async function saveDocument(props: SaveDocumentProps) {
       }
     });
   });
+
+  // remove ids that start with NEW_ from components
+  // but looking through docData recursively to remove id fields
+  const removeNewIds = (data: Record<string, unknown>) => {
+    Object.keys(data).forEach((key) => {
+      if (isObject(data[key])) {
+        if (data[key].id?.toString().startsWith('NEW_')) {
+          delete data[key].id;
+        }
+        removeNewIds(data[key] as Record<string, unknown>);
+      }
+    });
+  };
+  removeNewIds(docData);
 
   // save the document
   const [baseData, metaData] = await fetch(
@@ -84,8 +107,11 @@ function getRelationConnections(
     .filter(([, def]) => def.type === 'relation' && def.writable !== false)
     .reduce(
       (acc, [field, def]) => {
+        const newData = getProperty(docData, field);
+        if (!newData) return acc;
+
         const originalDocuments = parseRelationValues(getProperty(originalDocData, field));
-        const newDocuments = parseRelationValues(getProperty(docData, field));
+        const newDocuments = parseRelationValues(newData);
 
         const isChanged =
           originalDocuments.length !== newDocuments.length ||
