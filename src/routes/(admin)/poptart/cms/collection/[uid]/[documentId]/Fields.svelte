@@ -9,7 +9,7 @@
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
   import { notEmpty, parseSchemaDefs } from '$utils';
-  import { TextBlock, TextBox } from 'fluent-svelte';
+  import { InfoBadge, InfoBar, TextBlock, TextBox } from 'fluent-svelte';
   import {
     isArray,
     isBoolean,
@@ -20,7 +20,7 @@
     isString,
     isUndefined,
   } from 'is-what';
-  import { get } from 'svelte/store';
+  import { get, readonly } from 'svelte/store';
   import type { SchemaDef } from '../+layout';
   import { _isDocDataStore, type DocDataStore } from './+page';
 
@@ -44,15 +44,37 @@
 </script>
 
 {#each defsToShow as [key, def]}
-  {@const label = def.label ?? key}
+  {@const label = (() => {
+    let label = def.label ?? key;
+    if (def.required) label += '*';
+    return label;
+  })()}
   {@const description = def.description}
   {@const forId = (parentKeyPathLabel || '') + key}
+  {@const disabled = def.readonly || def.noread}
 
-  {#if def.type === 'component' && isArray(def.componentDefs) && (_isDocDataStore($docData[key]) || isNull($docData[key]))}
-    {#if isObject($plainDocData[key]) || isNull($docData[key])}
-      {@const id = isObject($plainDocData[key]) ? `${$plainDocData[key].id}` : null}
-      <FieldWrapper {label} {description} {forId}>
+  <FieldWrapper
+    {label}
+    {description}
+    {forId}
+    mode={def.type === 'boolean' ? 'checkbox' : 'default'}
+  >
+    {#if def.readonly}
+      <div style="margin-bottom: 6px;">
+        <InfoBar severity="information" closable={false} class="inline-infobar">
+          You do not have permission to edit this field.
+        </InfoBar>
+      </div>
+    {/if}
+    {#if def.noread}
+      <InfoBar severity="information" closable={false} class="inline-infobar">
+        You do not have permission to view this field.
+      </InfoBar>
+    {:else if def.type === 'component' && isArray(def.componentDefs) && (_isDocDataStore($docData[key]) || isNull($docData[key]))}
+      {#if isObject($plainDocData[key]) || isNull($docData[key])}
+        {@const id = isObject($plainDocData[key]) ? `${$plainDocData[key].id}` : null}
         <Components
+          {disabled}
           componentUIDs={[def.component]}
           arr={isNull(id) || isNull($docData[key])
             ? []
@@ -73,13 +95,11 @@
             }
           }}
         />
-      </FieldWrapper>
-    {:else}
-      UNSUPPORTED: Array of components
-    {/if}
-  {:else if def.type === 'dynamiczone'}
-    {@const zoneComponentDefs = Object.entries(def.componentDefs || {})}
-    <FieldWrapper {label} {description} {forId}>
+      {:else}
+        UNSUPPORTED: Array of components
+      {/if}
+    {:else if def.type === 'dynamiczone'}
+      {@const zoneComponentDefs = Object.entries(def.componentDefs || {})}
       {#if isArray($docData[key]) && isArray($plainDocData[key])}
         {@const docDatas = $docData[key].filter(_isDocDataStore)}
         {@const componentUIDs = $plainDocData[key]
@@ -88,6 +108,7 @@
           .filter(isString)}
 
         <Components
+          {disabled}
           componentUIDs={def.components}
           componentSettings={def.componentSettings}
           arr={docDatas
@@ -132,34 +153,30 @@
           }}
         />
       {/if}
-    </FieldWrapper>
-  {:else if def.type === 'boolean' && (isUndefined($docData[key]) || isBoolean($docData[key]))}
-    <FieldWrapper {label} {description} {forId} mode="checkbox">
-      <Checkbox id={forId} bind:checked={$docData[key]} />
-    </FieldWrapper>
-  {:else}
-    <FieldWrapper {label} {description} {forId}>
+    {:else if def.type === 'boolean' && (isUndefined($docData[key]) || isBoolean($docData[key]))}
+      <Checkbox id={forId} bind:checked={$docData[key]} {disabled} />
+    {:else}
       <!-- Strings -->
       {#if def.type === 'string' && isStringOrNullish($docData[key])}
-        <TextArea preventLines bind:value={$docData[key]} id={forId} />
+        <TextArea preventLines bind:value={$docData[key]} id={forId} {disabled} />
         <!-- Text -->
       {:else if def.type === 'text' && isStringOrNullish($docData[key])}
-        <TextArea preventLines bind:value={$docData[key]} id={forId} />
+        <TextArea preventLines bind:value={$docData[key]} id={forId} {disabled} />
         <!-- Email -->
       {:else if def.type === 'email' && isStringOrNullish($docData[key])}
-        <TextBox type="email" bind:value={$docData[key]} id={forId} />
+        <TextBox type="email" bind:value={$docData[key]} id={forId} {disabled} />
         <!-- Password -->
       {:else if def.type === 'password' && isStringOrNullish($docData[key])}
-        <TextBox type="password" bind:value={$docData[key]} id={forId} />
+        <TextBox type="password" bind:value={$docData[key]} id={forId} {disabled} />
         <!-- Markdown -->
       {:else if def.type === 'richtext' && isStringOrNullish($docData[key])}
-        <Code type="md" key={forId} bind:value={$docData[key]} />
+        <Code type="md" key={forId} bind:value={$docData[key]} {disabled} />
         <!-- Blocks -->
       {:else if def.type === 'blocks'}
         NOT SUPPORTED (blocks)
         <!-- UIDs -->
       {:else if def.type === 'uid'}
-        <StrapiUIDField {key} {collectionUID} {docData} {sessionAdminToken} />
+        <StrapiUIDField {key} {collectionUID} {docData} {sessionAdminToken} {disabled} />
         <!-- Date -->
       {:else if def.type === 'date' && isStringOrNullish($docData[key])}
         {@const [year, month, day] = $docData[key]?.split('-')?.map(Number) || []}
@@ -168,6 +185,7 @@
           {year}
           {month}
           {day}
+          {disabled}
           on:change={(evt) => {
             $docData[key] = evt.detail.split('T')[0];
           }}
@@ -193,6 +211,7 @@
           {month}
           {day}
           {time}
+          {disabled}
           on:change={(evt) => {
             $docData[key] = evt.detail;
           }}
@@ -202,6 +221,7 @@
         <!-- one-to-one -->
         {#if def.relation === 'oneToOne'}
           <SelectOne
+            {disabled}
             referenceOpts={{
               collectionUid: collectionUID,
               targetCollectionUid: def.target,
@@ -238,6 +258,7 @@
           <!-- one-to-many -->
         {:else if def.relation === 'oneToMany'}
           <SelectMany
+            {disabled}
             referenceOpts={{
               collectionUid: collectionUID,
               targetCollectionUid: def.target,
@@ -281,6 +302,7 @@
         <!-- Unknown -->
       {:else if def.type === 'enumeration'}
         <SelectOne
+          {disabled}
           options={def.enum.map((value) => ({ _id: value, label: value }))}
           selectedOption={(() => {
             if (!isString($docData[key])) return null;
@@ -299,8 +321,8 @@
         <pre>{JSON.stringify(def, null, 2)}</pre>
         {$docData[key]}
       {/if}
-    </FieldWrapper>
-  {/if}
+    {/if}
+  </FieldWrapper>
 {/each}
 
 {#if variant === 'show-hidden' && hiddenFieldDefs.length > 0}
@@ -319,5 +341,25 @@
     border-radius: var(--fds-control-corner-radius);
     padding: 1rem;
     margin: 1rem 0;
+  }
+
+  :global(.inline-infobar) {
+    min-block-size: 30px !important;
+    padding-inline-start: 12px !important;
+  }
+  :global(.inline-infobar p) {
+    font-size: 12px !important;
+  }
+  :global(.inline-infobar .info-bar-icon) {
+    margin-block-start: 10px !important;
+  }
+  :global(.inline-infobar .info-badge) {
+    min-block-size: 14px !important;
+    min-inline-size: 14px !important;
+    border-radius: 14px !important;
+    padding: 3px !important;
+  }
+  :global(.inline-infobar .info-bar-content) {
+    margin-inline-start: 10px !important;
   }
 </style>

@@ -172,6 +172,7 @@
           {collapsed}
           componentUID={arr[index].__componentUID}
           {index}
+          {disabled}
         />
       {/if}
     </Item>

@@ -2,7 +2,7 @@
   import { browser } from '$app/environment';
   import { isObjectId } from '$utils';
   import AwesomeDebouncePromise from 'awesome-debounce-promise';
-  import { ComboBox } from 'fluent-svelte';
+  import { ComboBox, InfoBar } from 'fluent-svelte';
   import { isError } from 'is-what';
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import type { Option } from '.';
@@ -144,7 +144,25 @@
   let referenceComboBoxWrapperElement: HTMLDivElement;
   let referenceComboBoxOpen = false;
   let referenceComboBoxValue = '';
+
+  // if every option is 'undefined', it means that strapi is only sending
+  // document ids because the user does not have permission to view the
+  // reference collection (and therefore the labels)
+  let maybeNoPermissionToViewReferenceCollection = false;
+  $: if ($referenceOptions.length > 0) {
+    if ($referenceOptions.every((opt) => opt.label === 'undefined')) {
+      maybeNoPermissionToViewReferenceCollection = true;
+    }
+  }
 </script>
+
+{#if maybeNoPermissionToViewReferenceCollection}
+  <div style="margin-bottom: {selectedOption ? 0 : 6}px;">
+    <InfoBar severity="information" closable={false} class="inline-infobar">
+      You do not have permission to view labels in the referenced collection ({referenceOpts?.collectionUid}).
+    </InfoBar>
+  </div>
+{/if}
 
 {#if selectedOption && !showCurrentSelectionOnDropdown}
   <div class="selected-option-area">

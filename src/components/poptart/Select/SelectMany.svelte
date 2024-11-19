@@ -3,7 +3,7 @@
   import { isObjectId } from '$utils/isObjectId';
   import { diffArray } from 'array-differences';
   import AwesomeDebouncePromise from 'awesome-debounce-promise';
-  import { ComboBox, TextBox, TextBoxButton } from 'fluent-svelte';
+  import { ComboBox, InfoBar, TextBox, TextBoxButton } from 'fluent-svelte';
   import { isError } from 'is-what';
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import type { Option } from '.';
@@ -202,6 +202,16 @@
   let referenceComboBoxWrapperElement: HTMLDivElement;
   let referenceComboBoxOpen = false;
   let referenceComboBoxValue = '';
+
+  // if every option is 'undefined', it means that strapi is only sending
+  // document ids because the user does not have permission to view the
+  // reference collection (and therefore the labels)
+  let maybeNoPermissionToViewReferenceCollection = false;
+  $: if ($referenceOptions.length > 0) {
+    if ($referenceOptions.every((opt) => opt.label === 'undefined')) {
+      maybeNoPermissionToViewReferenceCollection = true;
+    }
+  }
 </script>
 
 <!--
@@ -220,6 +230,14 @@ The `on:select` event occurs when the selected values change. It fires upon sele
   {@const filteredOptionsItems = options
     ?.filter((opt) => !selectedOptions.map(({ _id }) => _id).includes(opt._id))
     .map(toComboboxOption)}
+
+  {#if maybeNoPermissionToViewReferenceCollection}
+    <div style="margin-bottom: 6px;">
+      <InfoBar severity="information" closable={false} class="inline-infobar">
+        You do not have permission to view labels in the referenced collection ({referenceOpts?.collectionUid}).
+      </InfoBar>
+    </div>
+  {/if}
   <div
     bind:this={referenceComboBoxWrapperElement}
     on:focusin={() => {

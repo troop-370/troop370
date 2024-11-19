@@ -59,7 +59,14 @@
     <slot />
   </div>
   <div class="buttons">
-    <IconButton {disabled} on:click={() => dispatch('dismiss')}>
+    <IconButton
+      {disabled}
+      on:click={() => {
+        if (!disabled) {
+          dispatch('dismiss');
+        }
+      }}
+    >
       <FluentIcon name="Dismiss24Regular" />
     </IconButton>
     <!-- {#if collapsed}

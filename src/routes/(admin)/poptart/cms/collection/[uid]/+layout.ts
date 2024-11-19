@@ -264,6 +264,10 @@ export interface BaseAttribute {
   default?: unknown;
   private?: boolean;
   writable?: boolean;
+  /** `true` when the user does not have permission to read this field */
+  readonly?: true;
+  /** `true` when the user does not have permission to view this field */
+  noread?: true;
 }
 
 // Attribute: String

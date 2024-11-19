@@ -52,6 +52,7 @@
     on:keydown={handleKeyDown}
     on:paste={handlePaste}
     autocomplete="off"
+    {disabled}
   />
   <div class="text-box-underline" />
 </div>

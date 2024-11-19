@@ -17,6 +17,7 @@
   export let docData: DocDataStore;
   export let componentUID: string;
   export let index: number;
+  export let disabled = false;
 
   const defs =
     fieldsComponentProps.defs?.find((spec) => spec.componentUID === componentUID)?.defs || null;
@@ -44,6 +45,7 @@
   })()}
   {#if defs}
     <FieldsSvelteComponent
+      {disabled}
       sessionAdminToken={fieldsComponentProps.sessionAdminToken}
       variant={fieldsComponentProps.variant}
       {defs}

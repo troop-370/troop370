@@ -68,7 +68,14 @@
       <FluentIcon name="Open24Regular" />
     </IconButton>
   {/if}
-  <IconButton {disabled} on:click={() => dispatch('dismiss')}>
+  <IconButton
+    {disabled}
+    on:click={() => {
+      if (!disabled) {
+        dispatch('dismiss');
+      }
+    }}
+  >
     <FluentIcon name="Dismiss24Regular" />
   </IconButton>
 </div>

@@ -3,43 +3,40 @@ import { isWritableStore } from '$utils/isWritableStore';
 import { copy } from 'copy-anything';
 import { isArray, isObject, isString } from 'is-what';
 import { derived, get, readable, writable, type Readable, type Writable } from 'svelte/store';
-import type { ComponentAttribute } from '../+layout';
 import type { PageLoad } from './$types';
-import {
-  deconstructSchemaDefs,
-  getDocument,
-  reconstructSchemaDefs,
-  withDocumentRelationData,
-} from './getDocument';
+import { deconstructSchemaDefs, getDocument, withDocumentRelationData } from './getDocument';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
 
 export const load = (async ({ fetch, parent, params }) => {
   const { session, collectionConfig, permissions } = await parent();
 
   const defs = (() => {
-    const deconstructedSchemaDefs = deconstructSchemaDefs(get(collectionConfig).defs);
+    const defs = get(collectionConfig).defs;
+    const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
 
     // filter out the fields that the user doesn't have permission to read
     const readableFields = permissions.find(
       (p) => p.action === 'plugin::content-manager.explorer.read'
     )?.properties?.fields;
-    const filtered = deconstructedSchemaDefs.filter(([field]) => {
-      if (!isArray(readableFields)) return false;
-      return readableFields.includes(field);
+    deconstructedSchemaDefs.forEach(([field, def]) => {
+      if (isArray(readableFields)) {
+        const fieldIsNotReadable = !readableFields.includes(field);
+        if (fieldIsNotReadable) def.noread = true;
+      }
     });
 
-    return reconstructSchemaDefs(
-      filtered,
-      get(collectionConfig).defs.reduce(
-        (acc, [key, def]) => {
-          if (def.type === 'component') {
-            acc[def.component] = def;
-          }
-          return acc;
-        },
-        {} as Record<string, ComponentAttribute>
-      )
-    );
+    // force disable the fields that the user doesn't have permission to write
+    const writableFields = permissions.find(
+      (p) => p.action === 'plugin::content-manager.explorer.update'
+    )?.properties?.fields;
+    deconstructedSchemaDefs.forEach(([field, def]) => {
+      if (isArray(writableFields)) {
+        const fieldIsReadOnly = !writableFields.includes(field);
+        if (fieldIsReadOnly) def.readonly = true;
+      }
+    });
+
+    return defs;
   })();
 
   const queryProps = {
