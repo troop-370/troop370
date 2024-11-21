@@ -76,6 +76,46 @@ export const load = (async ({ fetch, parent, params, url }) => {
     []
   );
 
+  const previewConfig = await fetch(`/strapi/preview-button/config`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.adminToken}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return data?.config?.contentTypes?.find((contentType) => contentType.uid === params.uid);
+    })
+    .then((preview) => {
+      if (!preview) return;
+
+      function replaceVariables(str: string) {
+        return str.replace(/{([^}]+)}/g, (_, key) => {
+          return docData[key];
+        });
+      }
+
+      const publishedSearchParams = new URLSearchParams('');
+      if (preview.published.query) {
+        Object.entries(preview.published.query).forEach(([key, value]) => {
+          publishedSearchParams.append(key, replaceVariables(value));
+        });
+      }
+
+      const draftSearchParams = new URLSearchParams('');
+      if (preview.draft.query) {
+        Object.entries(preview.draft.query).forEach(([key, value]) => {
+          draftSearchParams.append(key, replaceVariables(value));
+        });
+      }
+
+      return {
+        published: `${replaceVariables(preview.published.url)}?${publishedSearchParams.toString()}`,
+        draft: `${replaceVariables(preview.draft.url)}?${draftSearchParams.toString()}`,
+      };
+    });
+
   return {
     docData,
     docDataStore,
@@ -84,6 +124,7 @@ export const load = (async ({ fetch, parent, params, url }) => {
     defs,
     actions,
     isPublishedVersion: !!docData.publishedAt,
+    previewConfig,
   };
 }) satisfies PageLoad;
 

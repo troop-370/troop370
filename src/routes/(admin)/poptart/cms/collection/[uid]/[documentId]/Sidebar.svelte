@@ -1,6 +1,7 @@
 <script lang="ts">
+  import Chip from '$lib/common/Chip/Chip.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
-  import { formatISODate, listOxford, notEmpty, openWindow } from '$utils';
+  import { capitalize, formatISODate, listOxford, notEmpty, openWindow } from '$utils';
   import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
   import { isString } from 'is-what';
   import type { Readable } from 'svelte/store';
@@ -15,6 +16,7 @@
   type ValueType<T> = T extends Readable<infer V> ? V : never;
 
   export let actions: ValueType<PageData['actions']>;
+  export let previewConfig: PageData['previewConfig'] | undefined = undefined;
   export let isEmbedded = false;
   export let features: Features = {
     actions: true,
@@ -167,6 +169,49 @@
         {/if}
       </div>
     </div>
+    <div class="doc-info-row">
+      <div>Status</div>
+      <div>
+        <Chip color={docData.status === 'published' ? 'neutral' : 'indigo'}>
+          {capitalize(`${docData.status}`)}
+        </Chip>
+      </div>
+    </div>
+  {/if}
+
+  {#if previewConfig}
+    <div class="section-title">Preview</div>
+    <div class="preview-buttons">
+      {#if docData.status === 'published'}
+        <Button
+          href={previewConfig.published}
+          on:click={(evt) => {
+            evt.preventDefault();
+            openWindow(
+              previewConfig.published,
+              `sidebar_preview_open` + docData.documentId,
+              'location=no'
+            );
+          }}
+        >
+          Open published preview
+        </Button>
+      {:else}
+        <Button
+          href={previewConfig.draft}
+          on:click={(evt) => {
+            evt.preventDefault();
+            openWindow(
+              previewConfig.draft,
+              `sidebar_preview_open` + docData.documentId,
+              'location=no'
+            );
+          }}
+        >
+          Open draft preview
+        </Button>
+      {/if}
+    </div>
   {/if}
 
   {#if features.versions && versionsList}
@@ -302,6 +347,15 @@
   }
   div.doc-info-row:nth-of-type(2) {
     opacity: 0.8;
+  }
+
+  .preview-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .preview-buttons :global(.button) {
+    width: fit-content;
   }
 
   .versions-section {

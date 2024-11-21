@@ -64,6 +64,7 @@
         {actions}
         docData={$docData}
         features={{ actions: false, docInfo: true, versions: !childWindow }}
+        previewConfig={data.previewConfig}
       />
     {/if}
   </article>
@@ -73,6 +74,7 @@
       {actions}
       docData={$docData}
       features={{ actions: !childWindow, docInfo: true, versions: !childWindow }}
+      previewConfig={data.previewConfig}
     />
   {/if}
 </div>
