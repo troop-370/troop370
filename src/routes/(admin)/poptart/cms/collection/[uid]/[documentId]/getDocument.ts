@@ -27,6 +27,9 @@ export async function getDocument(props: GetDocumentProps): Promise<Record<strin
   )
     .then((res) => res.json())
     .then((json) => {
+      if (json.data === null && json.error) {
+        throw ['NO_PERMISSION', json.error];
+      }
       return [json.data, json.meta];
     });
 

@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import { derived, get, writable } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
@@ -20,7 +21,9 @@ export const load = (async ({ fetch, parent, params }) => {
     defs,
   };
 
-  let docData = await getDocument(queryProps);
+  let docData = await getDocument(queryProps).catch((err) => {
+    error(500, err[0]);
+  });
 
   const docDataStore = createDocDataStore(docData);
 

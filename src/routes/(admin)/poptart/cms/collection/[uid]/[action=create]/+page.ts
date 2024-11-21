@@ -46,7 +46,11 @@ export const load = (async ({ fetch, parent, params, url }) => {
     if (params.action === 'clone') {
       const documentId = url.searchParams.get('from');
       if (!documentId) error(400, 'Missing documentId query parameter');
-      return await getDocument({ ...queryProps, documentId });
+
+      const doc = await getDocument({ ...queryProps, documentId });
+      if (!doc) error(404, 'Document to clone not found');
+
+      return doc;
     }
 
     error(400, 'Invalid action');
