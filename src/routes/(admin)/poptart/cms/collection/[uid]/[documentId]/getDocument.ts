@@ -12,11 +12,14 @@ interface GetDocumentProps {
   defs: SchemaDef[];
 }
 
-export async function getDocument(props: GetDocumentProps): Promise<Record<string, unknown>> {
+export async function getDocument(
+  props: GetDocumentProps,
+  status?: string
+): Promise<Record<string, unknown>> {
   const { fetch, session, collectionID, documentId } = props;
 
   const [baseData, metaData] = await fetch(
-    `/strapi/content-manager/collection-types/${collectionID}/${documentId}`,
+    `/strapi/content-manager/collection-types/${collectionID}/${documentId}${status === 'published' ? `?status=published` : ''}`,
     {
       method: 'GET',
       headers: {

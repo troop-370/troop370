@@ -8,7 +8,7 @@ import { checkForUnsavedChanges, saveDocument } from './saveDocument';
 export { isDocDataStore as _isDocDataStore } from './createDocDataStore';
 export type { DocDataStore } from './createDocDataStore';
 
-export const load = (async ({ fetch, parent, params }) => {
+export const load = (async ({ fetch, parent, params, url }) => {
   const { session, collectionConfig, permissions } = await parent();
 
   const defs = filterSchemaDefs(get(collectionConfig).defs, permissions, ['read', 'update']);
@@ -21,7 +21,7 @@ export const load = (async ({ fetch, parent, params }) => {
     defs,
   };
 
-  let docData = await getDocument(queryProps).catch((err) => {
+  let docData = await getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
     error(500, err[0]);
   });
 
@@ -76,7 +76,15 @@ export const load = (async ({ fetch, parent, params }) => {
     []
   );
 
-  return { docData, docDataStore, save, saveStatus, defs, actions };
+  return {
+    docData,
+    docDataStore,
+    save,
+    saveStatus,
+    defs,
+    actions,
+    isPublishedVersion: !!docData.publishedAt,
+  };
 }) satisfies PageLoad;
 
 export interface Action {

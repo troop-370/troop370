@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { page } from '$app/stores';
   import { title } from '$stores/title';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
@@ -29,6 +30,8 @@
 
   let currentContentWidth = 1000;
   $: showSidebarInline = currentContentWidth <= 900;
+  $: childWindow =
+    (!!browser && !!window.name) || $page.url.searchParams.get('childWindow') === '1';
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
@@ -36,7 +39,12 @@
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
   <article style="padding: {showSidebarInline ? 20 : 40}px;">
     {#if showSidebarInline}
-      <Sidebar isEmbedded {actions} docData={$docData} />
+      <Sidebar
+        isEmbedded
+        {actions}
+        docData={$docData}
+        features={{ actions: !childWindow, docInfo: false, versions: false }}
+      />
     {/if}
 
     <Editor
@@ -47,11 +55,25 @@
         save: data.save,
         defs: data.defs,
       }}
+      disabled={data.isPublishedVersion}
     />
+
+    {#if showSidebarInline}
+      <Sidebar
+        isEmbedded
+        {actions}
+        docData={$docData}
+        features={{ actions: false, docInfo: true, versions: !childWindow }}
+      />
+    {/if}
   </article>
 
   {#if showSidebarInline === false}
-    <Sidebar {actions} docData={$docData} />
+    <Sidebar
+      {actions}
+      docData={$docData}
+      features={{ actions: !childWindow, docInfo: true, versions: !childWindow }}
+    />
   {/if}
 </div>
 

@@ -1,14 +1,15 @@
 <script lang="ts">
   import FluentIcon from '$lib/common/FluentIcon.svelte';
-  import { formatISODate } from '$utils';
-  import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing } from 'fluent-svelte';
+  import { formatISODate, listOxford, notEmpty, openWindow } from '$utils';
+  import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
   import { isString } from 'is-what';
-  import type { Readable, Writable } from 'svelte/store';
+  import type { Readable } from 'svelte/store';
   import type { PageData } from './$types';
 
   interface Features {
     actions?: boolean;
     docInfo?: boolean;
+    versions?: boolean;
   }
 
   type ValueType<T> = T extends Readable<infer V> ? V : never;
@@ -18,6 +19,7 @@
   export let features: Features = {
     actions: true,
     docInfo: true,
+    versions: true,
   };
 
   export let docData: Record<string, unknown>;
@@ -28,6 +30,17 @@
   $: restActions = actions.filter(
     (action) => action.id !== saveAction?.id && action.id !== publishAction?.id
   );
+
+  let truncateVersionsList = true;
+  const versionsList = [
+    docData.status === 'modified'
+      ? {
+          timestamp: 'Published version',
+          users: [],
+          path: '?status=published',
+        }
+      : null,
+  ].filter(notEmpty);
 </script>
 
 <aside class="wrapper" class:isEmbedded>
@@ -155,6 +168,61 @@
       </div>
     </div>
   {/if}
+
+  {#if features.versions && versionsList}
+    <div class="section-title">Versions</div>
+    {#if versionsList.length > 0}
+      <div class="versions-section">
+        {#each versionsList.reverse().slice(0, truncateVersionsList ? 3 : undefined) as version}
+          <!-- format the date to only include the time when it is not a timestamp -->
+          <!-- from a day with cosolidated versions -->
+          {@const formattedDate = (() => {
+            if (version.timestamp === 'Published version') {
+              return version.timestamp;
+            }
+            // time of day is empty for consolidated versions
+            if (version.timestamp.includes('T00:00:00.000Z')) {
+              return formatISODate(version.timestamp, true, true, false);
+            }
+            return formatISODate(version.timestamp, true, true, true);
+          })()}
+
+          <!-- fall back to Unknown user when there are no users attributed to a version -->
+          {@const users = version.users.length > 0 ? version.users.map((user) => user.name) : ['']}
+
+          <Button
+            href={version.path}
+            on:click={(evt) => {
+              evt.preventDefault();
+              openWindow(
+                version.path,
+                `sidebar_version_open` + docData.documentId + version.timestamp,
+                'location=no'
+              );
+            }}
+          >
+            <div class="version-card">
+              <div>{formattedDate}</div>
+              <div style="color: var(--fds-text-secondary);">{listOxford(users)}</div>
+            </div>
+          </Button>
+        {/each}
+      </div>
+      {#if versionsList.length > 3}
+        {#if truncateVersionsList}
+          <Button style="margin-top: 6px;" on:click={() => (truncateVersionsList = false)}>
+            Show more versions
+          </Button>
+        {:else}
+          <Button style="margin-top: 6px;" on:click={() => (truncateVersionsList = true)}>
+            Show fewer versions
+          </Button>
+        {/if}
+      {/if}
+    {:else}
+      <TextBlock>No versions are available for this document.</TextBlock>
+    {/if}
+  {/if}
 </aside>
 
 <style>
@@ -234,5 +302,23 @@
   }
   div.doc-info-row:nth-of-type(2) {
     opacity: 0.8;
+  }
+
+  .versions-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .version-card {
+    padding: 6px 4px;
+    font-family: var(--fds-font-family-text);
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0px;
+    user-select: none;
+    width: 100%;
   }
 </style>

@@ -15,6 +15,7 @@
 
   export let data: Data;
   $: ({ collectionConfig, docDataStore } = data);
+  export let disabled = false;
   let sessionAdminToken = data.session.adminToken;
 
   let showHiddenFields = false;
@@ -49,4 +50,5 @@
   docData={docDataStore}
   {sessionAdminToken}
   variant={showHiddenFields ? 'show-hidden' : 'normal'}
+  {disabled}
 />

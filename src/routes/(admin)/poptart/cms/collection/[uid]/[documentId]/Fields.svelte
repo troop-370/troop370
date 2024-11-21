@@ -30,6 +30,8 @@
   export let sessionAdminToken: string | undefined;
   export let variant: 'normal' | 'show-hidden' | 'hidden-only' = 'normal';
   export let parentKeyPathLabel = '';
+  let allDisabled = false;
+  export { allDisabled as disabled };
 
   // TODO: require this to always be specified
   export let relationCurrentDocumentId: string | number = $docData.documentId as string;
@@ -51,7 +53,7 @@
   })()}
   {@const description = def.description}
   {@const forId = (parentKeyPathLabel || '') + key}
-  {@const disabled = def.readonly || def.noread}
+  {@const disabled = allDisabled || def.readonly || def.noread}
 
   <FieldWrapper
     {label}
