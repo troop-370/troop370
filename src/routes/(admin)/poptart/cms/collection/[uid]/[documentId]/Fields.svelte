@@ -220,7 +220,7 @@
           }}
         />
         <!-- Relations -->
-      {:else if def.type === 'relation' && def.target && def.mainField && isString(relationCurrentDocumentId)}
+      {:else if def.type === 'relation' && def.target && def.mainField}
         <!-- one-to-one -->
         {#if def.relation === 'oneToOne'}
           <SelectOne
@@ -229,7 +229,7 @@
               collectionUid: collectionUID,
               targetCollectionUid: def.target,
               fieldId: key.split('.').slice(-1)[0],
-              currentDocumentId: `${relationCurrentDocumentId}`,
+              currentDocumentId: relationCurrentDocumentId?.toString(),
               token: sessionAdminToken,
               mainField: def.mainField,
               idsToInclude: isArray($docData[key])
@@ -247,7 +247,7 @@
               return {
                 _id: `${$docData[key][0].documentId}`,
                 ...$docData[key][0],
-                label: $docData[key][0][def.mainField]?.toString(),
+                label: $docData[key][0][def.mainField]?.toString() || '',
               };
             })()}
             on:change={(evt) => {
@@ -266,7 +266,7 @@
               collectionUid: collectionUID,
               targetCollectionUid: def.target,
               fieldId: key.split('.').slice(-1)[0],
-              currentDocumentId: `${relationCurrentDocumentId}`,
+              currentDocumentId: relationCurrentDocumentId?.toString() || '',
               token: sessionAdminToken,
               mainField: def.mainField,
               pageSize: 100,
@@ -322,6 +322,7 @@
         />
       {:else}
         <pre>{JSON.stringify(def, null, 2)}</pre>
+        {JSON.stringify($docData)}
         {$docData[key]}
       {/if}
     {/if}

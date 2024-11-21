@@ -14,7 +14,7 @@ interface SaveDocumentProps {
   fetch: Fetch;
   session: App.Locals['session']['data'];
   collectionID: string;
-  documentId: string;
+  documentId?: string;
   defs: SchemaDef[];
   originalDocData: Record<string, unknown>;
   docDataStore: DocDataStore;
@@ -44,8 +44,6 @@ export async function saveDocument(props: SaveDocumentProps) {
       }
       setProperty(docData, field, connections[field]);
     });
-
-  console.log(JSON.parse(JSON.stringify(docData)));
 
   // remove ids from dynamiczone data that start with NEW_
   const dynamicZoneFields = deconstructedSchemaDefs.filter(
@@ -77,9 +75,9 @@ export async function saveDocument(props: SaveDocumentProps) {
 
   // save the document
   const [baseData, metaData] = await fetch(
-    `/strapi/content-manager/collection-types/${collectionID}/${documentId}`,
+    `/strapi/content-manager/collection-types/${collectionID}${documentId ? `/${documentId}` : ''}`,
     {
-      method: 'PUT',
+      method: documentId ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.adminToken}`,

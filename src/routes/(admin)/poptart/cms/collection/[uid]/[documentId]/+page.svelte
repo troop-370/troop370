@@ -4,41 +4,14 @@
   import { FileExplorerDialog } from '$components/poptart/FileExplorer';
   import { title } from '$stores/title';
   import { Button } from 'fluent-svelte';
-  import { onDestroy, onMount } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
-  import Fields from './Fields.svelte';
+  import Editor from './Editor.svelte';
 
   export let data;
   $: ({ collectionConfig, docDataStore, saveStatus } = data);
-  let sessionAdminToken = data.session.adminToken;
 
   let developerDialogOpen = false;
   let explorerDialogOpen = false;
-  let showHiddenFields = false;
-
-  function keyboardShortcuts(evt: KeyboardEvent) {
-    // trigger whether hidden fields are shown
-    // ALT + SHIFT + H
-    if (evt.altKey && evt.shiftKey && evt.key === 'H') {
-      evt.preventDefault();
-      showHiddenFields = !showHiddenFields;
-      return;
-    }
-
-    // save the document
-    // CTRL + S
-    if (evt.ctrlKey && evt.key === 's') {
-      evt.preventDefault();
-      data.save();
-      return;
-    }
-  }
-  onMount(() => {
-    document.addEventListener('keydown', keyboardShortcuts);
-  });
-  onDestroy(() => {
-    if (browser) document.removeEventListener('keydown', keyboardShortcuts);
-  });
 
   $: if (browser) {
     title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - ${$saveStatus}`);
@@ -53,11 +26,14 @@
 <Button on:click={data.save} disabled={$saveStatus === 'Saved'}>Save</Button>
 
 <article>
-  <Fields
-    defs={data.defs}
-    docData={docDataStore}
-    {sessionAdminToken}
-    variant={showHiddenFields ? 'show-hidden' : 'normal'}
+  <Editor
+    data={{
+      collectionConfig,
+      docDataStore,
+      session: data.session,
+      save: data.save,
+      defs: data.defs,
+    }}
   />
 </article>
 
