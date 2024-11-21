@@ -1,46 +1,75 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { FileExplorerDialog } from '$components/poptart/FileExplorer';
   import { title } from '$stores/title';
-  import { Button } from 'fluent-svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
+  import Sidebar from './Sidebar.svelte';
 
   export let data;
-  $: ({ collectionConfig, docDataStore, saveStatus } = data);
+  $: ({ collectionConfig, docDataStore, saveStatus, actions: partialActions } = data);
+  $: ({ docData } = docDataStore);
 
   let developerDialogOpen = false;
-  let explorerDialogOpen = false;
 
   $: if (browser) {
     title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - ${$saveStatus}`);
   }
+
+  $: actions = [
+    ...$partialActions,
+    {
+      id: 'developer',
+      label: 'Open developer dialog',
+      icon: 'DeveloperTools',
+      action: () => {
+        developerDialogOpen = !developerDialogOpen;
+      },
+    },
+  ] satisfies typeof $partialActions;
+
+  let currentContentWidth = 1000;
+  $: showSidebarInline = currentContentWidth <= 900;
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
-<FileExplorerDialog url={$page.url} session={data.session} bind:open={explorerDialogOpen} />
 
-<Button on:click={() => (developerDialogOpen = true)}>Open Developer Dialog</Button>
-<Button on:click={() => (explorerDialogOpen = true)}>Open Explorer Dialog</Button>
-<Button on:click={data.save} disabled={$saveStatus === 'Saved'}>Save</Button>
+<div class="content-wrapper" bind:clientWidth={currentContentWidth}>
+  <article style="padding: {showSidebarInline ? 20 : 40}px;">
+    {#if showSidebarInline}
+      <Sidebar isEmbedded {actions} docData={$docData} />
+    {/if}
 
-<article>
-  <Editor
-    data={{
-      collectionConfig,
-      docDataStore,
-      session: data.session,
-      save: data.save,
-      defs: data.defs,
-    }}
-  />
-</article>
+    <Editor
+      data={{
+        collectionConfig,
+        docDataStore,
+        session: data.session,
+        save: data.save,
+        defs: data.defs,
+      }}
+    />
+  </article>
+
+  {#if showSidebarInline === false}
+    <Sidebar {actions} docData={$docData} />
+  {/if}
+</div>
 
 <style>
   article {
+    width: 100%;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    overflow: hidden auto;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
   }
 </style>

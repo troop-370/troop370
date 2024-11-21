@@ -60,5 +60,33 @@ export const load = (async ({ fetch, parent, params }) => {
     return 'Saved';
   });
 
-  return { docData, docDataStore, save, saveStatus, defs };
+  const actions = derived(
+    [saveStatus],
+    ([$saveStatus]): Action[] => {
+      return [
+        {
+          id: 'save',
+          label: 'Save',
+          action: save,
+          disabled: $saveStatus !== 'Unsaved changes',
+          icon: 'Save24Regular',
+        },
+      ];
+    },
+    []
+  );
+
+  return { docData, docDataStore, save, saveStatus, defs, actions };
 }) satisfies PageLoad;
+
+export interface Action {
+  id: string;
+  label: string;
+  icon?: string;
+  action: (evt: MouseEvent | TouchEvent | KeyboardEvent | CustomEvent<any>) => void | Promise<void>;
+  loading?: boolean;
+  onAuxClick?: (evt: MouseEvent | CustomEvent<any>) => void;
+  disabled?: boolean;
+  tooltip?: string;
+  hint?: string;
+}
