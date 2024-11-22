@@ -15,9 +15,10 @@
 
   type ValueType<T> = T extends Readable<infer V> ? V : never;
 
-  export let actions: ValueType<PageData['actions']>;
-  export let previewConfig: PageData['previewConfig'] | undefined = undefined;
+  export let actions: ValueType<PageData['actions']> | undefined = undefined;
+  export let previewConfig: Readable<ValueType<PageData['previewConfig']>> | undefined = undefined;
   export let isEmbedded = false;
+  export let versions: PageData['versions'] | undefined = undefined;
   export let features: Features = {
     actions: true,
     docInfo: true,
@@ -27,21 +28,30 @@
   export let docData: Record<string, unknown>;
 
   let actionsMenuOpen = false;
-  $: saveAction = actions.find((action) => action.id === 'save');
-  $: publishAction = actions.find((action) => action.id === 'publish');
-  $: restActions = actions.filter(
+  $: saveAction = actions?.find((action) => action.id === 'save');
+  $: publishAction = actions?.find((action) => action.id === 'publish');
+  $: restActions = actions?.filter(
     (action) => action.id !== saveAction?.id && action.id !== publishAction?.id
   );
 
   let truncateVersionsList = true;
-  const versionsList = [
+  $: versionsList = [
     docData.status === 'modified'
       ? {
-          timestamp: 'Published version',
+          timestamp: 'Latest published version',
           users: [],
-          path: '?status=published',
+          path: '?status=published&childWindow=1',
+          status: 'published',
         }
       : null,
+    ...($versions?.data?.data.map((version) => {
+      return {
+        timestamp: version.createdAt,
+        users: [{ name: version.createdBy.firstname + ' ' + version.createdBy.lastname }],
+        path: `${docData.documentId}/version/${version.id}?childWindow=1`,
+        status: version.status,
+      };
+    }) || []),
   ].filter(notEmpty);
 </script>
 
@@ -116,7 +126,7 @@
           closeOnSelect={false}
         >
           <svelte:fragment slot="flyout">
-            {#each restActions as { action, disabled, onAuxClick, tooltip, icon, label, id, loading, hint }}
+            {#each restActions || [] as { action, disabled, onAuxClick, tooltip, icon, label, id, loading, hint }}
               <MenuFlyoutItem
                 disabled={disabled || loading}
                 on:click={async (evt) => {
@@ -172,23 +182,29 @@
     <div class="doc-info-row">
       <div>Status</div>
       <div>
-        <Chip color={docData.status === 'published' ? 'neutral' : 'indigo'}>
+        <Chip
+          color={docData.status === 'published'
+            ? 'green'
+            : docData.status === 'draft'
+              ? 'blue'
+              : 'indigo'}
+        >
           {capitalize(`${docData.status}`)}
         </Chip>
       </div>
     </div>
   {/if}
 
-  {#if previewConfig}
+  {#if $previewConfig}
     <div class="section-title">Preview</div>
     <div class="preview-buttons">
       {#if docData.status === 'published'}
         <Button
-          href={previewConfig.published}
+          href={$previewConfig.published}
           on:click={(evt) => {
             evt.preventDefault();
             openWindow(
-              previewConfig.published,
+              $previewConfig.published,
               `sidebar_preview_open` + docData.documentId,
               'location=no'
             );
@@ -198,11 +214,11 @@
         </Button>
       {:else}
         <Button
-          href={previewConfig.draft}
+          href={$previewConfig.draft}
           on:click={(evt) => {
             evt.preventDefault();
             openWindow(
-              previewConfig.draft,
+              $previewConfig.draft,
               `sidebar_preview_open` + docData.documentId,
               'location=no'
             );
@@ -218,11 +234,11 @@
     <div class="section-title">Versions</div>
     {#if versionsList.length > 0}
       <div class="versions-section">
-        {#each versionsList.reverse().slice(0, truncateVersionsList ? 3 : undefined) as version}
+        {#each versionsList.slice(0, truncateVersionsList ? 3 : undefined) as version}
           <!-- format the date to only include the time when it is not a timestamp -->
           <!-- from a day with cosolidated versions -->
           {@const formattedDate = (() => {
-            if (version.timestamp === 'Published version') {
+            if (version.timestamp === 'Latest published version') {
               return version.timestamp;
             }
             // time of day is empty for consolidated versions
@@ -249,6 +265,17 @@
             <div class="version-card">
               <div>{formattedDate}</div>
               <div style="color: var(--fds-text-secondary);">{listOxford(users)}</div>
+              <div style="margin-top: 6px;">
+                <Chip
+                  color={version.status === 'published'
+                    ? 'green'
+                    : version.status === 'draft'
+                      ? 'blue'
+                      : 'indigo'}
+                >
+                  {capitalize(`${version.status}`)}
+                </Chip>
+              </div>
             </div>
           </Button>
         {/each}

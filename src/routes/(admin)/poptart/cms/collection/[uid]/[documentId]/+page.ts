@@ -1,15 +1,17 @@
+import { invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
 import { derived, get, writable } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
 import { filterSchemaDefs } from './filterSchemaDefs';
 import { getDocument, withDocumentRelationData } from './getDocument';
+import { loadPreviewConfig } from './loadPreviewConfig';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
 export { isDocDataStore as _isDocDataStore } from './createDocDataStore';
 export type { DocDataStore } from './createDocDataStore';
 
 export const load = (async ({ fetch, parent, params, url }) => {
-  const { session, collectionConfig, permissions } = await parent();
+  const { session, collectionConfig, permissions, versions } = await parent();
 
   const defs = filterSchemaDefs(get(collectionConfig).defs, permissions, ['read', 'update']);
 
@@ -26,6 +28,10 @@ export const load = (async ({ fetch, parent, params, url }) => {
   });
 
   const docDataStore = createDocDataStore(docData);
+
+  const previewConfig = writable(
+    await loadPreviewConfig(fetch, session.adminToken, params.uid, docData)
+  );
 
   const saving = writable(false);
   const save = async () => {
@@ -45,6 +51,17 @@ export const load = (async ({ fetch, parent, params, url }) => {
       .then(async ([baseData]) => {
         docData = await withDocumentRelationData({ ...queryProps, baseData });
         docDataStore.set(docData);
+        const updatedPreviewConfig = await loadPreviewConfig(
+          fetch,
+          session.adminToken,
+          params.uid,
+          docData
+        );
+        if (updatedPreviewConfig) previewConfig.set(updatedPreviewConfig);
+
+        // update document versions list
+        versions.update((prev) => ({ ...prev, refetchOnInvalidate: true }));
+        invalidate('document:versions');
       })
       .finally(() => {
         saving.set(false);
@@ -75,46 +92,6 @@ export const load = (async ({ fetch, parent, params, url }) => {
     },
     []
   );
-
-  const previewConfig = await fetch(`/strapi/preview-button/config`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.adminToken}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      return data?.config?.contentTypes?.find((contentType) => contentType.uid === params.uid);
-    })
-    .then((preview) => {
-      if (!preview) return;
-
-      function replaceVariables(str: string) {
-        return str.replace(/{([^}]+)}/g, (_, key) => {
-          return docData[key];
-        });
-      }
-
-      const publishedSearchParams = new URLSearchParams('');
-      if (preview.published.query) {
-        Object.entries(preview.published.query).forEach(([key, value]) => {
-          publishedSearchParams.append(key, replaceVariables(value));
-        });
-      }
-
-      const draftSearchParams = new URLSearchParams('');
-      if (preview.draft.query) {
-        Object.entries(preview.draft.query).forEach(([key, value]) => {
-          draftSearchParams.append(key, replaceVariables(value));
-        });
-      }
-
-      return {
-        published: `${replaceVariables(preview.published.url)}?${publishedSearchParams.toString()}`,
-        draft: `${replaceVariables(preview.draft.url)}?${draftSearchParams.toString()}`,
-      };
-    });
 
   return {
     docData,
