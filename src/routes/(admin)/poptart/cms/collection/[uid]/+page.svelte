@@ -6,6 +6,7 @@
   import { ActionRow } from '$lib/common/PageTitle';
   import PageTitle from '$lib/common/PageTitle/PageTitle.svelte';
   import { motionMode } from '$stores/motionMode';
+  import { strapiEditor } from '$stores/strapiEditor';
   import { capitalize, hasKey } from '$utils';
   import {
     Button,
@@ -177,7 +178,11 @@
           variant="accent"
           disabled={!canCreate || loading || !canCreateAndGet}
           on:click={() => {
-            goto(`/poptart/content-manager/collection-types/${$collectionConfig.uid}/create`);
+            if ($strapiEditor) {
+              goto(`/poptart/content-manager/collection-types/${$collectionConfig.uid}/create`);
+            } else {
+              goto(`/poptart/cms/collection/${$collectionConfig.uid}/create`);
+            }
             // createNewDocDialogCounter++;
             // setTimeout(() => {
             //   createNewDocDialogOpen = !createNewDocDialogOpen;

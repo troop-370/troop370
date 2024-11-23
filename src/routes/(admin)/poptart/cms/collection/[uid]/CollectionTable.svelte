@@ -6,6 +6,7 @@
   import Loading from '$lib/common/Loading.svelte';
   import { compactMode } from '$stores/compactMode';
   import { motionMode } from '$stores/motionMode';
+  import { strapiEditor } from '$stores/strapiEditor';
   import { isIsoDate, isShortIsoDate, notEmpty } from '$utils';
   import { hasKey } from '$utils/hasKey';
   import {
@@ -40,7 +41,9 @@
 
   // row links behaviors
   $: links = {
-    href: `/poptart/content-manager/collection-types/${$collectionConfig.uid}`,
+    href: $strapiEditor
+      ? `/poptart/content-manager/collection-types/${$collectionConfig.uid}`
+      : `/poptart/cms/collection/${$collectionConfig.uid}`,
     hrefSuffixKey: 'documentId',
     hrefSearch: undefined,
     windowName: `editor-troop-370-${$collectionConfig.uid}-`,

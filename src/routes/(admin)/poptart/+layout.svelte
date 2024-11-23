@@ -8,6 +8,7 @@
   import { collapsedPane, collapsedPaneCompact } from '$stores/collapsedPane';
   import { compactMode } from '$stores/compactMode';
   import { motionMode } from '$stores/motionMode';
+  import { strapiEditor } from '$stores/strapiEditor';
   import { hasKey, notEmpty } from '$utils';
   import type { BeforeNavigate } from '@sveltejs/kit';
   import { Flyout, ProgressRing, TextBlock, ToggleSwitch } from 'fluent-svelte';
@@ -521,6 +522,7 @@
                   >
                     Reduce motion
                   </ToggleSwitch>
+                  <ToggleSwitch bind:checked={$strapiEditor}>Prefer legacy editor</ToggleSwitch>
                 </div>
               </svelte:fragment>
             </Flyout>
@@ -632,6 +634,7 @@
     z-index: 99999;
     left: 290px;
     bottom: 67px;
+    bottom: 84px;
   }
   .settings-flyout.collapsedPane {
     left: 50px;

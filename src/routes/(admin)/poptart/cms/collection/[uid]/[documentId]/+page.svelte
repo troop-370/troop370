@@ -36,9 +36,27 @@
       icon: 'CloudArrowUp24Regular',
     },
     {
+      id: 'clone',
+      label: 'Clone document',
+      icon: '',
+      action: () => {
+        goto(`/admin/cms/collection/${$collectionConfig.uid}/${$docData.documentId}/clone`);
+      },
+      onAuxClick: (evt) => {
+        evt.preventDefault();
+        if (hasKey(evt, 'button') && evt.button === 1) {
+          openWindow(
+            `/admin/cms/collection/${$collectionConfig.uid}/${$docData.documentId}/clone`,
+            $docData.documentId + 'clone',
+            'location=no'
+          );
+        }
+      },
+    },
+    {
       id: 'developer',
       label: 'Open developer dialog',
-      icon: 'DeveloperTools',
+      icon: '',
       action: () => {
         developerDialogOpen = !developerDialogOpen;
       },
@@ -46,7 +64,7 @@
     {
       id: 'configure_view',
       label: 'Configure the view',
-      icon: 'DeveloperTools',
+      icon: '',
       action: () => {
         goto(
           `/admin/content-manager/collection-types/${$collectionConfig.uid}/configurations/edit`
@@ -57,7 +75,28 @@
           evt.preventDefault();
           openWindow(
             `/admin/content-manager/collection-types/${$collectionConfig.uid}/configurations/edit`,
-            '_blank'
+            $docData.documentId + 'configure_view',
+            'location=no'
+          );
+        }
+      },
+    },
+    {
+      id: 'legacy_editor',
+      label: 'Open in legacy editor',
+      icon: '',
+      action: () => {
+        goto(
+          `/admin/content-manager/collection-types/${$collectionConfig.uid}/${$docData.documentId}`
+        );
+      },
+      onAuxClick: (evt) => {
+        if (hasKey(evt, 'button') && evt.button === 1) {
+          evt.preventDefault();
+          openWindow(
+            `/admin/content-manager/collection-types/${$collectionConfig.uid}/${$docData.documentId}`,
+            $docData.documentId + 'legacy_editor',
+            'location=no'
           );
         }
       },

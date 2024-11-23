@@ -3,6 +3,7 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   // import ArchiveSelectedDocs from '$lib/dialogs/ArchiveSelectedDocs.svelte';
   // import DeleteSelectedDocs from '$lib/dialogs/DeleteSelectedDocs.svelte';
+  import { strapiEditor } from '$stores/strapiEditor';
   import { openWindow } from '$utils/openWindow';
   import { Button } from 'fluent-svelte';
   import type { PageData } from './$types';
@@ -14,7 +15,9 @@
   $: show = $selectedIds.length > 0;
 
   $: links = {
-    href: `/poptart/content-manager/collection-types/${$settings.uid}`,
+    href: $strapiEditor
+      ? `/poptart/content-manager/collection-types/${$settings.uid}`
+      : `/poptart/cms/collection/${$settings.uid}`,
     hrefSuffixKey: 'id',
     hrefSearch: '?childWindow=1',
     windowName: `editor-troop-370-${$settings.uid}-`,
