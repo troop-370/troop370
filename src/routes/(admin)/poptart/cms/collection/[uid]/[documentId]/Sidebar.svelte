@@ -179,20 +179,22 @@
         {/if}
       </div>
     </div>
-    <div class="doc-info-row">
-      <div>Status</div>
-      <div>
-        <Chip
-          color={docData.status === 'published'
-            ? 'green'
-            : docData.status === 'draft'
-              ? 'blue'
-              : 'indigo'}
-        >
-          {capitalize(`${docData.status}`)}
-        </Chip>
+    {#if docData.status}
+      <div class="doc-info-row">
+        <div>Status</div>
+        <div>
+          <Chip
+            color={docData.status === 'published'
+              ? 'green'
+              : docData.status === 'draft'
+                ? 'blue'
+                : 'indigo'}
+          >
+            {capitalize(`${docData.status}`)}
+          </Chip>
+        </div>
       </div>
-    </div>
+    {/if}
   {/if}
 
   {#if $previewConfig}

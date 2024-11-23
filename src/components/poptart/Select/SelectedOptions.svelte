@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { slugify } from '$utils';
+  import { goto } from '$app/navigation';
+  import { openWindow, slugify } from '$utils';
   import { Button } from 'fluent-svelte';
   import { createEventDispatcher, onMount } from 'svelte';
   import { SOURCES, TRIGGERS, dndzone, type DndEvent } from 'svelte-dnd-action';
@@ -100,6 +101,20 @@
         disabled={disabled || populating}
       >
         Clear all
+      </Button>
+    {/if}
+    {#if referenceOpts}
+      <Button
+        on:click={() => {
+          openWindow(
+            `/admin/cms/collection/${referenceOpts.targetCollectionUid}/create?childWindow=1`,
+            'new-document' + Math.random(),
+            'location=no'
+          );
+        }}
+        disabled={disabled || populating}
+      >
+        Create new
       </Button>
     {/if}
     {#if populating}

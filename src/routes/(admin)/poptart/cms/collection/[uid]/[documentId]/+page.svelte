@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { title } from '$stores/title';
-  import { hasKey, openWindow } from '$utils';
+  import { hasKey, notEmpty, openWindow } from '$utils';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
   import PublishDocumentDialog from './PublishDocumentDialog.svelte';
@@ -26,15 +26,17 @@
 
   $: actions = [
     ...$partialActions,
-    {
-      id: 'publish',
-      label: 'Publish',
-      action: () => {
-        publishDocumentDialogOpen = true;
-      },
-      disabled: $saveStatus !== 'Unsaved changes' && $docData.status === 'published',
-      icon: 'CloudArrowUp24Regular',
-    },
+    $collectionConfig.options?.draftAndPublish !== false
+      ? {
+          id: 'publish',
+          label: 'Publish',
+          action: () => {
+            publishDocumentDialogOpen = true;
+          },
+          disabled: $saveStatus !== 'Unsaved changes' && $docData.status === 'published',
+          icon: 'CloudArrowUp24Regular',
+        }
+      : null,
     {
       id: 'clone',
       label: 'Clone document',
@@ -101,7 +103,7 @@
         }
       },
     },
-  ] satisfies typeof $partialActions;
+  ].filter(notEmpty) satisfies typeof $partialActions;
 
   let currentContentWidth = 1000;
   $: showSidebarInline = currentContentWidth <= 900;
@@ -124,7 +126,7 @@
       <Sidebar
         isEmbedded
         docData={sidebarDocData}
-        features={{ actions: !childWindow, docInfo: false, versions: false }}
+        features={{ actions: !data.isPublishedVersion, docInfo: false, versions: false }}
       />
     {/if}
 
@@ -158,7 +160,7 @@
     <Sidebar
       {actions}
       docData={sidebarDocData}
-      features={{ actions: !childWindow, docInfo: true, versions: !childWindow }}
+      features={{ actions: !data.isPublishedVersion, docInfo: true, versions: !childWindow }}
       previewConfig={data.previewConfig}
       versions={data.versions}
     />
