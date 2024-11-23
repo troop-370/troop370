@@ -61,7 +61,12 @@ export const load = (async ({ fetch, parent, params, url }) => {
   const saving = writable(false);
   const save = async () => {
     saving.set(true);
-    await saveDocument({ ...queryProps, docDataStore, originalDocData: initialDocData })
+    await saveDocument({
+      ...queryProps,
+      docDataStore,
+      originalDocData: initialDocData,
+      cloneMode: params.action === 'clone',
+    })
       .then(async ([baseData]) => {
         goto(`./${baseData.documentId}`);
       })

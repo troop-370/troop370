@@ -18,6 +18,7 @@ export interface SaveDocumentProps {
   defs: SchemaDef[];
   originalDocData: Record<string, unknown>;
   docDataStore: DocDataStore;
+  cloneMode?: boolean;
 }
 
 export async function saveDocument(
@@ -34,7 +35,7 @@ export async function saveDocument(
 
   // save the document
   const [baseData, metaData, errorData] = await fetch(
-    `/strapi/content-manager/collection-types/${collectionID}${documentId ? `/${documentId}` : ''}`,
+    `/strapi/content-manager/collection-types/${collectionID}${props.cloneMode ? '/clone' : ''}${documentId ? `/${documentId}` : ''}`,
     {
       method: documentId ? 'PUT' : 'POST',
       headers: {
