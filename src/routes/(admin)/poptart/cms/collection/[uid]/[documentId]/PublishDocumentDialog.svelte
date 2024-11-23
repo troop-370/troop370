@@ -21,6 +21,8 @@
   let error = '';
 
   function keyboardShortcuts(evt: KeyboardEvent) {
+    if (!open) return;
+
     // publish the document
     // CTRL + SHIFT + O
     if (evt.ctrlKey && evt.shiftKey && evt.key === '{') {
