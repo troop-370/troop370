@@ -1,10 +1,10 @@
 <script lang="ts">
   import FluentIcon from '$lib/common/FluentIcon.svelte';
-  import { isObjectId } from '$utils/isObjectId';
+  import { formatISODate, hasKey } from '$utils';
   import { diffArray } from 'array-differences';
   import AwesomeDebouncePromise from 'awesome-debounce-promise';
   import { ComboBox, InfoBar, TextBox, TextBoxButton } from 'fluent-svelte';
-  import { isError } from 'is-what';
+  import { isError, isString } from 'is-what';
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import type { Option } from '.';
   import SelectedOptions from './SelectedOptions.svelte';
@@ -190,11 +190,19 @@
       value: opt._id,
       disabled: opt.disabled,
       errorMessage: opt.reason,
-      identifier: isObjectId(opt._id)
-        ? opt._id.slice(-7, opt._id.length)
-        : typeof opt._id === 'number' && `${opt._id}`.length < 4
-          ? `${opt._id}`
-          : undefined,
+      identifier: (() => {
+        if (hasKey(opt, 'publishedAt') && isString(opt.publishedAt)) {
+          return 'Published ' + formatISODate(opt.publishedAt);
+        }
+        if (hasKey(opt, 'updatedAt') && isString(opt.updatedAt)) {
+          return 'Updated ' + formatISODate(opt.updatedAt);
+        } else if (opt._id) {
+          return opt._id.slice(-7, opt._id.length);
+        } else if (typeof opt._id === 'number' && `${opt._id}`.length < 4) {
+          return `${opt._id}`;
+        }
+        return undefined;
+      })(),
     };
   }
 

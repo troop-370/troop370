@@ -12,4 +12,6 @@ export interface Option {
   errorMessage?: string;
   /** @deprecated */
   identifier?: string;
+  /** @deprecated */
+  status?: 'published' | 'draft' | 'modified';
 }

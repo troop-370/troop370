@@ -130,11 +130,12 @@
   on:consider={handleDndConsider}
   on:finalize={handleDndFinalize}
 >
-  {#each selectedOptions as { label, _id } (_id)}
+  {#each selectedOptions as { label, _id, status } (_id)}
     <div animate:flip={{ duration: flipDurationMs }}>
       <SelectedOption
         {label}
         {_id}
+        {status}
         disabled={disabled || populating}
         on:keydown={handleKeyDown}
         on:focus={() => (dragging = true)}

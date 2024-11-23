@@ -56,7 +56,6 @@
     if (response === true) {
       handleClose();
     } else if (response) {
-      console.log(error, response);
       error = response;
     }
     loadingSubmit = false;

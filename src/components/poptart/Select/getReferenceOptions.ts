@@ -117,6 +117,7 @@ function getReferenceOptions(referenceOpts: GetReferenceOptions | undefined) {
         [mainField]: z.coerce.string().optional(),
         publishedAt: z.string().nullable(),
         updatedAt: z.string().nullable(),
+        status: z.literal('published').or(z.literal('draft')).or(z.literal('modified')).nullish(),
       });
       query<z.infer<typeof referenceOptionSchema>[]>({
         fetch,
@@ -135,6 +136,7 @@ function getReferenceOptions(referenceOpts: GetReferenceOptions | undefined) {
           _q: newSearchValue,
           _filter: '$containsi',
           page: 1,
+          sort: 'updatedAt:desc',
         },
         Authorization: `Bearer ${token}`,
         validator: referenceOptionSchema.array(),
@@ -148,6 +150,10 @@ function getReferenceOptions(referenceOpts: GetReferenceOptions | undefined) {
             _id: `${option.documentId}` || '',
             ...option,
             label: `${option[mainField]}` || `${option.documentId}` || '',
+            reason:
+              option.status === 'draft'
+                ? 'This item is a draft. When you publish the document, this item will be hidden until it is also published.'
+                : undefined,
           };
         });
         if (!foundOptions) throw new Error('No reference docs array found');

@@ -1,7 +1,9 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { title } from '$stores/title';
+  import { hasKey, openWindow } from '$utils';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
   import PublishDocumentDialog from './PublishDocumentDialog.svelte';
@@ -39,6 +41,25 @@
       icon: 'DeveloperTools',
       action: () => {
         developerDialogOpen = !developerDialogOpen;
+      },
+    },
+    {
+      id: 'configure_view',
+      label: 'Configure the view',
+      icon: 'DeveloperTools',
+      action: () => {
+        goto(
+          `/admin/content-manager/collection-types/${$collectionConfig.uid}/configurations/edit`
+        );
+      },
+      onAuxClick: (evt) => {
+        if (hasKey(evt, 'button') && evt.button === 1) {
+          evt.preventDefault();
+          openWindow(
+            `/admin/content-manager/collection-types/${$collectionConfig.uid}/configurations/edit`,
+            '_blank'
+          );
+        }
       },
     },
   ] satisfies typeof $partialActions;

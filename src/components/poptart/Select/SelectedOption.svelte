@@ -1,5 +1,9 @@
 <script lang="ts">
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import { themeMode } from '$stores/themeMode';
+  import { capitalize } from '$utils';
+  import { theme, type colorShade as colorShadeType, type colorType } from '$utils/theme/theme';
+  import Color from 'color';
   import { IconButton } from 'fluent-svelte';
   import { createEventDispatcher } from 'svelte';
 
@@ -13,6 +17,8 @@
 
   export let label: string | undefined;
   export let _id: string;
+  /** @deprecated */
+  export let status: 'published' | 'draft' | 'modified' | undefined = undefined;
 
   export let disabled = false;
 
@@ -22,9 +28,22 @@
   export let dragging = false;
 
   export let hideId: boolean | undefined = undefined;
-  $: implicitHideId = label === undefined || label == _id;
+  $: implicitHideId = (label === undefined || label == _id) && status === undefined;
+
+  let color: colorType;
+  let shade: { dark: colorShadeType; light: colorShadeType } = { dark: 300, light: 800 };
+  $: color = status === 'draft' || status === 'modified' ? 'danger' : 'neutral';
+  $: themeColor =
+    color === 'neutral' || !color
+      ? theme($themeMode).color.neutral[$themeMode]
+      : theme($themeMode).color[color];
+  $: colorShade = (() => {
+    if (color === 'neutral') return 1200;
+    return $themeMode === 'light' ? shade.light : shade.dark;
+  })();
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="selected-item" on:keydown on:focus on:blur on:mousedown on:touchstart>
   <div
     style="display: flex;"
@@ -58,9 +77,27 @@
     {/if}
   </div>
   <div class="select-item-detail">
-    <div class="selected-item-label">{label || _id}</div>
+    <div class="selected-item-label">
+      {label || _id}
+    </div>
     {#if (hideId ?? implicitHideId) == false}
-      <div class="selected-item-id">{_id}</div>
+      <div class="selected-item-id">
+        {#if status}
+          <span
+            class="status"
+            style="
+              color: var(--color-{color}{color === 'neutral' ? `-${$themeMode}` : ''}-{colorShade});
+            "
+          >
+            {#if status === 'draft' || status === 'modified'}
+              ⚠
+            {/if}
+            {capitalize(status)}
+          </span>
+          <span>⋅</span>
+        {/if}
+        {_id}
+      </div>
     {/if}
   </div>
   {#if openable}
@@ -111,6 +148,7 @@
     flex-wrap: nowrap;
     word-break: break-word;
     color: var(--fds-text-primary);
+    position: relative;
   }
 
   .selected-item-id {
