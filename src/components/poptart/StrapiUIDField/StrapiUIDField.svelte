@@ -37,7 +37,7 @@
     {disabled}
     on:click={() => {
       loading = true;
-      generateStrapiUID(collectionUID, key, docData, sessionAdminToken)
+      generateStrapiUID(collectionUID, key, $docData, sessionAdminToken)
         .then((newUID) => {
           $docData[key] = newUID;
         })
