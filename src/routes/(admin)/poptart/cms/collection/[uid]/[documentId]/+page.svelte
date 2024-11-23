@@ -4,6 +4,7 @@
   import { title } from '$stores/title';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
+  import PublishDocumentDialog from './PublishDocumentDialog.svelte';
   import Sidebar from './Sidebar.svelte';
 
   export let data;
@@ -15,6 +16,7 @@
   };
 
   let developerDialogOpen = false;
+  let publishDocumentDialogOpen = false;
 
   $: if (browser) {
     title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - ${$saveStatus}`);
@@ -22,6 +24,15 @@
 
   $: actions = [
     ...$partialActions,
+    {
+      id: 'publish',
+      label: 'Publish',
+      action: () => {
+        publishDocumentDialogOpen = true;
+      },
+      disabled: $saveStatus !== 'Unsaved changes' && $docData.status === 'published',
+      icon: 'CloudArrowUp24Regular',
+    },
     {
       id: 'developer',
       label: 'Open developer dialog',
@@ -39,6 +50,13 @@
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
+<PublishDocumentDialog
+  bind:open={publishDocumentDialogOpen}
+  documentId={`${$docData.documentId}`}
+  handlePublish={async () => {
+    return await data.publish();
+  }}
+/>
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
   <article style="padding: {showSidebarInline ? 20 : 40}px;">
@@ -56,6 +74,9 @@
         docDataStore,
         session: data.session,
         save: data.save,
+        publish: () => {
+          publishDocumentDialogOpen = true;
+        },
         defs: data.defs,
       }}
       disabled={data.isPublishedVersion}

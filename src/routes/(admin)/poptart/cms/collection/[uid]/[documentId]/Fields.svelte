@@ -48,7 +48,7 @@
 {#each defsToShow as [key, def]}
   {@const label = (() => {
     let label = def.label ?? key;
-    if (def.required) label += '*';
+    if (def.required && def.type !== 'boolean') label += '*';
     return label;
   })()}
   {@const description = def.description}

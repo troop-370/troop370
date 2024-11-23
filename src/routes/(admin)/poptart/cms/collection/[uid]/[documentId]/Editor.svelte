@@ -11,6 +11,7 @@
     session: App.Locals['session']['data'];
     defs: SchemaDef[];
     save: () => void;
+    publish?: () => void;
   }
 
   export let data: Data;
@@ -34,6 +35,14 @@
     if (evt.ctrlKey && evt.key === 's') {
       evt.preventDefault();
       data.save();
+      return;
+    }
+
+    // publish the document
+    // CTRL + SHIFT + P
+    if (evt.ctrlKey && evt.shiftKey && evt.key === 'P') {
+      evt.preventDefault();
+      data.publish?.();
       return;
     }
   }

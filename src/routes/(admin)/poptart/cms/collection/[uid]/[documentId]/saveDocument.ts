@@ -10,7 +10,7 @@ import { deconstructSchemaDefs } from './getDocument';
 
 type Fetch = typeof fetch;
 
-interface SaveDocumentProps {
+export interface SaveDocumentProps {
   fetch: Fetch;
   session: App.Locals['session']['data'];
   collectionID: string;
@@ -20,18 +20,48 @@ interface SaveDocumentProps {
   docDataStore: DocDataStore;
 }
 
-export async function saveDocument(props: SaveDocumentProps) {
-  const { fetch, session, collectionID, documentId, defs, docDataStore } = props;
+export async function saveDocument(
+  props: SaveDocumentProps
+): Promise<
+  [
+    Record<string, unknown> | undefined,
+    Record<string, unknown> | undefined,
+    Record<string, unknown> | undefined,
+  ]
+> {
+  const { fetch, session, collectionID, documentId } = props;
+  const docData = await prepDocument(props);
+
+  // save the document
+  const [baseData, metaData, errorData] = await fetch(
+    `/strapi/content-manager/collection-types/${collectionID}${documentId ? `/${documentId}` : ''}`,
+    {
+      method: documentId ? 'PUT' : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.adminToken}`,
+      },
+      body: JSON.stringify(docData),
+    }
+  )
+    .then((res) => res.json())
+    .then((json) => {
+      return [json.data, json.meta, json.error];
+    });
+
+  return [baseData, metaData, errorData];
+}
+
+export async function prepDocument(
+  props: Pick<SaveDocumentProps, 'defs' | 'docDataStore' | 'originalDocData'>
+) {
+  const { defs, docDataStore, originalDocData } = props;
   const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
 
   const docData = filterDataToEditableFields(docDataStore.toObject(), deconstructedSchemaDefs);
 
   // convert relations to connections/disconnections
-  const connections = getRelationConnections(
-    props.originalDocData,
-    docData,
-    deconstructedSchemaDefs
-  );
+  const connections = getRelationConnections(originalDocData, docData, deconstructedSchemaDefs);
   deconstructedSchemaDefs
     .filter(([, def]) => def.type === 'relation' && def.writable !== false)
     .forEach(([field, def]) => {
@@ -73,24 +103,7 @@ export async function saveDocument(props: SaveDocumentProps) {
   };
   removeNewIds(docData);
 
-  // save the document
-  const [baseData, metaData] = await fetch(
-    `/strapi/content-manager/collection-types/${collectionID}${documentId ? `/${documentId}` : ''}`,
-    {
-      method: documentId ? 'PUT' : 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.adminToken}`,
-      },
-      body: JSON.stringify(docData),
-    }
-  )
-    .then((res) => res.json())
-    .then((json) => {
-      return [json.data, json.meta];
-    });
-
-  return [baseData, metaData] as const;
+  return docData;
 }
 
 function getRelationConnections(

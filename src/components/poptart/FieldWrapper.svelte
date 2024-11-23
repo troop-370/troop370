@@ -1,5 +1,6 @@
 <script lang="ts">
   import { TextBlock } from 'fluent-svelte';
+  import DOMPurify from 'isomorphic-dompurify';
 
   export let label: string;
   export let forId: string;
@@ -40,7 +41,7 @@
           {#if $$slots.caption}
             <slot name="caption" />
           {:else}
-            {description}
+            {@html DOMPurify.sanitize(description)}
           {/if}
         </TextBlock>
       </label>
