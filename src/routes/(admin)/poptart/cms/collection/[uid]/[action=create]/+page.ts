@@ -35,6 +35,9 @@ export const load = (async ({ fetch, parent, params, url }) => {
           if (def.type === 'dynamiczone') {
             acc[key] = [];
           }
+          if (def.default !== undefined) {
+            acc[key] = def.default;
+          }
           return acc;
         },
         {} as Record<string, unknown>
