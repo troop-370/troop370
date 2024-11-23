@@ -1,11 +1,11 @@
 import { invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
-import { isString } from 'is-what';
+import { isFullArray, isFullObject, isString } from 'is-what';
 import { derived, get, writable } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
 import { filterSchemaDefs } from './filterSchemaDefs';
-import { getDocument, withDocumentRelationData } from './getDocument';
+import { deconstructSchemaDefs, getDocument, withDocumentRelationData } from './getDocument';
 import { loadPreviewConfig } from './loadPreviewConfig';
 import { publishDocument } from './publishDocument';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
@@ -79,10 +79,33 @@ export const load = (async ({ fetch, parent, params, url }) => {
     Record<string, unknown> | undefined,
   ]) {
     if (errorData) {
-      const message =
-        errorData.message && isString(errorData.message)
-          ? errorData.message
-          : 'An unknown error occurred while saving the document.';
+      const message = (() => {
+        if (
+          isFullObject(errorData.details) &&
+          isFullArray(errorData.details.errors) &&
+          isFullObject(errorData.details.errors[0]) &&
+          isString(errorData.details.errors[0].message)
+        ) {
+          const message = errorData.details.errors[0].message;
+          const path = errorData.details.errors[0].path;
+          if (!isFullArray(path)) return message;
+          if (message.startsWith('This attribute')) {
+            const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
+            // TODO: confirm that this works for nested fields (I do not know the structure of the path array)
+            const foundDef = deconstructedSchemaDefs.find(([field]) => field === path.join('.'));
+            if (foundDef) {
+              const newMessage = message.replace(
+                'This attribute',
+                `The field "${foundDef?.[1].label || foundDef?.[0]}"`
+              );
+              return newMessage + '.';
+            }
+          }
+          return message + (path.length > 0 ? ` (Field: ${path.join('.')}).` : '');
+        }
+        if (isString(errorData.message)) return errorData.message;
+        return 'An unknown error occurred while saving the document.';
+      })();
       throw new Error(message);
     }
     if (!baseData) {
