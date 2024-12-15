@@ -2,8 +2,8 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import type { Editor } from '@tiptap/core';
   import { ComboBox, IconButton } from 'fluent-svelte';
-  import type { tiptapOptions } from '../../../../config';
   import { richTextParams } from '../richTextParams';
+  import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;
@@ -15,7 +15,10 @@
   $: fontSize = textStyle?.fontSize || '17px';
 
   $: textStyleGallery = (() => {
-    if (editor?.isActive('heading', { level: 1 }) && editor.isActive('className', { class: 'title' }))
+    if (
+      editor?.isActive('heading', { level: 1 }) &&
+      editor.isActive('className', { class: 'title' })
+    )
       return 'title';
     if (editor?.isActive('className', { class: 'subtitle' })) return 'subtitle';
     if (editor?.isActive('heading', { level: 1 })) return 'heading1';
@@ -28,7 +31,10 @@
     return '';
   })();
   $: textStyleGalleryLabel = (() => {
-    if (editor?.isActive('heading', { level: 1 }) && editor.isActive('className', { class: 'title' }))
+    if (
+      editor?.isActive('heading', { level: 1 }) &&
+      editor.isActive('className', { class: 'title' })
+    )
       return 'Title';
     if (editor?.isActive('className', { class: 'subtitle' })) return 'Subtitle';
     if (editor?.isActive('heading', { level: 1 })) return 'Heading 1';
@@ -65,12 +71,16 @@
     fontFamilyItems.length === 0;
   $: fontSizeDisabled =
     disabled || previewMode || !options?.features.fontSizePicker || fontSizeItems.length === 0;
-  $: boldDisabled = disabled || previewMode || !options?.features.bold || !editor?.can().toggleBold();
-  $: italicDisabled = disabled || previewMode || !options?.features.italic || !editor?.can().toggleItalic();
+  $: boldDisabled =
+    disabled || previewMode || !options?.features.bold || !editor?.can().toggleBold();
+  $: italicDisabled =
+    disabled || previewMode || !options?.features.italic || !editor?.can().toggleItalic();
   $: underlineDisabled =
     disabled || previewMode || !options?.features.underline || !editor?.can().toggleUnderline();
-  $: strikeDisabled = disabled || previewMode || !options?.features.strike || !editor?.can().toggleStrike();
-  $: codeDisabled = disabled || previewMode || !options?.features.code || !editor?.can().toggleCode();
+  $: strikeDisabled =
+    disabled || previewMode || !options?.features.strike || !editor?.can().toggleStrike();
+  $: codeDisabled =
+    disabled || previewMode || !options?.features.code || !editor?.can().toggleCode();
   $: bulletListDisabled =
     disabled || previewMode || !options?.features.bulletList || !editor?.can().toggleBulletList();
   $: orderedListDisabled =
@@ -137,10 +147,12 @@
               // so focus is not stolen from other elements if the combobox rerenders
               // and the select event is fired again (it is fired upon render or when
               // the selection changes to a different font)
-              const currentFocusOnComboboxItem = document.activeElement?.classList.contains('combo-box-item');
+              const currentFocusOnComboboxItem =
+                document.activeElement?.classList.contains('combo-box-item');
               const currentFocusOnComboboxTextField =
                 document.activeElement?.getAttribute('role') === 'combobox';
-              if (currentFocusOnComboboxTextField || currentFocusOnComboboxItem) return commands.focus();
+              if (currentFocusOnComboboxTextField || currentFocusOnComboboxItem)
+                return commands.focus();
               return true;
             })
             .setFontFamily(evt.detail.value)
@@ -165,10 +177,12 @@
               // so focus is not stolen from other elements if the combobox rerenders
               // and the select event is fired again (it is fired upon render or when
               // the selection changes to a different font)
-              const currentFocusOnComboboxItem = document.activeElement?.classList.contains('combo-box-item');
+              const currentFocusOnComboboxItem =
+                document.activeElement?.classList.contains('combo-box-item');
               const currentFocusOnComboboxTextField =
                 document.activeElement?.getAttribute('role') === 'combobox';
-              if (currentFocusOnComboboxTextField || currentFocusOnComboboxItem) return commands.focus();
+              if (currentFocusOnComboboxTextField || currentFocusOnComboboxItem)
+                return commands.focus();
               return true;
             })
             .setFontSize(evt.detail.value)
@@ -268,7 +282,9 @@
   <span class="bar" />
 
   <IconButton
-    on:click={bulletListDisabled ? undefined : () => editor?.chain().focus().toggleBulletList().run()}
+    on:click={bulletListDisabled
+      ? undefined
+      : () => editor?.chain().focus().toggleBulletList().run()}
     disabled={bulletListDisabled}
     class={editor?.isActive('bulletList') ? 'active' : ''}
   >
@@ -293,7 +309,9 @@
     </FluentIcon>
   </IconButton>
   <IconButton
-    on:click={orderedListDisabled ? undefined : () => editor?.chain().focus().toggleOrderedList().run()}
+    on:click={orderedListDisabled
+      ? undefined
+      : () => editor?.chain().focus().toggleOrderedList().run()}
     disabled={orderedListDisabled}
     class={editor?.isActive('orderedList') ? 'active' : ''}
   >
@@ -345,8 +363,10 @@
       // so commands are not run if the combobox rerenders
       // and the select event is fired again (it is fired upon render or when
       // the selection changes to a different node)
-      const currentFocusOnComboboxItem = document.activeElement?.classList.contains('combo-box-item');
-      const currentFocusOnComboboxTextField = document.activeElement?.getAttribute('role') === 'combobox';
+      const currentFocusOnComboboxItem =
+        document.activeElement?.classList.contains('combo-box-item');
+      const currentFocusOnComboboxTextField =
+        document.activeElement?.getAttribute('role') === 'combobox';
 
       if (currentFocusOnComboboxTextField || currentFocusOnComboboxItem)
         editor
@@ -374,7 +394,12 @@
                 .run();
             }
             if (evt.detail.value === 'subtitle') {
-              return chain().setFontFamily('Georgia').setItalic().setParagraph().setClassName('subtitle').run();
+              return chain()
+                .setFontFamily('Georgia')
+                .setItalic()
+                .setParagraph()
+                .setClassName('subtitle')
+                .run();
             }
             if (evt.detail.value === 'heading1') {
               return chain()

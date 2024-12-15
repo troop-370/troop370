@@ -8,8 +8,8 @@
   import type { Readable } from 'svelte/store';
   import { WebrtcProvider } from 'y-webrtc';
   import * as Y from 'yjs';
-  import type { tiptapOptions } from '.';
   import { richTextParams } from './richTextParams';
+  import type { tiptapOptions } from './tiptapOptions';
 
   interface AwarenessUser {
     name: string;

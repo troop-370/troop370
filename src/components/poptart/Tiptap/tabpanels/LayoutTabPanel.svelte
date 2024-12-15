@@ -2,7 +2,7 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import type { Editor } from '@tiptap/core';
   import { Button, IconButton } from 'fluent-svelte';
-  import type { tiptapOptions } from '../../../../config';
+  import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;

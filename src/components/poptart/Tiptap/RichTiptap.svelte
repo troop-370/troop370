@@ -14,7 +14,6 @@
   import { titlebarActions } from '$stores/titlebarActions';
   import { debounce } from '$utils';
   import { Transaction } from 'yjs';
-  import type { tiptapOptions } from '.';
   import type { Action } from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/+page';
   import type Sidebar from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/Sidebar.svelte';
   import BubbleMenuParagraph from './BubbleMenuParagraph.svelte';
@@ -28,6 +27,7 @@
   import DocPropsSidebar from './sidebars/DocPropsSidebar.svelte';
   import SidebarHeader from './sidebars/SidebarHeader.svelte';
   import VersionsSidebar from './sidebars/VersionsSidebar.svelte';
+  import type { tiptapOptions } from './tiptapOptions';
 
   export let ydoc: ComponentProps<Tiptap>['ydoc'];
   export let ydocKey: ComponentProps<Tiptap>['ydocKey'];

@@ -3,10 +3,10 @@
   import type { Editor } from '@tiptap/core';
   import { Button } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
-  import type { tiptapOptions } from '..';
   import type { CommentStorage } from '../extension-power-comment/powerComment';
   import { richTextParams } from '../richTextParams';
   import type Tiptap from '../Tiptap.svelte';
+  import type { tiptapOptions } from '../tiptapOptions';
   import Comment from './Comment.svelte';
   import SidebarHeader from './SidebarHeader.svelte';
 

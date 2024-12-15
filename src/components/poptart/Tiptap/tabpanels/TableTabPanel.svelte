@@ -3,7 +3,7 @@
   import type { Editor } from '@tiptap/core';
   import { Button, IconButton, MenuFlyout, MenuFlyoutItem, Tooltip } from 'fluent-svelte';
   import { tick } from 'svelte';
-  import type { tiptapOptions } from '..';
+  import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;

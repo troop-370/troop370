@@ -3,12 +3,12 @@
   import type { Editor } from '@tiptap/core';
   import { Button, IconButton, MenuFlyout, MenuFlyoutItem, Tooltip } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
-  import type { tiptapOptions } from '..';
   import type Tiptap from '../Tiptap.svelte';
   import LinkDialog from '../dialogs/LinkDialog.svelte';
   import PhotoWidgetDialog from '../dialogs/PhotoWidgetDialog.svelte';
   import YoutubeVideoIdDialog from '../dialogs/YoutubeVideoIdDialog.svelte';
   import { richTextParams } from '../richTextParams';
+  import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;

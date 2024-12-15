@@ -10,7 +10,6 @@
     ProgressRing,
   } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
-  import type { tiptapOptions } from '.';
   import type { Action } from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/+page';
   import type Tiptap from './Tiptap.svelte';
   import { downloadEmailHTML } from './downloadEmailHTML';
@@ -26,6 +25,7 @@
   import TableTabPanel from './tabpanels/TableTabPanel.svelte';
   import ViewTabPanel from './tabpanels/ViewTabPanel.svelte';
   import YoutubeTabPanel from './tabpanels/YoutubeTabPanel.svelte';
+  import type { tiptapOptions } from './tiptapOptions';
 
   export let editor: Editor | null;
   export let disabled = false;

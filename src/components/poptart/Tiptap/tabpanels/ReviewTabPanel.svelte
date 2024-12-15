@@ -3,9 +3,9 @@
   import type { Editor } from '@tiptap/core';
   import { Button, IconButton, Tooltip } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
-  import type { tiptapOptions } from '../../../../config';
   import type Tiptap from '../Tiptap.svelte';
   import { richTextParams } from '../richTextParams';
+  import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;
@@ -215,7 +215,10 @@
   <Tooltip text="Accept change">
     {#if width > 560}
       <Button
-        disabled={disabled || previewMode || !options?.features.trackChanges || !editor?.can().approveChange()}
+        disabled={disabled ||
+          previewMode ||
+          !options?.features.trackChanges ||
+          !editor?.can().approveChange()}
         on:click={() => editor?.chain().focus().approveChange().nextChange().run()}
       >
         <FluentIcon mode="ribbonButtonIconLeft">
@@ -251,7 +254,10 @@
       </Button>
     {:else}
       <IconButton
-        disabled={disabled || previewMode || !options?.features.trackChanges || !editor?.can().approveChange()}
+        disabled={disabled ||
+          previewMode ||
+          !options?.features.trackChanges ||
+          !editor?.can().approveChange()}
         on:click={() => editor?.chain().focus().approveChange().nextChange().run()}
       >
         <FluentIcon>
@@ -290,7 +296,10 @@
   <Tooltip text="Reject change">
     {#if width > 620}
       <Button
-        disabled={disabled || previewMode || !options?.features.trackChanges || !editor?.can().rejectChange()}
+        disabled={disabled ||
+          previewMode ||
+          !options?.features.trackChanges ||
+          !editor?.can().rejectChange()}
         on:click={() => editor?.chain().focus().rejectChange().nextChange().run()}
       >
         <FluentIcon mode="ribbonButtonIconLeft">
@@ -326,7 +335,10 @@
       </Button>
     {:else}
       <IconButton
-        disabled={disabled || previewMode || !options?.features.trackChanges || !editor?.can().rejectChange()}
+        disabled={disabled ||
+          previewMode ||
+          !options?.features.trackChanges ||
+          !editor?.can().rejectChange()}
         on:click={() => editor?.chain().focus().rejectChange().nextChange().run()}
       >
         <FluentIcon>
@@ -513,7 +525,9 @@
 
   <Tooltip text="Delete comment">
     <IconButton
-      on:click={unsetCommentDisabled ? undefined : () => editor?.chain().focus().unsetComment().run()}
+      on:click={unsetCommentDisabled
+        ? undefined
+        : () => editor?.chain().focus().unsetComment().run()}
       disabled={unsetCommentDisabled}
     >
       <FluentIcon>

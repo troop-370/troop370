@@ -2,8 +2,8 @@
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import type { Editor } from '@tiptap/core';
   import { Button, IconButton, Tooltip } from 'fluent-svelte';
-  import type { tiptapOptions } from '../../../../config';
   import { richTextParams } from '../richTextParams';
+  import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;

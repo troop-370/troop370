@@ -3,9 +3,9 @@
   import type { Editor } from '@tiptap/core';
   import { IconButton } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
-  import type { tiptapOptions } from '.';
   import type Tiptap from './Tiptap.svelte';
   import { richTextParams } from './richTextParams';
+  import type { tiptapOptions } from './tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;
