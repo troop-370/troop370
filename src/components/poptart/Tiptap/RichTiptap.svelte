@@ -339,6 +339,7 @@
     {toggleTrackChanges}
     {iframehtmlstring}
     {actions}
+    {disabled}
     bind:docStatsDialogOpen
   />
   <div class="main-middle">

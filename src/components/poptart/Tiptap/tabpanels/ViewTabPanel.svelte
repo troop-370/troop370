@@ -45,7 +45,6 @@
       }
     }}
     class={$richTextParams.obj.previewMode === 0 ? 'active' : ''}
-    {disabled}
   >
     <FluentIcon mode="ribbonButtonIconLeft">
       <svg height="100%" width="100%" viewBox="0,0,2048,2048" focusable="false">
@@ -67,7 +66,11 @@
         />
       </svg>
     </FluentIcon>
-    Editing mode
+    {#if disabled}
+      Document mode
+    {:else}
+      Editing mode
+    {/if}
   </Button>
   <Button
     on:click={() => {
@@ -78,7 +81,6 @@
       }
     }}
     class={$richTextParams.obj.previewMode > 0 ? 'active' : ''}
-    {disabled}
   >
     <FluentIcon mode="ribbonButtonIconLeft">
       <svg height="100%" width="100%" viewBox="0,0,2048,2048" focusable="false">
