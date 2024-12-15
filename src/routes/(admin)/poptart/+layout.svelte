@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import NavigationView from '$components/poptart/NavigationView.svelte';
   import type { MenuItem } from '$components/poptart/NavigationView/_NavigationTypes.js';
+  import { richTextParams } from '$components/poptart/Tiptap/richTextParams.js';
   import Titlebar from '$components/poptart/Titlebar.svelte';
   import { collapsedPane, collapsedPaneCompact } from '$stores/collapsedPane';
   import { compactMode } from '$stores/compactMode';
@@ -393,8 +394,23 @@
     },
   ];
 
+  // track editor fullscreen mode
+  let editorFullscreen =
+    $richTextParams.isActive('fs') ||
+    $page.url.searchParams.get('fs') === '1' ||
+    $page.url.searchParams.get('fs') === '3' ||
+    $page.url.searchParams.get('fs') === 'force';
+  $: if (browser) {
+    editorFullscreen =
+      $richTextParams.isActive('fs') || $page.url.searchParams.get('fs') === 'force';
+  }
+  afterNavigate(() => {
+    editorFullscreen =
+      $richTextParams.isActive('fs') || $page.url.searchParams.get('fs') === 'force';
+  });
+
   let windowWidth = 1000;
-  $: navPaneCompactMode = windowWidth < 900;
+  $: navPaneCompactMode = editorFullscreen || windowWidth < 900;
   let settingFlyoutOpen = false;
 
   // variables for page transitions
@@ -489,7 +505,7 @@
             <NavigationView
               variant="leftCompact"
               menuItems={[...mainMenuItems, ...routeMenuItems, ...menuFooterItems]}
-              showBackArrow={false}
+              showBackArrow={editorFullscreen && windowWidth >= 900}
               compact={$compactMode}
               bind:collapsedPane={$collapsedPaneCompact}
             />

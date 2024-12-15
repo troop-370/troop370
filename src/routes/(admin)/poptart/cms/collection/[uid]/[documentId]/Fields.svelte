@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+  import { afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import Checkbox from '$components/poptart/Checkbox/Checkbox.svelte';
   import Code from '$components/poptart/Code/Code.svelte';
@@ -8,7 +10,11 @@
   import { SelectMany, SelectOne } from '$components/poptart/Select';
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
+  import { RichTiptap } from '$components/poptart/Tiptap';
+  import { editorExtensions } from '$components/poptart/Tiptap/editorExtensions';
+  import { richTextParams } from '$components/poptart/Tiptap/richTextParams';
   import { notEmpty, parseSchemaDefs } from '$utils';
+  import { setTipTapXMLFragment } from '$utils/setTipTapXMLFragment';
   import { InfoBar, TextBlock, TextBox } from 'fluent-svelte';
   import {
     isArray,
@@ -20,9 +26,11 @@
     isString,
     isUndefined,
   } from 'is-what';
-  import { get } from 'svelte/store';
+  import { onMount } from 'svelte';
+  import { get, readable } from 'svelte/store';
+  import * as Y from 'yjs';
   import type { SchemaDef } from '../+layout';
-  import { _isDocDataStore, type DocDataStore } from './+page';
+  import { _isDocDataStore, type Action, type DocDataStore } from './+page';
 
   export let defs: SchemaDef[];
   export let docData: DocDataStore;
@@ -37,12 +45,45 @@
   export let relationCurrentDocumentId: string | number = $docData.documentId as string;
   export let collectionUID = $page.params.uid as string;
 
+  export let actions: Action[] = [];
+
   function isStringOrNullish(value: unknown): value is string | null {
     return isString(value) || isNullOrUndefined(value);
   }
 
   $: ({ visibleFieldDefs, hiddenFieldDefs } = parseSchemaDefs(defs));
   $: defsToShow = variant === 'hidden-only' ? defs : visibleFieldDefs;
+
+  // ensure that the ydoc contains tiptap fields
+  const ydoc = readable(new Y.Doc());
+  $: tiptapFields = defs.filter(([key, def]) => def.customField === 'plugin::tiptap-editor.tiptap');
+  let hasSetTipTapFields = false;
+  $: if (!hasSetTipTapFields) {
+    tiptapFields.forEach(([key, def], index) => {
+      setTipTapXMLFragment(
+        key,
+        $docData[key] as string | null | undefined,
+        $ydoc,
+        editorExtensions.tiptap
+      );
+      if (index === tiptapFields.length - 1) {
+        hasSetTipTapFields = true;
+      }
+    });
+  }
+
+  // track fullscreen editor status
+  let fullscreen =
+    $richTextParams.isActive('fs') ||
+    $page.url.searchParams.get('fs') === '1' ||
+    $page.url.searchParams.get('fs') === '3' ||
+    $page.url.searchParams.get('fs') === 'force';
+  $: if (browser) {
+    fullscreen = $richTextParams.isActive('fs') || $page.url.searchParams.get('fs') === 'force';
+  }
+  afterNavigate(() => {
+    fullscreen = $richTextParams.isActive('fs') || $page.url.searchParams.get('fs') === 'force';
+  });
 </script>
 
 {#each defsToShow as [key, def]}
@@ -72,6 +113,35 @@
       <InfoBar severity="information" closable={false} class="inline-infobar">
         You do not have permission to view this field.
       </InfoBar>
+    {:else if def.customField}
+      {#if def.customField === 'plugin::tiptap-editor.tiptap'}
+        <RichTiptap
+          {disabled}
+          options={def.options}
+          actions={actions || []}
+          user={{
+            _id: '1',
+            name: 'User',
+            color: 'red',
+            sessionId: '1',
+            photo: '',
+          }}
+          ydocKey={key}
+          fullSharedData={docData}
+          {ydoc}
+          {fullscreen}
+          on:transaction={(evt) => {
+            if (evt.detail) {
+              const content = evt.detail.content;
+              $docData[key] = JSON.stringify(content);
+            }
+          }}
+        />
+      {:else}
+        <p>Unsupported custom field</p>
+        <pre>{JSON.stringify(def, null, 2)}</pre>
+        {$docData[key]}
+      {/if}
     {:else if def.type === 'component' && isArray(def.componentDefs) && (_isDocDataStore($docData[key]) || isNull($docData[key]))}
       {#if isObject($plainDocData[key]) || isNull($docData[key])}
         {@const id = isObject($plainDocData[key]) ? `${$plainDocData[key].id}` : null}
@@ -324,7 +394,6 @@
         />
       {:else}
         <pre>{JSON.stringify(def, null, 2)}</pre>
-        {JSON.stringify($docData)}
         {$docData[key]}
       {/if}
     {/if}

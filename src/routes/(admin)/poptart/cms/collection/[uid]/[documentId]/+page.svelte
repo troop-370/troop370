@@ -40,7 +40,7 @@
     {
       id: 'clone',
       label: 'Clone document',
-      icon: '',
+      icon: 'DocumentCopy16Regular',
       action: () => {
         goto(`/admin/cms/collection/${$collectionConfig.uid}/${$docData.documentId}/clone`);
       },
@@ -58,7 +58,7 @@
     {
       id: 'developer',
       label: 'Open developer dialog',
-      icon: '',
+      icon: 'DeveloperBoard16Regular',
       action: () => {
         developerDialogOpen = !developerDialogOpen;
       },
@@ -66,7 +66,7 @@
     {
       id: 'configure_view',
       label: 'Configure the view',
-      icon: '',
+      icon: 'Options16Regular',
       action: () => {
         goto(
           `/admin/content-manager/collection-types/${$collectionConfig.uid}/configurations/edit`
@@ -85,8 +85,8 @@
     },
     {
       id: 'legacy_editor',
-      label: 'Open in legacy editor',
-      icon: '',
+      label: 'Switch to legacy editor',
+      icon: 'CircleEdit24Regular',
       action: () => {
         goto(
           `/admin/content-manager/collection-types/${$collectionConfig.uid}/${$docData.documentId}`
@@ -142,6 +142,7 @@
         defs: data.defs,
       }}
       disabled={data.isPublishedVersion}
+      {actions}
     />
 
     {#if showSidebarInline}

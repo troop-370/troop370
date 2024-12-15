@@ -3,6 +3,7 @@
   import { onDestroy, onMount } from 'svelte';
   import type { SchemaDef } from '../+layout';
   import type { PageData } from './$types';
+  import type { Action } from './+page';
   import Fields from './Fields.svelte';
 
   interface Data {
@@ -18,6 +19,8 @@
   $: ({ collectionConfig, docDataStore } = data);
   export let disabled = false;
   let sessionAdminToken = data.session.adminToken;
+
+  export let actions: Action[] = [];
 
   let showHiddenFields = false;
 
@@ -60,4 +63,5 @@
   {sessionAdminToken}
   variant={showHiddenFields ? 'show-hidden' : 'normal'}
   {disabled}
+  {actions}
 />
