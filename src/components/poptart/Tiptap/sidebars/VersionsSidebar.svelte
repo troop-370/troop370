@@ -6,6 +6,7 @@
   import SidebarHeader from './SidebarHeader.svelte';
 
   export let versions: PageData['versions'] | undefined = undefined;
+  export let docData: Record<string, unknown> | undefined;
 
   let headerHeight = 100;
 </script>
@@ -16,7 +17,7 @@
 
 <div class="wrapper" style="height: calc(100% - {headerHeight}px);">
   {#if versions}
-    <Sidebar docData={{}} {versions} features={{ versions: true }} />
+    <Sidebar docData={docData ?? {}} {versions} features={{ versions: true }} isEmbedded />
   {:else}
     <TextBlock>No versions could be found for this document.</TextBlock>
   {/if}

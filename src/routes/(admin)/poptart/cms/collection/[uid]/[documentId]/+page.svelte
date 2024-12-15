@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import { title } from '$stores/title';
   import { hasKey, notEmpty, openWindow } from '$utils';
+  import type { ComponentProps } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
   import PublishDocumentDialog from './PublishDocumentDialog.svelte';
@@ -109,6 +110,13 @@
   $: showSidebarInline = currentContentWidth <= 900;
   $: childWindow =
     (!!browser && !!window.name) || $page.url.searchParams.get('childWindow') === '1';
+
+  $: coreSidebarProps = {
+    docData: sidebarDocData,
+    actions,
+    previewConfig: data.previewConfig,
+    versions,
+  } satisfies ComponentProps<Sidebar>;
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
@@ -125,8 +133,8 @@
     {#if showSidebarInline}
       <Sidebar
         isEmbedded
-        docData={sidebarDocData}
         features={{ actions: !data.isPublishedVersion, docInfo: false, versions: false }}
+        {...coreSidebarProps}
       />
     {/if}
 
@@ -143,27 +151,22 @@
       }}
       disabled={data.isPublishedVersion}
       {actions}
+      {coreSidebarProps}
     />
 
     {#if showSidebarInline}
       <Sidebar
         isEmbedded
-        {actions}
-        docData={sidebarDocData}
         features={{ actions: false, docInfo: true, versions: !childWindow }}
-        previewConfig={data.previewConfig}
-        versions={data.versions}
+        {...coreSidebarProps}
       />
     {/if}
   </article>
 
   {#if showSidebarInline === false}
     <Sidebar
-      {actions}
-      docData={sidebarDocData}
       features={{ actions: !data.isPublishedVersion, docInfo: true, versions: !childWindow }}
-      previewConfig={data.previewConfig}
-      versions={data.versions}
+      {...coreSidebarProps}
     />
   {/if}
 </div>

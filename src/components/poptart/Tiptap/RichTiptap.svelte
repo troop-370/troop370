@@ -41,6 +41,13 @@
   export let dynamicPreviewHref = '';
   export let actions: Action[] = [];
 
+  export let docPropertiesSidebarProps:
+    | Pick<
+        ComponentProps<DocPropsSidebar>,
+        'sessionAdminToken' | 'defs' | 'docDataStore' | 'variant'
+      >
+    | undefined = undefined;
+
   const dispatch = createEventDispatcher<{
     transaction: { attrs: Record<string, unknown>; content: any; type: unknown } | null;
   }>();
@@ -211,7 +218,6 @@
     // when `trackChanges` is changed in the variable, also set it in the document attributes.
     // the document attributes do not sync, but they are available to tiptap extensions.
     if (editor && editor?.state.doc.attrs.trackChanges !== trackChanges) {
-      console.log(editor?.state.doc.attrs, trackChanges);
       editor.state.tr.step(new SetDocAttrStep('trackChanges', trackChanges));
       editor.view?.dispatch(editor.state.tr);
     }
@@ -398,10 +404,18 @@
           <div class="sidebar-content" in:fly={{ y: 20, duration, easing: expoOut, delay }}>
             {#if $richTextParams.primaryActive === 'comments'}
               <CommentsSidebar {editor} {user} {options} />
-            {:else if $richTextParams.primaryActive === 'props' && !!coreSidebarProps}
-              <!-- <DocPropsSidebar {disabled} {user} {processSchemaDef} {ydoc} {wsProvider} {coreSidebarProps} /> -->
+            {:else if $richTextParams.primaryActive === 'props' && !!coreSidebarProps && !!docPropertiesSidebarProps}
+              <DocPropsSidebar
+                {disabled}
+                {...docPropertiesSidebarProps}
+                {coreSidebarProps}
+                editorIsFullscreen={fullscreen}
+              />
             {:else if $richTextParams.primaryActive === 'versions'}
-              <VersionsSidebar />
+              <VersionsSidebar
+                docData={coreSidebarProps?.docData}
+                versions={coreSidebarProps?.versions}
+              />
             {:else}
               <SidebarHeader
                 on:click={() => {
