@@ -1,36 +1,17 @@
 <script lang="ts">
   import type { NodeViewProps } from '@tiptap/core';
-  import { NodeViewWrapper } from 'svelte-tiptap';
+  import { NodeViewContent, NodeViewWrapper } from 'svelte-tiptap';
   import WidgetWrapper from '../WidgetWrapper.svelte';
 
-  export let editor: NodeViewProps['editor'];
   export let node: NodeViewProps['node'];
-  export let getPos: NodeViewProps['getPos'];
-  export let deleteNode: NodeViewProps['deleteNode'];
-
-  function selectNodeTextEnd() {
-    if (typeof getPos === 'function') {
-      const resolvedPos = editor.state.doc.resolve(getPos() + 1);
-      if (resolvedPos.nodeAfter) {
-        editor.commands.setTextSelection(getPos() + 1 + resolvedPos.nodeAfter.nodeSize);
-      }
-    }
-  }
-
-  function handleKeyDown(evt: KeyboardEvent) {
-    // delete the node if it is empty and the delete key is pressed
-    if (evt.key === 'Delete' && node.textContent.length === 0) {
-      evt.preventDefault();
-      deleteNode();
-    }
-  }
 </script>
 
 <NodeViewWrapper>
-  <WidgetWrapper position={node.attrs.position} on:click={selectNodeTextEnd} noBorder>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="pull-quote" on:keydown={handleKeyDown} contenteditable="false">
-      <div contenteditable class="editable" class:showPlaceholder={node.textContent.length === 0} />
+  <WidgetWrapper position={node.attrs.position} noBorder>
+    <div class="pull-quote">
+      <div class="editable" class:showPlaceholder={node.textContent.length === 0}>
+        <NodeViewContent contenteditable />
+      </div>
     </div>
   </WidgetWrapper>
 </NodeViewWrapper>
