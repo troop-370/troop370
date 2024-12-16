@@ -324,6 +324,10 @@
   });
 
   onMount(() => {
+    if (hiddenUI && disabled) {
+      // the editor is probably a blocks editor
+      return;
+    }
     $richTextParams.forceUpdate();
   });
 
