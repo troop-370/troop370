@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { NodeViewProps } from '@tiptap/core';
   import { onMount } from 'svelte';
-  import { NodeViewWrapper } from 'svelte-tiptap';
+  import { NodeViewContent, NodeViewWrapper } from 'svelte-tiptap';
   import YoutubePlayer from 'youtube-player';
   import type { YouTubePlayer } from 'youtube-player/dist/types';
 
@@ -107,7 +107,7 @@
   // TODO: use unique player ID so that multiple embeds can exist
 </script>
 
-<NodeViewWrapper>
+<NodeViewWrapper data-drag-handle>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div class="player-container" on:click={selectNodeTextEnd} contenteditable="false">
@@ -147,9 +147,13 @@
     </div>
   </div>
 
-  {#if node.attrs.showCaption === true}
-    <div contenteditable class="editable" class:showPlaceholder={node.textContent.length === 0} />
-  {/if}
+  <div
+    class="editable"
+    class:showPlaceholder={node.textContent.length === 0}
+    class:hideCaption={node.attrs.showCaption !== true}
+  >
+    <NodeViewContent contenteditable />
+  </div>
 </NodeViewWrapper>
 
 <style>
@@ -197,5 +201,8 @@
     pointer-events: none;
     height: 0;
     transform: translateX(-50%);
+  }
+  .editable.hideCaption {
+    display: none;
   }
 </style>
