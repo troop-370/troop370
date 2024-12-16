@@ -100,7 +100,7 @@
     "eslint-plugin-svelte": "^2.43.0",
     "flatten-anything": "^3.0.5",
     "fluent-svelte": "^1.6.0",
-    "iframe-resizer": "^5.3.2",
+    "iframe-resizer": "^4.4.5",
     "is-what": "^5.0.2",
     "isomorphic-dompurify": "2.16.0",
     "jwt-decode": "^4.0.0",
