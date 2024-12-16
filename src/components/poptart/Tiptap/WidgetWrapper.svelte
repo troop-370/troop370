@@ -9,8 +9,6 @@
   class:left={position === 'left'}
   class:right={position === 'right'}
   class:noBorder
-  on:click
-  contenteditable="false"
 >
   <slot />
 </div>

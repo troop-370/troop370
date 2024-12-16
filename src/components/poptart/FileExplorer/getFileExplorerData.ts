@@ -100,16 +100,9 @@ export async function getFileExplorerData({
           ...$files.data,
           docs:
             $files.data?.docs?.map((file) => {
-              if (file.url.startsWith('/')) {
-                const url = new URL(file.url, PUBLIC_API_URL);
-                return {
-                  ...file,
-                  url: 'http://localhost:370/admin/strapi' + url.pathname + url.search,
-                };
-              }
               return {
                 ...file,
-                url: 'https://troop370atlanta.org/filestore' + url.pathname + url.search,
+                url: convertFileURL(file.url, 'http://localhost:370'),
               };
             }) || [],
         },
@@ -119,6 +112,16 @@ export async function getFileExplorerData({
   });
 
   return combined;
+}
+
+export function convertFileURL(fileUrl: string, siteOrigin = 'https://troop370atlanta.org') {
+  if (fileUrl.startsWith('/')) {
+    const url = new URL(fileUrl, PUBLIC_API_URL);
+    return 'http://localhost:370/admin/strapi' + url.pathname + url.search;
+  }
+
+  const url = new URL(fileUrl);
+  return siteOrigin + '/filestore' + url.pathname + url.search;
 }
 
 const folderSchema = z.object({

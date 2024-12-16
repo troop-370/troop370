@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { isObjectId } from '$utils/isObjectId';
-  import type { NodeViewProps } from '@tiptap/core';
+  import { convertFileURL } from '$components/poptart/FileExplorer/getFileExplorerData';
+  import { isNumber, type NodeViewProps } from '@tiptap/core';
   import { ProgressRing } from 'fluent-svelte';
-  import { NodeViewWrapper } from 'svelte-tiptap';
+  import { NodeViewContent, NodeViewWrapper } from 'svelte-tiptap';
   import WidgetWrapper from '../WidgetWrapper.svelte';
 
   export let node: NodeViewProps['node'];
@@ -16,47 +16,39 @@
   }
 
   let loading = false;
-  function getPhotoDetails(photoId: string) {
+  function getPhotoDetails(photoId: number) {
     loading = true;
-    const isId = isObjectId(photoId);
-    // query<PhotoBasicByRegexnameOrUrlQuery, PhotoBasicByRegexnameOrUrlQueryVariables>({
-    //   fetch,
-    //   tenant: $page.params.tenant,
-    //   query: PhotoBasicByRegexnameOrUrl,
-    //   useCache: false,
-    //   variables: {
-    //     limit: 1,
-    //     page: 1,
-    //     filter: JSON.stringify({
-    //       // ensure that the photo creater string exists and is not null or undefined or empty string
-    //       $and: [
-    //         { 'people.photo_created_by': { $exists: true } },
-    //         { 'people.photo_created_by': { $ne: null } },
-    //         { 'people.photo_created_by': { $ne: '' } },
-    //       ],
-    //       // match by string included in name OR exact same URL (only if not an object Id [use _id arg instead])
-    //       ...(isId
-    //         ? { _id: photoId }
-    //         : { $or: [{ name: { $regex: photoId, $options: 'i' } }, { photo_url: photoId }] }),
-    //     }),
-    //   },
-    // })
-    //   .finally(() => {
-    //     loading = false;
-    //   })
-    //   .then((result) => {
-    //     const photo = result?.data?.photos?.docs?.[0];
+    const isId = isNumber(photoId);
+    fetch(`/strapi/upload/files/${photoId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${$page.data.session.adminToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .finally(() => {
+        loading = false;
+      })
+      .then((photo) => {
+        // set the photo url and credit attributes
+        if (photo && editor.isEditable) {
+          if (photo.url) {
+            const photoUrl = convertFileURL(photo.url, $page.url.origin);
+            if (photoUrl !== node.attrs.photoUrl) {
+              updateAttributes({ photoUrl });
+            }
+          } else {
+            updateAttributes({ photoUrl: '' });
+          }
 
-    //     // set the photo url and credit attributes
-    //     if (photo && editor.isEditable) {
-    //       if (photo.photo_url && photo.photo_url !== node.attrs.photoUrl) {
-    //         updateAttributes({ photoUrl: photo.photo_url });
-    //       }
-    //       if (photo.people?.photo_created_by && photo.people.photo_created_by !== node.attrs.photoCredit) {
-    //         updateAttributes({ photoCredit: photo.people.photo_created_by });
-    //       }
-    //     }
-    //   });
+          if (photo.caption && photo.caption !== node.attrs.photoCredit) {
+            updateAttributes({ photoCredit: photo.caption });
+          } else {
+            updateAttributes({ photoCredit: '' });
+          }
+        }
+      });
   }
 
   function selectNodeTextEnd() {
@@ -75,12 +67,15 @@
 </script>
 
 <NodeViewWrapper>
-  <WidgetWrapper position={node.attrs.position} on:click={selectNodeTextEnd}>
+  <WidgetWrapper position={node.attrs.position}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       contenteditable="false"
       class="img-wrapper"
       class:left={node.attrs.position === 'left'}
       class:right={node.attrs.position === 'right'}
+      on:click={selectNodeTextEnd}
     >
       <img src={node.attrs.photoUrl + '?tr=w-600'} alt="" data-drag-handle class:loading />
       <div class="progress" class:loading>
@@ -88,14 +83,14 @@
       </div>
     </div>
     <div class="caption" class:show={node.attrs.showCaption === true}>
-      {#if node.attrs.showCaption === true}
-        <span
-          contenteditable
-          class="editable"
-          class:showPlaceholder={node.textContent.length === 0}
-        />
-      {/if}
-      <span class="source">{node.attrs.photoCredit}</span>
+      <div
+        class="editable"
+        class:showPlaceholder={node.textContent.length === 0}
+        class:hideCaption={node.attrs.showCaption !== true}
+      >
+        <NodeViewContent contenteditable />
+      </div>
+      <span class="source" contenteditable="false">{node.attrs.photoCredit}</span>
     </div>
   </WidgetWrapper>
 </NodeViewWrapper>
@@ -135,8 +130,8 @@
     font-size: 90%;
     text-align: center;
   }
-  .editable :global(*) {
-    display: inline-block;
+  .editable.showPlaceholder {
+    width: 100%;
   }
   .editable.showPlaceholder::before {
     content: 'Type a caption… (or hide it via the ribbon)';
@@ -145,6 +140,9 @@
     pointer-events: none;
     height: 0;
     transform: translateX(-50%);
+  }
+  .editable.hideCaption {
+    display: none;
   }
 
   .caption {

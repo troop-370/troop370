@@ -5,7 +5,7 @@ import PhotoWidgetNodeView from './PhotoWidgetNodeView.svelte';
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     photoWidget: {
-      insertPhotoWidget: (photoId: string) => ReturnType;
+      insertPhotoWidget: (photoId: number) => ReturnType;
     };
   }
 }
@@ -55,7 +55,7 @@ const PhotoWidget = Node.create<PhotoWidgetOptions>({
         renderHTML: (attributes) => ({
           'data-show-caption': attributes.showCaption,
         }),
-        parseHTML: (element) => element.getAttribute('data-show-caption') || false,
+        parseHTML: (element) => element.getAttribute('data-show-caption') === 'true' || false,
       },
       position: {
         default: 'center',
@@ -87,7 +87,7 @@ const PhotoWidget = Node.create<PhotoWidgetOptions>({
   addCommands() {
     return {
       insertPhotoWidget:
-        (photoId: string) =>
+        (photoId: number) =>
         ({ state, dispatch }) => {
           if (dispatch) {
             // remove anything within the selection
@@ -112,7 +112,7 @@ const PhotoWidget = Node.create<PhotoWidgetOptions>({
   },
 
   addNodeView() {
-    // return SvelteNodeViewRenderer(PhotoWidgetNodeView);
+    return SvelteNodeViewRenderer(PhotoWidgetNodeView);
   },
 });
 
