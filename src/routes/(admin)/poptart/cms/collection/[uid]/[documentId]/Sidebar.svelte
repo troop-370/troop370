@@ -10,6 +10,7 @@
   interface Features {
     actions?: boolean;
     docInfo?: boolean;
+    preview?: boolean;
     versions?: boolean;
   }
 
@@ -22,10 +23,13 @@
   export let features: Features = {
     actions: true,
     docInfo: true,
+    preview: true,
     versions: true,
   };
 
   export let docData: Record<string, unknown>;
+
+  $: showSectionTitles = Object.values(features).filter((val) => val === true).length > 1;
 
   let actionsMenuOpen = false;
   $: saveAction = actions?.find((action) => action.id === 'save');
@@ -154,7 +158,9 @@
   {/if}
 
   {#if features.docInfo}
-    <div class="section-title">Document information</div>
+    {#if showSectionTitles}
+      <div class="section-title">Document information</div>
+    {/if}
     <div class="doc-info-row">
       <div>ID</div>
       <div>{docData.documentId}</div>
@@ -197,8 +203,10 @@
     {/if}
   {/if}
 
-  {#if $previewConfig}
-    <div class="section-title">Preview</div>
+  {#if $previewConfig && features.preview}
+    {#if showSectionTitles}
+      <div class="section-title">Preview</div>
+    {/if}
     <div class="preview-buttons">
       {#if docData.status === 'published'}
         <Button
@@ -233,7 +241,9 @@
   {/if}
 
   {#if features.versions && versionsList}
-    <div class="section-title">Versions</div>
+    {#if showSectionTitles}
+      <div class="section-title">Versions</div>
+    {/if}
     {#if versionsList.length > 0}
       <div class="versions-section">
         {#each versionsList.slice(0, truncateVersionsList ? 3 : undefined) as version}

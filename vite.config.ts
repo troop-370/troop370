@@ -7,6 +7,10 @@ const config: UserConfig = {
     // add libraries containing invalid ESM here
     noExternal: ['rrule', 'copy-anything'],
   },
+  optimizeDeps: {
+    // ensures compatibility with old commonjs libraries
+    include: ['youtube-player'],
+  },
 };
 
 export default config;

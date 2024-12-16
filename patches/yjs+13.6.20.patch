@@ -1,0 +1,43 @@
+diff --git a/node_modules/yjs/dist/src/types/YMap.d.ts b/node_modules/yjs/dist/src/types/YMap.d.ts
+index 5ae4c01..ed75c34 100644
+--- a/node_modules/yjs/dist/src/types/YMap.d.ts
++++ b/node_modules/yjs/dist/src/types/YMap.d.ts
+@@ -99,20 +99,12 @@ export class YMap<MapType> extends AbstractType<YMapEvent<MapType>> implements I
+     delete(key: string): void;
+     /**
+      * Adds or updates an element with a specified key and value.
+-     * @template {MapType} VAL
+-     *
+-     * @param {string} key The key of the element to add to this YMap
+-     * @param {VAL} value The value of the element to add
+-     * @return {VAL}
+      */
+-    set<VAL extends MapType>(key: string, value: VAL): VAL;
++    set<K extends keyof MapType>(key: K, value: MapType[K]): MapType[K];
+     /**
+      * Returns a specified element from this YMap.
+-     *
+-     * @param {string} key
+-     * @return {MapType|undefined}
+      */
+-    get(key: string): MapType | undefined;
++    get<K extends keyof MapType>(key: K): MapType[K] | undefined;
+     /**
+      * Returns a boolean indicating whether the specified key exists or not.
+      *
+@@ -132,11 +124,10 @@ export class YMap<MapType> extends AbstractType<YMapEvent<MapType>> implements I
+     [Symbol.iterator](): IterableIterator<[string, MapType]>;
+ }
+ export function readYMap(_decoder: UpdateDecoderV1 | UpdateDecoderV2): YMap<any>;
+-import { YEvent } from "../utils/YEvent.js";
++import { Item } from "../structs/Item.js";
++import { Doc } from "../utils/Doc.js";
+ import { Transaction } from "../utils/Transaction.js";
++import { UpdateDecoderV1, UpdateDecoderV2 } from "../utils/UpdateDecoder.js";
++import { YEvent } from "../utils/YEvent.js";
+ import { AbstractType } from "./AbstractType.js";
+-import { Doc } from "../utils/Doc.js";
+-import { Item } from "../structs/Item.js";
+-import { UpdateDecoderV1 } from "../utils/UpdateDecoder.js";
+-import { UpdateDecoderV2 } from "../utils/UpdateDecoder.js";
+ //# sourceMappingURL=YMap.d.ts.map

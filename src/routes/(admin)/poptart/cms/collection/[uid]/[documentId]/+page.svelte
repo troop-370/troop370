@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import { title } from '$stores/title';
   import { hasKey, notEmpty, openWindow } from '$utils';
+  import type { ComponentProps } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
   import PublishDocumentDialog from './PublishDocumentDialog.svelte';
@@ -40,7 +41,7 @@
     {
       id: 'clone',
       label: 'Clone document',
-      icon: '',
+      icon: 'DocumentCopy16Regular',
       action: () => {
         goto(`/admin/cms/collection/${$collectionConfig.uid}/${$docData.documentId}/clone`);
       },
@@ -58,7 +59,7 @@
     {
       id: 'developer',
       label: 'Open developer dialog',
-      icon: '',
+      icon: 'DeveloperBoard16Regular',
       action: () => {
         developerDialogOpen = !developerDialogOpen;
       },
@@ -66,7 +67,7 @@
     {
       id: 'configure_view',
       label: 'Configure the view',
-      icon: '',
+      icon: 'Options16Regular',
       action: () => {
         goto(
           `/admin/content-manager/collection-types/${$collectionConfig.uid}/configurations/edit`
@@ -85,8 +86,8 @@
     },
     {
       id: 'legacy_editor',
-      label: 'Open in legacy editor',
-      icon: '',
+      label: 'Switch to legacy editor',
+      icon: 'CircleEdit24Regular',
       action: () => {
         goto(
           `/admin/content-manager/collection-types/${$collectionConfig.uid}/${$docData.documentId}`
@@ -109,6 +110,13 @@
   $: showSidebarInline = currentContentWidth <= 900;
   $: childWindow =
     (!!browser && !!window.name) || $page.url.searchParams.get('childWindow') === '1';
+
+  $: coreSidebarProps = {
+    docData: sidebarDocData,
+    actions,
+    previewConfig: data.previewConfig,
+    versions,
+  } satisfies ComponentProps<Sidebar>;
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
@@ -125,8 +133,8 @@
     {#if showSidebarInline}
       <Sidebar
         isEmbedded
-        docData={sidebarDocData}
         features={{ actions: !data.isPublishedVersion, docInfo: false, versions: false }}
+        {...coreSidebarProps}
       />
     {/if}
 
@@ -142,27 +150,23 @@
         defs: data.defs,
       }}
       disabled={data.isPublishedVersion}
+      {actions}
+      {coreSidebarProps}
     />
 
     {#if showSidebarInline}
       <Sidebar
         isEmbedded
-        {actions}
-        docData={sidebarDocData}
         features={{ actions: false, docInfo: true, versions: !childWindow }}
-        previewConfig={data.previewConfig}
-        versions={data.versions}
+        {...coreSidebarProps}
       />
     {/if}
   </article>
 
   {#if showSidebarInline === false}
     <Sidebar
-      {actions}
-      docData={sidebarDocData}
       features={{ actions: !data.isPublishedVersion, docInfo: true, versions: !childWindow }}
-      previewConfig={data.previewConfig}
-      versions={data.versions}
+      {...coreSidebarProps}
     />
   {/if}
 </div>
