@@ -14,6 +14,7 @@
   import { editorExtensions } from '$components/poptart/Tiptap/editorExtensions';
   import { richTextParams } from '$components/poptart/Tiptap/richTextParams';
   import { notEmpty, parseSchemaDefs } from '$utils';
+  import { blocksToProsemirror } from '$utils/blocksToProsemirror';
   import { setTipTapXMLFragment } from '$utils/setTipTapXMLFragment';
   import { InfoBar, TextBlock, TextBox } from 'fluent-svelte';
   import {
@@ -60,6 +61,7 @@
   // ensure that the ydoc contains tiptap fields
   const ydoc = readable(new Y.Doc());
   $: tiptapFields = defs.filter(([key, def]) => def.customField === 'plugin::tiptap-editor.tiptap');
+  $: legacyBlocksFields = defs.filter(([key, def]) => def.type === 'blocks');
   let hasSetTipTapFields = false;
   $: if (!hasSetTipTapFields) {
     tiptapFields.forEach(([key, def], index) => {
@@ -72,6 +74,16 @@
       if (index === tiptapFields.length - 1) {
         hasSetTipTapFields = true;
       }
+    });
+    legacyBlocksFields.forEach(([key, def], index) => {
+      try {
+        setTipTapXMLFragment(
+          key,
+          JSON.stringify(blocksToProsemirror($docData[key] as any)),
+          $ydoc,
+          editorExtensions.tiptap
+        );
+      } catch {}
     });
   }
 
@@ -271,7 +283,25 @@
           <Code type="md" key={forId} bind:value={$docData[key]} {disabled} />
           <!-- Blocks -->
         {:else if def.type === 'blocks'}
-          NOT SUPPORTED (blocks)
+          <div style="margin-bottom: 6px;">
+            <InfoBar severity="caution" closable={false} class="inline-infobar">
+              This is a legacy field type. It cannot be edited with the new editor.
+            </InfoBar>
+          </div>
+          <RichTiptap
+            disabled
+            hiddenUI
+            user={{
+              _id: '1',
+              name: 'User',
+              color: 'red',
+              sessionId: '1',
+              photo: '',
+            }}
+            ydocKey={key}
+            fullSharedData={docData}
+            {ydoc}
+          />
           <!-- UIDs -->
         {:else if def.type === 'uid'}
           <StrapiUIDField {key} {collectionUID} {docData} {sessionAdminToken} {disabled} />

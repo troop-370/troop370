@@ -32,6 +32,7 @@
   export let ydoc: ComponentProps<Tiptap>['ydoc'];
   export let ydocKey: ComponentProps<Tiptap>['ydocKey'];
   export let disabled: ComponentProps<Tiptap>['disabled'];
+  export let hiddenUI = false;
   export let user: ComponentProps<Tiptap>['user'];
   export let options: tiptapOptions | undefined = undefined;
   export let fullscreen = false;
@@ -336,35 +337,39 @@
   {@html `<` + `style>${css}</style>`}
 {/await}
 
-<div class="richtiptap" class:fullscreen bind:clientWidth={tiptapwidth}>
-  <Ribbon
-    {editor}
-    {options}
-    {user}
-    {trackChanges}
-    {toggleTrackChanges}
-    {iframehtmlstring}
-    {actions}
-    {disabled}
-    bind:docStatsDialogOpen
-  />
+<div class="richtiptap" class:fullscreen class:hiddenUI bind:clientWidth={tiptapwidth}>
+  {#if !hiddenUI}
+    <Ribbon
+      {editor}
+      {options}
+      {user}
+      {trackChanges}
+      {toggleTrackChanges}
+      {iframehtmlstring}
+      {actions}
+      {disabled}
+      bind:docStatsDialogOpen
+    />
+  {/if}
   <div class="main-middle">
     {#if $richTextParams.obj.previewMode > 0}
       <PreviewFrame src={dynamicPreviewHref} {fullSharedData} />
     {/if}
     <div class="richtiptap-content" class:hidden={$richTextParams.obj.previewMode > 0}>
-      <div class="notices">
-        {#if isManaged && tiptapwidth > 400}
-          <InfoBar
-            severity="information"
-            title="Some features are managed by your administrator and may be disabled."
-          />
-        {/if}
-        {#if $richTextParams.isActive('fs')}
-          <slot name="alerts" />
-        {/if}
-      </div>
-      {#if options?.metaFrame && $richTextParams.isActive('fs')}
+      {#if !hiddenUI}
+        <div class="notices">
+          {#if isManaged && tiptapwidth > 400}
+            <InfoBar
+              severity="information"
+              title="Some features are managed by your administrator and may be disabled."
+            />
+          {/if}
+          {#if $richTextParams.isActive('fs')}
+            <slot name="alerts" />
+          {/if}
+        </div>
+      {/if}
+      {#if options?.metaFrame && $richTextParams.isActive('fs') && !hiddenUI}
         <MetaFrame src={options.metaFrame} {tiptapwidth} {fullSharedData} bind:iframehtmlstring />
       {/if}
       <div
@@ -394,7 +399,7 @@
       </div>
     </div>
 
-    {#if tiptapwidth > 400}
+    {#if tiptapwidth > 400 && !hiddenUI}
       <div
         class="sidebar-wrapper"
         class:navActive={$richTextParams.activeCount > 1}
@@ -510,7 +515,7 @@
     {/if}
   </div>
 
-  {#if tiptapwidth > 400}
+  {#if tiptapwidth > 400 && !hiddenUI}
     <div class="footer-wrapper">
       <div class="footer">
         <button
@@ -549,7 +554,11 @@
     height: 500px;
     overflow: hidden;
     border-radius: var(--fds-control-corner-radius);
-    border: 2px solid var(--titlebar-bg);
+    box-shadow: inset 0 0 0 1px var(--titlebar-bg);
+  }
+  .richtiptap.hiddenUI {
+    background-color: var(--fds-control-fill-default);
+    box-shadow: inset 0 0 0 1px var(--fds-control-stroke-default);
   }
 
   .main-middle {
