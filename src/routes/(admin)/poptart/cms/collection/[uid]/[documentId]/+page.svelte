@@ -121,40 +121,42 @@
 />
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
-  <article style="padding: {showSidebarInline ? 20 : 40}px;">
-    {#if showSidebarInline}
-      <Sidebar
-        isEmbedded
-        docData={sidebarDocData}
-        features={{ actions: !data.isPublishedVersion, docInfo: false, versions: false }}
-      />
-    {/if}
+  <div class="article-wrapper">
+    <article style="padding: {showSidebarInline ? 20 : 40}px;">
+      {#if showSidebarInline}
+        <Sidebar
+          isEmbedded
+          docData={sidebarDocData}
+          features={{ actions: !data.isPublishedVersion, docInfo: false, versions: false }}
+        />
+      {/if}
 
-    <Editor
-      data={{
-        collectionConfig,
-        docDataStore,
-        session: data.session,
-        save: data.save,
-        publish: () => {
-          publishDocumentDialogOpen = true;
-        },
-        defs: data.defs,
-      }}
-      disabled={data.isPublishedVersion}
-    />
-
-    {#if showSidebarInline}
-      <Sidebar
-        isEmbedded
-        {actions}
-        docData={sidebarDocData}
-        features={{ actions: false, docInfo: true, versions: !childWindow }}
-        previewConfig={data.previewConfig}
-        versions={data.versions}
+      <Editor
+        data={{
+          collectionConfig,
+          docDataStore,
+          session: data.session,
+          save: data.save,
+          publish: () => {
+            publishDocumentDialogOpen = true;
+          },
+          defs: data.defs,
+        }}
+        disabled={data.isPublishedVersion}
       />
-    {/if}
-  </article>
+
+      {#if showSidebarInline}
+        <Sidebar
+          isEmbedded
+          {actions}
+          docData={sidebarDocData}
+          features={{ actions: false, docInfo: true, versions: !childWindow }}
+          previewConfig={data.previewConfig}
+          versions={data.versions}
+        />
+      {/if}
+    </article>
+  </div>
 
   {#if showSidebarInline === false}
     <Sidebar
@@ -173,7 +175,12 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+  }
+
+  .article-wrapper {
+    width: 100%;
     overflow: hidden auto;
+    box-sizing: border-box;
   }
 
   .content-wrapper {
