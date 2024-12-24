@@ -18,7 +18,7 @@
     height = `1px`;
     tick().then(() => {
       height = `${textareaElem.scrollHeight}px`;
-      textareaElem.focus();
+      // textareaElem.focus();
     });
   }
 
