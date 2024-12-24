@@ -137,9 +137,7 @@ function getRelationConnections(
         }
 
         // build the `set` array with positional information
-        // NOTE: Strapi reverses the order of the documents in the `set` array, so we
-        // need to specify the order in reverse
-        const setDocuments = newDocuments.reverse().map((doc, index) => {
+        const setDocuments = newDocuments.map((doc, index) => {
           if (index === 0) {
             return { ...doc, start: true };
           } else if (index === newDocuments.length - 1) {

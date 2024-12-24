@@ -76,7 +76,8 @@ export async function withDocumentRelationData(props: WithDocumentRelationDataPr
   );
   const relationData = {};
   Object.entries(flatRelationData).forEach(([field, data]) => {
-    setProperty(relationData, field, data);
+    // reverse the data because strapi returns the data in reverse order
+    setProperty(relationData, field, data.reverse());
   });
 
   return merge(baseData, relationData);
