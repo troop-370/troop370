@@ -11,8 +11,12 @@
   export let options: tiptapOptions | undefined = undefined;
 
   $: textStyle = editor?.getAttributes('textStyle');
-  $: fontFamily = textStyle?.fontFamily || 'Georgia';
-  $: fontSize = textStyle?.fontSize || '17px';
+  $: fontFamily =
+    textStyle?.fontFamily ||
+    options?.features.fontFamilies?.[0]?.label ||
+    options?.features.fontFamilies?.[0]?.name ||
+    'Georgia';
+  $: fontSize = textStyle?.fontSize || options?.features.fontSizes?.[0] || '17px';
 
   $: textStyleGallery = (() => {
     if (
@@ -68,9 +72,9 @@
     previewMode ||
     !options?.features.fontFamilyPicker ||
     !editor?.can().setFontFamily('Georgia') ||
-    fontFamilyItems.length === 0;
+    fontFamilyItems.length < 2;
   $: fontSizeDisabled =
-    disabled || previewMode || !options?.features.fontSizePicker || fontSizeItems.length === 0;
+    disabled || previewMode || !options?.features.fontSizePicker || fontSizeItems.length < 2;
   $: boldDisabled =
     disabled || previewMode || !options?.features.bold || !editor?.can().toggleBold();
   $: italicDisabled =

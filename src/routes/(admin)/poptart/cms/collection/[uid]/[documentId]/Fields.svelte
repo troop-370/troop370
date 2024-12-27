@@ -13,8 +13,9 @@
   import { RichTiptap } from '$components/poptart/Tiptap';
   import { editorExtensions } from '$components/poptart/Tiptap/editorExtensions';
   import { richTextParams } from '$components/poptart/Tiptap/richTextParams';
-  import { notEmpty, parseSchemaDefs } from '$utils';
+  import { hasKey, notEmpty, parseSchemaDefs } from '$utils';
   import { blocksToProsemirror } from '$utils/blocksToProsemirror';
+  import { isJSON } from '$utils/isJSON';
   import { setTipTapXMLFragment } from '$utils/setTipTapXMLFragment';
   import { InfoBar, TextBlock, TextBox } from 'fluent-svelte';
   import {
@@ -136,9 +137,27 @@
         </InfoBar>
       {:else if def.customField}
         {#if def.customField === 'plugin::tiptap-editor.tiptap'}
+          {@const tiptapOptions = isObject(def.options) ? def.options : {}}
           <RichTiptap
             {disabled}
-            options={def.options}
+            options={{
+              ...tiptapOptions,
+              features: {
+                ...(tiptapOptions.features || {}),
+                fontSizes:
+                  hasKey(tiptapOptions.features, 'fontSizes') &&
+                  isString(tiptapOptions.features.fontSizes) &&
+                  isJSON(tiptapOptions.features.fontSizes)
+                    ? JSON.parse(tiptapOptions.features.fontSizes)
+                    : [],
+                fontFamilies:
+                  hasKey(tiptapOptions.features, 'fontFamilies') &&
+                  isString(tiptapOptions.features.fontFamilies) &&
+                  isJSON(tiptapOptions.features.fontFamilies)
+                    ? JSON.parse(tiptapOptions.features.fontFamilies)
+                    : [],
+              },
+            }}
             actions={actions || []}
             user={{
               _id: '1',
