@@ -1,7 +1,9 @@
 import { apity } from '$api';
+import { HardBreak } from '$pm/render/HardBreak';
+import { Link } from '$pm/render/Link';
 import { notEmpty } from '$utils';
+import Renderer from '@cristata/prosemirror-to-html-js';
 import { error } from '@sveltejs/kit';
-import { renderBlock, type Node } from 'blocks-html-renderer';
 import { DOMParser } from 'xmldom';
 import type { PageServerLoad } from './$types';
 
@@ -27,9 +29,28 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   const { session } = await parent();
 
   const docs = resolved.data.data.filter(notEmpty).map((d) => {
+    // convert the json body to html
+    const bodyContent = JSON.parse(d.body || '[]');
+    let body = '';
+    try {
+      const renderer = new Renderer.Renderer();
+      renderer.addNode(HardBreak);
+      renderer.addMark(Link);
+      body = renderer.render({
+        type: 'doc',
+        content: bodyContent,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
     const buttonTextOverride = (() => {
-      if (d.body && Array.isArray(d.body) && d.body.length === 1 && DOMParser) {
-        const html = renderBlock(d.body.filter((node) => node.type === 'paragraph'));
+      if (bodyContent && Array.isArray(bodyContent) && bodyContent.length === 1 && DOMParser) {
+        const renderer = new Renderer.Renderer();
+        const html = renderer.render({
+          type: 'doc',
+          content: [bodyContent[0]],
+        });
 
         if (html) {
           const dom = new DOMParser().parseFromString(html, 'text/html');
@@ -52,12 +73,16 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
     const hrefOverride = (() => {
       if (
         buttonTextOverride &&
-        d.body &&
-        Array.isArray(d.body) &&
-        d.body.length === 1 &&
+        bodyContent &&
+        Array.isArray(bodyContent) &&
+        bodyContent.length === 1 &&
         DOMParser
       ) {
-        const html = renderBlock(d.body.filter((node) => node.type === 'paragraph'));
+        const renderer = new Renderer.Renderer();
+        const html = renderer.render({
+          type: 'doc',
+          content: [bodyContent[0]],
+        });
 
         if (html) {
           const dom = new DOMParser().parseFromString(html, 'text/html');
@@ -90,8 +115,8 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
       body:
         (d.enable_password_protection && session.authenticated !== true) ||
         (buttonTextOverride && hrefOverride)
-          ? []
-          : (d.body as Node[]),
+          ? null
+          : body,
       button_text: buttonTextOverride || d.button_text || 'Read more',
       enable_password_protection: d.enable_password_protection,
       href: hrefOverride ? hrefOverride : undefined,

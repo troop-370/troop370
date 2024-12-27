@@ -1,60 +1,35 @@
 <script lang="ts">
   import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
+  import { HardBreak } from '$pm/render/HardBreak';
+  import { Newsletter3Link } from '$pm/render/Newsletter3Link';
   import { capitalize } from '$utils';
-  import { renderBlock, type Node } from 'blocks-html-renderer';
+  import { Renderer } from '@cristata/prosemirror-to-html-js';
+  import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
   import { Number } from '.';
 
   export let name: string | undefined = undefined;
   export let description: string | undefined = undefined;
-  export let body: Node[];
+  export let body: ProsemirrorDocNode[];
   export let number: number;
   export let category: string;
 
-  let processedHtml = `<code>JSON.stringify(body)</code>`;
+  let html = `<code>JSON.stringify(body)</code>`;
   $: {
-    if (DOMParser) {
-      const html = renderBlock(body);
-
-      if (html) {
-        const dom = new DOMParser().parseFromString(html, 'text/html');
-
-        /**
-         * Style the buttons in the content,
-         */
-        const anchors = dom.getElementsByTagName('a') || []; // get all anchors in document
-        Array.from(anchors).forEach((anchor, i) => {
-          const buttonText = anchor.textContent || ''; // get text of anchor
-          const buttonTypeOutlined = buttonText.includes('.ob'); // check if anchor includes the text '.ob'
-          const buttonTypeRegular = buttonText.includes('.pb'); // check if anchor includes the text '.b'
-          if (buttonTypeOutlined === true) {
-            // only do the following if the anchor includes the text '.ob'
-            anchors[i].textContent = buttonText.replace('.ob', '');
-            anchors[i].setAttribute('class', 'email-mdc-button email-mdc-button--outlined');
-            anchors[i].setAttribute(
-              'style',
-              'margin-top: 0px; font-family: Roboto, sans-serif; font-size: 12.5px; font-weight: 700; line-height: 18px; letter-spacing: 1.3px; text-decoration: none; text-transform: uppercase; padding: 6px 8px; border: 1px solid #cccccc; color: rgb(0, 63, 135); border-radius: 2px; margin-top: 10px; display: inline-flex;'
-            );
-          }
-          if (buttonTypeRegular === true) {
-            // only do the following if the anchor includes the text '.pb'
-            anchors[i].textContent = buttonText.replace('.pb', '');
-            anchors[i].setAttribute('class', 'email-mdc-button');
-            anchors[i].setAttribute(
-              'style',
-              'margin-top: 0px; font-family: Roboto, sans-serif; font-size: 12.5px; font-weight: 700; line-height: 18px; letter-spacing: 1.3px; text-decoration: none; text-transform: uppercase; padding: 6px 0px; border: 0px solid #cccccc; color: rgb(0, 63, 135); border-radius: 2px; margin-top: 10px; display: inline-flex;'
-            );
-          }
-        });
-
-        processedHtml = dom.toString() || html || '';
-      } else {
-        processedHtml = html || '';
-      }
+    try {
+      const renderer = new Renderer();
+      renderer.addNode(HardBreak);
+      renderer.addMark(Newsletter3Link);
+      html = renderer.render({
+        type: 'doc',
+        content: body,
+      });
+    } catch (err) {
+      console.error(err);
     }
 
-    processedHtml = processedHtml.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
+    html = html.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
   }
 </script>
 
@@ -67,7 +42,7 @@
 {#if description}
   <p>{@html marked.parseInline(capitalize(description))}</p>
 {/if}
-<div class="post-content">{@html processedHtml}</div>
+<div class="post-content">{@html html}</div>
 
 <style>
   h2 {
@@ -107,5 +82,15 @@
     font-weight: 400;
     letter-spacing: 0.03125em;
     color: #000000;
+  }
+
+  .post-content :global(li p) {
+    margin: 0;
+  }
+
+  .post-content :global(p + ul),
+  .post-content :global(p + ol) {
+    margin-top: calc(-8px + 4px);
+    padding-inline-start: 22px;
   }
 </style>

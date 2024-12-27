@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
   import { formatISODate, notEmpty, withoutImageNodes } from '$utils';
+  import { isJSON } from '$utils/isJSON';
+  import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
   import {
     BackgroundTable,
     CalendarMonth,
@@ -16,6 +18,8 @@
 
   export let newsletter: ApiTypes['manualSchemas']['Newsletter'];
   export let element: HTMLHtmlElement | undefined = undefined;
+
+  const blankBody: ProsemirrorDocNode[] = [];
 </script>
 
 <html id="newsletter-doc" lang="en-us" bind:this={element}>
@@ -112,7 +116,7 @@
                 <NewsletterPostCard
                   name={post.title}
                   description={post.subtitle}
-                  body={withoutImageNodes(post.body)}
+                  body={withoutImageNodes(isJSON(post?.body) ? JSON.parse(post.body) : blankBody)}
                 />
               </td>
             </tr>

@@ -983,6 +983,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -1123,6 +1127,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -1318,6 +1326,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -1512,6 +1524,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -1799,6 +1815,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -2037,7 +2057,8 @@ export interface components {
     };
     EmailManualCalendarMonthComponent: {
       id?: number;
-      __component?: string;
+      /** @enum {string} */
+      __component?: "email.manual-calendar-month";
       month?: string;
       events?: string;
     };
@@ -2246,6 +2267,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -2332,7 +2357,7 @@ export interface components {
       data: {
         title: string;
         subtitle?: string;
-        body?: unknown;
+        body?: string;
         enable_password_protection: boolean;
         button_text: string;
         /** @example string or id */
@@ -2340,6 +2365,7 @@ export interface components {
         slug: string;
         tags?: (number | string)[];
         submitted_by: string;
+        legacy_body?: unknown;
         locale?: string;
         localizations?: (number | string)[];
         /** @example string or id */
@@ -2371,7 +2397,7 @@ export interface components {
       documentId?: string;
       title: string;
       subtitle?: string;
-      body?: unknown;
+      body?: string;
       enable_password_protection: boolean;
       button_text: string;
       category?: {
@@ -2502,6 +2528,10 @@ export interface components {
                 id?: number;
                 documentId?: string;
               }[];
+            stageRequiredToPublish?: {
+              id?: number;
+              documentId?: string;
+            };
             contentTypes?: unknown;
             /** Format: date-time */
             createdAt?: string;
@@ -2587,6 +2617,7 @@ export interface components {
           };
         }[];
       submitted_by: string;
+      legacy_body?: unknown;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -2607,7 +2638,7 @@ export interface components {
           documentId?: string;
           title?: string;
           subtitle?: string;
-          body?: unknown;
+          body?: string;
           enable_password_protection?: boolean;
           button_text?: string;
           category?: {
@@ -2620,6 +2651,7 @@ export interface components {
               documentId?: string;
             }[];
           submitted_by?: string;
+          legacy_body?: unknown;
           /** Format: date-time */
           createdAt?: string;
           /** Format: date-time */
@@ -2846,6 +2878,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -2915,7 +2951,8 @@ export interface components {
         sender_name: string;
         /** Format: date */
         header_date: string;
-        body: unknown;
+        body: string;
+        legacy_body?: unknown;
         locale?: string;
         localizations?: (number | string)[];
         /** @example string or id */
@@ -2949,7 +2986,8 @@ export interface components {
       sender_name: string;
       /** Format: date */
       header_date: string;
-      body: unknown;
+      body: string;
+      legacy_body?: unknown;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -3063,7 +3101,8 @@ export interface components {
           sender_name?: string;
           /** Format: date */
           header_date?: string;
-          body?: unknown;
+          body?: string;
+          legacy_body?: unknown;
           /** Format: date-time */
           createdAt?: string;
           /** Format: date-time */
@@ -3096,6 +3135,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;
@@ -3344,6 +3387,10 @@ export interface components {
                   id?: number;
                   documentId?: string;
                 }[];
+              stageRequiredToPublish?: {
+                id?: number;
+                documentId?: string;
+              };
               contentTypes?: unknown;
               /** Format: date-time */
               createdAt?: string;

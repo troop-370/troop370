@@ -3,8 +3,8 @@ import type { Node as BlockNode } from 'blocks-html-renderer';
 import { copy } from 'copy-anything';
 import { notEmpty } from './notEmpty';
 
-export function blocksToProsemirror(nodes: BlockNode[]) {
-  return nodes.flatMap((node) => blockToProsemirror(node)).filter(notEmpty);
+export function blocksToProsemirror(nodes: BlockNode[] | undefined | null) {
+  return (nodes || []).flatMap((node) => blockToProsemirror(node)).filter(notEmpty);
 }
 
 type TextInlineNode = Extract<BlockNode['children'][number], { bold?: boolean }>;

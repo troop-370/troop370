@@ -1,18 +1,16 @@
-import type { Node as BlocksNode } from 'blocks-html-renderer';
+import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
 import { hasKey } from './hasKey';
 
 /**
- * Returns a copy of the input blocks nodes without image nodes.
+ * Returns a copy of the input prosemirror doc nodes without image nodes.
  *
  * Note: This will recursively search for image nodes and exclude them.
  */
-export function withoutImageNodes(nodes: BlocksNode[]): BlocksNode[] {
-  // @ts-expect-error typescript is being dumb here
+export function withoutImageNodes(nodes: ProsemirrorDocNode[]): ProsemirrorDocNode[] {
   return nodes.filter(removeImageNode).map((node) => {
     return {
       ...node,
-      // @ts-expect-error typescript is being dumb here
-      children: hasKey(node, 'children') ? withoutImageNodes(node.children) : [],
+      children: hasKey(node, 'content') ? withoutImageNodes(node.content) : [],
     };
   });
 }

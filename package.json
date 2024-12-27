@@ -67,7 +67,7 @@
   "type": "module",
   "dependencies": {
     "@cocreators-ee/apity": "^0.0.5",
-    "@cristata/prosemirror-to-html-js": "^3.1.0",
+    "@cristata/prosemirror-to-html-js": "^3.1.1",
     "@fluentui/svg-icons": "1.1.192",
     "@iwsio/json-csv-core": "^1.1.4",
     "@monaco-editor/loader": "^1.4.0",
