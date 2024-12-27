@@ -435,6 +435,7 @@
                 {...docPropertiesSidebarProps}
                 {coreSidebarProps}
                 editorIsFullscreen={fullscreen}
+                {user}
               />
             {:else if $richTextParams.primaryActive === 'versions'}
               <VersionsSidebar

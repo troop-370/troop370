@@ -1,15 +1,18 @@
 <script lang="ts">
+  import { SelectOne } from '$components/poptart/Select';
   import Chip from '$lib/common/Chip/Chip.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import Loading from '$lib/common/Loading.svelte';
   import { capitalize, formatISODate, listOxford, notEmpty, openWindow } from '$utils';
   import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
-  import { isString } from 'is-what';
+  import { isObject, isString } from 'is-what';
   import type { Readable } from 'svelte/store';
   import type { PageData } from './$types';
 
   interface Features {
     actions?: boolean;
     docInfo?: boolean;
+    workflowStage?: boolean;
     preview?: boolean;
     versions?: boolean;
   }
@@ -20,12 +23,17 @@
   export let previewConfig: Readable<ValueType<PageData['previewConfig']>> | undefined = undefined;
   export let isEmbedded = false;
   export let versions: PageData['versions'] | undefined = undefined;
+  export let stages: PageData['stages'] | undefined = undefined;
   export let features: Features = {
     actions: true,
     docInfo: true,
+    workflowStage: true,
     preview: true,
     versions: true,
   };
+  export let disabled = false;
+  export let setStage: PageData['setStage'] | undefined = undefined;
+  export let showStageSpinner = false;
 
   export let docData: Record<string, unknown>;
 
@@ -201,6 +209,38 @@
         </div>
       </div>
     {/if}
+  {/if}
+
+  {#if features.workflowStage && stages}
+    <div
+      class="section-title"
+      style="display: flex; align-items: center; justify-content: space-between;"
+    >
+      Stage
+      {#if showStageSpinner}
+        <Loading message="" size={24} style="display: inline-flex;" />
+      {/if}
+    </div>
+
+    <SelectOne
+      disabled={disabled || !setStage}
+      selectedOption={isObject(docData.strapi_stage)
+        ? {
+            _id: `${docData.strapi_stage.id}`,
+            label:
+              $stages?.find(
+                (stage) =>
+                  isObject(docData.strapi_stage) && stage.strapiStageId === docData.strapi_stage.id
+              )?.label || `${docData.strapi_stage.name}`,
+          }
+        : undefined}
+      options={$stages}
+      on:change={(evt) => {
+        setStage?.(evt.detail.strapiStageId);
+      }}
+      showCurrentSelectionOnDropdown
+      hideSelected={false}
+    />
   {/if}
 
   {#if $previewConfig && features.preview}

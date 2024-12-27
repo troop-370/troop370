@@ -54,6 +54,5 @@ export function genAvatar(
   const blobURL = URL.createObjectURL(blob);
 
   cache.set(key, blobURL);
-  console.log('genAvatar', id, blobURL);
   return blobURL;
 }

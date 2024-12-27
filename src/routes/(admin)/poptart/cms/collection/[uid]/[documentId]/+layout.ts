@@ -36,7 +36,37 @@ export const load = (async ({ parent, params, fetch, depends }) => {
       });
   }
 
-  return { versions };
+  const stages = writable<{
+    data: z.infer<typeof stagesDataSchema> | null;
+    loading: boolean;
+    refetchOnInvalidate: boolean;
+  }>({
+    data: null,
+    loading: false,
+    refetchOnInvalidate: false,
+  });
+
+  if (!get(stages).data || get(stages).refetchOnInvalidate) {
+    stages.set({ data: null, loading: true, refetchOnInvalidate: false });
+    fetch(
+      `/strapi/review-workflows/content-manager/collection-types/${params.uid}/${params.documentId}/stages`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.adminToken}`,
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((json) => stagesDataSchema.parse(json))
+      .then((data) => stages.set({ data, loading: false, refetchOnInvalidate: false }))
+      .catch((err) => {
+        console.error(JSON.stringify(err, null, 2));
+      });
+  }
+
+  return { versions, stages };
 }) satisfies LayoutLoad;
 
 const versionSchema = z.object({
@@ -67,5 +97,24 @@ const versionsDataSchema = z.object({
       pageCount: z.number(),
       total: z.number(),
     }),
+  }),
+});
+
+const stageSchema = z.object({
+  color: z.string(),
+  createdAt: z.string(),
+  documentId: z.string(),
+  id: z.number(),
+  locale: z.string().nullable(),
+  name: z.string(),
+  publishedAt: z.string().nullable(),
+  updatedAt: z.string().nullable(),
+});
+
+const stagesDataSchema = z.object({
+  data: z.array(stageSchema),
+  meta: z.object({
+    stageCount: z.number(),
+    workflowCount: z.number(),
   }),
 });

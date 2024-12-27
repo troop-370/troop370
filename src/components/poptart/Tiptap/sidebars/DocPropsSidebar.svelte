@@ -13,6 +13,7 @@
   export let docDataStore: ComponentProps<Fields>['docDataStore'];
   export let variant: ComponentProps<Fields>['variant'];
   export let editorIsFullscreen = false;
+  export let user: ComponentProps<Fields>['user'];
 
   let headerHeight = 100;
 </script>
@@ -26,7 +27,7 @@
 <div class="props-wrapper" style="height: calc(100% - {headerHeight}px);">
   {#if editorIsFullscreen}
     <div class="sidebar-wrapper">
-      <Sidebar {...coreSidebarProps} isEmbedded features={{ docInfo: true }} />
+      <Sidebar {...coreSidebarProps} isEmbedded features={{ docInfo: true, workflowStage: true }} />
     </div>
 
     <Fields
@@ -38,6 +39,7 @@
       actions={coreSidebarProps?.actions}
       {coreSidebarProps}
       isEmbedded
+      {user}
     />
   {:else}
     <TextBlock>To view document properties in this pane, enter fullscreen mode.</TextBlock>

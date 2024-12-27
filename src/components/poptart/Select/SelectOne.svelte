@@ -268,13 +268,8 @@
       on:select={(evt) => {
         if (!evt.detail) return;
 
-        const newOption = {
-          label: evt.detail.name,
-          _id: evt.detail.value,
-          disabled: evt.detail.disabled,
-        };
-
-        handleUpdateOption(newOption);
+        const { name, value, ...rest } = evt.detail;
+        handleUpdateOption({ label: name, _id: value, ...rest });
       }}
     />
   {/key}

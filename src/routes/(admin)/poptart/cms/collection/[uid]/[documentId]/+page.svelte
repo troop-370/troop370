@@ -17,7 +17,14 @@
   const colorHash = new ColorHash({ saturation: 0.8, lightness: 0.34, hash: 'bkdr' });
 
   export let data;
-  $: ({ collectionConfig, docDataStore, saveStatus, actions: partialActions, versions } = data);
+  $: ({
+    collectionConfig,
+    docDataStore,
+    saveStatus,
+    actions: partialActions,
+    versions,
+    stages,
+  } = data);
   $: ({ docData } = docDataStore);
   $: sidebarDocData = {
     ...$docData,
@@ -31,6 +38,8 @@
     title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - ${$saveStatus}`);
   }
 
+  $: disabled = data.isPublishedVersion || $saveStatus.startsWith('Setting stage');
+
   $: actions = [
     ...$partialActions,
     $collectionConfig.options?.draftAndPublish !== false
@@ -40,7 +49,8 @@
           action: () => {
             publishDocumentDialogOpen = true;
           },
-          disabled: $saveStatus !== 'Unsaved changes' && $docData.status === 'published',
+          disabled:
+            disabled || ($saveStatus !== 'Unsaved changes' && $docData.status === 'published'),
           icon: 'CloudArrowUp24Regular',
         }
       : null,
@@ -119,9 +129,13 @@
 
   $: coreSidebarProps = {
     docData: sidebarDocData,
+    disabled,
     actions,
     previewConfig: data.previewConfig,
     versions,
+    stages,
+    setStage: data.setStage,
+    showStageSpinner: $saveStatus.startsWith('Setting stage'),
   } satisfies ComponentProps<Sidebar>;
 </script>
 
@@ -139,7 +153,12 @@
     {#if showSidebarInline}
       <Sidebar
         isEmbedded
-        features={{ actions: !data.isPublishedVersion, docInfo: false, versions: false }}
+        features={{
+          actions: !data.isPublishedVersion,
+          docInfo: false,
+          workflowStage: true,
+          versions: false,
+        }}
         {...coreSidebarProps}
       />
     {/if}
@@ -155,7 +174,7 @@
         },
         defs: data.defs,
       }}
-      disabled={data.isPublishedVersion}
+      {disabled}
       {actions}
       {coreSidebarProps}
       user={data.session.adminUser
@@ -182,7 +201,7 @@
     {#if showSidebarInline}
       <Sidebar
         isEmbedded
-        features={{ actions: false, docInfo: true, versions: !childWindow }}
+        features={{ actions: false, docInfo: true, workflowStage: false, versions: !childWindow }}
         {...coreSidebarProps}
       />
     {/if}
@@ -190,7 +209,12 @@
 
   {#if showSidebarInline === false}
     <Sidebar
-      features={{ actions: !data.isPublishedVersion, docInfo: true, versions: !childWindow }}
+      features={{
+        actions: !data.isPublishedVersion,
+        docInfo: true,
+        workflowStage: true,
+        versions: !childWindow,
+      }}
       {...coreSidebarProps}
     />
   {/if}

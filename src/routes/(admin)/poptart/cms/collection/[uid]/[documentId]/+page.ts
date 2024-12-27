@@ -1,7 +1,7 @@
 import { invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
 import { isFullArray, isFullObject, isString } from 'is-what';
-import { derived, get, writable } from 'svelte/store';
+import { derived, get, writable, type Writable } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
 import { filterSchemaDefs } from './filterSchemaDefs';
@@ -9,11 +9,12 @@ import { deconstructSchemaDefs, getDocument, withDocumentRelationData } from './
 import { loadPreviewConfig } from './loadPreviewConfig';
 import { publishDocument } from './publishDocument';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
+import { setDocumentStage } from './setDocumentStage';
 export { isDocDataStore as _isDocDataStore } from './createDocDataStore';
 export type { DocDataStore } from './createDocDataStore';
 
 export const load = (async ({ fetch, parent, params, url }) => {
-  const { session, collectionConfig, permissions, versions } = await parent();
+  const { session, collectionConfig, permissions, versions, stages } = await parent();
 
   const defs = filterSchemaDefs(get(collectionConfig).defs, permissions, ['read', 'update']);
 
@@ -72,6 +73,36 @@ export const load = (async ({ fetch, parent, params, url }) => {
         publishing.set(false);
       });
   };
+
+  const settingStage = writable(false);
+  const setStage = async (stage: number) => {
+    settingStage.set(true);
+    return await setDocumentStage({ ...queryProps, stage })
+      .then(([baseData]) => {
+        if (baseData) {
+          ((get(docDataStore).strapi_stage as Writable<unknown>) || undefined)?.set?.(
+            baseData.strapi_stage
+          );
+        }
+
+        return true;
+      })
+      .catch((err) => {
+        return (
+          err.message ||
+          'An unknown error occurred while changing the review workflwo stage for the document.'
+        );
+      })
+      .finally(() => {
+        settingStage.set(false);
+
+        console.log('setting stage done');
+      });
+  };
+
+  settingStage.subscribe((val) => {
+    console.log('setting stage', val);
+  });
 
   async function processSaveResponse([baseData, , errorData]: [
     Record<string, unknown> | undefined,
@@ -133,9 +164,11 @@ export const load = (async ({ fetch, parent, params, url }) => {
   }
 
   const saveStatus = derived(
-    [docDataStore.docData, saving, publishing],
-    ([$currentDocData, $saving, $publishing]) => {
+    [docDataStore.docData, saving, publishing, settingStage],
+    ([$currentDocData, $saving, $publishing, $settingStage]) => {
+      console.log($settingStage);
       if ($publishing) return 'Publishing…';
+      if ($settingStage) return 'Setting stage…';
       if ($saving) return 'Saving…';
 
       const isUnsaved = checkForUnsavedChanges(docData, $currentDocData, defs);
@@ -161,6 +194,28 @@ export const load = (async ({ fetch, parent, params, url }) => {
     []
   );
 
+  // combine the available stages and the current stage to get a full list of stages
+  const fullStages = derived([stages, docDataStore], ([$stages, $docDataStore]) => {
+    if (!$stages.data || $stages.loading || !$docDataStore?.strapi_stage) return [];
+    const otherStages = $stages.data.data;
+    const currentStage = (
+      $docDataStore.strapi_stage as any
+    )?.toObject?.() as (typeof otherStages)[0];
+    // TODO: figure out how to insert the current stage in the correct position
+    return [...otherStages, currentStage]
+      .map((stage) => {
+        const customIdMatcher = stage.name.match(/\[(\d+(\.\d+)?)\]/);
+
+        return {
+          _id: customIdMatcher?.[1] || `s${stage.id}`,
+          label: `${stage.name.replace(customIdMatcher?.[0] || '', '')}`,
+          strapiStageId: stage.id,
+          sortId: customIdMatcher?.[1] ? customIdMatcher[1] : '',
+        };
+      })
+      .sort((a, b) => a.sortId.localeCompare(b.sortId));
+  });
+
   return {
     docData,
     docDataStore,
@@ -171,6 +226,8 @@ export const load = (async ({ fetch, parent, params, url }) => {
     actions,
     isPublishedVersion: url.searchParams.get('status') === 'published',
     previewConfig,
+    stages: fullStages,
+    setStage,
   };
 }) satisfies PageLoad;
 
