@@ -57,9 +57,10 @@
 
   let bubbleMenuParagraph: HTMLDivElement;
 
+  const randomClass = Math.random().toString(36).substring(7);
   const parsedCss = less.render(
     `
-      div.richtiptap-content {
+      div.richtiptap-content.${randomClass} {
 
         .text-box-container {
           // background-color: white !important;
@@ -353,7 +354,6 @@
 {#await parsedCss then { css }}
   {@html `<` + `style>${css}</style>`}
 {/await}
-
 <div class="richtiptap" class:fullscreen class:hiddenUI bind:clientWidth={tiptapwidth}>
   {#if !hiddenUI}
     <Ribbon
@@ -372,7 +372,10 @@
     {#if $richTextParams.obj.previewMode > 0}
       <PreviewFrame src={dynamicPreviewHref} {fullSharedData} />
     {/if}
-    <div class="richtiptap-content" class:hidden={$richTextParams.obj.previewMode > 0}>
+    <div
+      class="richtiptap-content {randomClass}"
+      class:hidden={$richTextParams.obj.previewMode > 0}
+    >
       {#if !hiddenUI}
         <div class="notices">
           {#if isManaged && tiptapwidth > 400}
