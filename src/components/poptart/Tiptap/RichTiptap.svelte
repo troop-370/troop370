@@ -226,6 +226,17 @@
     }
   }
 
+  // make the tiptap field options available to the transformers extension,
+  // which ransforms the document on modification to ensure it respects
+  // which features are enabled
+  $: if (
+    editor &&
+    options &&
+    JSON.stringify(editor.storage.transformers.fieldOptions) !== JSON.stringify(options)
+  ) {
+    editor.commands.setFieldOptions(options);
+  }
+
   function toggleTrackChanges(bool: boolean) {
     if (!options?.features.trackChanges && !trackChanges) return;
     ySettingsMap?.set('trackChanges', bool);

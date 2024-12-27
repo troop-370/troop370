@@ -25,5 +25,6 @@ export interface tiptapOptions {
     comment?: boolean;
     trackChanges?: boolean;
     pullQuote?: boolean;
+    table?: boolean;
   };
 }

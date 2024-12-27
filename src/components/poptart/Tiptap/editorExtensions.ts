@@ -20,6 +20,7 @@ import { PhotoWidget } from './extension-photo';
 import { PowerComment } from './extension-power-comment';
 import { PullQuote } from './extension-pull-quote';
 import { TrackChanges } from './extension-track-changes';
+import { Transformers } from './extension-transformers';
 import { SweepwidgetWidget } from './extension-widget-sweepwidget';
 import { YoutubeWidget } from './extension-widget-youtube';
 
@@ -134,6 +135,7 @@ const editorExtensions = {
     TableHeader,
     TableCell,
     CharacterCount,
+    Transformers,
   ],
   text: [ParagraphDocument, Paragraph, Text],
   float: [ParagraphDocument, Paragraph, Float],
