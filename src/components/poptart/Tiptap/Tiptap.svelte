@@ -10,15 +10,7 @@
   import * as Y from 'yjs';
   import { richTextParams } from './richTextParams';
   import type { tiptapOptions } from './tiptapOptions';
-
-  interface AwarenessUser {
-    name: string;
-    color: string;
-    sessionId: string;
-    _id: string;
-    photo: string;
-    [key: string]: unknown;
-  }
+  import type { AwarenessUser } from './types';
 
   /**
    * A yjs document that should be updated with the values of this field.

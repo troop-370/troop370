@@ -117,7 +117,9 @@
           {/if}
           <PersonPicture
             size={26}
-            src={genAvatar(data.session.adminUser?.id.toString() || '')}
+            src={genAvatar(
+              data.session.adminUser?.username || '' + data.session.adminUser?.id.toString() || ''
+            )}
             alt={data.session.adminEmail}
           />
         </IconButton>

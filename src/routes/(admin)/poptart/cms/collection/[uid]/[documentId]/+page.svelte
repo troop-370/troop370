@@ -3,12 +3,18 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { title } from '$stores/title';
-  import { hasKey, notEmpty, openWindow } from '$utils';
+  import { genAvatar, hasKey, notEmpty, openWindow } from '$utils';
+  import _ColorHash from 'color-hash';
   import type { ComponentProps } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
   import PublishDocumentDialog from './PublishDocumentDialog.svelte';
   import Sidebar from './Sidebar.svelte';
+
+  // @ts-expect-error https://github.com/zenozeng/color-hash/issues/42
+  const ColorHash: typeof _ColorHash = _ColorHash.default || _ColorHash;
+  // @ts-expect-error 'bkdr' is a vlid hash config value
+  const colorHash = new ColorHash({ saturation: 0.8, lightness: 0.34, hash: 'bkdr' });
 
   export let data;
   $: ({ collectionConfig, docDataStore, saveStatus, actions: partialActions, versions } = data);
@@ -152,6 +158,25 @@
       disabled={data.isPublishedVersion}
       {actions}
       {coreSidebarProps}
+      user={data.session.adminUser
+        ? {
+            _id: data.session.adminEmail + data.session.adminUser.id.toString(),
+            name: data.session.adminUser.firstname + ' ' + data.session.adminUser.lastname,
+            color: colorHash.hex(
+              data.session.adminUser.username + data.session.adminUser.id.toString()
+            ),
+            photo: genAvatar(
+              data.session.adminUser.username + data.session.adminUser.id.toString()
+            ),
+            sessionId: '0',
+          }
+        : {
+            _id: Math.random().toString(),
+            name: 'Unknown',
+            color: 'black',
+            photo: '',
+            sessionId: '0',
+          }}
     />
 
     {#if showSidebarInline}

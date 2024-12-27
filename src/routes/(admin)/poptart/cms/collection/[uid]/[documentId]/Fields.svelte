@@ -10,7 +10,7 @@
   import { SelectMany, SelectOne } from '$components/poptart/Select';
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
-  import { RichTiptap } from '$components/poptart/Tiptap';
+  import { RichTiptap, type AwarenessUser } from '$components/poptart/Tiptap';
   import { editorExtensions } from '$components/poptart/Tiptap/editorExtensions';
   import { richTextParams } from '$components/poptart/Tiptap/richTextParams';
   import { hasKey, notEmpty, parseSchemaDefs } from '$utils';
@@ -45,6 +45,7 @@
   export { allDisabled as disabled };
   export let coreSidebarProps: ComponentProps<Sidebar> | undefined = undefined;
   export let isEmbedded = false;
+  export let user: AwarenessUser;
 
   // TODO: require this to always be specified
   export let relationCurrentDocumentId: string | number = $docData.documentId as string;
@@ -159,13 +160,7 @@
               },
             }}
             actions={actions || []}
-            user={{
-              _id: '1',
-              name: 'User',
-              color: 'red',
-              sessionId: '1',
-              photo: '',
-            }}
+            {user}
             ydocKey={key}
             fullSharedData={docData}
             {ydoc}
@@ -307,20 +302,7 @@
               This is a legacy field type. It cannot be edited with the new editor.
             </InfoBar>
           </div>
-          <RichTiptap
-            disabled
-            hiddenUI
-            user={{
-              _id: '1',
-              name: 'User',
-              color: 'red',
-              sessionId: '1',
-              photo: '',
-            }}
-            ydocKey={key}
-            fullSharedData={docData}
-            {ydoc}
-          />
+          <RichTiptap disabled hiddenUI {user} ydocKey={key} fullSharedData={docData} {ydoc} />
           <!-- UIDs -->
         {:else if def.type === 'uid'}
           <StrapiUIDField {key} {collectionUID} {docData} {sessionAdminToken} {disabled} />

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import type { AwarenessUser } from '$components/poptart/Tiptap';
   import { onDestroy, onMount, type ComponentProps } from 'svelte';
   import type { SchemaDef } from '../+layout';
   import type { PageData } from './$types';
@@ -22,6 +23,8 @@
   let sessionAdminToken = data.session.adminToken;
 
   export let actions: Action[] = [];
+
+  export let user: AwarenessUser;
 
   export let coreSidebarProps: ComponentProps<Sidebar> | undefined = undefined;
 
@@ -68,4 +71,5 @@
   {disabled}
   {actions}
   {coreSidebarProps}
+  {user}
 />
