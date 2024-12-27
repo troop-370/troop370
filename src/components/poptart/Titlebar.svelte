@@ -1,7 +1,9 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
+  import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { title } from '$stores/title';
+  import { titlebarActions } from '$stores/titlebarActions';
   import { genAvatar } from '$utils';
   import { Flyout, IconButton, PersonPicture, TextBlock } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
@@ -67,7 +69,7 @@
         />
       </svg>
     {/if}
-    <!-- {#if $titlebarActions.length > 0}
+    {#if $titlebarActions.length > 0}
       <div class="divider" />
       {#each $titlebarActions as action}
         <IconButton
@@ -85,7 +87,7 @@
         </IconButton>
       {/each}
       <div class="divider" />
-    {/if} -->
+    {/if}
     <TextBlock variant="caption" data-tauri-drag-region>
       {#if $title}
         {$title} -

@@ -330,11 +330,11 @@
       },
     ]);
   } else {
-    titlebarActions.set([]);
+    if (!hiddenUI) titlebarActions.set([]);
   }
 
   onDestroy(() => {
-    titlebarActions.set([]);
+    if (!hiddenUI) titlebarActions.set([]);
   });
 
   onMount(() => {
