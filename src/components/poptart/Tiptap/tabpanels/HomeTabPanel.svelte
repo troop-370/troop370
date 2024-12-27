@@ -347,9 +347,9 @@
     openOnFocus
     disabled={textStylePickerDisabled}
     items={[
-      { name: 'Title', value: 'title' },
-      { name: 'Subtitle', value: 'subtitle' },
-      { name: 'Heading 1', value: 'heading1' },
+      // { name: 'Title', value: 'title' },
+      // { name: 'Subtitle', value: 'subtitle' },
+      // { name: 'Heading 1', value: 'heading1' },
       { name: 'Heading 2', value: 'heading2' },
       { name: 'Heading 3', value: 'heading3' },
       { name: 'Block quote', value: 'blockQuote' },
@@ -390,56 +390,31 @@
           .command(({ chain }) => {
             if (!evt.detail) return false;
             if (evt.detail.value === 'title') {
-              return chain()
-                .setFontFamily('Adamant BG')
-                .setBold()
-                .setHeading({ level: 1 })
-                .setClassName('title')
-                .run();
+              return chain().setHeading({ level: 1 }).setClassName('title').run();
             }
             if (evt.detail.value === 'subtitle') {
-              return chain()
-                .setFontFamily('Georgia')
-                .setItalic()
-                .setParagraph()
-                .setClassName('subtitle')
-                .run();
+              return chain().setParagraph().setClassName('subtitle').run();
             }
             if (evt.detail.value === 'heading1') {
-              return chain()
-                .setFontFamily('Adamant BG')
-                .setBold()
-                .setHeading({ level: 1 })
-                .setClassName('')
-                .run();
+              return chain().setHeading({ level: 1 }).setClassName('').run();
             }
             if (evt.detail.value === 'heading2') {
-              return chain()
-                .setFontFamily('Adamant BG')
-                .setBold()
-                .setHeading({ level: 2 })
-                .setClassName('')
-                .run();
+              return chain().setHeading({ level: 2 }).setClassName('').run();
             }
             if (evt.detail.value === 'heading3') {
-              return chain()
-                .setFontFamily('Adamant BG')
-                .setBold()
-                .setHeading({ level: 3 })
-                .setClassName('')
-                .run();
+              return chain().setHeading({ level: 3 }).setClassName('').run();
             }
             if (evt.detail.value === 'blockQuote') {
-              return chain().setFontFamily('Georgia').setBlockquote().setClassName('').run();
+              return chain().setBlockquote().setClassName('').run();
             }
             if (evt.detail.value === 'codeBlock') {
-              return chain().setFontFamily('Georgia').setCodeBlock().setClassName('').run();
+              return chain().setCodeBlock().setClassName('').run();
             }
             if (evt.detail.value === 'hangingIndent') {
-              return chain().setFontFamily('Georgia').setParagraph().setClassName('hanging').run();
+              return chain().setParagraph().setClassName('hanging').run();
             }
             if (evt.detail.value === 'paragraph') {
-              return chain().setFontFamily('Georgia').setParagraph().setClassName('').run();
+              return chain().setParagraph().setClassName('').run();
             }
             return false;
           })
