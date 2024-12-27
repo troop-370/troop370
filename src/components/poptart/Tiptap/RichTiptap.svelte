@@ -8,7 +8,7 @@
   import { createEventDispatcher, onDestroy, onMount, type ComponentProps } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import type { Readable } from 'svelte/store';
-  import { fade, fly } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   import WordCountDialog from './dialogs/WordCountDialog.svelte';
 
   import { titlebarActions } from '$stores/titlebarActions';
@@ -189,7 +189,9 @@
         }
     
         ${(() => {
-          if (options?.css?.indexOf('.ProseMirror') === 0) return options.css;
+          if (options?.css?.indexOf('.ProseMirror') === 0) {
+            return options.css.replaceAll('\\r\\n', '').replaceAll('\\n', '');
+          }
           return '';
         })()}
       }
