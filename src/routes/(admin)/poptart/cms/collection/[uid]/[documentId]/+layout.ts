@@ -2,19 +2,29 @@ import { get, writable } from 'svelte/store';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
 
+const versions = writable<{
+  data: z.infer<typeof versionsDataSchema> | null;
+  loading: boolean;
+  refetchOnInvalidate: boolean;
+}>({
+  data: null,
+  loading: false,
+  refetchOnInvalidate: false,
+});
+
+const stages = writable<{
+  data: z.infer<typeof stagesDataSchema> | null;
+  loading: boolean;
+  refetchOnInvalidate: boolean;
+}>({
+  data: null,
+  loading: false,
+  refetchOnInvalidate: false,
+});
+
 export const load = (async ({ parent, params, fetch, depends }) => {
   depends('document:versions');
   const { session } = await parent();
-
-  const versions = writable<{
-    data: z.infer<typeof versionsDataSchema> | null;
-    loading: boolean;
-    refetchOnInvalidate: boolean;
-  }>({
-    data: null,
-    loading: false,
-    refetchOnInvalidate: false,
-  });
 
   if (!get(versions).data || get(versions).refetchOnInvalidate) {
     versions.set({ data: null, loading: true, refetchOnInvalidate: false });
@@ -35,16 +45,6 @@ export const load = (async ({ parent, params, fetch, depends }) => {
         console.error(JSON.stringify(err, null, 2));
       });
   }
-
-  const stages = writable<{
-    data: z.infer<typeof stagesDataSchema> | null;
-    loading: boolean;
-    refetchOnInvalidate: boolean;
-  }>({
-    data: null,
-    loading: false,
-    refetchOnInvalidate: false,
-  });
 
   if (!get(stages).data || get(stages).refetchOnInvalidate) {
     stages.set({ data: null, loading: true, refetchOnInvalidate: false });

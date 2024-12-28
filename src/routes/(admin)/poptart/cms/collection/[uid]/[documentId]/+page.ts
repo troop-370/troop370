@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
 import { isFullArray, isFullObject, isString } from 'is-what';
@@ -13,6 +14,21 @@ import { setDocumentStage } from './setDocumentStage';
 export { isDocDataStore as _isDocDataStore } from './createDocDataStore';
 export type { DocDataStore } from './createDocDataStore';
 
+// this is a workaround to prevent the store from being reset on navigation
+// and is only stored on the client side
+let cache: Record<string, any> = {};
+
+/**
+ * Persists a value as a variable outside the load function **in browser only**
+ * so that it is not reset when the load function re-runs.
+ */
+async function ignoreReruns<T>(key: string, cb: () => T | Promise<T>): Promise<T> {
+  if (!browser) return await cb();
+  if (cache[key]) return cache[key];
+  cache[key] = await cb();
+  return cache[key];
+}
+
 export const load = (async ({ fetch, parent, params, url }) => {
   const { session, collectionConfig, permissions, versions, stages } = await parent();
 
@@ -26,11 +42,13 @@ export const load = (async ({ fetch, parent, params, url }) => {
     defs,
   };
 
-  let docData = await getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
-    error(500, err[0]);
-  });
+  let docData = await ignoreReruns('documentData', () =>
+    getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
+      error(500, err[0]);
+    })
+  );
 
-  const docDataStore = createDocDataStore(docData);
+  const docDataStore = await ignoreReruns('docDataStore', () => createDocDataStore(docData));
 
   const previewConfig = writable(
     await loadPreviewConfig(fetch, session.adminToken, params.uid, docData)
@@ -95,14 +113,8 @@ export const load = (async ({ fetch, parent, params, url }) => {
       })
       .finally(() => {
         settingStage.set(false);
-
-        console.log('setting stage done');
       });
   };
-
-  settingStage.subscribe((val) => {
-    console.log('setting stage', val);
-  });
 
   async function processSaveResponse([baseData, , errorData]: [
     Record<string, unknown> | undefined,
@@ -142,7 +154,9 @@ export const load = (async ({ fetch, parent, params, url }) => {
     if (!baseData) {
       throw new Error('No data were returned from the server after saving the document.');
     }
-    docData = await withDocumentRelationData({ ...queryProps, baseData });
+    docData = await ignoreReruns('documentData', () =>
+      withDocumentRelationData({ ...queryProps, baseData })
+    );
     docDataStore.set(docData);
     updatePreviewConfig(docData);
     updateVersionsList();
@@ -166,7 +180,6 @@ export const load = (async ({ fetch, parent, params, url }) => {
   const saveStatus = derived(
     [docDataStore.docData, saving, publishing, settingStage],
     ([$currentDocData, $saving, $publishing, $settingStage]) => {
-      console.log($settingStage);
       if ($publishing) return 'Publishing…';
       if ($settingStage) return 'Setting stage…';
       if ($saving) return 'Saving…';

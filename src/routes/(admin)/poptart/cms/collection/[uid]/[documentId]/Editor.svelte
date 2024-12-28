@@ -72,4 +72,5 @@
   {actions}
   {coreSidebarProps}
   {user}
+  {collectionConfig}
 />

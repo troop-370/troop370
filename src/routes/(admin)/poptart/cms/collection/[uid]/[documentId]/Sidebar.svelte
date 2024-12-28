@@ -379,7 +379,7 @@
     display: flex;
     flex-direction: row;
     gap: 6px;
-    margin: 20px 0 10px 0;
+    margin: 10px 0 10px 0;
   }
 
   .button-row :global(.button:not(:last-of-type)) {

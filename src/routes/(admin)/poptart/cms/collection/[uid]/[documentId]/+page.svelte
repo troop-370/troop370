@@ -2,9 +2,12 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import PreviewFrame from '$components/poptart/Tiptap/PreviewFrame.svelte';
   import { title } from '$stores/title';
+  import { updatePreviewsWhileComposing } from '$stores/updatePreviewsWhileComposing';
   import { genAvatar, hasKey, notEmpty, openWindow } from '$utils';
   import _ColorHash from 'color-hash';
+  import { Button, ToggleSwitch } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
@@ -122,11 +125,6 @@
     },
   ].filter(notEmpty) satisfies typeof $partialActions;
 
-  let currentContentWidth = 1000;
-  $: showSidebarInline = currentContentWidth <= 900;
-  $: childWindow =
-    (!!browser && !!window.name) || $page.url.searchParams.get('childWindow') === '1';
-
   $: coreSidebarProps = {
     docData: sidebarDocData,
     disabled,
@@ -137,6 +135,54 @@
     setStage: data.setStage,
     showStageSpinner: $saveStatus.startsWith('Setting stage'),
   } satisfies ComponentProps<Sidebar>;
+
+  let currentDocAndPreviewWidth = 1000;
+  $: previewSrc = $collectionConfig.dynamicPreviewHref;
+  $: showPreviewWidth = previewSrc ? 1400 : 99999999999;
+  $: tabsShown = currentDocAndPreviewWidth <= showPreviewWidth;
+
+  let currentContentWidth = 1000;
+  $: showSidebarInline = currentContentWidth <= 900;
+  $: childWindow =
+    (!!browser && !!window.name) || $page.url.searchParams.get('childWindow') === '1';
+
+  let tabsContainerElement: HTMLDivElement;
+  let activeTab = 'compose';
+  let mouseOverActiveTab = false;
+  $: ({ activeTabWidth, activeTabLeft } = (() => {
+    const tabsContainerRect = tabsContainerElement?.getBoundingClientRect();
+    const activeTabRect = tabsContainerElement
+      ?.querySelector(`[data-tab='${activeTab}']`)
+      ?.getBoundingClientRect();
+    return {
+      activeTabWidth: (activeTabRect?.width || 0) - (mouseOverActiveTab ? 0 : 22),
+      activeTabLeft:
+        (activeTabRect?.left || 0) - (tabsContainerRect?.left || 0) + (mouseOverActiveTab ? 0 : 11),
+    };
+  })());
+  $: if (!tabsShown) activeTab = 'compose';
+
+  function handleTabClick(evt: CustomEvent) {
+    const target = evt.target as HTMLElement | undefined;
+    const clickedTabName = target?.getAttribute('data-tab');
+    if (clickedTabName) {
+      activeTab = clickedTabName;
+      mouseOverActiveTab = true;
+    }
+  }
+  function handleTabMouseEnter(evt: CustomEvent) {
+    const target = evt.target as HTMLElement | undefined;
+    const tabName = target?.getAttribute('data-tab');
+    if (tabName === activeTab) mouseOverActiveTab = true;
+    else mouseOverActiveTab = false;
+  }
+
+  function handleTabMouseLeave(evt: CustomEvent) {
+    const target = evt.target as HTMLElement | undefined;
+    const tabName = target?.getAttribute('data-tab');
+    if (tabName === activeTab) mouseOverActiveTab = false;
+    else mouseOverActiveTab = false;
+  }
 </script>
 
 <DeveloperDialog bind:open={developerDialogOpen} {data} />
@@ -149,64 +195,136 @@
 />
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
-  <article style="padding: {showSidebarInline ? 20 : 40}px;">
-    {#if showSidebarInline}
-      <Sidebar
-        isEmbedded
-        features={{
-          actions: !data.isPublishedVersion,
-          docInfo: false,
-          workflowStage: true,
-          versions: false,
-        }}
-        {...coreSidebarProps}
-      />
+  <div
+    class="doc-and-preview"
+    bind:clientWidth={currentDocAndPreviewWidth}
+    class:showPreview={currentDocAndPreviewWidth > showPreviewWidth}
+  >
+    <div class="document-fields">
+      <article style="padding: {showSidebarInline ? 20 : 40}px;">
+        {#if tabsShown}
+          <div class="tabs-container" class:reduceSpaceAbove={showSidebarInline}>
+            {#if showSidebarInline}
+              <div style="margin: 0 11px;">
+                <Sidebar
+                  isEmbedded
+                  features={{
+                    actions: !data.isPublishedVersion,
+                  }}
+                  {...coreSidebarProps}
+                />
+              </div>
+            {/if}
+            <div class="tabs" bind:this={tabsContainerElement}>
+              <Button
+                data-tab={'compose'}
+                on:click={handleTabClick}
+                on:mouseenter={handleTabMouseEnter}
+                on:mouseleave={handleTabMouseLeave}
+                disabled={!$docData}
+              >
+                Compose
+              </Button>
+              <Button
+                data-tab={'preview'}
+                on:click={handleTabClick}
+                on:mouseenter={handleTabMouseEnter}
+                on:mouseleave={handleTabMouseLeave}
+                disabled={!$docData}
+              >
+                Preview
+              </Button>
+              <div class="tabline" style="width: {activeTabWidth}px; left: {activeTabLeft}px;" />
+            </div>
+          </div>
+        {/if}
+
+        {#if tabsShown && (activeTab === 'preview' || $updatePreviewsWhileComposing)}
+          {#if previewSrc && activeTab === 'preview'}
+            <div style="margin: 20px 0;">
+              <ToggleSwitch bind:checked={$updatePreviewsWhileComposing}>
+                Update previews while composing
+              </ToggleSwitch>
+            </div>
+          {/if}
+          <PreviewFrame
+            src={previewSrc}
+            fullSharedData={docData}
+            noOuterMargin
+            hide={activeTab !== 'preview'}
+          />
+        {/if}
+
+        {#if showSidebarInline}
+          <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
+            <Sidebar
+              isEmbedded
+              features={{
+                workflowStage: true,
+              }}
+              {...coreSidebarProps}
+            />
+          </div>
+        {/if}
+
+        <div style={activeTab === 'preview' ? 'display: none;' : ''}>
+          <Editor
+            data={{
+              collectionConfig,
+              docDataStore,
+              session: data.session,
+              save: data.save,
+              publish: () => {
+                publishDocumentDialogOpen = true;
+              },
+              defs: data.defs,
+            }}
+            {disabled}
+            {actions}
+            {coreSidebarProps}
+            user={data.session.adminUser
+              ? {
+                  _id: data.session.adminEmail + data.session.adminUser.id.toString(),
+                  name: data.session.adminUser.firstname + ' ' + data.session.adminUser.lastname,
+                  color: colorHash.hex(
+                    data.session.adminUser.username + data.session.adminUser.id.toString()
+                  ),
+                  photo: genAvatar(
+                    data.session.adminUser.username + data.session.adminUser.id.toString()
+                  ),
+                  sessionId: '0',
+                }
+              : {
+                  _id: Math.random().toString(),
+                  name: 'Unknown',
+                  color: 'black',
+                  photo: '',
+                  sessionId: '0',
+                }}
+          />
+        </div>
+
+        {#if showSidebarInline}
+          <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
+            <Sidebar
+              isEmbedded
+              features={{
+                actions: false,
+                docInfo: true,
+                versions: !childWindow,
+              }}
+              {...coreSidebarProps}
+            />
+          </div>
+        {/if}
+      </article>
+    </div>
+    {#if currentDocAndPreviewWidth > showPreviewWidth}
+      <div class="concurrent-preview">
+        <PreviewFrame src={previewSrc} fullSharedData={docData} noOuterMargin />
+      </div>
     {/if}
-
-    <Editor
-      data={{
-        collectionConfig,
-        docDataStore,
-        session: data.session,
-        save: data.save,
-        publish: () => {
-          publishDocumentDialogOpen = true;
-        },
-        defs: data.defs,
-      }}
-      {disabled}
-      {actions}
-      {coreSidebarProps}
-      user={data.session.adminUser
-        ? {
-            _id: data.session.adminEmail + data.session.adminUser.id.toString(),
-            name: data.session.adminUser.firstname + ' ' + data.session.adminUser.lastname,
-            color: colorHash.hex(
-              data.session.adminUser.username + data.session.adminUser.id.toString()
-            ),
-            photo: genAvatar(
-              data.session.adminUser.username + data.session.adminUser.id.toString()
-            ),
-            sessionId: '0',
-          }
-        : {
-            _id: Math.random().toString(),
-            name: 'Unknown',
-            color: 'black',
-            photo: '',
-            sessionId: '0',
-          }}
-    />
-
-    {#if showSidebarInline}
-      <Sidebar
-        isEmbedded
-        features={{ actions: false, docInfo: true, workflowStage: false, versions: !childWindow }}
-        {...coreSidebarProps}
-      />
-    {/if}
-  </article>
-
+  </div>
   {#if showSidebarInline === false}
     <Sidebar
       features={{
@@ -221,14 +339,6 @@
 </div>
 
 <style>
-  article {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    overflow: hidden auto;
-  }
-
   .content-wrapper {
     display: flex;
     flex-direction: row;
@@ -236,5 +346,115 @@
     overflow: hidden;
     height: 100%;
     box-sizing: border-box;
+  }
+
+  .doc-and-preview {
+    min-width: 0;
+    overflow: auto;
+    flex-grow: 1;
+    position: unset !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .doc-and-preview.showPreview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .document-fields {
+    min-width: 0;
+    overflow: auto;
+    box-sizing: border-box;
+    width: 100%;
+    /* flex-grow: 1; */
+  }
+
+  article {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .sidebar-embed {
+    background-color: var(--fds-control-fill-default);
+    padding: 0 12px 18px 12px;
+    margin-bottom: 18px;
+    border-radius: var(--fds-control-corner-radius);
+  }
+
+  .concurrent-preview {
+    min-width: 0;
+    overflow: auto;
+    flex-grow: 1;
+    padding: 40px 40px 40px 0;
+  }
+
+  .tabs-container {
+    margin-left: -11px;
+    width: calc(100% + 22px);
+    position: sticky;
+    top: 0;
+    padding-top: 30px;
+    margin-top: -40px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    z-index: 9;
+  }
+  .tabs-container.reduceSpaceAbove {
+    padding-top: 20px;
+    margin-top: -20px;
+  }
+  .tabs-container.reduceSpaceAbove :global(.button-row) {
+    margin-top: 0px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .tabs-container {
+      background-color: #272727;
+    }
+  }
+
+  .tabs {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+  }
+
+  .tabs :global(.button.style-standard),
+  .tabs :global(.button.style-standard.disabled) {
+    background-color: transparent;
+    box-shadow: none;
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .tabs :global(.button.style-standard):hover:not(disabled):not(.disabled) {
+    background-color: var(--fds-subtle-fill-secondary);
+  }
+
+  .tabs :global(.button.style-standard):active:not(disabled):not(.disabled) {
+    background-color: var(--fds-subtle-fill-tertiary);
+    color: var(--fds-text-secondary);
+  }
+
+  .tabs :global(.button.style-standard[data-contextual='true']) {
+    color: var(--fds-accent-default);
+  }
+
+  .tabline {
+    margin: 0px;
+    bottom: 0px;
+    left: 11px;
+    width: 58.625px;
+    height: 2.4px;
+    pointer-events: none;
+    position: absolute;
+    transition: all 150ms cubic-bezier(0.17, 0.17, 0, 1) 0s;
+    float: left;
+    background-color: var(--fds-accent-default);
+    border-radius: 6px;
   }
 </style>

@@ -49,6 +49,10 @@ interface GetReferenceOptions {
    */
   requiredFieldNames?: string[];
   /**
+   * These fields will be included in the option object.
+   */
+  forceLoadFields?: string[];
+  /**
    * The field to use as the label for the option.
    */
   mainField: string;
@@ -79,6 +83,7 @@ function getReferenceOptions(referenceOpts: GetReferenceOptions | undefined) {
     idsToExclude,
     token,
     requiredFieldNames,
+    forceLoadFields,
     mainField,
     pageSize = 10,
     searchImmediately = false,

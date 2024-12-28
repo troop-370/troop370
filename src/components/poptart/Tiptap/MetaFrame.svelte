@@ -30,12 +30,15 @@
     frameObj?.close();
   });
 
+  let connected = false;
+
   function reportMessages(evt: MessageEvent) {
     if (evt.origin !== new URL(src).origin) return;
+    connected = true;
 
     // on initial connection event, send data
     if (evt.data === 'connected') {
-      sendFields();
+      sendFields($fullSharedData);
     }
 
     // if the event data is JSON, check if
@@ -57,6 +60,16 @@
         iframehtmlstring = frameString;
       }
     }
+  }
+
+  // keep sending fields until the iframe is connected
+  let wait = false;
+  $: if (!connected && !wait) {
+    sendFields($fullSharedData);
+    wait = true;
+    setTimeout(() => {
+      wait = false;
+    }, 1000);
   }
 
   function sendFields(fields?: typeof $fullSharedData) {

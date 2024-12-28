@@ -16,6 +16,7 @@
   import { hasKey, notEmpty, parseSchemaDefs } from '$utils';
   import { blocksToProsemirror } from '$utils/blocksToProsemirror';
   import { isJSON } from '$utils/isJSON';
+  import { listExtraFieldNames } from '$utils/listRequiredFieldNames';
   import { setTipTapXMLFragment } from '$utils/setTipTapXMLFragment';
   import { InfoBar, TextBlock, TextBox } from 'fluent-svelte';
   import {
@@ -28,10 +29,11 @@
     isString,
     isUndefined,
   } from 'is-what';
-  import { onMount, type ComponentProps } from 'svelte';
+  import { type ComponentProps } from 'svelte';
   import { get, readable } from 'svelte/store';
   import * as Y from 'yjs';
   import type { SchemaDef } from '../+layout';
+  import type { PageData } from './$types';
   import { _isDocDataStore, type Action, type DocDataStore } from './+page';
   import type Sidebar from './Sidebar.svelte';
 
@@ -46,6 +48,7 @@
   export let coreSidebarProps: ComponentProps<Sidebar> | undefined = undefined;
   export let isEmbedded = false;
   export let user: AwarenessUser;
+  export let collectionConfig: PageData['collectionConfig'];
 
   // TODO: require this to always be specified
   export let relationCurrentDocumentId: string | number = $docData.documentId as string;
@@ -143,6 +146,7 @@
             {disabled}
             options={{
               ...tiptapOptions,
+              metaFrame: $collectionConfig.inlinePreviewHref,
               features: {
                 ...(tiptapOptions.features || {}),
                 fontSizes:
@@ -159,6 +163,7 @@
                     : [],
               },
             }}
+            dynamicPreviewHref={$collectionConfig.dynamicPreviewHref}
             actions={actions || []}
             {user}
             ydocKey={key}
@@ -386,12 +391,13 @@
             />
             <!-- one-to-many -->
           {:else if def.relation === 'oneToMany'}
+            {@const fieldId = key.split('.').slice(-1)[0]}
             <SelectMany
               {disabled}
               referenceOpts={{
                 collectionUid: collectionUID,
                 targetCollectionUid: def.target,
-                fieldId: key.split('.').slice(-1)[0],
+                fieldId,
                 currentDocumentId: relationCurrentDocumentId?.toString() || '',
                 token: sessionAdminToken,
                 mainField: def.mainField,
@@ -404,6 +410,7 @@
                       .filter((id) => isNumber(id))
                   : [],
                 searchImmediately: true,
+                forceLoadFields: listExtraFieldNames(collectionUID, fieldId),
               }}
               selectedOptions={(() => {
                 if (!isArray($docData[key])) return undefined;

@@ -1,17 +1,16 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { beforeNavigate } from '$app/navigation';
+  import { page } from '$app/stores';
   import { hasKey } from '$utils';
   import { onMount } from 'svelte';
 
-  const target = 'https://cristata.app/';
-  const devTarget = 'http://localhost:4000/';
+  const target = $page.url.origin + '/';
   export let fields: Readonly<Record<string, any>> = Object.freeze({});
 
   // tell the parent component that we are ready for data
   if (browser) {
     parent.postMessage('connected', target);
-    parent.postMessage('connected', devTarget);
   }
 
   // send a copy of this page's content to the parent of the frame
@@ -33,7 +32,6 @@
         })
         .join('\n');
       parent.postMessage(JSON.stringify({ contentTag, styleString }), target);
-      parent.postMessage(JSON.stringify({ contentTag, styleString }), devTarget);
     }
   }
 

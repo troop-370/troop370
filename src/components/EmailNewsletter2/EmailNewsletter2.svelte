@@ -81,7 +81,9 @@
                             "
                         >
                           {formatISODate(
-                            new Date(newsletter.publishedAt || new Date()).toISOString(),
+                            new Date(
+                              newsletter.shortPublishedAt || newsletter.publishedAt || new Date()
+                            ).toISOString(),
                             false,
                             true,
                             false
@@ -122,7 +124,7 @@
             </tr>
           {/each}
         {/if}
-        {#if new Date(newsletter.publishedAt || new Date()) < new Date()}
+        {#if new Date(newsletter.shortPublishedAt || newsletter.publishedAt || new Date()) < new Date()}
           <NewsletterMiniPostCard
             label={'Advancement'}
             posts={newsletter.version2?.advancement_mini_posts?.filter(notEmpty) || []}
@@ -231,7 +233,7 @@
                         <a href="https://troop370atlanta.org/events">Troop Events</a>
                         <a href="https://troop370atlanta.org/members/calendar">Basic Calendar</a>
                       </ResourceRow>
-                      {#if new Date(newsletter.publishedAt || new Date()) < new Date('2022-07-21')}
+                      {#if new Date(newsletter.shortPublishedAt || newsletter.publishedAt || new Date()) < new Date('2022-07-21')}
                         <ResourceRow label="Submit Annoucements">
                           <p>
                             Submit your announcement for the weekly email, website, or reminder

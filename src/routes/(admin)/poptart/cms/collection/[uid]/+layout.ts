@@ -6,7 +6,7 @@ import { derived, get } from 'svelte/store';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
 
-export const load = (async ({ fetch, parent, params }) => {
+export const load = (async ({ fetch, parent, params, url }) => {
   const { session, contentManagerSettings, userPermissions } = await parent();
   if (!contentManagerSettings) error(404, 'failed to find content manager settings');
 
@@ -42,6 +42,18 @@ export const load = (async ({ fetch, parent, params }) => {
     error(404, 'failed to find collection configuration');
   }
 
+  // determine if there is a dynamic preview route for this collection
+  const previews = import.meta.glob('/src/routes/cristata/previews/*/+page.svelte');
+  const allPreviewPaths = Object.keys(previews);
+  const possiblePreviewRoute = `/src/routes/cristata/previews/${params.uid.replace('api::', '')}/+page.svelte`;
+  const previewRouteExists = allPreviewPaths.includes(possiblePreviewRoute);
+
+  // determine if there is an inline preview route for this collection
+  const inlinePreviews = import.meta.glob('/src/routes/cristata/inline-previews/*/+page.svelte');
+  const allInlinePreviewPaths = Object.keys(inlinePreviews);
+  const possibleInlinePreviewRoute = `/src/routes/cristata/inline-previews/${params.uid.replace('api::', '')}/+page.svelte`;
+  const inlinePreviewRouteExists = allInlinePreviewPaths.includes(possibleInlinePreviewRoute);
+
   const combinedSettings = derived(
     [contentManagerSettings, collectionConfig],
     ([$contentManagerSettings, $collectionConfig]) => {
@@ -76,7 +88,16 @@ export const load = (async ({ fetch, parent, params }) => {
         if (!schema) error(404, 'failed to find schema for ' + collectionUID);
 
         // combine settings from content type and collection config
-        const merged = merge(settings, schema);
+        const merged = merge(settings, schema, {
+          dynamicPreviewHref: previewRouteExists
+            ? possiblePreviewRoute.replace('/src/routes', url.origin).replace('/+page.svelte', '')
+            : undefined,
+          inlinePreviewHref: inlinePreviewRouteExists
+            ? possibleInlinePreviewRoute
+                .replace('/src/routes', url.origin)
+                .replace('/+page.svelte', '')
+            : undefined,
+        });
 
         // get an array of field names in the order they should appear on the edit page
         const editPageOrderedKeys = merged.layouts.edit.flatMap((layout) =>

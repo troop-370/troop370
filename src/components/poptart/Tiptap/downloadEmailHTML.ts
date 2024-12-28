@@ -35,7 +35,9 @@ async function generateEmailHTML(
           .replaceAll('thead', 'thead.tiptap-table')
           .replaceAll('tbody', 'tbody.tiptap-table')
           .replaceAll('tfoot', 'tfoot.tiptap-table')
-          .replaceAll('tr', 'tr.tiptap-table')
+          .replaceAll('tr ', 'tr.tiptap-table ')
+          .replaceAll('tr.', 'tr.tiptap-table.')
+          .replaceAll('tr[', 'tr.tiptap-table[')
           .replaceAll('th', 'th.tiptap-table')
           .replaceAll('td', 'td.tiptap-table');
       return '';
