@@ -13,6 +13,7 @@
   import { RichTiptap, type AwarenessUser } from '$components/poptart/Tiptap';
   import { editorExtensions } from '$components/poptart/Tiptap/editorExtensions';
   import { richTextParams } from '$components/poptart/Tiptap/richTextParams';
+  import StatelessCheckbox from '$lib/common/Checkbox/StatelessCheckbox.svelte';
   import { hasKey, notEmpty, parseSchemaDefs } from '$utils';
   import { blocksToProsemirror } from '$utils/blocksToProsemirror';
   import { isJSON } from '$utils/isJSON';
@@ -283,7 +284,14 @@
           />
         {/if}
       {:else if def.type === 'boolean' && (isUndefined($docData[key]) || isBoolean($docData[key]))}
-        <Checkbox id={forId} bind:checked={$docData[key]} {disabled} />
+        <StatelessCheckbox
+          id={forId}
+          checked={$docData[key]}
+          on:change={(evt) => {
+            $docData[key] = evt.detail.checked;
+          }}
+          {disabled}
+        />
       {:else}
         <!-- Strings -->
         {#if def.type === 'string' && isStringOrNullish($docData[key])}
