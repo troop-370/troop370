@@ -255,7 +255,7 @@
           />
         {/if}
 
-        {#if showSidebarInline}
+        {#if showSidebarInline && $stages && $stages.length > 0}
           <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
             <Sidebar
               isEmbedded
@@ -313,6 +313,7 @@
                 docInfo: true,
                 versions: !childWindow,
               }}
+              forceShowTitles
               {...coreSidebarProps}
             />
           </div>

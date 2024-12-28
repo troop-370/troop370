@@ -37,7 +37,9 @@
 
   export let docData: Record<string, unknown>;
 
-  $: showSectionTitles = Object.values(features).filter((val) => val === true).length > 1;
+  export let forceShowTitles = false;
+  $: showSectionTitles =
+    forceShowTitles || Object.values(features).filter((val) => val === true).length > 1;
 
   let actionsMenuOpen = false;
   $: saveAction = actions?.find((action) => action.id === 'save');
@@ -211,7 +213,7 @@
     {/if}
   {/if}
 
-  {#if features.workflowStage && stages}
+  {#if features.workflowStage && $stages && $stages.length > 0}
     <div
       class="section-title"
       style="display: flex; align-items: center; justify-content: space-between;"
