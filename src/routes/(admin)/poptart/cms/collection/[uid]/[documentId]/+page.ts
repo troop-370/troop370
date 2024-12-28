@@ -22,9 +22,13 @@ let cache: Record<string, any> = {};
  * Persists a value as a variable outside the load function **in browser only**
  * so that it is not reset when the load function re-runs.
  */
-async function ignoreReruns<T>(key: string, cb: () => T | Promise<T>): Promise<T> {
+async function ignoreReruns<T>(
+  key: string,
+  cb: () => T | Promise<T>,
+  { overwrite = false }: { overwrite?: boolean } = {}
+): Promise<T> {
   if (!browser) return await cb();
-  if (cache[key]) return cache[key];
+  if (cache[key] && !overwrite) return cache[key];
   cache[key] = await cb();
   return cache[key];
 }
@@ -154,8 +158,20 @@ export const load = (async ({ fetch, parent, params, url }) => {
     if (!baseData) {
       throw new Error('No data were returned from the server after saving the document.');
     }
-    docData = await ignoreReruns('documentData', () =>
-      withDocumentRelationData({ ...queryProps, baseData })
+    docData = await ignoreReruns(
+      'documentData',
+      async () => {
+        if (baseData.status === 'published') {
+          // for some reason, the document relations cannot be populated until the document has been
+          // requested at least once after it has been published
+          return getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
+            error(500, err[0]);
+          });
+        }
+        // when just saving, we can just populate the relations included in the response
+        return withDocumentRelationData({ ...queryProps, baseData });
+      },
+      { overwrite: true }
     );
     docDataStore.set(docData);
     updatePreviewConfig(docData);
