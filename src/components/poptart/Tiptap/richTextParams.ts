@@ -12,13 +12,16 @@ export const richTextParams = derived([params], ([$params]) => {
     ...$params,
     obj: $params,
     activeCount: Object.entries($params).filter(
-      ([key, value]) => key !== 'fs' && key !== 'previewMode' && (value === 1 || value === 2 || value === 3)
+      ([key, value]) =>
+        key !== 'fs' && key !== 'previewMode' && (value === 1 || value === 2 || value === 3)
     ).length,
     primaryActive:
       Object.entries($params).find(
         ([key, value]) => key !== 'fs' && key !== 'previewMode' && value === 1
       )?.[0] ||
-      Object.entries($params).find(([key, value]) => key !== 'fs' && key !== 'previewMode' && value === 3)?.[0],
+      Object.entries($params).find(
+        ([key, value]) => key !== 'fs' && key !== 'previewMode' && value === 3
+      )?.[0],
     isActive(key: string) {
       if ($params[key]) return $params[key] === 1 || $params[key] === 2 || $params[key] === 3;
       return false;
@@ -41,6 +44,7 @@ export const richTextParams = derived([params], ([$params]) => {
       });
     },
     forceUpdate() {
+      console.log(getFromUrl());
       params.set(getFromUrl());
     },
   };
@@ -69,42 +73,45 @@ function getFromUrl(url?: URL) {
   let firstTwoKey = '';
   let firstThreeKey = '';
   if (!url) url = new URL(location.href);
-  [...url.searchParams.entries()].forEach(([key, value]) => {
-    const number = value === 'force' ? 3 : parseInt(value);
+  [...url.searchParams.entries()]
+    // childWindow is a special param that is not part of the rich text editor
+    .filter(([key]) => !['childWindow'].includes(key))
+    .forEach(([key, value]) => {
+      const number = value === 'force' ? 3 : parseInt(value);
 
-    if (number === 0) {
-      obj[key] = 0;
-      return;
-    }
+      if (number === 0) {
+        obj[key] = 0;
+        return;
+      }
 
-    // only allow one param to have a value of one (ignore fs value)
-    if (number === 1) {
-      if (hasOne) {
+      // only allow one param to have a value of one (ignore fs value)
+      if (number === 1) {
+        if (hasOne) {
+          obj[key] = 2;
+        } else {
+          obj[key] = 1;
+        }
+        if (key !== 'fs' && key !== 'previewMode') {
+          hasOne = true;
+        }
+      }
+
+      if (number === 2) {
         obj[key] = 2;
-      } else {
-        obj[key] = 1;
+        if (key !== 'fs' && key !== 'previewMode') {
+          hasTwo = true;
+          firstTwoKey = key;
+        }
       }
-      if (key !== 'fs' && key !== 'previewMode') {
-        hasOne = true;
-      }
-    }
 
-    if (number === 2) {
-      obj[key] = 2;
-      if (key !== 'fs' && key !== 'previewMode') {
-        hasTwo = true;
-        firstTwoKey = key;
+      if (number === 3) {
+        obj[key] = 3;
+        if (key !== 'fs' && key !== 'previewMode') {
+          hasThree = true;
+          firstThreeKey = key;
+        }
       }
-    }
-
-    if (number === 3) {
-      obj[key] = 3;
-      if (key !== 'fs' && key !== 'previewMode') {
-        hasThree = true;
-        firstThreeKey = key;
-      }
-    }
-  });
+    });
 
   // if there is no one or three but there are twos, make the first two a one
   if (hasTwo && !hasOne && !hasThree && firstTwoKey) {
