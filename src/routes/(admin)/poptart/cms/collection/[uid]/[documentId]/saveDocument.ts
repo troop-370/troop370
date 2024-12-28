@@ -1,4 +1,4 @@
-import { getProperty, notEmpty, setProperty } from '$utils';
+import { getProperty, setProperty } from '$utils';
 import { delProperty, hasProperty } from '$utils/objectPath';
 import { copy } from 'copy-anything';
 import { flattenObject } from 'flatten-anything';
@@ -175,7 +175,7 @@ function parseRelationValues(values: unknown[]) {
 
 function filterDataToEditableFields(
   _docData: Record<string, unknown>,
-  deconstructedSchemaDefs: SchemaDef[]
+  deconstructedSchemaDefs: ReturnType<typeof deconstructSchemaDefs>
 ) {
   let docData = copy(_docData);
 
@@ -201,14 +201,51 @@ function filterDataToEditableFields(
     delProperty(docData, field);
   });
 
+  // remove extra properties from relation data since they cannot be saved
+  deconstructedSchemaDefs
+    .filter(([, def]) => def.type === 'relation' && def.writable !== false)
+    .forEach(([field]) => {
+      const relationData = getProperty(docData, field);
+      if (!relationData) {
+        // if it is null, just set it to an empty array
+        setProperty(docData, field, []);
+      }
+
+      const documents = parseRelationValues(relationData);
+      setProperty(docData, field, documents);
+    });
+
+  // remove ids from components
+  deconstructedSchemaDefs
+    .filter(([field, def]) => def.type === 'integer' && !!def.componentId && field.endsWith('.id'))
+    .forEach(([field]) => {
+      delProperty(docData, field);
+    });
+
+  // remove ids from dynamiczone data
+  deconstructedSchemaDefs
+    .filter(([field, def]) => def.type === 'dynamiczone' && def.writable !== false)
+    .forEach(([field]) => {
+      const values = getProperty(docData, field);
+      if (!isArray(values)) return;
+
+      values.forEach((value) => {
+        if (isObject(value) && value.id) {
+          delete value.id;
+        }
+      });
+    });
+
   return docData;
 }
 
 export function checkForUnsavedChanges<T extends Record<string, unknown>>(
   originalDocData: T,
   currentDocData: T,
-  deconstructedSchemaDefs: SchemaDef[]
+  defs: SchemaDef[]
 ) {
+  const deconstructedSchemaDefs = deconstructSchemaDefs(defs);
+
   const originalDocDataFiltered = filterDataToEditableFields(
     originalDocData,
     deconstructedSchemaDefs
