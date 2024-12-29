@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import { invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
 import { isFullArray, isFullObject, isString } from 'is-what';
@@ -7,31 +6,13 @@ import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
 import { filterSchemaDefs } from './filterSchemaDefs';
 import { deconstructSchemaDefs, getDocument, withDocumentRelationData } from './getDocument';
+import { ignoreDocumentLoadReruns as ignoreReruns } from './ignoreDocumentLoadReruns';
 import { loadPreviewConfig } from './loadPreviewConfig';
 import { publishDocument } from './publishDocument';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
 import { setDocumentStage } from './setDocumentStage';
 export { isDocDataStore as _isDocDataStore } from './createDocDataStore';
 export type { DocDataStore } from './createDocDataStore';
-
-// this is a workaround to prevent the store from being reset on navigation
-// and is only stored on the client side
-let cache: Record<string, any> = {};
-
-/**
- * Persists a value as a variable outside the load function **in browser only**
- * so that it is not reset when the load function re-runs.
- */
-async function ignoreReruns<T>(
-  key: string,
-  cb: () => T | Promise<T>,
-  { overwrite = false }: { overwrite?: boolean } = {}
-): Promise<T> {
-  if (!browser) return await cb();
-  if (cache[key] && !overwrite) return cache[key];
-  cache[key] = await cb();
-  return cache[key];
-}
 
 export const load = (async ({ fetch, parent, params, url }) => {
   const { session, collectionConfig, permissions, versions, stages } = await parent();
