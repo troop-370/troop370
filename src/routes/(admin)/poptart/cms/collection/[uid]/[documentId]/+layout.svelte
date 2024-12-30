@@ -5,7 +5,7 @@
   // clear the cache when navigating away from the document
   // so that the next time the document is loaded, it will be fresh
   onNavigate(({ from, to }) => {
-    if (from?.url.pathname !== to?.url.pathname) {
+    if (from?.url && from.url.pathname !== to?.url?.pathname) {
       clearDocumentLoadRerunCache();
     }
   });
