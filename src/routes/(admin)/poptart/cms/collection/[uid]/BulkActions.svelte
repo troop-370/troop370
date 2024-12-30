@@ -12,6 +12,11 @@
   export let settings: NonNullable<PageData['collectionConfig']>;
   export let tableData: PageData['collectionDocsData'];
 
+  const shouldOpenFullscreen =
+    $settings.defs.filter(
+      ([key, def]) => def.type === 'text' && def.customField === 'plugin::tiptap-editor.tiptap'
+    ).length === 1;
+
   $: show = $selectedIds.length > 0;
 
   $: links = {
@@ -20,7 +25,9 @@
         ? `/poptart/content-manager/collection-types/${$settings.uid}`
         : `/poptart/cms/collection/${$settings.uid}`,
     hrefSuffixKey: 'documentId',
-    hrefSearch: '?childWindow=1',
+    hrefSearch: shouldOpenFullscreen
+      ? '?childWindow=1&fs=force&props=1&versions=2&comments=2'
+      : '?childWindow=1',
     windowName: `editor-troop-370-${$settings.uid}-`,
   };
 

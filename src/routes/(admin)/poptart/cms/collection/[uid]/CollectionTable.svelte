@@ -35,6 +35,11 @@
   export let tableDataFilter: NonNullable<PageData['table']>['filter'];
   export let tableDataSort: NonNullable<PageData['table']>['sort'];
 
+  const shouldOpenFullscreen =
+    $collectionConfig.defs.filter(
+      ([key, def]) => def.type === 'text' && def.customField === 'plugin::tiptap-editor.tiptap'
+    ).length === 1;
+
   const filterJSON = JSON.stringify(tableDataFilter);
 
   type Doc = NonNullable<NonNullable<typeof $tableData.data>['docs']>[0];
@@ -46,7 +51,7 @@
         ? `/poptart/content-manager/collection-types/${$collectionConfig.uid}`
         : `/poptart/cms/collection/${$collectionConfig.uid}`,
     hrefSuffixKey: 'documentId',
-    hrefSearch: undefined,
+    hrefSearch: shouldOpenFullscreen ? '?fs=force&props=1&versions=2&comments=2' : undefined,
     windowName: `editor-troop-370-${$collectionConfig.uid}-`,
   };
 
