@@ -2,8 +2,9 @@ import { queryWithStore } from '$utils/query';
 import { error } from '@sveltejs/kit';
 import { isArray, isPlainObject } from 'is-what';
 import { merge } from 'merge-anything';
-import { derived, get } from 'svelte/store';
+import { derived, get, type Readable } from 'svelte/store';
 import { z } from 'zod';
+import type { LayoutData as GrandParentLayoutData } from '../../$types';
 import type { LayoutLoad } from './$types';
 
 export const load = (async ({ fetch, parent, params, url }) => {
@@ -57,113 +58,16 @@ export const load = (async ({ fetch, parent, params, url }) => {
   const combinedSettings = derived(
     [contentManagerSettings, collectionConfig],
     ([$contentManagerSettings, $collectionConfig]) => {
-      function calculateDefs(collectionUID: string, isComponent = false) {
-        // get settings related to this content type
-        const settings = (() => {
-          if (isComponent) {
-            const componentSettings = $contentManagerSettings.data?.docs?.components.find(
-              (type) => type.uid === collectionUID
-            );
-            if (!componentSettings)
-              error(404, 'failed to find component settings for ' + collectionUID);
-            return componentSettings;
-          }
-
-          return $contentManagerSettings.data?.docs?.contentTypes.find(
-            (type) => type.uid === collectionUID
-          );
-        })();
-        if (!settings) error(404, 'failed to find content type settings for ' + collectionUID);
-
-        // get the schema for this content type
-        const schema = (() => {
-          if (isComponent) {
-            const component = $collectionConfig?.components?.[collectionUID];
-            if (!component) error(404, 'failed to find component schema for ' + collectionUID);
-            return component;
-          }
-
-          return $collectionConfig?.contentType;
-        })();
-        if (!schema) error(404, 'failed to find schema for ' + collectionUID);
-
-        // combine settings from content type and collection config
-        const merged = merge(settings, schema, {
-          dynamicPreviewHref: previewRouteExists
-            ? possiblePreviewRoute.replace('/src/routes', url.origin).replace('/+page.svelte', '')
-            : undefined,
-          inlinePreviewHref: inlinePreviewRouteExists
-            ? possibleInlinePreviewRoute
-                .replace('/src/routes', url.origin)
-                .replace('/+page.svelte', '')
-            : undefined,
-        });
-
-        // get an array of field names in the order they should appear on the edit page
-        const editPageOrderedKeys = merged.layouts.edit.flatMap((layout) =>
-          layout.map((field) => field.name)
-        );
-
-        const defs = Object.entries(merged.attributes)
-          .map(([key, value]) => {
-            // the attribute settings should be an object with the type and related settings
-            const attribute = isPlainObject(value) ? value : {};
-
-            // if it is a component type, we need to calculate the defs for the component
-            if (attribute.type === 'component') {
-              const [componentDefs] = calculateDefs(attribute.component as string, true);
-              attribute.componentDefs = componentDefs || [];
-            }
-
-            // if it is a dynamic zone type, we need to calculate the defs for the component
-            if (attribute.type === 'dynamiczone') {
-              if (isArray(attribute.components)) {
-                const data = attribute.components.map((component) => {
-                  const [componentDefs, mergedSettings] = calculateDefs(component as string, true);
-                  return {
-                    key: component as string,
-                    settings: mergedSettings,
-                    defs: componentDefs,
-                  };
-                });
-
-                attribute.componentDefs = Object.fromEntries(
-                  data.map((component) => {
-                    return [component.key, component.defs] as const;
-                  })
-                );
-
-                attribute.componentSettings = Object.fromEntries(
-                  data.map((component) => {
-                    const { attributes, layouts, metadatas, ...rest } = component.settings;
-                    return [
-                      component.key,
-                      { displayName: rest.info.displayName, more: rest },
-                    ] as const;
-                  })
-                );
-              }
-            }
-
-            // determine the numerical order of this field on the edit page
-            const orderIndex = editPageOrderedKeys.findIndex((k) => k === key);
-
-            return [
-              key,
-              {
-                ...attribute,
-                ...merged.metadatas[key].edit,
-                table: merged.metadatas[key].list,
-                order: orderIndex === -1 ? Infinity : orderIndex,
-              },
-            ] as [string, StrapiAttribute];
-          })
-          .sort(([, a], [, b]) => (a.order > b.order ? 1 : -1));
-
-        return [defs, merged] as const;
-      }
-
-      const [defs, merged] = calculateDefs(params.uid);
+      const [defs, merged] = _calculateDefs({
+        collectionUID: params.uid,
+        $contentManagerSettings,
+        $collectionConfig,
+        previewRouteExists,
+        inlinePreviewRouteExists,
+        possiblePreviewRoute,
+        possibleInlinePreviewRoute,
+        url,
+      });
       return { ...merged, defs };
     }
   );
@@ -176,8 +80,135 @@ export const load = (async ({ fetch, parent, params, url }) => {
     contentTypeSchema: contentTypeSettings,
     permissions,
     collectionConfig: combinedSettings,
+    partialStrapiCollectionConfig: collectionConfig,
   };
 }) satisfies LayoutLoad;
+
+type ValueOfReadable<S> = S extends Readable<infer U> ? U : never;
+
+interface CalculateDefsParams {
+  collectionUID: string;
+  $contentManagerSettings: ValueOfReadable<GrandParentLayoutData['contentManagerSettings']>;
+  $collectionConfig: z.infer<typeof collectionConfigurationSchema> | undefined;
+  isComponent?: boolean;
+  previewRouteExists: boolean;
+  inlinePreviewRouteExists: boolean;
+  possiblePreviewRoute: string;
+  possibleInlinePreviewRoute: string;
+  url: URL;
+}
+
+export function _calculateDefs(params: CalculateDefsParams) {
+  const { collectionUID, $contentManagerSettings, $collectionConfig, isComponent, url } = params;
+
+  // get settings related to this content type
+  const settings = (() => {
+    if (isComponent) {
+      const componentSettings = $contentManagerSettings.data?.docs?.components.find(
+        (type) => type.uid === collectionUID
+      );
+      if (!componentSettings) error(404, 'failed to find component settings for ' + collectionUID);
+      return componentSettings;
+    }
+
+    return $contentManagerSettings.data?.docs?.contentTypes.find(
+      (type) => type.uid === collectionUID
+    );
+  })();
+  if (!settings) error(404, 'failed to find content type settings for ' + collectionUID);
+
+  // get the schema for this content type
+  const schema = (() => {
+    if (isComponent) {
+      const component = $collectionConfig?.components?.[collectionUID];
+      if (!component) error(404, 'failed to find component schema for ' + collectionUID);
+      return component;
+    }
+
+    return $collectionConfig?.contentType;
+  })();
+  if (!schema) error(404, 'failed to find schema for ' + collectionUID);
+
+  // combine settings from content type and collection config
+  const merged = merge(settings, schema, {
+    dynamicPreviewHref: params.previewRouteExists
+      ? params.possiblePreviewRoute.replace('/src/routes', url.origin).replace('/+page.svelte', '')
+      : undefined,
+    inlinePreviewHref: params.inlinePreviewRouteExists
+      ? params.possibleInlinePreviewRoute
+          .replace('/src/routes', url.origin)
+          .replace('/+page.svelte', '')
+      : undefined,
+  });
+
+  // get an array of field names in the order they should appear on the edit page
+  const editPageOrderedKeys = merged.layouts.edit.flatMap((layout) =>
+    layout.map((field) => field.name)
+  );
+
+  const defs = Object.entries(merged.attributes)
+    .map(([key, value]) => {
+      // the attribute settings should be an object with the type and related settings
+      const attribute = isPlainObject(value) ? value : {};
+
+      // if it is a component type, we need to calculate the defs for the component
+      if (attribute.type === 'component') {
+        const [componentDefs] = _calculateDefs({
+          ...params,
+          collectionUID: attribute.component as string,
+          isComponent: true,
+        });
+        attribute.componentDefs = componentDefs || [];
+      }
+
+      // if it is a dynamic zone type, we need to calculate the defs for the component
+      if (attribute.type === 'dynamiczone') {
+        if (isArray(attribute.components)) {
+          const data = attribute.components.map((component) => {
+            const [componentDefs, mergedSettings] = _calculateDefs({
+              ...params,
+              collectionUID: component as string,
+              isComponent: true,
+            });
+            return {
+              key: component as string,
+              settings: mergedSettings,
+              defs: componentDefs,
+            };
+          });
+
+          attribute.componentDefs = Object.fromEntries(
+            data.map((component) => {
+              return [component.key, component.defs] as const;
+            })
+          );
+
+          attribute.componentSettings = Object.fromEntries(
+            data.map((component) => {
+              const { attributes, layouts, metadatas, ...rest } = component.settings;
+              return [component.key, { displayName: rest.info.displayName, more: rest }] as const;
+            })
+          );
+        }
+      }
+
+      // determine the numerical order of this field on the edit page
+      const orderIndex = editPageOrderedKeys.findIndex((k) => k === key);
+
+      return [
+        key,
+        {
+          ...attribute,
+          ...(merged.metadatas[key]?.edit || {}),
+          table: merged.metadatas[key]?.list || {},
+          order: orderIndex === -1 ? Infinity : orderIndex,
+        },
+      ] as [string, StrapiAttribute];
+    })
+    .sort(([, a], [, b]) => (a.order > b.order ? 1 : -1));
+
+  return [defs, merged] as const;
+}
 
 const typeConfigurationSchema = z.object({
   layouts: z.object({
