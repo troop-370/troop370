@@ -45,7 +45,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
   const _post = {
     slug: post.slug,
     timestamps: {
-      published_at: post.publishedAt,
+      published_at: post.shortPublishedAt || post.publishedAt,
     },
     submitted_by: post.submitted_by?.split(';').map((name) => name.trim()) || [],
     name: post.title,

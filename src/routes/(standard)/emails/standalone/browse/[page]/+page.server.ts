@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params }) => {
       _id: d.object_id,
       name: d.name,
       timestamps: {
-        published_at: d.publishedAt,
+        published_at: d.shortPublishedAt || d.publishedAt,
       },
     };
   });

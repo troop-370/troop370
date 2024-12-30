@@ -8,7 +8,7 @@
   export let name: string;
   export let href: string;
   export let authors: string[];
-  export let date: Date | undefined = undefined;
+  export let date: string | undefined = undefined;
   export let body: string | null;
   export let buttonText = 'Read more';
   export let hasPassword = false;
@@ -45,7 +45,7 @@
       <span> | </span>
     {/if}
     {#if date}
-      <span>{formatISODate(date.toISOString(), false, true, false)}</span>
+      <span>{formatISODate(date, false, true, false)}</span>
     {/if}
   </div>
   {#if previewText}
