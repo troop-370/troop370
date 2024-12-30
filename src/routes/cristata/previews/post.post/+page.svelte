@@ -88,6 +88,12 @@
       </table>
     </div>
   {/if}
+{:else if !parsed.success}
+  <PreviewDataCard
+    label="Error details"
+    caption="Something went wrong. Please report this error to the Webmaster."
+    data={parsed.error}
+  />
 {/if}
 
 <PreviewData bind:fields />
