@@ -11,6 +11,6 @@ strapiEditor.subscribe(($strapiEditor) => {
   if (browser) localStorage?.setItem('store:strapiEditor_4', `${$strapiEditor}`);
 });
 
-const modernCollections = ['api::newsletter.newsletter'];
+const modernCollections = ['api::newsletter.newsletter', 'api::post.post'];
 export const isModernCollection = (collectionName: string) =>
   modernCollections.includes(collectionName);
