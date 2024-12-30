@@ -1,6 +1,7 @@
 import CharacterCount from '@tiptap/extension-character-count';
 import Document from '@tiptap/extension-document';
 import FontFamily from '@tiptap/extension-font-family';
+import Heading from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
 import Paragraph from '@tiptap/extension-paragraph';
 import Table from '@tiptap/extension-table';
@@ -108,7 +109,8 @@ const Float = Text.extend({
 
 const editorExtensions = {
   tiptap: [
-    StarterKit.configure({ history: false }),
+    StarterKit.configure({ history: false, heading: false }),
+    Heading.configure({ levels: [2, 3] }),
     TrackChanges,
     Underline,
     TextStyle,
