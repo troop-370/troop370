@@ -141,7 +141,7 @@
           You do not have permission to view this field.
         </InfoBar>
       {:else if def.customField}
-        {#if def.customField === 'plugin::tiptap-editor.tiptap'}
+        {#if def.customField === 'plugin::tiptap-editor.tiptap' && isStringOrNullish($docData[key])}
           {@const tiptapOptions = isObject(def.options) ? def.options : {}}
           <RichTiptap
             {disabled}
@@ -188,7 +188,7 @@
         {:else}
           <p>Unsupported custom field</p>
           <pre>{JSON.stringify(def, null, 2)}</pre>
-          {$docData[key]}
+          <pre>{JSON.stringify($docData[key], null, 2)}</pre>
         {/if}
       {:else if def.type === 'component' && isArray(def.componentDefs) && (_isDocDataStore($docData[key]) || isNull($docData[key]))}
         {#if isObject($plainDocData[key]) || isNull($docData[key])}
@@ -309,7 +309,7 @@
         {:else if def.type === 'richtext' && isStringOrNullish($docData[key])}
           <Code type="md" key={forId} bind:value={$docData[key]} {disabled} />
           <!-- Blocks -->
-        {:else if def.type === 'blocks'}
+        {:else if def.type === 'blocks' && (isArray($docData[key]) || isNullOrUndefined($docData[key]))}
           <div style="margin-bottom: 6px;">
             <InfoBar severity="caution" closable={false} class="inline-infobar">
               This is a legacy field type. It cannot be edited with the new editor.

@@ -19,25 +19,33 @@ function setTipTapXMLFragment(
     Collaboration.configure({ document, field }),
   ]);
 
-  // set the shared type based on this value
-  if (content) {
-    // if content is stringified json object, parse it before inserting it
-    if (isJsonContentArrayString(content)) {
-      prosemirrorJSONToYXmlFragment(schema, { type: 'doc', content: JSON.parse(content) }, current);
-    } else {
-      prosemirrorJSONToYXmlFragment(
-        schema,
-        {
-          type: 'doc',
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
-        },
-        current
-      );
+  try {
+    // set the shared type based on this value
+    if (content) {
+      // if content is stringified json object, parse it before inserting it
+      if (isJsonContentArrayString(content)) {
+        prosemirrorJSONToYXmlFragment(
+          schema,
+          { type: 'doc', content: JSON.parse(content) },
+          current
+        );
+      } else {
+        prosemirrorJSONToYXmlFragment(
+          schema,
+          {
+            type: 'doc',
+            content: [{ type: 'paragraph', content: [{ type: 'text', text: content }] }],
+          },
+          current
+        );
+      }
     }
-  }
 
-  // return the DOM version of the content
-  return current.toJSON();
+    // return the DOM version of the content
+    return current.toJSON();
+  } catch {
+    return '';
+  }
 }
 
 /**
