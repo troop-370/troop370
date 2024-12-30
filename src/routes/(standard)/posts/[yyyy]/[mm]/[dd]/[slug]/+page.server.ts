@@ -1,10 +1,7 @@
 import { apity } from '$api';
-import { HardBreak } from '$pm/render/HardBreak';
-import { Link } from '$pm/render/Link';
+import { parseBody } from '$components/Post/parseBody';
 import { notEmpty } from '$utils';
-import Renderer from '@cristata/prosemirror-to-html-js';
 import { error, redirect } from '@sveltejs/kit';
-import { DOMParser } from 'xmldom';
 import type { PageServerLoad } from './$types';
 
 const getPosts = apity.path('/posts').method('get').create();
@@ -52,7 +49,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
     },
     submitted_by: post.submitted_by?.split(';').map((name) => name.trim()) || [],
     name: post.title,
-    body: addRippleDiv(parseBody(post.body)),
+    body: parseBody(post.body),
     enable_password_protection: post.enable_password_protection,
     categories: post.category?.value,
     tags: post.tags?.filter(notEmpty).map((tag) => tag?.value),
@@ -61,56 +58,3 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 
   return { post: _post };
 };
-
-function parseBody(body = '') {
-  if (!body) return '';
-
-  const renderer = new Renderer.Renderer();
-  renderer.addNode(HardBreak);
-  renderer.addMark(Link);
-
-  const html = renderer.render({
-    type: 'doc',
-    content: JSON.parse(body),
-  });
-
-  if (DOMParser && html) {
-    const dom = new DOMParser().parseFromString(html, 'text/html');
-
-    /**
-     * Style the buttons in the content,
-     */
-    const anchors = dom.getElementsByTagName('a') || []; // get all anchors in document
-    Array.from(anchors).forEach((anchor, i) => {
-      const buttonText = anchor.textContent || ''; // get text of anchor
-      const buttonTypeOutlined = buttonText.includes('.ob'); // check if anchor includes the text '.ob'
-      const buttonTypeRegular = buttonText.includes('.pb'); // check if anchor includes the text '.b'
-      if (buttonTypeOutlined === true) {
-        // only do the following if the anchor includes the text '.ob'
-        anchors[i].textContent = buttonText.replace('.ob', '');
-        anchors[i].setAttribute('class', 'mdc-button mdc-button--outlined');
-      }
-      if (buttonTypeRegular === true) {
-        // only do the following if the anchor includes the text '.b'
-        anchors[i].textContent = buttonText.replace('.pb', '');
-        anchors[i].setAttribute('class', 'mdc-button');
-      }
-    });
-
-    return dom.toString() || html || '';
-  }
-
-  return html || JSON.stringify(body || '') || '';
-}
-
-function addRippleDiv(body: string) {
-  return body
-    .replaceAll(
-      ' class="mdc-button mdc-button--outlined">',
-      ' class="mdc-button mdc-button--outlined"><span class="mdc-button__ripple"></span>'
-    )
-    .replaceAll(
-      ' class="mdc-button">',
-      ' class="mdc-button"><span class="mdc-button__ripple"></span>'
-    );
-}
