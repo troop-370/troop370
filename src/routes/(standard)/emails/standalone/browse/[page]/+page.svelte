@@ -26,9 +26,7 @@
           <NewsletterCard
             name={email.name}
             href="/emails/standalone/{email._id}"
-            date={email.timestamps.published_at
-              ? new Date(email.timestamps.published_at)
-              : undefined}
+            date={email.timestamps.published_at}
           />
         {/if}
       {/each}

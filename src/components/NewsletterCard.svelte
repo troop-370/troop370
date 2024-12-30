@@ -5,7 +5,7 @@
 
   export let name: string;
   export let href: string;
-  export let date: Date | undefined = undefined;
+  export let date: string | undefined = undefined;
   export let buttonText = 'View';
 </script>
 
@@ -14,7 +14,7 @@
     <a {href}><h2>{@html marked.parseInline(name)}</h2> </a>
     <div class="meta">
       {#if date}
-        <span>{formatISODate(date.toISOString(), false, true, false)}</span>
+        <span>{formatISODate(date, false, true, false)}</span>
       {/if}
     </div>
   </div>
@@ -71,7 +71,10 @@
 
   a {
     color: inherit;
-    transition: background-color 0.2s, box-shadow 0.1s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.1s,
+      color 0.2s;
     text-decoration: none;
   }
   a:hover {
