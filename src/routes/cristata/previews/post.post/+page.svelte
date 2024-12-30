@@ -18,7 +18,7 @@
       .string()
       .nullable()
       .default(null)
-      .transform((val) => (val ? val.split(',') : null)),
+      .transform((val) => (val ? val.split(';') : null)),
     title: z.string().default(''),
     body: z.string().default(''),
     enable_password_protection: z.boolean().default(false),
