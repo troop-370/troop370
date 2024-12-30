@@ -132,7 +132,9 @@
                           "
                       >
                         {formatISODate(
-                          new Date(newsletter.publishedAt || new Date()).toISOString(),
+                          new Date(
+                            newsletter.shortPublishedAt || newsletter.publishedAt || new Date()
+                          ).toISOString(),
                           false,
                           true,
                           false
