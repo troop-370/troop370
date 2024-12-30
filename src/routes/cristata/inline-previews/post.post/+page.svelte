@@ -143,9 +143,12 @@
     }
   }
 
+  article {
+    background-color: #f3f3f3;
+  }
   @media (prefers-color-scheme: dark) {
     article {
-      background-color: rgb(36, 36, 36);
+      background-color: #202020;
     }
   }
 
