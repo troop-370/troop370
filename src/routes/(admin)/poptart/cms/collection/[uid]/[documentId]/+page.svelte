@@ -201,124 +201,126 @@
     class:showPreview={currentDocAndPreviewWidth > showPreviewWidth}
   >
     <div class="document-fields">
-      <article style="padding: {showSidebarInline ? 20 : 40}px;">
-        {#if tabsShown}
-          <div class="tabs-container" class:reduceSpaceAbove={showSidebarInline}>
-            {#if showSidebarInline}
-              <div style="margin: 0 11px;">
-                <Sidebar
-                  isEmbedded
-                  features={{
-                    actions: !data.isPublishedVersion,
-                  }}
-                  {...coreSidebarProps}
-                />
+      <div class="article-wrapper">
+        <article style="padding: {showSidebarInline ? 20 : 40}px;">
+          {#if tabsShown}
+            <div class="tabs-container" class:reduceSpaceAbove={showSidebarInline}>
+              {#if showSidebarInline}
+                <div style="margin: 0 11px;">
+                  <Sidebar
+                    isEmbedded
+                    features={{
+                      actions: !data.isPublishedVersion,
+                    }}
+                    {...coreSidebarProps}
+                  />
+                </div>
+              {/if}
+              <div class="tabs" bind:this={tabsContainerElement}>
+                <Button
+                  data-tab={'compose'}
+                  on:click={handleTabClick}
+                  on:mouseenter={handleTabMouseEnter}
+                  on:mouseleave={handleTabMouseLeave}
+                  disabled={!$docData}
+                >
+                  Compose
+                </Button>
+                <Button
+                  data-tab={'preview'}
+                  on:click={handleTabClick}
+                  on:mouseenter={handleTabMouseEnter}
+                  on:mouseleave={handleTabMouseLeave}
+                  disabled={!$docData}
+                >
+                  Preview
+                </Button>
+                <div class="tabline" style="width: {activeTabWidth}px; left: {activeTabLeft}px;" />
               </div>
-            {/if}
-            <div class="tabs" bind:this={tabsContainerElement}>
-              <Button
-                data-tab={'compose'}
-                on:click={handleTabClick}
-                on:mouseenter={handleTabMouseEnter}
-                on:mouseleave={handleTabMouseLeave}
-                disabled={!$docData}
-              >
-                Compose
-              </Button>
-              <Button
-                data-tab={'preview'}
-                on:click={handleTabClick}
-                on:mouseenter={handleTabMouseEnter}
-                on:mouseleave={handleTabMouseLeave}
-                disabled={!$docData}
-              >
-                Preview
-              </Button>
-              <div class="tabline" style="width: {activeTabWidth}px; left: {activeTabLeft}px;" />
-            </div>
-          </div>
-        {/if}
-
-        {#if tabsShown && (activeTab === 'preview' || $updatePreviewsWhileComposing)}
-          {#if previewSrc && activeTab === 'preview'}
-            <div style="margin: 20px 0;">
-              <ToggleSwitch bind:checked={$updatePreviewsWhileComposing}>
-                Update previews while composing
-              </ToggleSwitch>
             </div>
           {/if}
-          <PreviewFrame
-            src={previewSrc}
-            fullSharedData={docData}
-            noOuterMargin
-            hide={activeTab !== 'preview'}
-          />
-        {/if}
 
-        {#if showSidebarInline && $stages && $stages.length > 0}
-          <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
-            <Sidebar
-              isEmbedded
-              features={{
-                workflowStage: true,
-              }}
-              {...coreSidebarProps}
+          {#if tabsShown && (activeTab === 'preview' || $updatePreviewsWhileComposing)}
+            {#if previewSrc && activeTab === 'preview'}
+              <div style="margin: 20px 0;">
+                <ToggleSwitch bind:checked={$updatePreviewsWhileComposing}>
+                  Update previews while composing
+                </ToggleSwitch>
+              </div>
+            {/if}
+            <PreviewFrame
+              src={previewSrc}
+              fullSharedData={docData}
+              noOuterMargin
+              hide={activeTab !== 'preview'}
             />
-          </div>
-        {/if}
+          {/if}
 
-        <div style={activeTab === 'preview' ? 'display: none;' : ''}>
-          <Editor
-            data={{
-              collectionConfig,
-              docDataStore,
-              session: data.session,
-              save: data.save,
-              publish: () => {
-                publishDocumentDialogOpen = true;
-              },
-              defs: data.defs,
-            }}
-            {disabled}
-            {actions}
-            {coreSidebarProps}
-            user={data.session.adminUser
-              ? {
-                  _id: data.session.adminEmail + data.session.adminUser.id.toString(),
-                  name: data.session.adminUser.firstname + ' ' + data.session.adminUser.lastname,
-                  color: colorHash.hex(
-                    data.session.adminUser.username + data.session.adminUser.id.toString()
-                  ),
-                  photo: genAvatar(
-                    data.session.adminUser.username + data.session.adminUser.id.toString()
-                  ),
-                  sessionId: '0',
-                }
-              : {
-                  _id: Math.random().toString(),
-                  name: 'Unknown',
-                  color: 'black',
-                  photo: '',
-                  sessionId: '0',
+          {#if showSidebarInline && $stages && $stages.length > 0}
+            <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
+              <Sidebar
+                isEmbedded
+                features={{
+                  workflowStage: true,
                 }}
-          />
-        </div>
+                {...coreSidebarProps}
+              />
+            </div>
+          {/if}
 
-        {#if showSidebarInline}
-          <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
-            <Sidebar
-              isEmbedded
-              features={{
-                actions: false,
-                docInfo: true,
-                versions: !childWindow,
+          <div style={activeTab === 'preview' ? 'display: none;' : ''}>
+            <Editor
+              data={{
+                collectionConfig,
+                docDataStore,
+                session: data.session,
+                save: data.save,
+                publish: () => {
+                  publishDocumentDialogOpen = true;
+                },
+                defs: data.defs,
               }}
-              forceShowTitles
-              {...coreSidebarProps}
+              {disabled}
+              {actions}
+              {coreSidebarProps}
+              user={data.session.adminUser
+                ? {
+                    _id: data.session.adminEmail + data.session.adminUser.id.toString(),
+                    name: data.session.adminUser.firstname + ' ' + data.session.adminUser.lastname,
+                    color: colorHash.hex(
+                      data.session.adminUser.username + data.session.adminUser.id.toString()
+                    ),
+                    photo: genAvatar(
+                      data.session.adminUser.username + data.session.adminUser.id.toString()
+                    ),
+                    sessionId: '0',
+                  }
+                : {
+                    _id: Math.random().toString(),
+                    name: 'Unknown',
+                    color: 'black',
+                    photo: '',
+                    sessionId: '0',
+                  }}
             />
           </div>
-        {/if}
-      </article>
+
+          {#if showSidebarInline}
+            <div class="sidebar-embed" style={activeTab === 'preview' ? 'display: none;' : ''}>
+              <Sidebar
+                isEmbedded
+                features={{
+                  actions: false,
+                  docInfo: true,
+                  versions: !childWindow,
+                }}
+                forceShowTitles
+                {...coreSidebarProps}
+              />
+            </div>
+          {/if}
+        </article>
+      </div>
     </div>
     {#if currentDocAndPreviewWidth > showPreviewWidth}
       <div class="concurrent-preview">
@@ -368,6 +370,12 @@
     box-sizing: border-box;
     width: 100%;
     /* flex-grow: 1; */
+  }
+
+  .article-wrapper {
+    width: 100%;
+    overflow: hidden auto;
+    box-sizing: border-box;
   }
 
   article {

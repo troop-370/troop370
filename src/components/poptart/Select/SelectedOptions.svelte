@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { isModernCollection, strapiEditor } from '$stores/strapiEditor';
   import { openWindow, slugify } from '$utils';
   import { Button } from 'fluent-svelte';
   import { createEventDispatcher, onMount } from 'svelte';
@@ -106,11 +107,19 @@
     {#if referenceOpts}
       <Button
         on:click={() => {
-          openWindow(
-            `/admin/cms/collection/${referenceOpts.targetCollectionUid}/create?childWindow=1`,
-            'new-document' + Math.random(),
-            'location=no'
-          );
+          if ($strapiEditor || !isModernCollection(referenceOpts.targetCollectionUid)) {
+            openWindow(
+              `/admin/content-manager/collection-types/${referenceOpts.targetCollectionUid}/create?childWindow=1`,
+              'new-document' + Math.random(),
+              'location=no'
+            );
+          } else {
+            openWindow(
+              `/admin/cms/collection/${referenceOpts.targetCollectionUid}/create?childWindow=1`,
+              'new-document' + Math.random(),
+              'location=no'
+            );
+          }
         }}
         disabled={disabled || populating}
       >

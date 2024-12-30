@@ -128,6 +128,14 @@
     intro = create_in_transition(iframe, fly, { y: 40, duration, easing: expoOut, delay });
     intro.start();
   }
+
+  let frameSrc = probablyPath ? '/strapi' + probablyPath : '/strapi/poptart/_wait';
+  onMount(() => {
+    if (!navigate) {
+      // if the the navigate function is not ready, go ahead and set the src for the iframe
+      frameSrc = '/strapi' + probablyPath;
+    }
+  });
 </script>
 
 <div class="wrapper">
@@ -141,7 +149,7 @@
   <iframe
     id="content-iframe"
     title="strapi"
-    src="/strapi/poptart/_wait"
+    src={frameSrc}
     bind:this={iframe}
     allowtransparency
     on:load={handleIframeLoad}
