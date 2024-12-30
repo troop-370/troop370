@@ -37,7 +37,7 @@ export async function saveDocument(
   const [baseData, metaData, errorData] = await fetch(
     `/strapi/content-manager/collection-types/${collectionID}${props.cloneMode ? '/clone' : ''}${documentId ? `/${documentId}` : ''}`,
     {
-      method: documentId ? 'PUT' : 'POST',
+      method: documentId && !props.cloneMode ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.adminToken}`,

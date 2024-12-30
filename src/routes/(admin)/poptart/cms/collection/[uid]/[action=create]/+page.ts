@@ -69,6 +69,7 @@ export const load = (async ({ fetch, parent, params, url }) => {
       docDataStore,
       originalDocData: initialDocData,
       cloneMode: params.action === 'clone',
+      documentId: url.searchParams.get('from')!,
     })
       .then(async ([baseData]) => {
         goto(`./${baseData.documentId}`);
