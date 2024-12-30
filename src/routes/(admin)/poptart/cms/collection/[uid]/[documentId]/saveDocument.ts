@@ -131,10 +131,11 @@ function getRelationConnections(
             (origDoc, idx) => origDoc.documentId !== (newDocuments[idx]?.documentId || '')
           );
 
-        if (!isChanged) {
-          acc[field] = { connect: [], disconnect: [] };
-          return acc;
-        }
+        // this is supposed to work, but strapi was deleting all the relations instead
+        // if (!isChanged) {
+        //   acc[field] = { connect: [], disconnect: [] };
+        //   return acc;
+        // }
 
         // build the `set` array with positional information
         const setDocuments = newDocuments.map((doc, index) => {
