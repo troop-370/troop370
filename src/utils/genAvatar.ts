@@ -1,7 +1,15 @@
+import _Avatar from 'boring-avatars';
 import _ColorHash from 'color-hash';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 // @ts-expect-error https://github.com/zenozeng/color-hash/issues/42
 const ColorHash: typeof _ColorHash = _ColorHash.default || _ColorHash;
+
+// @ts-expect-error
+const Avatar: typeof _Avatar = _Avatar.default || _Avatar;
+
+const cache = new Map<string, string>();
 
 /**
  * Generate an avatar from a string.
@@ -28,7 +36,23 @@ export function genAvatar(
     colorHash.hex(id.split('').reverse().join('')),
   ];
 
-  return `https://source.boringavatars.com/${type}/${size}/${id}?colors=${colors
-    .toString()
-    .replaceAll('#', '')}&square`;
+  const key = `${id}-${size}-${type}`;
+  if (cache.has(key)) {
+    return cache.get(key);
+  }
+
+  const el = createElement(Avatar, {
+    name: id + 's',
+    size,
+    variant: type,
+    colors,
+    square: true,
+  });
+  const html = renderToStaticMarkup(el);
+
+  const blob = new Blob([html], { type: 'image/svg+xml;charset=utf-8' });
+  const blobURL = URL.createObjectURL(blob);
+
+  cache.set(key, blobURL);
+  return blobURL;
 }

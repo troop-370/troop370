@@ -1,6 +1,5 @@
 export { apity } from './apity';
 export type { ApiTypes };
-import type { Node as BlocksNode } from 'blocks-html-renderer';
 import type { components, operations, paths } from './types';
 interface ApiTypes {
   schemas: components['schemas'];
@@ -15,7 +14,7 @@ interface manualSchemas {
 }
 
 type ApiNewsletter = ApiTypes['schemas']['Newsletter'];
-type ApiPost = ApiTypes['schemas']['Post'] & { body: BlocksNode[] };
+type ApiPost = ApiTypes['schemas']['Post'] & { body: string };
 interface Newsletter extends Omit<Omit<ApiNewsletter, 'version2'>, 'version3'> {
   version3?: {
     pinned_mini_posts?: ApiPost[];
@@ -32,6 +31,4 @@ interface Newsletter extends Omit<Omit<ApiNewsletter, 'version2'>, 'version3'> {
     high_adventure_mini_posts?: ApiPost[];
   };
 }
-interface StandaloneEmail extends Omit<ApiTypes['schemas']['StandaloneEmail'], 'body'> {
-  body: BlocksNode[];
-}
+type StandaloneEmail = ApiTypes['schemas']['StandaloneEmail'];

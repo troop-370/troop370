@@ -1,9 +1,12 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { onDestroy, onMount } from 'svelte';
+  import type { AwarenessUser } from '$components/poptart/Tiptap';
+  import { onDestroy, onMount, type ComponentProps } from 'svelte';
   import type { SchemaDef } from '../+layout';
   import type { PageData } from './$types';
+  import type { Action } from './+page';
   import Fields from './Fields.svelte';
+  import type Sidebar from './Sidebar.svelte';
 
   interface Data {
     collectionConfig: PageData['collectionConfig'];
@@ -18,6 +21,12 @@
   $: ({ collectionConfig, docDataStore } = data);
   export let disabled = false;
   let sessionAdminToken = data.session.adminToken;
+
+  export let actions: Action[] = [];
+
+  export let user: AwarenessUser;
+
+  export let coreSidebarProps: ComponentProps<Sidebar> | undefined = undefined;
 
   let showHiddenFields = false;
 
@@ -60,4 +69,8 @@
   {sessionAdminToken}
   variant={showHiddenFields ? 'show-hidden' : 'normal'}
   {disabled}
+  {actions}
+  {coreSidebarProps}
+  {user}
+  {collectionConfig}
 />

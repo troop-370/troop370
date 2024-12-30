@@ -6,7 +6,7 @@ import { z } from 'zod';
 type UnpopulatedValue = { _id: string; label?: string };
 type PopulatedValue = { _id: string; label: string; [key: string]: unknown };
 
-const standardFields = ['id', 'documentId', 'publishedAt', 'updatedAt'];
+const standardFields = ['id', 'documentId', 'publishedAt', 'updatedAt', 'status'];
 
 async function populateReferenceValues(
   values: UnpopulatedValue[],

@@ -1,15 +1,19 @@
 <script lang="ts">
+  import { SelectOne } from '$components/poptart/Select';
   import Chip from '$lib/common/Chip/Chip.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import Loading from '$lib/common/Loading.svelte';
   import { capitalize, formatISODate, listOxford, notEmpty, openWindow } from '$utils';
   import { Button, MenuFlyout, MenuFlyoutItem, ProgressRing, TextBlock } from 'fluent-svelte';
-  import { isString } from 'is-what';
+  import { isObject, isString } from 'is-what';
   import type { Readable } from 'svelte/store';
   import type { PageData } from './$types';
 
   interface Features {
     actions?: boolean;
     docInfo?: boolean;
+    workflowStage?: boolean;
+    preview?: boolean;
     versions?: boolean;
   }
 
@@ -19,13 +23,23 @@
   export let previewConfig: Readable<ValueType<PageData['previewConfig']>> | undefined = undefined;
   export let isEmbedded = false;
   export let versions: PageData['versions'] | undefined = undefined;
+  export let stages: PageData['stages'] | undefined = undefined;
   export let features: Features = {
     actions: true,
     docInfo: true,
+    workflowStage: true,
+    preview: true,
     versions: true,
   };
+  export let disabled = false;
+  export let setStage: PageData['setStage'] | undefined = undefined;
+  export let showStageSpinner = false;
 
   export let docData: Record<string, unknown>;
+
+  export let forceShowTitles = false;
+  $: showSectionTitles =
+    forceShowTitles || Object.values(features).filter((val) => val === true).length > 1;
 
   let actionsMenuOpen = false;
   $: saveAction = actions?.find((action) => action.id === 'save');
@@ -154,7 +168,9 @@
   {/if}
 
   {#if features.docInfo}
-    <div class="section-title">Document information</div>
+    {#if showSectionTitles}
+      <div class="section-title">Document information</div>
+    {/if}
     <div class="doc-info-row">
       <div>ID</div>
       <div>{docData.documentId}</div>
@@ -197,8 +213,42 @@
     {/if}
   {/if}
 
-  {#if $previewConfig}
-    <div class="section-title">Preview</div>
+  {#if features.workflowStage && $stages && $stages.length > 0}
+    <div
+      class="section-title"
+      style="display: flex; align-items: center; justify-content: space-between;"
+    >
+      Stage
+      {#if showStageSpinner}
+        <Loading message="" size={24} style="display: inline-flex;" />
+      {/if}
+    </div>
+
+    <SelectOne
+      disabled={disabled || !setStage}
+      selectedOption={isObject(docData.strapi_stage)
+        ? {
+            _id: `${docData.strapi_stage.id}`,
+            label:
+              $stages?.find(
+                (stage) =>
+                  isObject(docData.strapi_stage) && stage.strapiStageId === docData.strapi_stage.id
+              )?.label || `${docData.strapi_stage.name}`,
+          }
+        : undefined}
+      options={$stages}
+      on:change={(evt) => {
+        setStage?.(evt.detail.strapiStageId);
+      }}
+      showCurrentSelectionOnDropdown
+      hideSelected={false}
+    />
+  {/if}
+
+  {#if $previewConfig && features.preview}
+    {#if showSectionTitles}
+      <div class="section-title">Preview</div>
+    {/if}
     <div class="preview-buttons">
       {#if docData.status === 'published'}
         <Button
@@ -233,7 +283,9 @@
   {/if}
 
   {#if features.versions && versionsList}
-    <div class="section-title">Versions</div>
+    {#if showSectionTitles}
+      <div class="section-title">Versions</div>
+    {/if}
     {#if versionsList.length > 0}
       <div class="versions-section">
         {#each versionsList.slice(0, truncateVersionsList ? 3 : undefined) as version}
@@ -329,7 +381,7 @@
     display: flex;
     flex-direction: row;
     gap: 6px;
-    margin: 20px 0 10px 0;
+    margin: 10px 0 10px 0;
   }
 
   .button-row :global(.button:not(:last-of-type)) {

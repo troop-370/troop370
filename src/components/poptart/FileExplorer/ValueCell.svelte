@@ -111,12 +111,13 @@
       ? `${fieldData.firstname} ${fieldData.lastname}`.trim()
       : undefined}
   {@const _id = fieldData.id ? `${fieldData.id}` : undefined}
+  {@const username = fieldData.username ? `${fieldData.username}` : undefined}
   {@const photo = fieldData.photo ? `${fieldData.photo}` : undefined}
   <div class="refs-wrapper" class:compact={info.table.options.meta?.compactMode}>
     {#if name && _id}
       <div class="ref-wrapper">
         <img
-          src={photo ? photo : _id ? genAvatar(_id) : ''}
+          src={photo ? photo : _id ? genAvatar(username || _id) : ''}
           alt=""
           style="width: 20px; height: 20px; border-radius: 50%;"
         />

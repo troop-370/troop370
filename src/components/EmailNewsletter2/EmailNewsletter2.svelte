@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
   import { formatISODate, notEmpty, withoutImageNodes } from '$utils';
+  import { isJSON } from '$utils/isJSON';
+  import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
   import {
     BackgroundTable,
     CalendarMonth,
@@ -16,6 +18,8 @@
 
   export let newsletter: ApiTypes['manualSchemas']['Newsletter'];
   export let element: HTMLHtmlElement | undefined = undefined;
+
+  const blankBody: ProsemirrorDocNode[] = [];
 </script>
 
 <html id="newsletter-doc" lang="en-us" bind:this={element}>
@@ -77,7 +81,9 @@
                             "
                         >
                           {formatISODate(
-                            new Date(newsletter.publishedAt || new Date()).toISOString(),
+                            new Date(
+                              newsletter.shortPublishedAt || newsletter.publishedAt || new Date()
+                            ).toISOString(),
                             false,
                             true,
                             false
@@ -112,13 +118,13 @@
                 <NewsletterPostCard
                   name={post.title}
                   description={post.subtitle}
-                  body={withoutImageNodes(post.body)}
+                  body={withoutImageNodes(isJSON(post?.body) ? JSON.parse(post.body) : blankBody)}
                 />
               </td>
             </tr>
           {/each}
         {/if}
-        {#if new Date(newsletter.publishedAt || new Date()) < new Date()}
+        {#if new Date(newsletter.shortPublishedAt || newsletter.publishedAt || new Date()) < new Date()}
           <NewsletterMiniPostCard
             label={'Advancement'}
             posts={newsletter.version2?.advancement_mini_posts?.filter(notEmpty) || []}
@@ -227,7 +233,7 @@
                         <a href="https://troop370atlanta.org/events">Troop Events</a>
                         <a href="https://troop370atlanta.org/members/calendar">Basic Calendar</a>
                       </ResourceRow>
-                      {#if new Date(newsletter.publishedAt || new Date()) < new Date('2022-07-21')}
+                      {#if new Date(newsletter.shortPublishedAt || newsletter.publishedAt || new Date()) < new Date('2022-07-21')}
                         <ResourceRow label="Submit Annoucements">
                           <p>
                             Submit your announcement for the weekly email, website, or reminder

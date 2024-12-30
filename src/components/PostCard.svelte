@@ -2,37 +2,29 @@
   import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
   import { formatISODate, listOxford } from '$utils';
   import Button, { Icon } from '@smui/button';
-  import { renderBlock, type Node } from 'blocks-html-renderer';
   import { marked } from 'marked';
   import { DOMParser } from 'xmldom';
 
   export let name: string;
   export let href: string;
   export let authors: string[];
-  export let date: Date | undefined = undefined;
-  export let body: Node[];
+  export let date: string | undefined = undefined;
+  export let body: string | null;
   export let buttonText = 'Read more';
   export let hasPassword = false;
 
-  let previewText = body.slice(0, 200) + '…';
-  if (DOMParser) {
-    const html = renderBlock(body.filter((node) => node.type === 'paragraph'));
+  let previewText = body ? body.slice(0, 200) + '…' : '';
+  if (DOMParser && body) {
+    const dom = new DOMParser().parseFromString(body, 'text/html');
 
-    if (html) {
-      const dom = new DOMParser().parseFromString(html, 'text/html');
+    let _text = '';
+    Array.from(dom.childNodes).map((node) => {
+      if (node.nodeType === 1) {
+        _text += node.textContent + ' ' || '';
+      }
+    });
 
-      let _text = '';
-      Array.from(dom.childNodes).map((node) => {
-        if (node.nodeType === 1) {
-          _text += node.textContent + ' ' || '';
-        }
-      });
-
-      previewText = _text.slice(0, 200) + '…' || '';
-    } else {
-      previewText = '';
-    }
-
+    previewText = _text.slice(0, 200) + '…' || body.slice(0, 200) + '…' || '';
     previewText = previewText.replaceAll(PUBLIC_OLD_FILESTORE_PATH, PUBLIC_NEW_FILESTORE_PATH);
   }
 </script>
@@ -53,10 +45,12 @@
       <span> | </span>
     {/if}
     {#if date}
-      <span>{formatISODate(date.toISOString(), false, true, false)}</span>
+      <span>{formatISODate(date, false, true, false)}</span>
     {/if}
   </div>
-  <p>{previewText}</p>
+  {#if previewText}
+    <p>{previewText}</p>
+  {/if}
   <Button variant="outlined" {href}>{buttonText}</Button>
 </article>
 
@@ -114,7 +108,10 @@
 
   a {
     color: inherit;
-    transition: background-color 0.2s, box-shadow 0.1s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.1s,
+      color 0.2s;
     text-decoration: none;
   }
   a:hover {

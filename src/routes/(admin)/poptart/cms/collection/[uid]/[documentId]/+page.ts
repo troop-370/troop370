@@ -1,19 +1,21 @@
 import { invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
 import { isFullArray, isFullObject, isString } from 'is-what';
-import { derived, get, writable } from 'svelte/store';
+import { derived, get, writable, type Writable } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
 import { filterSchemaDefs } from './filterSchemaDefs';
 import { deconstructSchemaDefs, getDocument, withDocumentRelationData } from './getDocument';
+import { ignoreDocumentLoadReruns as ignoreReruns } from './ignoreDocumentLoadReruns';
 import { loadPreviewConfig } from './loadPreviewConfig';
 import { publishDocument } from './publishDocument';
 import { checkForUnsavedChanges, saveDocument } from './saveDocument';
+import { setDocumentStage } from './setDocumentStage';
 export { isDocDataStore as _isDocDataStore } from './createDocDataStore';
 export type { DocDataStore } from './createDocDataStore';
 
 export const load = (async ({ fetch, parent, params, url }) => {
-  const { session, collectionConfig, permissions, versions } = await parent();
+  const { session, collectionConfig, permissions, versions, stages } = await parent();
 
   const defs = filterSchemaDefs(get(collectionConfig).defs, permissions, ['read', 'update']);
 
@@ -25,11 +27,13 @@ export const load = (async ({ fetch, parent, params, url }) => {
     defs,
   };
 
-  let docData = await getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
-    error(500, err[0]);
-  });
+  let docData = await ignoreReruns('documentData', () =>
+    getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
+      error(500, err[0]);
+    })
+  );
 
-  const docDataStore = createDocDataStore(docData);
+  const docDataStore = await ignoreReruns('docDataStore', () => createDocDataStore(docData));
 
   const previewConfig = writable(
     await loadPreviewConfig(fetch, session.adminToken, params.uid, docData)
@@ -73,6 +77,30 @@ export const load = (async ({ fetch, parent, params, url }) => {
       });
   };
 
+  const settingStage = writable(false);
+  const setStage = async (stage: number) => {
+    settingStage.set(true);
+    return await setDocumentStage({ ...queryProps, stage })
+      .then(([baseData]) => {
+        if (baseData) {
+          ((get(docDataStore).strapi_stage as Writable<unknown>) || undefined)?.set?.(
+            baseData.strapi_stage
+          );
+        }
+
+        return true;
+      })
+      .catch((err) => {
+        return (
+          err.message ||
+          'An unknown error occurred while changing the review workflwo stage for the document.'
+        );
+      })
+      .finally(() => {
+        settingStage.set(false);
+      });
+  };
+
   async function processSaveResponse([baseData, , errorData]: [
     Record<string, unknown> | undefined,
     Record<string, unknown> | undefined,
@@ -111,7 +139,21 @@ export const load = (async ({ fetch, parent, params, url }) => {
     if (!baseData) {
       throw new Error('No data were returned from the server after saving the document.');
     }
-    docData = await withDocumentRelationData({ ...queryProps, baseData });
+    docData = await ignoreReruns(
+      'documentData',
+      async () => {
+        if (baseData.status === 'published') {
+          // for some reason, the document relations cannot be populated until the document has been
+          // requested at least once after it has been published
+          return getDocument(queryProps, url.searchParams.get('status') || '').catch((err) => {
+            error(500, err[0]);
+          });
+        }
+        // when just saving, we can just populate the relations included in the response
+        return withDocumentRelationData({ ...queryProps, baseData });
+      },
+      { overwrite: true }
+    );
     docDataStore.set(docData);
     updatePreviewConfig(docData);
     updateVersionsList();
@@ -133,9 +175,10 @@ export const load = (async ({ fetch, parent, params, url }) => {
   }
 
   const saveStatus = derived(
-    [docDataStore.docData, saving, publishing],
-    ([$currentDocData, $saving, $publishing]) => {
+    [docDataStore.docData, saving, publishing, settingStage],
+    ([$currentDocData, $saving, $publishing, $settingStage]) => {
       if ($publishing) return 'Publishing…';
+      if ($settingStage) return 'Setting stage…';
       if ($saving) return 'Saving…';
 
       const isUnsaved = checkForUnsavedChanges(docData, $currentDocData, defs);
@@ -161,6 +204,28 @@ export const load = (async ({ fetch, parent, params, url }) => {
     []
   );
 
+  // combine the available stages and the current stage to get a full list of stages
+  const fullStages = derived([stages, docDataStore], ([$stages, $docDataStore]) => {
+    if (!$stages.data || $stages.loading || !$docDataStore?.strapi_stage) return [];
+    const otherStages = $stages.data.data;
+    const currentStage = (
+      $docDataStore.strapi_stage as any
+    )?.toObject?.() as (typeof otherStages)[0];
+    // TODO: figure out how to insert the current stage in the correct position
+    return [...otherStages, currentStage]
+      .map((stage) => {
+        const customIdMatcher = stage.name.match(/\[(\d+(\.\d+)?)\]/);
+
+        return {
+          _id: customIdMatcher?.[1] || `s${stage.id}`,
+          label: `${stage.name.replace(customIdMatcher?.[0] || '', '')}`,
+          strapiStageId: stage.id,
+          sortId: customIdMatcher?.[1] ? customIdMatcher[1] : '',
+        };
+      })
+      .sort((a, b) => a.sortId.localeCompare(b.sortId));
+  });
+
   return {
     docData,
     docDataStore,
@@ -171,6 +236,8 @@ export const load = (async ({ fetch, parent, params, url }) => {
     actions,
     isPublishedVersion: url.searchParams.get('status') === 'published',
     previewConfig,
+    stages: fullStages,
+    setStage,
   };
 }) satisfies PageLoad;
 

@@ -40,7 +40,10 @@
         const optFields = Object.entries(opt)
           .filter(([, value]) => value !== undefined && value !== null)
           .map(([key]) => key);
-        const forcedFields = referenceOpts?.requiredFieldNames || [];
+        const forcedFields = [
+          ...(referenceOpts?.forceLoadFields || []),
+          ...(referenceOpts?.requiredFieldNames || []),
+        ];
         return !forcedFields.every((field) => optFields.includes(field));
       });
       if (valuesAreMissingLabels || valuesAreMissingForcedFields) {
@@ -64,7 +67,7 @@
           givenOptions,
           ref.targetCollectionUid,
           ref.mainField,
-          ref.requiredFieldNames,
+          [...(ref.forceLoadFields || []), ...(ref.requiredFieldNames || [])],
           ref.token,
           controller.signal
         )

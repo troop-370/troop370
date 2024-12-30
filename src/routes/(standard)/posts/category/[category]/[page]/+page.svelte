@@ -34,9 +34,6 @@
     {#if data.posts.docs}
       {#each data.posts.docs as post}
         {#if post}
-          {@const date = post.timestamps.published_at
-            ? new Date(post.timestamps.published_at)
-            : undefined}
           {@const shortDate = post.timestamps.short_published_at
             ? new Date(post.timestamps.short_published_at)
             : undefined}
@@ -49,7 +46,7 @@
             name={post.name}
             href={post.href || `/posts${datePath}/${post.slug}`}
             authors={(post.submitted_by || []).filter(notEmpty)}
-            {date}
+            date={post.timestamps.short_published_at || post.timestamps.published_at}
             body={post.body}
             buttonText={post.button_text}
             hasPassword={post.enable_password_protection}

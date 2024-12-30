@@ -1,7 +1,9 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
+  import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { title } from '$stores/title';
+  import { titlebarActions } from '$stores/titlebarActions';
   import { genAvatar } from '$utils';
   import { Flyout, IconButton, PersonPicture, TextBlock } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
@@ -57,7 +59,7 @@
         width="41.57"
         height="26"
         viewBox="0 0 31.1775 36"
-        class:noMargin={false}
+        class:noMargin={$titlebarActions.length > 0}
       >
         <path
           d="m28.1553 10.7445-8.1515-4.7059v12.7647l8.1515-4.7059zM7.4376 8.1969l11.0557 6.3824V5.1667l-2.9039-1.676ZM12.683 30.8327l2.9064 1.677 8.081-4.665-10.9852-6.3409zM25.182 26.9724l2.9736-1.7166v-9.4132l-11.1275 6.424zM5.9264 9.0687l-2.903 1.6758-.0006 9.412 11.0544-6.3825zM3.0229 25.2555l8.1495 4.704.0028-12.764-8.1521 4.706z"
@@ -67,7 +69,7 @@
         />
       </svg>
     {/if}
-    <!-- {#if $titlebarActions.length > 0}
+    {#if $titlebarActions.length > 0}
       <div class="divider" />
       {#each $titlebarActions as action}
         <IconButton
@@ -85,7 +87,7 @@
         </IconButton>
       {/each}
       <div class="divider" />
-    {/if} -->
+    {/if}
     <TextBlock variant="caption" data-tauri-drag-region>
       {#if $title}
         {$title} -
@@ -117,7 +119,9 @@
           {/if}
           <PersonPicture
             size={26}
-            src={genAvatar(data.session.adminUser?.id.toString() || '')}
+            src={genAvatar(
+              data.session.adminUser?.username || '' + data.session.adminUser?.id.toString() || ''
+            )}
             alt={data.session.adminEmail}
           />
         </IconButton>
@@ -228,12 +232,12 @@
   }
 
   /* vertical divider */
-  /* div.divider {
+  div.divider {
     width: 0;
     height: calc(env(titlebar-area-height, 33px) * 0.6);
     border-left: 1px solid rgba(255, 255, 255, 0.4);
     margin: 0 8px;
-  } */
+  }
 
   /* action icons */
   div.left :global(.icon-button) {

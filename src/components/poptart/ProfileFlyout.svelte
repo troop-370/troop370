@@ -16,7 +16,9 @@
   <div class="current-profile">
     <PersonPicture
       size={60}
-      src={genAvatar(data.session.adminUser?.id.toString() || '')}
+      src={genAvatar(
+        data.session.adminUser?.username || '' + data.session.adminUser?.id.toString() || ''
+      )}
       alt={data.session.adminEmail}
     />
     <div style="margin: 12px 0 6px 0;">

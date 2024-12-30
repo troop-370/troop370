@@ -7,9 +7,9 @@
   export let label: string;
   export let posts: NonNullable<
     NonNullable<ApiTypes['manualSchemas']['Newsletter']['version2']>['fundraiser_mini_posts']
-  >['data'];
+  >;
 
-  $: _posts = (posts || []).map(({ attributes }) => attributes).filter(notEmpty);
+  $: _posts = (posts || []).filter(notEmpty);
 </script>
 
 {#if _posts.length > 0}

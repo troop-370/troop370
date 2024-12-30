@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
   import { formatISODate, withoutImageNodes } from '$utils';
+  import { blocksToProsemirror } from '$utils/blocksToProsemirror';
   import {
     BackgroundTable,
     CardTable,
@@ -93,7 +94,7 @@
         </tr>
         <tr>
           <td>
-            <NewsletterPostCard body={withoutImageNodes(email.body)} />
+            <NewsletterPostCard body={withoutImageNodes(JSON.parse(email.body || '[]'))} />
           </td>
         </tr>
         <tr>
