@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { isURL } from '$utils';
   import { marked } from 'marked';
   import { ContainerTable, Number } from '.';
 
@@ -20,7 +21,11 @@
       <p>{@html marked.parseInline(description)}</p>
     </td>
     <td class="button-td" width={124}>
-      <a href="https://troop370atlanta.org/posts/{slug}">{buttonText}</a>
+      {#if slug && isURL(slug)}
+        <a href={slug}>{buttonText}</a>
+      {:else}
+        <a href="https://troop370atlanta.org/posts/{slug}">{buttonText}</a>
+      {/if}
     </td>
   </tr>
 </ContainerTable>

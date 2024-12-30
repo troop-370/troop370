@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ApiTypes } from '$api';
   import { formatISODate, notEmpty, withoutImageNodes } from '$utils';
+  import { getPostButtonInfo } from '$utils/getPostButtonInfo';
   import { isJSON } from '$utils/isJSON';
   import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
   import {
@@ -156,12 +157,15 @@
                 <MainTable>
                   {#if newsletter.version3?.pinned_mini_posts && newsletter.version3.pinned_mini_posts.filter(notEmpty).length > 0}
                     {#each newsletter.version3.pinned_mini_posts.filter(notEmpty) as post, index}
+                      {@const { hrefOverride } = getPostButtonInfo(
+                        isJSON(post?.body) ? JSON.parse(post.body) : blankBody
+                      )}
                       <tr>
                         <td>
                           <NewsletterPinnedPostCard
                             name={post?.title || ''}
                             description={post?.subtitle || ''}
-                            slug={post?.slug}
+                            slug={hrefOverride || post?.slug}
                             buttonText={post?.button_text || 'Read more'}
                             number={index + 1}
                             category={post?.category?.value || ''}
@@ -194,10 +198,13 @@
                     posts={newsletter.version3?.past_announcements
                       ?.filter(notEmpty)
                       ?.map((post) => {
+                        const { hrefOverride } = getPostButtonInfo(
+                          isJSON(post?.body) ? JSON.parse(post.body) : blankBody
+                        );
                         return {
                           name: post?.title || '',
                           description: post?.subtitle || '',
-                          slug: post?.slug,
+                          slug: hrefOverride || post?.slug,
                           button_text: post?.button_text || 'Read more',
                           categories: [post?.category?.value || null],
                         };

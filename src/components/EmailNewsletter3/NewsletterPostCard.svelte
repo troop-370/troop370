@@ -5,8 +5,8 @@
   import { capitalize } from '$utils';
   import { Renderer } from '@cristata/prosemirror-to-html-js';
   import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
+  import { copy } from 'copy-anything';
   import { marked } from 'marked';
-  import { DOMParser } from 'xmldom';
   import { Number } from '.';
 
   export let name: string | undefined = undefined;
@@ -23,7 +23,7 @@
       renderer.addMark(Newsletter3Link);
       html = renderer.render({
         type: 'doc',
-        content: body,
+        content: copy(body),
       });
     } catch (err) {
       console.error(err);

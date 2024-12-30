@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { capitalize, notEmpty } from '$utils';
+  import { capitalize, isURL, notEmpty } from '$utils';
   import { marked } from 'marked';
   import { ContainerTable, Number } from '.';
 
@@ -35,7 +35,11 @@
               </p>
             </td>
             <td class="button-td" width={124}>
-              <a href="https://troop370atlanta.org/posts/{post.slug}">{post.button_text}</a>
+              {#if post.slug && isURL(post.slug)}
+                <a href={post.slug}>{post.button_text}</a>
+              {:else}
+                <a href="https://troop370atlanta.org/posts/{post.slug}">{post.button_text}</a>
+              {/if}
             </td>
           </tr>
         {/each}

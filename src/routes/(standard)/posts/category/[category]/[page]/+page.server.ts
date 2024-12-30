@@ -2,8 +2,12 @@ import { apity } from '$api';
 import { HardBreak } from '$pm/render/HardBreak';
 import { Link } from '$pm/render/Link';
 import { notEmpty } from '$utils';
+import { getPostButtonInfo } from '$utils/getPostButtonInfo';
 import Renderer from '@cristata/prosemirror-to-html-js';
+import type { ProsemirrorDocNode } from '@cristata/prosemirror-to-html-js/dist/Renderer';
 import { error } from '@sveltejs/kit';
+import { copy } from 'copy-anything';
+import { isString } from 'is-what';
 import { DOMParser } from 'xmldom';
 import type { PageServerLoad } from './$types';
 
@@ -30,7 +34,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 
   const docs = resolved.data.data.filter(notEmpty).map((d) => {
     // convert the json body to html
-    const bodyContent = JSON.parse(d.body || '[]');
+    const bodyContent = JSON.parse(d.body || '[]') as ProsemirrorDocNode[];
     let body = '';
     try {
       const renderer = new Renderer.Renderer();
@@ -38,71 +42,13 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
       renderer.addMark(Link);
       body = renderer.render({
         type: 'doc',
-        content: bodyContent,
+        content: copy(bodyContent),
       });
     } catch (err) {
       console.error(err);
     }
 
-    const buttonTextOverride = (() => {
-      if (bodyContent && Array.isArray(bodyContent) && bodyContent.length === 1 && DOMParser) {
-        const renderer = new Renderer.Renderer();
-        const html = renderer.render({
-          type: 'doc',
-          content: [bodyContent[0]],
-        });
-
-        if (html) {
-          const dom = new DOMParser().parseFromString(html, 'text/html');
-
-          let _text = '';
-          Array.from(dom.childNodes)
-            .filter((node): node is Element => node.nodeType === 1)
-            .map((node) => {
-              _text += node.textContent + ' ' || '';
-            });
-
-          const text = _text.trim();
-          if (text.endsWith('.ob') || text.endsWith('.pb')) {
-            return _text.replace(/\.ob|\.pb/g, '');
-          }
-        }
-      }
-    })();
-
-    const hrefOverride = (() => {
-      if (
-        buttonTextOverride &&
-        bodyContent &&
-        Array.isArray(bodyContent) &&
-        bodyContent.length === 1 &&
-        DOMParser
-      ) {
-        const renderer = new Renderer.Renderer();
-        const html = renderer.render({
-          type: 'doc',
-          content: [bodyContent[0]],
-        });
-
-        if (html) {
-          const dom = new DOMParser().parseFromString(html, 'text/html');
-
-          let _text = '';
-          const anchors = Array.from(dom.childNodes)
-            .flatMap((node) => Array.from(node.childNodes))
-            .filter((node): node is Element => node.nodeType === 1)
-            .filter((node): node is HTMLAnchorElement => node.tagName === 'a');
-
-          if (
-            anchors.length === 1 &&
-            (!d.enable_password_protection ||
-              (d.enable_password_protection && session.authenticated === true))
-          ) {
-            return anchors[0].getAttribute('href');
-          }
-        }
-      }
-    })();
+    const { buttonTextOverride, hrefOverride } = getPostButtonInfo(bodyContent);
 
     return {
       slug: d.slug,
