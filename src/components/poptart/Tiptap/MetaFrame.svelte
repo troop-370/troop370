@@ -107,6 +107,6 @@
     width: 100%;
     border: none;
     margin-bottom: var(--margin-bottom, -74px);
-    color-scheme: light;
+    color-scheme: light dark;
   }
 </style>
