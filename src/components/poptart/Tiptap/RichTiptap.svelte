@@ -553,7 +553,6 @@
         <div style="flex-grow: 1;"></div>
         <button
           class="footer-textblock"
-          {disabled}
           on:click={() => $richTextParams.set('previewMode', 0)}
           class:active={$richTextParams.obj.previewMode === 0}
           title="Document mode"
@@ -579,7 +578,6 @@
         </button>
         <button
           class="footer-textblock"
-          {disabled}
           on:click={() => $richTextParams.set('previewMode', 2)}
           class:active={$richTextParams.obj.previewMode === 2}
           title="Preview mode"
