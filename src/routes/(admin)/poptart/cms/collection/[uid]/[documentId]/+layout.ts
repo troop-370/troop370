@@ -1,30 +1,35 @@
 import { get, writable } from 'svelte/store';
 import { z } from 'zod';
 import type { LayoutLoad } from './$types';
-
-const versions = writable<{
-  data: z.infer<typeof versionsDataSchema> | null;
-  loading: boolean;
-  refetchOnInvalidate: boolean;
-}>({
-  data: null,
-  loading: false,
-  refetchOnInvalidate: false,
-});
-
-const stages = writable<{
-  data: z.infer<typeof stagesDataSchema> | null;
-  loading: boolean;
-  refetchOnInvalidate: boolean;
-}>({
-  data: null,
-  loading: false,
-  refetchOnInvalidate: false,
-});
+import { ignoreDocumentLoadReruns } from './ignoreDocumentLoadReruns';
 
 export const load = (async ({ parent, params, fetch, depends }) => {
   depends('document:versions');
   const { session } = await parent();
+
+  const versions = await ignoreDocumentLoadReruns('versions', () =>
+    writable<{
+      data: z.infer<typeof versionsDataSchema> | null;
+      loading: boolean;
+      refetchOnInvalidate: boolean;
+    }>({
+      data: null,
+      loading: false,
+      refetchOnInvalidate: false,
+    })
+  );
+
+  const stages = await ignoreDocumentLoadReruns('stages', () =>
+    writable<{
+      data: z.infer<typeof stagesDataSchema> | null;
+      loading: boolean;
+      refetchOnInvalidate: boolean;
+    }>({
+      data: null,
+      loading: false,
+      refetchOnInvalidate: false,
+    })
+  );
 
   if (!get(versions).data || get(versions).refetchOnInvalidate) {
     versions.set({ data: null, loading: true, refetchOnInvalidate: false });
