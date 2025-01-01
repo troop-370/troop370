@@ -11,6 +11,7 @@
   import { fly } from 'svelte/transition';
   import WordCountDialog from './dialogs/WordCountDialog.svelte';
 
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { titlebarActions } from '$stores/titlebarActions';
   import { debounce } from '$utils';
   import { Transaction } from 'yjs';
@@ -343,6 +344,15 @@
       return;
     }
     $richTextParams.forceUpdate();
+  });
+
+  afterNavigate(({ from, to }) => {
+    if (from?.url.pathname !== to?.url.pathname) {
+      // ensure that the richtextparams are cleared when navigating away
+      // since the fs=force param will cause fields to be hidden if the
+      // next page does not have a tiptap field
+      $richTextParams.forceUpdate();
+    }
   });
 
   $: delay = $motionMode === 'reduced' ? 0 : 130;
