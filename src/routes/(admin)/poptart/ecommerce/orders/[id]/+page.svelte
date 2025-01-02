@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { invalidate } from '$app/navigation';
   import { page } from '$app/stores';
   import FieldWrapper from '$components/poptart/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { compactMode } from '$stores/compactMode.js';
+  import { title } from '$stores/title';
   import { capitalize, formatISODate, openWindow } from '$utils';
   import { stateAbbreviationToName } from '$utils/stateNameToAbbreviation.js';
   import { copy } from 'copy-anything';
@@ -23,6 +25,8 @@
   import OrderSelectedOption from './OrderSelectedOption.svelte';
 
   export let data;
+
+  $: if (browser) title.set('Order #' + data.order.id);
 
   let paymentStatusDropdownOpen = false;
   let fulfillmentStatusDropdownOpen = false;

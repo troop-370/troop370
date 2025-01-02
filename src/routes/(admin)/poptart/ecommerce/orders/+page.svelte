@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { afterNavigate, goto, invalidate } from '$app/navigation';
   import { page } from '$app/stores';
   import FieldWrapper from '$components/poptart/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { ActionRow, PageTitle } from '$lib/common/PageTitle';
   import { motionMode } from '$stores/motionMode';
+  import { title } from '$stores/title';
   import { hasKey } from '$utils';
   import { Button, Checkbox, ContentDialog, ProgressRing, TextBox } from 'fluent-svelte';
   import { expoOut } from 'svelte/easing';
@@ -35,6 +37,8 @@
     data.url.searchParams.get('__pageTitle') ||
     // otherwise, use the default title
     'Online store orders';
+
+  $: if (browser) title.set(pageTitle);
 
   // keep the search box value representative of the URL search params
   let searchBoxValue = calculateSearchBoxValue();

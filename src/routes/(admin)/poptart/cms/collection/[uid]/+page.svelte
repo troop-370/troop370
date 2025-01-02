@@ -7,6 +7,7 @@
   import PageTitle from '$lib/common/PageTitle/PageTitle.svelte';
   import { motionMode } from '$stores/motionMode';
   import { isModernCollection, strapiEditor } from '$stores/strapiEditor';
+  import { title } from '$stores/title';
   import { capitalize, hasKey } from '$utils';
   import {
     Button,
@@ -35,6 +36,8 @@
     // otherwise, build a title using the collection name
     (displayName ? displayName : capitalize(collectionNamePlural.replaceAll('-', ' '))) +
       ' collection';
+
+  $: if (browser) title.set(pageTitle);
 
   // keep the search box value representative of the URL search params
   let searchBoxValue = calculateSearchBoxValue();

@@ -10,6 +10,7 @@
   import { compactMode } from '$stores/compactMode';
   import { motionMode } from '$stores/motionMode';
   import { strapiEditor } from '$stores/strapiEditor';
+  import { title } from '$stores/title';
   import { hasKey, notEmpty } from '$utils';
   import type { BeforeNavigate } from '@sveltejs/kit';
   import { Flyout, ProgressRing, TextBlock, ToggleSwitch } from 'fluent-svelte';
@@ -485,7 +486,7 @@
 </script>
 
 <svelte:head>
-  <title>Troop 370 Admin</title>
+  <title>{$title} - Troop 370 Admin</title>
   <link rel="manifest" href="/poptart/manifest.webmanifest" />
 </svelte:head>
 

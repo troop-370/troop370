@@ -1,9 +1,13 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { page } from '$app/stores';
+  import { title } from '$stores/title';
   import { Button, ContentDialog } from 'fluent-svelte';
 
   let data: { errorCode?: string; errorMessage?: string } = {};
   $: data = JSON.parse($page.url.searchParams.get('data') || '{}');
+
+  $: if (browser) title.set('Ecommerce app unavailable');
 </script>
 
 <ContentDialog open title="Store unavailable" closable={false}>

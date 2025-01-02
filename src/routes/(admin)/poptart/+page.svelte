@@ -1,12 +1,16 @@
 <script>
+  import { browser } from '$app/environment';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { PageTitle } from '$lib/common/PageTitle';
   import TileButton from '$lib/common/TileButton.svelte';
+  import { title } from '$stores/title';
   import { notEmpty } from '$utils';
   import { copy } from 'copy-anything';
 
   export let data;
   $: ({ apps } = data);
+
+  $: if (browser) title.set('Dashboard');
 </script>
 
 <PageTitle>Dashboard</PageTitle>

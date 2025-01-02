@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import FieldWrapper from '$components/poptart/FieldWrapper.svelte';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { ActionRow, PageSubtitle, PageTitle } from '$lib/common/PageTitle';
   import { compactMode } from '$stores/compactMode';
+  import { title } from '$stores/title';
   import { capitalize, notEmpty } from '$utils';
   import {
     stateNameToAbbreviation,
@@ -27,6 +29,8 @@
     orderItemSchema,
     paymentStatuses,
   } from '../../ecwidSchemas';
+
+  $: if (browser) title.set('New manual order');
 
   export let data;
   $: ({ productsStore, shippingOptionsStore } = data);

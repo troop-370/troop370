@@ -1,9 +1,12 @@
 <script>
+  import { browser } from '$app/environment';
   import { page } from '$app/stores';
+  import { title } from '$stores/title';
   import { Button } from 'fluent-svelte';
 
   $: pathnanme = $page.url.pathname.replace('/poptart', '');
   $: url = new URL(pathnanme + $page.url.search, $page.url.origin);
+  $: if (browser) title.set('');
 </script>
 
 <div>
