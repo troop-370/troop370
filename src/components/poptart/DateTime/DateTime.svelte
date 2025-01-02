@@ -127,9 +127,9 @@
   <Button
     {disabled}
     on:click={() => {
-      month = new Date().getUTCMonth() + 1;
-      day = new Date().getUTCDate();
-      year = new Date().getUTCFullYear();
+      month = new Date().getMonth() + 1;
+      day = new Date().getDate();
+      year = new Date().getFullYear();
     }}
   >
     Today
