@@ -69,6 +69,7 @@ export async function withDocumentRelationData(props: WithDocumentRelationDataPr
             },
             field.split('.').slice(-1)[0]
           );
+          console.log(field, results);
           return [field, results] as const;
         })
         .filter(notEmpty)
@@ -122,7 +123,12 @@ async function getDocumentRelation(props: GetDocumentProps, field: string) {
       },
     }
   )
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 500) {
+        return { results: [], pagination: {} };
+      }
+      return res.json();
+    })
     .then((json) => {
       return [json.results, json.pagination] as const;
     });
