@@ -211,8 +211,7 @@ function filterDataToEditableFields(
     .forEach(([field]) => {
       const relationData = getProperty(docData, field);
       if (!relationData) {
-        // if it is null, just set it to an empty array
-        setProperty(docData, field, []);
+        return;
       }
 
       const documents = parseRelationValues(relationData);
