@@ -7,14 +7,20 @@
   import { openWindow } from '$utils/openWindow';
   import { Button } from 'fluent-svelte';
   import type { PageData } from './$types';
+  import { filterSchemaDefs } from './[documentId]/filterSchemaDefs';
   import { selectedIds } from './selectedIdsStore';
 
   export let settings: NonNullable<PageData['collectionConfig']>;
+  export let permissions: NonNullable<PageData['permissions']>;
   export let tableData: PageData['collectionDocsData'];
 
   $: shouldOpenFullscreen =
-    $settings.defs.filter(
-      ([key, def]) => def.type === 'text' && def.customField === 'plugin::tiptap-editor.tiptap'
+    filterSchemaDefs($settings.defs, permissions, ['read', 'update']).filter(
+      ([key, def]) =>
+        def.type === 'text' &&
+        def.customField === 'plugin::tiptap-editor.tiptap' &&
+        !def.readonly &&
+        !def.noread
     ).length === 1;
 
   $: show = $selectedIds.length > 0;

@@ -27,6 +27,7 @@
   import type { PageData } from './$types';
   import BulkActions from './BulkActions.svelte';
   import ValueCell from './ValueCell.svelte';
+  import { filterSchemaDefs } from './[documentId]/filterSchemaDefs';
   import { selectedIds } from './selectedIdsStore';
 
   export let collectionConfig: NonNullable<PageData['collectionConfig']>;
@@ -36,8 +37,12 @@
   export let tableDataSort: NonNullable<PageData['table']>['sort'];
 
   $: shouldOpenFullscreen =
-    $collectionConfig.defs.filter(
-      ([key, def]) => def.type === 'text' && def.customField === 'plugin::tiptap-editor.tiptap'
+    filterSchemaDefs($collectionConfig.defs, permissions, ['read', 'update']).filter(
+      ([key, def]) =>
+        def.type === 'text' &&
+        def.customField === 'plugin::tiptap-editor.tiptap' &&
+        !def.readonly &&
+        !def.noread
     ).length === 1;
 
   const filterJSON = JSON.stringify(tableDataFilter);
@@ -54,6 +59,15 @@
     hrefSearch: shouldOpenFullscreen ? '?fs=3&props=1&versions=2&comments=2' : undefined,
     windowName: `editor-troop-370-${$collectionConfig.uid}-`,
   };
+  $: console.log(
+    $collectionConfig.defs.filter(
+      ([key, def]) =>
+        def.type === 'text' &&
+        def.customField === 'plugin::tiptap-editor.tiptap' &&
+        !def.readonly &&
+        !def.noread
+    )
+  );
 
   let columns: ColumnDef<Doc>[] = [];
   $: columns = [
@@ -465,7 +479,7 @@
 
 {#if $collectionConfig}
   <div style="position: relative;">
-    <BulkActions settings={collectionConfig} {tableData} />
+    <BulkActions settings={collectionConfig} {tableData} {permissions} />
   </div>
 {/if}
 
