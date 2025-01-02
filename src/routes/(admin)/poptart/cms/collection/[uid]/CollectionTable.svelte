@@ -35,7 +35,7 @@
   export let tableDataFilter: NonNullable<PageData['table']>['filter'];
   export let tableDataSort: NonNullable<PageData['table']>['sort'];
 
-  const shouldOpenFullscreen =
+  $: shouldOpenFullscreen =
     $collectionConfig.defs.filter(
       ([key, def]) => def.type === 'text' && def.customField === 'plugin::tiptap-editor.tiptap'
     ).length === 1;

@@ -12,7 +12,7 @@
   export let settings: NonNullable<PageData['collectionConfig']>;
   export let tableData: PageData['collectionDocsData'];
 
-  const shouldOpenFullscreen =
+  $: shouldOpenFullscreen =
     $settings.defs.filter(
       ([key, def]) => def.type === 'text' && def.customField === 'plugin::tiptap-editor.tiptap'
     ).length === 1;
