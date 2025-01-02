@@ -1,5 +1,6 @@
 <script lang="ts">
   import { isJSON } from '$utils/isJSON';
+  import { iframeResizer } from 'iframe-resizer';
   import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
   import type { Readable } from 'svelte/store';
 
@@ -12,7 +13,6 @@
 
   onMount(async () => {
     if (iframeElem) {
-      const { iframeResizer } = await import('iframe-resizer');
       frameObj = iframeResizer(
         {
           autoResize: true,

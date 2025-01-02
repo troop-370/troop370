@@ -3,6 +3,7 @@
   import { motionMode } from '$stores/motionMode';
   import { isJSON } from '$utils/isJSON';
   import { ProgressRing, TextBlock } from 'fluent-svelte';
+  import { iframeResizer } from 'iframe-resizer';
   import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
   import { expoOut } from 'svelte/easing';
   import { create_in_transition } from 'svelte/internal';
@@ -38,7 +39,6 @@
 
   onMount(async () => {
     if (iframeElem) {
-      const { iframeResizer } = await import('iframe-resizer');
       frameObj = iframeResizer(
         {
           autoResize: true,
