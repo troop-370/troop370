@@ -148,16 +148,21 @@ function getRelationConnections(
           }
         });
 
-        acc[field] = { set: setDocuments };
+        // this is supposed to work in all cases, but cloning a doc in the current strapi version
+        // is requiring the 'set' array to be provided with the property
+        // acc[field] = { set: setDocuments };
+        acc[field] = setDocuments;
         return acc;
       },
       {} as Record<
         string,
-        {
-          set?: ReturnType<typeof parseRelationValues>;
-          connect?: [];
-          disconnect?: [];
-        }
+        // see above for why this is commented out
+        // {
+        //   set?: ReturnType<typeof parseRelationValues>;
+        //   connect?: [];
+        //   disconnect?: [];
+        // }
+        ReturnType<typeof parseRelationValues>
       >
     );
 
