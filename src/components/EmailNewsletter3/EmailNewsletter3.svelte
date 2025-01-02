@@ -133,9 +133,9 @@
                           "
                       >
                         {formatISODate(
-                          new Date(
-                            newsletter.shortPublishedAt || newsletter.publishedAt || new Date()
-                          ).toISOString(),
+                          newsletter.shortPublishedAt ||
+                            newsletter.publishedAt ||
+                            new Date().toISOString(),
                           false,
                           true,
                           false

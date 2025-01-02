@@ -74,12 +74,7 @@
                             "
                         >
                           {#if email.header_date}
-                            {formatISODate(
-                              new Date(email.header_date).toISOString(),
-                              false,
-                              true,
-                              false
-                            )}
+                            {formatISODate(email.header_date, false, true, false)}
                           {:else}
                             <code>DATE MISSING</code>
                           {/if}
