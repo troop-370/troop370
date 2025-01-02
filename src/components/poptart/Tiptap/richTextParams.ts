@@ -44,7 +44,6 @@ export const richTextParams = derived([params], ([$params]) => {
       });
     },
     forceUpdate() {
-      console.log(getFromUrl());
       params.set(getFromUrl());
     },
   };
@@ -55,7 +54,7 @@ params.subscribe((richTextParams) => {
   if (!location) return;
 
   const url = convertToUrl(richTextParams);
-  if (url) goto(url);
+  if (url) goto(url, { replaceState: true });
 });
 
 function adjustUpdate(params: Record<string, 0 | 1 | 2 | 3>) {

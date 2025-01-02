@@ -51,7 +51,7 @@
         ? `/poptart/content-manager/collection-types/${$collectionConfig.uid}`
         : `/poptart/cms/collection/${$collectionConfig.uid}`,
     hrefSuffixKey: 'documentId',
-    hrefSearch: shouldOpenFullscreen ? '?fs=force&props=1&versions=2&comments=2' : undefined,
+    hrefSearch: shouldOpenFullscreen ? '?fs=3&props=1&versions=2&comments=2' : undefined,
     windowName: `editor-troop-370-${$collectionConfig.uid}-`,
   };
 

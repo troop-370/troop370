@@ -26,7 +26,7 @@
         : `/poptart/cms/collection/${$settings.uid}`,
     hrefSuffixKey: 'documentId',
     hrefSearch: shouldOpenFullscreen
-      ? '?childWindow=1&fs=force&props=1&versions=2&comments=2'
+      ? '?childWindow=1&fs=3&props=1&versions=2&comments=2'
       : '?childWindow=1',
     windowName: `editor-troop-370-${$settings.uid}-`,
   };
