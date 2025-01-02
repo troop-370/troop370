@@ -188,6 +188,10 @@ export const load = (async ({ fetch, parent, params, url }) => {
     }
   );
 
+  const canUpdate = permissions
+    .map((permission) => permission.action)
+    .includes('plugin::content-manager.explorer.update');
+
   const actions = derived(
     [saveStatus],
     ([$saveStatus]): Action[] => {
@@ -196,7 +200,7 @@ export const load = (async ({ fetch, parent, params, url }) => {
           id: 'save',
           label: 'Save',
           action: save,
-          disabled: $saveStatus !== 'Unsaved changes',
+          disabled: $saveStatus !== 'Unsaved changes' || !canUpdate,
           icon: 'Save24Regular',
         },
       ];

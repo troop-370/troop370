@@ -69,7 +69,6 @@ export async function withDocumentRelationData(props: WithDocumentRelationDataPr
             },
             field.split('.').slice(-1)[0]
           );
-          console.log(field, results);
           return [field, results] as const;
         })
         .filter(notEmpty)

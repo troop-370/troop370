@@ -43,9 +43,19 @@
 
   $: disabled = data.isPublishedVersion || $saveStatus.startsWith('Setting stage');
 
+  $: canPublish = data.permissions
+    .map((permission) => permission.action)
+    .includes('plugin::content-manager.explorer.publish');
+  $: canDelete = data.permissions
+    .map((permission) => permission.action)
+    .includes('plugin::content-manager.explorer.delete');
+  $: canCreate = data.permissions
+    .map((permission) => permission.action)
+    .includes('plugin::content-manager.explorer.create');
+
   $: actions = [
     ...$partialActions,
-    $collectionConfig.options?.draftAndPublish !== false
+    $collectionConfig.options?.draftAndPublish !== false && canPublish
       ? {
           id: 'publish',
           label: 'Publish',
@@ -53,7 +63,9 @@
             publishDocumentDialogOpen = true;
           },
           disabled:
-            disabled || ($saveStatus !== 'Unsaved changes' && $docData.status === 'published'),
+            disabled ||
+            ($saveStatus !== 'Unsaved changes' && $docData.status === 'published') ||
+            !canPublish,
           icon: 'CloudArrowUp24Regular',
         }
       : null,
@@ -64,6 +76,7 @@
       action: () => {
         goto(`/admin/cms/collection/${$collectionConfig.uid}/${$docData.documentId}/clone`);
       },
+      disabled: disabled || !canCreate,
       onAuxClick: (evt) => {
         evt.preventDefault();
         if (hasKey(evt, 'button') && evt.button === 1) {

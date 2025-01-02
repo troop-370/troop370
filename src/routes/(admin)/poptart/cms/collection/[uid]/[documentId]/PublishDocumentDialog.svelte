@@ -65,7 +65,7 @@
 <ContentDialog title="Publish document" bind:open size="standard" on:close={handleClose}>
   {#if error}
     <div class="error">
-      <InfoBar severity="critical" title="Failed to save changes">
+      <InfoBar severity="critical" title="Failed to publish">
         {#if error.startsWith('MISSING_FIELDS')}
           {@const missingFields = error.split(':')[1].split(',')}
           <TextBlock>
@@ -77,6 +77,11 @@
             </ul>
             Please fill in the required fields and try again.
             <i>Required fields are marked with an asterisk (*).</i>
+          </TextBlock>
+        {:else if error === 'Policy Failed'}
+          <TextBlock>
+            You do not have permission to publish this document. Please contact an administrator for
+            assistance.
           </TextBlock>
         {:else}
           <TextBlock>{error}</TextBlock>
