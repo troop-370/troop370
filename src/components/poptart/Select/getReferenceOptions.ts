@@ -146,48 +146,57 @@ function getReferenceOptions(referenceOpts: GetReferenceOptions | undefined) {
         Authorization: `Bearer ${token}`,
         validator: referenceOptionSchema.array(),
         useCache: false,
-      }).then((res) => {
-        // TODO: handle errors
-
-        // the resulting docs can be used as the options for the reference
-        let foundOptions = res?.data?.docs?.filter(notEmpty).map((option): Option => {
-          return {
-            _id: `${option.documentId}` || '',
-            ...option,
-            label: `${option[mainField]}` || `${option.documentId}` || '',
-            reason:
-              option.status === 'draft'
-                ? 'This item is a draft. When you publish the document, this item will be hidden until it is also published.'
-                : undefined,
-          };
-        });
-        if (!foundOptions) throw new Error('No reference docs array found');
-
-        // for each option, confirm that it has the required fields
-        // and disable the option if it is missing a required field
-        foundOptions.forEach((option) => {
-          // find the names of the fields that have falsy values
-          const falsyFieldNames =
-            requiredFieldNames?.filter(
-              (requiredFieldName) => !getProperty(option, requiredFieldName)
-            ) || [];
-
-          // if the option is missing some fields,
-          // disable the option so it cannot be selected
-          // and provide a reason so the user knows
-          // why the option is disabled
-          if (falsyFieldNames.length > 0) {
-            option.disabled = true;
-            option.reason = `This document cannot be selected because it is missing the following required fields: ${falsyFieldNames.join(
-              ', '
-            )}`;
+      })
+        .then((res) => {
+          // TODO: handle more errors
+          if (res?.errors?.[0]?.status === 500) {
+            throw new Error('NO_PERMISSION');
           }
-        });
 
-        // set the options and present them to the user
-        options.set(foundOptions);
-        loading.set(false);
-      });
+          // the resulting docs can be used as the options for the reference
+          let foundOptions = res?.data?.docs?.filter(notEmpty).map((option): Option => {
+            return {
+              _id: `${option.documentId}` || '',
+              ...option,
+              label: `${option[mainField]}` || `${option.documentId}` || '',
+              reason:
+                option.status === 'draft'
+                  ? 'This item is a draft. When you publish the document, this item will be hidden until it is also published.'
+                  : undefined,
+            };
+          });
+          if (!foundOptions) throw new Error('No reference docs array found');
+
+          // for each option, confirm that it has the required fields
+          // and disable the option if it is missing a required field
+          foundOptions.forEach((option) => {
+            // find the names of the fields that have falsy values
+            const falsyFieldNames =
+              requiredFieldNames?.filter(
+                (requiredFieldName) => !getProperty(option, requiredFieldName)
+              ) || [];
+
+            // if the option is missing some fields,
+            // disable the option so it cannot be selected
+            // and provide a reason so the user knows
+            // why the option is disabled
+            if (falsyFieldNames.length > 0) {
+              option.disabled = true;
+              option.reason = `This document cannot be selected because it is missing the following required fields: ${falsyFieldNames.join(
+                ', '
+              )}`;
+            }
+          });
+
+          // set the options and present them to the user
+          options.set(foundOptions);
+        })
+        .catch((err) => {
+          error.set(err.message);
+        })
+        .finally(() => {
+          loading.set(false);
+        });
     } else {
       loading.set(false);
     }

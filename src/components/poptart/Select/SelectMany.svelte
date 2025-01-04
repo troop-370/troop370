@@ -209,7 +209,12 @@
     };
   }
 
-  const { searchValue, options: referenceOptions, loading } = getReferenceOptions(referenceOpts);
+  const {
+    searchValue,
+    options: referenceOptions,
+    loading,
+    error,
+  } = getReferenceOptions(referenceOpts);
   let referenceComboBoxWrapperElement: HTMLDivElement;
   let referenceComboBoxOpen = false;
   let referenceComboBoxValue = '';
@@ -218,10 +223,13 @@
   // document ids because the user does not have permission to view the
   // reference collection (and therefore the labels)
   let maybeNoPermissionToViewReferenceCollection = false;
-  $: if ($referenceOptions.length > 0) {
-    if ($referenceOptions.every((opt) => opt.label === 'undefined')) {
-      maybeNoPermissionToViewReferenceCollection = true;
-    }
+  $: if (
+    $referenceOptions.length > 0 &&
+    $referenceOptions.every((opt) => opt.label === 'undefined')
+  ) {
+    maybeNoPermissionToViewReferenceCollection = true;
+  } else if ($error === 'NO_PERMISSION') {
+    maybeNoPermissionToViewReferenceCollection = true;
   }
 </script>
 
