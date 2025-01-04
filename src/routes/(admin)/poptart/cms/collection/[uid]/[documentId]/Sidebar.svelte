@@ -50,14 +50,14 @@
 
   let truncateVersionsList = true;
   $: versionsList = [
-    docData.status === 'modified'
-      ? {
-          timestamp: 'Latest published version',
-          users: [],
-          path: '?status=published&childWindow=1',
-          status: 'published',
-        }
-      : null,
+    // docData.status === 'modified'
+    //   ? {
+    //       timestamp: 'Latest published version',
+    //       users: [],
+    //       path: '?status=published&childWindow=1',
+    //       status: 'published',
+    //     }
+    //   : null,
     ...($versions?.data?.data.map((version) => {
       return {
         timestamp: version.createdAt,
