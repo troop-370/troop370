@@ -1,12 +1,17 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
+  import { title } from '$stores/title';
   import Editor from '../../Editor.svelte';
   import Sidebar from '../../Sidebar.svelte';
 
   export let data;
   $: ({ version, docDataStore, collectionConfig } = data);
   $: ({ docData } = docDataStore);
+
+  $: if (browser) {
+    title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - Version`);
+  }
 
   $: sidebarDocData = {
     ...$docData,
