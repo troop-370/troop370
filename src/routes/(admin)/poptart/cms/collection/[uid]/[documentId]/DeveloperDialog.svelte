@@ -58,7 +58,7 @@
 
 <style>
   :global(.developer-dialog) {
-    inline-size: unset !important;
+    inline-size: calc(100vw - 120px) !important;
     height: 100%;
   }
   pre {

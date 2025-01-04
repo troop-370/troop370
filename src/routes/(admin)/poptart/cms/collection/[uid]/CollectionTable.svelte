@@ -35,6 +35,7 @@
   export let tableData: PageData['collectionDocsData'];
   export let tableDataFilter: NonNullable<PageData['table']>['filter'];
   export let tableDataSort: NonNullable<PageData['table']>['sort'];
+  export let session: PageData['session'];
 
   $: shouldOpenFullscreen =
     filterSchemaDefs($collectionConfig.defs, permissions, ['read', 'update']).filter(
@@ -59,15 +60,6 @@
     hrefSearch: shouldOpenFullscreen ? '?fs=3&props=1&versions=2&comments=2' : undefined,
     windowName: `editor-troop-370-${$collectionConfig.uid}-`,
   };
-  $: console.log(
-    $collectionConfig.defs.filter(
-      ([key, def]) =>
-        def.type === 'text' &&
-        def.customField === 'plugin::tiptap-editor.tiptap' &&
-        !def.readonly &&
-        !def.noread
-    )
-  );
 
   let columns: ColumnDef<Doc>[] = [];
   $: columns = [
@@ -205,6 +197,13 @@
     },
   ];
 
+  function checkDataIdEquality(current: Doc[], incoming: Doc[]) {
+    const currentIds = current.map((doc) => doc.id).sort();
+    const incomingIds = incoming.map((doc) => doc.id).sort();
+
+    return currentIds.join() === incomingIds.join();
+  }
+
   let colName = $collectionConfig.apiID;
   let data: Doc[] = [];
   // let filter = JSON.stringify(tableDataFilter);
@@ -212,6 +211,7 @@
   $: {
     if (
       data.length !== ($tableData.data?.docs || []).length ||
+      !checkDataIdEquality(data, $tableData.data?.docs || []) ||
       colName !== $collectionConfig.apiID ||
       // filter !== JSON.stringify(tableDataFilter) ||
       sort !== JSON.stringify(tableDataSort)
@@ -332,7 +332,9 @@
   }
 
   let lastSelectedRowIndex = 0;
-  $: $selectedIds = $table.getSelectedRowModel().rows.map((row) => row.original.id) as number[];
+  $: $selectedIds = $table
+    .getSelectedRowModel()
+    .rows.map((row) => row.original.documentId) as string[];
 
   function toggleSort(column: Column<Doc>, sortable: boolean, shiftKey?: boolean) {
     if (sortable) column.toggleSorting(undefined, shiftKey);
@@ -479,7 +481,7 @@
 
 {#if $collectionConfig}
   <div style="position: relative;">
-    <BulkActions settings={collectionConfig} {tableData} {permissions} />
+    <BulkActions settings={collectionConfig} {tableData} {permissions} {session} />
   </div>
 {/if}
 

@@ -147,6 +147,16 @@
 
   // control whether the dropdown with view options is open or closed
   let viewDropdownOpen = false;
+
+  let explorerMainElem: HTMLDivElement;
+  onMount(() => {
+    // if the explorer main container is somehow scrolled, reset it to the top
+    explorerMainElem.onscroll = () => {
+      if (explorerMainElem.scrollTop > 0) {
+        explorerMainElem.scroll(0, 0);
+      }
+    };
+  });
 </script>
 
 <div class="wrapper">
@@ -362,13 +372,14 @@
   </div>
 
   <div class="explorer">
-    <div class="new-table-wrapper explorer-main">
+    <div class="new-table-wrapper explorer-main" bind:this={explorerMainElem}>
       <CollectionTable
         permissions={data.permissions || []}
         collectionConfig={data.collectionConfig}
         tableData={data.collectionDocsData}
         tableDataSort={data.table.sort}
         tableDataFilter={data.table.filters}
+        session={data.session}
         bind:loadingMore
         on:sort={(evt) => {
           // backup the current sort in localstorage so it can be restored later

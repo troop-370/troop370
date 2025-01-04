@@ -7,12 +7,15 @@
   import { openWindow } from '$utils/openWindow';
   import { Button } from 'fluent-svelte';
   import type { PageData } from './$types';
+  import DeleteDocumentDialog from './[documentId]/DeleteDocumentDialog.svelte';
+  import { deleteDocument } from './[documentId]/deleteDocument';
   import { filterSchemaDefs } from './[documentId]/filterSchemaDefs';
   import { selectedIds } from './selectedIdsStore';
 
   export let settings: NonNullable<PageData['collectionConfig']>;
   export let permissions: NonNullable<PageData['permissions']>;
   export let tableData: PageData['collectionDocsData'];
+  export let session: PageData['session'];
 
   $: shouldOpenFullscreen =
     filterSchemaDefs($settings.defs, permissions, ['read', 'update']).filter(
@@ -38,7 +41,9 @@
   };
 
   $: firstSelectedHref = `${links.href}/${
-    ($tableData?.data?.docs || []).find((doc) => doc.id === $selectedIds[0])?.[links.hrefSuffixKey]
+    ($tableData?.data?.docs || []).find((doc) => doc.documentId === $selectedIds[0])?.[
+      links.hrefSuffixKey
+    ]
   }${links.hrefSearch || ''}`;
 
   let deleteDialogOpen = false;
@@ -47,7 +52,7 @@
 
 <div class="actions" class:show>
   <Button
-    disabled={true || $selectedIds.length === 0}
+    disabled={$selectedIds.length === 0}
     on:click={() => (deleteDialogOpen = !deleteDialogOpen)}
   >
     <FluentIcon name="Delete20Regular" mode="buttonIconLeft" />
@@ -83,6 +88,25 @@
     Open in Editor
   </Button>
 </div>
+
+<DeleteDocumentDialog
+  bind:open={deleteDialogOpen}
+  handleDelete={async () => {
+    const result = await deleteDocument({
+      collectionID: $settings.uid,
+      documentIds: $selectedIds,
+      session,
+      fetch,
+    });
+    if (result.success) {
+      await $tableData.refetch();
+      $selectedIds = [];
+      return true;
+    }
+    return result.failures?.toString() || 'Failed to delete selected documents';
+  }}
+  variant={$selectedIds > 1 ? 'multiple' : 'single'}
+/>
 
 <!-- <DeleteSelectedDocs
   bind:open={deleteDialogOpen}

@@ -3,7 +3,6 @@
   import FieldWrapper from '$components/poptart/FieldWrapper.svelte';
   import { Button, ContentDialog, InfoBar, ProgressRing, TextBlock, TextBox } from 'fluent-svelte';
   import { onDestroy, onMount } from 'svelte';
-  import { publishDocument } from './publishDocument';
 
   export let open = false;
   export let handlePublish: (() => Promise<boolean | string>) | undefined = undefined;

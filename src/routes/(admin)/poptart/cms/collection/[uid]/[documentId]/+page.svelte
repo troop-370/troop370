@@ -9,6 +9,7 @@
   import _ColorHash from 'color-hash';
   import { Button, ToggleSwitch } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
+  import DeleteDocumentDialog from './DeleteDocumentDialog.svelte';
   import DeveloperDialog from './DeveloperDialog.svelte';
   import Editor from './Editor.svelte';
   import PublishDocumentDialog from './PublishDocumentDialog.svelte';
@@ -36,6 +37,7 @@
 
   let developerDialogOpen = false;
   let publishDocumentDialogOpen = false;
+  let deleteDocumentDialogOpen = false;
 
   $: if (browser) {
     title.set(`${$docDataStore[$collectionConfig.settings.mainField]} - ${$saveStatus}`);
@@ -136,6 +138,17 @@
         }
       },
     },
+    canDelete
+      ? {
+          id: 'delete',
+          label: 'Delete',
+          action: () => {
+            deleteDocumentDialogOpen = true;
+          },
+          disabled: disabled || !canDelete,
+          icon: 'Delete24Regular',
+        }
+      : null,
   ].filter(notEmpty) satisfies typeof $partialActions;
 
   $: coreSidebarProps = {
@@ -202,10 +215,9 @@
 <PublishDocumentDialog
   bind:open={publishDocumentDialogOpen}
   documentId={`${$docData.documentId}`}
-  handlePublish={async () => {
-    return await data.publish();
-  }}
+  handlePublish={data.publish}
 />
+<DeleteDocumentDialog bind:open={deleteDocumentDialogOpen} handleDelete={data.deleteDoc} />
 
 <div class="content-wrapper" bind:clientWidth={currentContentWidth}>
   <div

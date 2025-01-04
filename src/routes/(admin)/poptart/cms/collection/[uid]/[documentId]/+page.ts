@@ -1,9 +1,10 @@
-import { invalidate } from '$app/navigation';
+import { goto, invalidate } from '$app/navigation';
 import { error } from '@sveltejs/kit';
 import { isFullArray, isFullObject, isString } from 'is-what';
 import { derived, get, writable, type Writable } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { createDocDataStore } from './createDocDataStore';
+import { deleteDocument } from './deleteDocument';
 import { filterSchemaDefs } from './filterSchemaDefs';
 import { deconstructSchemaDefs, getDocument, withDocumentRelationData } from './getDocument';
 import { ignoreDocumentLoadReruns as ignoreReruns } from './ignoreDocumentLoadReruns';
@@ -74,6 +75,31 @@ export const load = (async ({ fetch, parent, params, url }) => {
       })
       .finally(() => {
         publishing.set(false);
+      });
+  };
+
+  const deleting = writable(false);
+  const deleteDoc = async () => {
+    deleting.set(true);
+    return await deleteDocument({ ...queryProps, documentIds: [params.documentId] })
+      .then((result) => {
+        if (!result)
+          throw new Error('An unknown error occurred while deleting the document (no result).');
+
+        // if the deletion was successful, navigate back to the collection
+        if (result.success) {
+          goto(`/admin/cms/collection/${params.uid}`);
+          return true;
+        }
+
+        // if the deletion was not successful, show an error message
+        return result.failures?.[0] || 'Failed to delete the document.';
+      })
+      .catch((err) => {
+        return err.message || 'An unknown error occurred while deleting the document.';
+      })
+      .finally(() => {
+        deleting.set(false);
       });
   };
 
@@ -175,8 +201,9 @@ export const load = (async ({ fetch, parent, params, url }) => {
   }
 
   const saveStatus = derived(
-    [docDataStore.docData, saving, publishing, settingStage],
-    ([$currentDocData, $saving, $publishing, $settingStage]) => {
+    [docDataStore.docData, saving, publishing, settingStage, deleting],
+    ([$currentDocData, $saving, $publishing, $settingStage, $deleting]) => {
+      if ($deleting) return 'Deleting…';
       if ($publishing) return 'Publishing…';
       if ($settingStage) return 'Setting stage…';
       if ($saving) return 'Saving…';
@@ -235,6 +262,7 @@ export const load = (async ({ fetch, parent, params, url }) => {
     docDataStore,
     save,
     publish,
+    deleteDoc,
     saveStatus,
     defs,
     actions,
