@@ -285,10 +285,10 @@
             }}
           />
         {/if}
-      {:else if def.type === 'boolean' && (isUndefined($docData[key]) || isBoolean($docData[key]))}
+      {:else if def.type === 'boolean' && (isNullOrUndefined($docData[key]) || isBoolean($docData[key]))}
         <StatelessCheckbox
           id={forId}
-          checked={$docData[key]}
+          checked={$docData[key] ?? undefined}
           on:change={(evt) => {
             $docData[key] = evt.detail.checked;
           }}

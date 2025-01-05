@@ -16,7 +16,7 @@
       .transform((val) => (val ? val.split(';') : null)),
     title: z.string().default(''),
     body: z.string().default(''),
-    enable_password_protection: z.boolean().default(false),
+    enable_password_protection: z.boolean().nullable().default(false),
     categories: z.string().nullable().array().default([]),
     tags: z.string().nullable().array().default([]),
     subtitle: z.string().default(''),

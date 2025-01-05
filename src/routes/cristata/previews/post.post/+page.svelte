@@ -25,7 +25,7 @@
     title: z.string().default(''),
     theme: z.string().nullable().default('post'),
     body: z.string().default(''),
-    enable_password_protection: z.boolean().default(false),
+    enable_password_protection: z.boolean().nullable().default(false),
     category: z
       .object({
         label: z.string().default(''),
