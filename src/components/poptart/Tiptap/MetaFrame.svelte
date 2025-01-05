@@ -5,7 +5,7 @@
   import type { Readable } from 'svelte/store';
 
   export let src: string;
-  export let tiptapwidth: number;
+  export let editorAreaWidth: number;
   export let iframehtmlstring = '';
   export let fullSharedData: Readable<Record<string, unknown>>;
   let iframeElem: HTMLIFrameElement | undefined;
@@ -99,7 +99,7 @@
   contenteditable="false"
   allowtransparency={true}
   title="richtiptap-header-or-meta"
-  style="--margin-bottom: {tiptapwidth <= 760 ? -6 : -74}px;"
+  style="--margin-bottom: {editorAreaWidth <= 680 ? -6 : -74}px;"
 />
 
 <style>

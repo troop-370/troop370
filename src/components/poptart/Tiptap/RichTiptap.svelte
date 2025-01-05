@@ -1,5 +1,6 @@
 <script lang="ts">
   import { beforeNavigate } from '$app/navigation';
+  import { page } from '$app/stores';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { motionMode } from '$stores/motionMode';
   import { titlebarActions } from '$stores/titlebarActions';
@@ -204,6 +205,7 @@
   );
 
   let tiptapwidth = 0;
+  $: editorAreaWidth = tiptapwidth - ($richTextParams.primaryActive ? 300 : 0);
   let editor: Editor | null;
 
   interface IYSettingsMap {
@@ -412,18 +414,23 @@
       {/if}
       {#if options?.metaFrame && !hiddenUI}
         <div style={`display: ${$richTextParams.isActive('fs') ? 'block' : 'none'}`}>
-          <MetaFrame src={options.metaFrame} {tiptapwidth} {fullSharedData} bind:iframehtmlstring />
+          <MetaFrame
+            src={options.metaFrame}
+            {editorAreaWidth}
+            {fullSharedData}
+            bind:iframehtmlstring
+          />
         </div>
       {/if}
       <div
         style="
-          max-width: {tiptapwidth <= 680 ? `unset` : `768px`};
-          width: {tiptapwidth <= 680 ? `100%` : `calc(100% - 40px)`};
+          max-width: {editorAreaWidth <= 680 ? `unset` : `768px`};
+          width: {editorAreaWidth <= 680 ? `100%` : `calc(100% - 40px)`};
           box-sizing: border-box;
           background-color: white;
-          border: {tiptapwidth <= 680 ? `none` : `1px solid rgb(171, 171, 171)`};
-          padding: {tiptapwidth <= 680 ? `24px 20px` : `68px 88px`};
-          margin: {tiptapwidth <= 680 ? `0 auto` : `20px auto`};
+          border: {editorAreaWidth <= 680 ? `none` : `1px solid rgb(171, 171, 171)`};
+          padding: {editorAreaWidth <= 680 ? `24px 20px` : `68px 88px`};
+          margin: {editorAreaWidth <= 680 ? `0 auto` : `20px auto`};
         "
       >
         {#key bubbleMenuParagraph}
