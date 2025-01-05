@@ -3,80 +3,41 @@
   import PreviewData from '$components/PreviewData.svelte';
   import { formatISODate, listOxford, notEmpty } from '$utils';
   import { marked } from 'marked';
-  import { z } from 'zod';
+  import Paladin2020 from './Paladin2020.svelte';
+  import { validator } from './validator';
+  import Warnings from './Warnings.svelte';
 
   let fields: Record<string, any> = {};
 
-  const validator = z.object({
-    slug: z.string().default(''),
-    submitted_by: z
-      .string()
-      .nullable()
-      .default(null)
-      .transform((val) => (val ? val.split(';') : null)),
-    title: z.string().default(''),
-    body: z.string().default(''),
-    enable_password_protection: z.boolean().nullable().default(false),
-    categories: z.string().nullable().array().default([]),
-    tags: z.string().nullable().array().default([]),
-    subtitle: z.string().default(''),
-    publishedAt: z.string().nullable().default(null),
-    shortPublishedAt: z.string().nullable().default(null),
-  });
-
   $: parsed = validator.safeParse(fields);
-
   $: data = parsed.success ? parsed.data : null;
 </script>
 
 {#if data}
-  <article>
-    <Banner>
-      <h1>{@html marked.parseInline(data.title)}</h1>
-      <p>{@html marked.parseInline(data.subtitle)}</p>
-    </Banner>
+  {#if data.theme === 'blog'}
+    <Paladin2020 fields={data} />
+  {:else}
+    <article>
+      <Banner>
+        <h1>{@html marked.parseInline(data.title)}</h1>
+        <p>{@html marked.parseInline(data.subtitle)}</p>
+      </Banner>
 
-    {#if !data.submitted_by || data.submitted_by.filter(notEmpty).length === 0}
-      <div class="warning">
-        WARNING! You have not specified the first and last name of the person who submitted this
-        post. Please add them via the <span style="font-weight: 500;">Submitted by</span> field.
-      </div>
-    {/if}
-    {#if !data.categories || data.categories.filter(notEmpty).length === 0}
-      <div class="warning">
-        WARNING! You have not specified a category for this post. Please add one via the
-        <span style="font-weight: 500;">Category</span> field.
-      </div>
-    {/if}
-    {#if !data.enable_password_protection && data.body.match(/[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/)}
-      <div class="warning light">
-        It looks like you have included an email address in the body of this post. If it is a
-        personal email address, consider enabling the
-        <span style="font-weight: 500;">Enable password protection</span>
-        option to prevent this email from being visible to the public and bots.
-      </div>
-    {/if}
-    {#if !data.enable_password_protection && data.body.match(/(\+?\d{1,2}\s?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/)}
-      <div class="warning light">
-        It looks like you have included a phone number in the body of this post. If it is a personal
-        phone number, consider enabling the
-        <span style="font-weight: 500;">Enable password protection</span>
-        option to prevent this phone number from being visible to the public and bots.
-      </div>
-    {/if}
+      <Warnings {data} />
 
-    <div id="main-content">
-      <p class="meta">
-        Posted
-        {#if data.submitted_by && data.submitted_by.filter(notEmpty).length > 0}
-          by {listOxford(data.submitted_by.filter(notEmpty))}
-        {/if}
-        {#if data.shortPublishedAt}
-          on {formatISODate(data.shortPublishedAt, true, true, false)}
-        {/if}
-      </p>
-    </div>
-  </article>
+      <div id="main-content">
+        <p class="meta">
+          Posted
+          {#if data.submitted_by && data.submitted_by.filter(notEmpty).length > 0}
+            by {listOxford(data.submitted_by.filter(notEmpty))}
+          {/if}
+          {#if data.shortPublishedAt}
+            on {formatISODate(data.shortPublishedAt, true, true, false)}
+          {/if}
+        </p>
+      </div>
+    </article>
+  {/if}
 {/if}
 
 <PreviewData bind:fields />
@@ -131,22 +92,6 @@
   }
   article :global(a:focus-visible:not(.mdc-button)) {
     box-shadow: 0 0 0 2px var(--color-primary);
-  }
-
-  div.warning {
-    background-color: var(--color-secondary);
-    grid-column-start: 1;
-    grid-column-end: 4;
-    margin: 0 0 0 -10px;
-    width: calc(100% + 30px);
-    padding: 4px 20px;
-    box-sizing: border-box;
-    font-family: var(--font-detail);
-    color: var(--color-neutral-10);
-  }
-
-  div.warning.light {
-    background-color: color-mix(in srgb, black 20%, var(--color-primary) 100%);
   }
 
   #main-content {

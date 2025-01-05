@@ -191,6 +191,7 @@
       rgb(0 0 0 / 11%) 0px 0.05px 0.9px 0px;
 
     --font-body: 'Georgia', serif;
+    font-variant: lining-nums;
   }
   article {
     max-width: 590px;
