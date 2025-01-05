@@ -12,7 +12,7 @@
   export let options: tiptapOptions | undefined = undefined;
   export let docData: DocDataStore | undefined = undefined;
 
-  $: [themeField, themeFieldDef] = $page.data.defs.find(([field, def]) => {
+  $: [themeField, themeFieldDef] = $page?.data?.defs?.find(([field, def]) => {
     if (def.type === 'enumeration' && def.label === 'Theme [[body:theme]]') {
       return true;
     }
