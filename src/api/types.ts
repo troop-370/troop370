@@ -2366,6 +2366,11 @@ export interface components {
         tags?: (number | string)[];
         submitted_by: string;
         legacy_body?: unknown;
+        /** @enum {string} */
+        theme?: "post" | "blog";
+        /** @example string or id */
+        cover_photo?: number | string;
+        cover_photo_caption?: string;
         locale?: string;
         localizations?: (number | string)[];
         /** @example string or id */
@@ -2618,6 +2623,137 @@ export interface components {
         }[];
       submitted_by: string;
       legacy_body?: unknown;
+      /** @enum {string} */
+      theme?: "post" | "blog";
+      cover_photo?: {
+        id?: number;
+        documentId?: string;
+        name?: string;
+        alternativeText?: string;
+        caption?: string;
+        width?: number;
+        height?: number;
+        formats?: unknown;
+        hash?: string;
+        ext?: string;
+        mime?: string;
+        /** Format: float */
+        size?: number;
+        url?: string;
+        previewUrl?: string;
+        provider?: string;
+        provider_metadata?: unknown;
+        related?: {
+            id?: number;
+            documentId?: string;
+          }[];
+        folder?: {
+          id?: number;
+          documentId?: string;
+          name?: string;
+          pathId?: number;
+          parent?: {
+            id?: number;
+            documentId?: string;
+          };
+          children?: {
+              id?: number;
+              documentId?: string;
+            }[];
+          files?: {
+              id?: number;
+              documentId?: string;
+              name?: string;
+              alternativeText?: string;
+              caption?: string;
+              width?: number;
+              height?: number;
+              formats?: unknown;
+              hash?: string;
+              ext?: string;
+              mime?: string;
+              /** Format: float */
+              size?: number;
+              url?: string;
+              previewUrl?: string;
+              provider?: string;
+              provider_metadata?: unknown;
+              related?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+              folder?: {
+                id?: number;
+                documentId?: string;
+              };
+              folderPath?: string;
+              sourceName?: string;
+              sourceUrl?: string;
+              /** Format: date-time */
+              createdAt?: string;
+              /** Format: date-time */
+              updatedAt?: string;
+              /** Format: date-time */
+              publishedAt?: string;
+              createdBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              updatedBy?: {
+                id?: number;
+                documentId?: string;
+              };
+              locale?: string;
+              localizations?: {
+                  id?: number;
+                  documentId?: string;
+                }[];
+            }[];
+          path?: string;
+          /** Format: date-time */
+          createdAt?: string;
+          /** Format: date-time */
+          updatedAt?: string;
+          /** Format: date-time */
+          publishedAt?: string;
+          createdBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          updatedBy?: {
+            id?: number;
+            documentId?: string;
+          };
+          locale?: string;
+          localizations?: {
+              id?: number;
+              documentId?: string;
+            }[];
+        };
+        folderPath?: string;
+        sourceName?: string;
+        sourceUrl?: string;
+        /** Format: date-time */
+        createdAt?: string;
+        /** Format: date-time */
+        updatedAt?: string;
+        /** Format: date-time */
+        publishedAt?: string;
+        createdBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        updatedBy?: {
+          id?: number;
+          documentId?: string;
+        };
+        locale?: string;
+        localizations?: {
+            id?: number;
+            documentId?: string;
+          }[];
+      };
+      cover_photo_caption?: string;
       /** Format: date-time */
       createdAt?: string;
       /** Format: date-time */
@@ -2652,6 +2788,58 @@ export interface components {
             }[];
           submitted_by?: string;
           legacy_body?: unknown;
+          /** @enum {string} */
+          theme?: "post" | "blog";
+          cover_photo?: {
+            id?: number;
+            documentId?: string;
+            name?: string;
+            alternativeText?: string;
+            caption?: string;
+            width?: number;
+            height?: number;
+            formats?: unknown;
+            hash?: string;
+            ext?: string;
+            mime?: string;
+            /** Format: float */
+            size?: number;
+            url?: string;
+            previewUrl?: string;
+            provider?: string;
+            provider_metadata?: unknown;
+            related?: {
+                id?: number;
+                documentId?: string;
+              }[];
+            folder?: {
+              id?: number;
+              documentId?: string;
+            };
+            folderPath?: string;
+            sourceName?: string;
+            sourceUrl?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: date-time */
+            publishedAt?: string;
+            createdBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            updatedBy?: {
+              id?: number;
+              documentId?: string;
+            };
+            locale?: string;
+            localizations?: {
+                id?: number;
+                documentId?: string;
+              }[];
+          };
+          cover_photo_caption?: string;
           /** Format: date-time */
           createdAt?: string;
           /** Format: date-time */

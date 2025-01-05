@@ -168,7 +168,7 @@
             actions={actions || []}
             {user}
             ydocKey={key}
-            fullSharedData={docData}
+            fullSharedData={plainDocData}
             {ydoc}
             {coreSidebarProps}
             {fullscreen}
@@ -184,6 +184,7 @@
                 $docData[key] = JSON.stringify(content);
               }
             }}
+            {docData}
           />
         {:else}
           <p>Unsupported custom field</p>

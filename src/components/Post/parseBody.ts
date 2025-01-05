@@ -1,14 +1,21 @@
 import { HardBreak } from '$pm/render/HardBreak';
 import { Link } from '$pm/render/Link';
+import { PhotoWidget } from '$pm/render/PhotoWidget';
+import { PullQuote } from '$pm/render/PullQuote';
 import { Renderer } from '@cristata/prosemirror-to-html-js';
 import { DOMParser } from 'xmldom';
 
-export function parseBody(body = '') {
+export function parseBody(body = '', theme: 'default' | 'paladin2020' = 'default') {
   if (!body) return '';
 
   const renderer = new Renderer();
   renderer.addNode(HardBreak);
   renderer.addMark(Link);
+
+  if (theme === 'paladin2020') {
+    renderer.addNode(PhotoWidget);
+    renderer.addNode(PullQuote);
+  }
 
   const html = renderer.render({
     type: 'doc',

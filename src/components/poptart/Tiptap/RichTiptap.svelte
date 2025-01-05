@@ -15,7 +15,10 @@
   import { titlebarActions } from '$stores/titlebarActions';
   import { debounce } from '$utils';
   import { Transaction } from 'yjs';
-  import type { Action } from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/+page';
+  import type {
+    Action,
+    DocDataStore,
+  } from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/+page';
   import type Sidebar from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/Sidebar.svelte';
   import BubbleMenuParagraph from './BubbleMenuParagraph.svelte';
   import MetaFrame from './MetaFrame.svelte';
@@ -42,6 +45,7 @@
   export let coreSidebarProps: ComponentProps<Sidebar> | undefined = undefined;
   export let dynamicPreviewHref = '';
   export let actions: Action[] = [];
+  export let docData: DocDataStore | undefined = undefined;
 
   export let docPropertiesSidebarProps:
     | Pick<
@@ -59,7 +63,7 @@
   let bubbleMenuParagraph: HTMLDivElement;
 
   const randomClass = Math.random().toString(36).substring(7);
-  const parsedCss = less.render(
+  $: parsedCss = less.render(
     `
       div.richtiptap-content.${randomClass} {
 
@@ -261,6 +265,11 @@
     }
   });
 
+  // set the editor div class
+  // $: if (editor) {
+  //   editor.setOptions({ editorProps: { attributes: { class:  } } })
+  // }
+
   let docStatsDialogOpen = false;
 
   $: saveAction = actions.find((action) => action.id === 'save');
@@ -378,6 +387,7 @@
       {actions}
       {disabled}
       bind:docStatsDialogOpen
+      {docData}
     />
   {/if}
   <div class="main-middle">

@@ -1,5 +1,6 @@
 import { apity } from '$api';
 import { parseBody } from '$components/Post/parseBody';
+import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
 import { notEmpty } from '$utils';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -21,7 +22,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
         shortPublishedAt: previewId ? undefined : shortDate,
         previewId,
       },
-      populate: 'category, tags',
+      populate: 'category, tags, cover_photo',
       // @ts-expect-error status is not in the type definition because it is not in the openapi.json schema
       status: previewId ? 'draft' : 'published',
     },
@@ -49,11 +50,18 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
     },
     submitted_by: post.submitted_by?.split(';').map((name) => name.trim()) || [],
     name: post.title,
-    body: parseBody(post.body),
+    body: parseBody(post.body, post.theme === 'blog' ? 'paladin2020' : 'default'),
     enable_password_protection: post.enable_password_protection,
-    categories: post.category?.value,
+    categories: [post.category?.value].filter(notEmpty),
     tags: post.tags?.filter(notEmpty).map((tag) => tag?.value),
     description: post.subtitle,
+    theme: post.theme,
+    cover_photo: post.cover_photo?.url?.replace(
+      PUBLIC_OLD_FILESTORE_PATH,
+      PUBLIC_NEW_FILESTORE_PATH.replace('https://troop370atlanta.org', url.origin)
+    ),
+    cover_photo_credit: post.cover_photo?.caption,
+    cover_photo_caption: post.cover_photo_caption,
   };
 
   return { post: _post };

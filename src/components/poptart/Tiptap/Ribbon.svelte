@@ -10,7 +10,10 @@
     ProgressRing,
   } from 'fluent-svelte';
   import type { ComponentProps } from 'svelte';
-  import type { Action } from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/+page';
+  import type {
+    Action,
+    DocDataStore,
+  } from '../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/+page';
   import type Tiptap from './Tiptap.svelte';
   import { downloadEmailHTML } from './downloadEmailHTML';
   import { downloadHTML } from './downloadHTML';
@@ -37,6 +40,7 @@
   export let iframehtmlstring = '';
   export let actions: Action[] = [];
   export let docStatsDialogOpen = false;
+  export let docData: DocDataStore | undefined = undefined;
 
   let tabsContainerElement: HTMLDivElement;
   let activeTab = 'home';
@@ -247,14 +251,14 @@
           >
             Insert
           </Button>
-          <!-- <Button
+          <Button
             data-tab={'layout'}
             on:click={handleTabClick}
             on:mouseenter={handleTabMouseEnter}
             on:mouseleave={handleTabMouseLeave}
           >
             Layout
-          </Button> -->
+          </Button>
           <Button
             data-tab={'review'}
             on:click={handleTabClick}
@@ -623,7 +627,7 @@
     <div class="tabpanel">
       <HomeTabPanel visible={activeTab === 'home'} {editor} {options} {disabled} />
       <InsertTabPanel visible={activeTab === 'insert'} {editor} {options} {user} {disabled} />
-      <LayoutTabPanel visible={activeTab === 'layout'} {editor} {options} {disabled} />
+      <LayoutTabPanel visible={activeTab === 'layout'} {editor} {options} {disabled} {docData} />
       <ReviewTabPanel
         visible={activeTab === 'review'}
         {editor}

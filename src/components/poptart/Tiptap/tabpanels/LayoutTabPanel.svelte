@@ -1,16 +1,43 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import type { Editor } from '@tiptap/core';
-  import { Button, IconButton } from 'fluent-svelte';
+  import { Button, ComboBox, IconButton } from 'fluent-svelte';
+  import type { DocDataStore } from '../../../../routes/(admin)/poptart/cms/collection/[uid]/[documentId]/createDocDataStore';
   import type { tiptapOptions } from '../tiptapOptions';
 
   export let editor: Editor | null;
   export let visible = false;
   export let disabled = false;
   export let options: tiptapOptions | undefined = undefined;
+  export let docData: DocDataStore | undefined = undefined;
+
+  $: [themeField, themeFieldDef] = $page.data.defs.find(([field, def]) => {
+    if (def.type === 'enumeration' && def.label === 'Theme [[body:theme]]') {
+      return true;
+    }
+    return false;
+  }) || [undefined, undefined];
 </script>
 
 <div class="panel" class:visible>
+  <ComboBox
+    openOnFocus
+    {disabled}
+    items={themeFieldDef.enum.map((value) => ({ value, name: 'Theme: ' + value })) || []}
+    value={$docData?.[themeField] || ''}
+    style="width: 180px;"
+    disableAutoSelectFromSearch
+    placeholder="Theme"
+    on:select={(evt) => {
+      if ($docData) {
+        $docData[themeField] = evt.detail.value;
+      }
+    }}
+  />
+
+  <span class="bar" />
+
   <Button disabled={disabled || true}>
     <FluentIcon mode="ribbonButtonIconLeft">
       <svg height="100%" width="100%" viewBox="0,0,2048,2048" focusable="false">
