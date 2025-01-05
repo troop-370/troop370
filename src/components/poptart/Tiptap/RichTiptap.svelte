@@ -367,6 +367,24 @@
     }
   });
 
+  $: [themeField, themeFieldDef] = $page?.data?.defs?.find(([field, def]) => {
+    if (def.type === 'enumeration' && def.label === 'Theme [[body:theme]]') {
+      return true;
+    }
+    return false;
+  }) || [undefined, undefined];
+  $: theme = $docData?.[themeField] || themeFieldDef?.default || 'default';
+
+  $: if (editor) {
+    editor.setOptions({
+      editorProps: {
+        attributes: {
+          class: `theme--${theme}`,
+        },
+      },
+    });
+  }
+
   $: delay = $motionMode === 'reduced' ? 0 : 130;
   $: duration = $motionMode === 'reduced' ? 0 : 270;
 
