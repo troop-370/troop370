@@ -146,6 +146,7 @@ const fileSchema = z.object({
   hash: z.string(),
   height: z.number().nullable(),
   id: z.number(),
+  documentId: z.string(),
   isUrlSigned: z.boolean(),
   mime: z.string(),
   name: z.string(),

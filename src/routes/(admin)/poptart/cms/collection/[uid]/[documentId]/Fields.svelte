@@ -7,6 +7,7 @@
   import DateTime from '$components/poptart/DateTime/DateTime.svelte';
   import Components from '$components/poptart/DocArray/Components.svelte';
   import FieldWrapper from '$components/poptart/FieldWrapper.svelte';
+  import FileField from '$components/poptart/File/FileField.svelte';
   import { SelectMany, SelectOne } from '$components/poptart/Select';
   import StrapiUIDField from '$components/poptart/StrapiUIDField/StrapiUIDField.svelte';
   import TextArea from '$components/poptart/TextArea/TextArea.svelte';
@@ -462,9 +463,11 @@
             showCurrentSelectionOnDropdown
             hideSelected={false}
           />
+        {:else if def.type === 'media' && def.allowedTypes?.length === 1 && def.allowedTypes?.[0] === 'images' && def.multiple === false}
+          <FileField {docData} {key} />
         {:else}
           <pre>{JSON.stringify(def, null, 2)}</pre>
-          {$docData[key]}
+          <pre>{JSON.stringify($docData[key], null, 2)}</pre>
         {/if}
       {/if}
     </FieldWrapper>
