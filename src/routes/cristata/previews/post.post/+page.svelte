@@ -23,7 +23,7 @@
       .default(null)
       .transform((val) => (val ? val.split(';') : null)),
     title: z.string().default(''),
-    theme: z.string().default('post'),
+    theme: z.string().nullable().default('post'),
     body: z.string().default(''),
     enable_password_protection: z.boolean().default(false),
     category: z
