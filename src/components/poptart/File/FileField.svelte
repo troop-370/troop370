@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { PUBLIC_NEW_FILESTORE_PATH, PUBLIC_OLD_FILESTORE_PATH } from '$env/static/public';
-  import { openWindow } from '$utils';
+  import { hasKey, openWindow } from '$utils';
   import { Button } from 'fluent-svelte';
   import { readable, type Writable } from 'svelte/store';
   import { FileExplorerDialog } from '../FileExplorer';
@@ -24,7 +24,7 @@
   export let open = false;
 </script>
 
-{#if $store}
+{#if store && hasKey(store, 'subscribe') && $store}
   <SelectedFile
     label={$store.name}
     credit={$store.caption}
