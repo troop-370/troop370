@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { beforeNavigate } from '$app/navigation';
   import FluentIcon from '$lib/common/FluentIcon.svelte';
   import { motionMode } from '$stores/motionMode';
+  import { titlebarActions } from '$stores/titlebarActions';
+  import { debounce } from '$utils';
   import { SetDocAttrStep } from '$utils/SetDocAttrStep';
   import type { Editor } from '@tiptap/core';
   import { IconButton, InfoBar, TextBlock, Tooltip } from 'fluent-svelte';
@@ -9,11 +12,6 @@
   import { expoOut } from 'svelte/easing';
   import type { Readable } from 'svelte/store';
   import { fly } from 'svelte/transition';
-  import WordCountDialog from './dialogs/WordCountDialog.svelte';
-
-  import { beforeNavigate } from '$app/navigation';
-  import { titlebarActions } from '$stores/titlebarActions';
-  import { debounce } from '$utils';
   import { Transaction } from 'yjs';
   import type {
     Action,
@@ -25,6 +23,7 @@
   import PreviewFrame from './PreviewFrame.svelte';
   import Ribbon from './Ribbon.svelte';
   import Tiptap from './Tiptap.svelte';
+  import WordCountDialog from './dialogs/WordCountDialog.svelte';
   import { editorExtensions } from './editorExtensions';
   import { richTextParams } from './richTextParams';
   import CommentsSidebar from './sidebars/CommentsSidebar.svelte';
@@ -62,7 +61,7 @@
 
   let bubbleMenuParagraph: HTMLDivElement;
 
-  const randomClass = Math.random().toString(36).substring(7);
+  const randomClass = 'c' + Math.random().toString(36).substring(7);
   $: parsedCss = less.render(
     `
       div.richtiptap-content.${randomClass} {
