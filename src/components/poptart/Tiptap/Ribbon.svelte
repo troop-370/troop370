@@ -1,5 +1,6 @@
 <script lang="ts">
   import FluentIcon from '$lib/common/FluentIcon.svelte';
+  import { notEmpty } from '$utils';
   import type { Editor } from '@tiptap/core';
   import {
     Button,
@@ -116,9 +117,56 @@
       action.id !== shareAction?.id &&
       action.id !== saveAction?.id
   );
+
+  function handleWheel(evt: WheelEvent) {
+    const direction = evt.deltaY > 0 ? 'right' : 'left';
+    const tabOrder = Array.from(tabsContainerElement.querySelectorAll('button'))
+      .map((el) => el.getAttribute('data-tab'))
+      .filter(notEmpty);
+
+    /**
+     * Check if the element has a scrollable parent (greater than the height of the ribbon bar),
+     * even if the scrollbar is not currently visible.
+     */
+    const hasScrollableParent = (el: HTMLElement | null) => {
+      if (!el) return false;
+
+      // the tabs and tabpanel are not larger than this
+      if (el.offsetHeight > 40) {
+        return true;
+      }
+
+      // stop looking for the parent if we reach the ribbon
+      if (
+        el.classList.contains('ribbon') ||
+        el.classList.contains('tabpanel') ||
+        el.classList.contains('tabs')
+      )
+        return false;
+
+      // stop looking for the parent if we reach the body
+      if (el === document.body) return false;
+
+      // if the element has a scrollbar, return true
+      if (el.scrollHeight > el.clientHeight) return true;
+
+      // otherwise, check the parent
+      return hasScrollableParent(el.parentElement);
+    };
+
+    const currentTabIndex = tabOrder.indexOf(activeTab);
+    const nextTabIndex = direction === 'right' ? currentTabIndex + 1 : currentTabIndex - 1;
+    const nextTab = tabOrder[nextTabIndex];
+    if (nextTab && !hasScrollableParent(evt.target as HTMLElement)) {
+      activeTab = nextTab;
+    }
+
+    // prevent scroll event
+    evt.preventDefault();
+  }
 </script>
 
-<div class="ribbon" bind:offsetWidth={width}>
+<div class="ribbon" bind:offsetWidth={width} on:wheel={handleWheel}>
   <div style="padding: 0 8px;">
     <div class="top">
       <div class="tabs" bind:this={tabsContainerElement}>
