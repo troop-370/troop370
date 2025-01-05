@@ -21,22 +21,24 @@
 </script>
 
 <div class="panel" class:visible>
-  <ComboBox
-    openOnFocus
-    {disabled}
-    items={themeFieldDef.enum.map((value) => ({ value, name: 'Theme: ' + value })) || []}
-    value={$docData?.[themeField] || ''}
-    style="width: 180px;"
-    disableAutoSelectFromSearch
-    placeholder="Theme"
-    on:select={(evt) => {
-      if ($docData) {
-        $docData[themeField] = evt.detail.value;
-      }
-    }}
-  />
+  {#if themeFieldDef}
+    <ComboBox
+      openOnFocus
+      {disabled}
+      items={themeFieldDef.enum.map((value) => ({ value, name: 'Theme: ' + value })) || []}
+      value={$docData?.[themeField] || ''}
+      style="width: 180px;"
+      disableAutoSelectFromSearch
+      placeholder="Theme"
+      on:select={(evt) => {
+        if ($docData) {
+          $docData[themeField] = evt.detail.value;
+        }
+      }}
+    />
 
-  <span class="bar" />
+    <span class="bar" />
+  {/if}
 
   <Button disabled={disabled || true}>
     <FluentIcon mode="ribbonButtonIconLeft">
