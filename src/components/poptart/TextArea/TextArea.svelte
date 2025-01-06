@@ -17,8 +17,6 @@
   function handleChange(value: string) {
     height = `1px`;
     tick().then(() => {
-      height = `${textareaElem.scrollHeight}px`;
-      // textareaElem.focus();
       if (textareaElem) {
         height = `${textareaElem.scrollHeight}px`;
         // textareaElem.focus();
