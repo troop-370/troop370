@@ -51,7 +51,7 @@
             />
           </Icon>
         </IconButton>
-        <IconButton href="https://www.instagram.com/bsatroop370/">
+        <IconButton href="https://www.instagram.com/bsa.troop370/">
           <Icon component={Svg} viewBox="0 0 24 24">
             <path
               fill="currentColor"

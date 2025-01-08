@@ -21,6 +21,9 @@
   export let element: HTMLHtmlElement | undefined = undefined;
 
   const blankBody: ProsemirrorDocNode[] = [];
+
+  const header_date =
+    newsletter.shortPublishedAt || newsletter.publishedAt || new Date().toISOString();
 </script>
 
 <html id="newsletter-doc" lang="en-us" bind:this={element}>
@@ -132,14 +135,7 @@
                             max-width: 590px;
                           "
                       >
-                        {formatISODate(
-                          newsletter.shortPublishedAt ||
-                            newsletter.publishedAt ||
-                            new Date().toISOString(),
-                          false,
-                          true,
-                          false
-                        )}
+                        {formatISODate(header_date, false, true, false)}
                       </p>
                     </td>
                   </tr>
@@ -346,9 +342,15 @@
                               </tr>
                               <tr>
                                 <td>
-                                  <a href="https://www.instagram.com/bsatroop370/">
-                                    Follow us on Instagram
-                                  </a>
+                                  {#if new Date(header_date) > new Date('2025-01-08')}
+                                    <a href="https://www.instagram.com/bsa.troop370/">
+                                      Follow us on Instagram
+                                    </a>
+                                  {:else}
+                                    <a href="https://www.instagram.com/bsatroop370/">
+                                      Follow us on Instagram
+                                    </a>
+                                  {/if}
                                 </td>
                               </tr>
                             </ContainerTable>
@@ -367,12 +369,14 @@
                               <a href="mailto:sheri.buehner@troop370atlanta.org">Sheri Buehner</a>.
                               Please submit your announcement by Sunday at noon.
                             </p>
-                            <p>
-                              Submit website announcements and reminder texts to
-                              <a href="mailto:jack.buehner@troop370atlanta.org">Jack Buehner</a>.
-                              Please submit your reminder at least 48 hours in advance. Reminder
-                              texts have a 115-character limit.
-                            </p>
+                            {#if new Date(header_date) < new Date('2025-01-08')}
+                              <p>
+                                Submit website announcements and reminder texts to
+                                <a href="mailto:jack.buehner@troop370atlanta.org">Jack Buehner</a>.
+                                Please submit your reminder at least 48 hours in advance. Reminder
+                                texts have a 115-character limit.
+                              </p>
+                            {/if}
                           </td>
                         </tr>
                       </ContainerTable>

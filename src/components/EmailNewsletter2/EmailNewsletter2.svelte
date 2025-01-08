@@ -20,6 +20,9 @@
   export let element: HTMLHtmlElement | undefined = undefined;
 
   const blankBody: ProsemirrorDocNode[] = [];
+
+  const header_date =
+    newsletter.shortPublishedAt || newsletter.publishedAt || new Date().toISOString();
 </script>
 
 <html id="newsletter-doc" lang="en-us" bind:this={element}>
@@ -80,14 +83,7 @@
                               text-align: center;
                             "
                         >
-                          {formatISODate(
-                            new Date(
-                              newsletter.shortPublishedAt || newsletter.publishedAt || new Date()
-                            ).toISOString(),
-                            false,
-                            true,
-                            false
-                          )}
+                          {formatISODate(header_date, false, true, false)}
                         </p>
                       </td>
                     </tr>
@@ -277,9 +273,21 @@
                             Join us on Facebook
                           </a>
                           <span> • </span>
-                          <a href="https://www.instagram.com/bsatroop370/" style="color: #003f87;">
-                            Follow us on Instagram
-                          </a>
+                          {#if new Date(email.header_date) > new Date('2025-01-08')}
+                            <a
+                              href="https://www.instagram.com/bsa.troop370/"
+                              style="color: #003f87;"
+                            >
+                              Follow us on Instagram
+                            </a>
+                          {:else}
+                            <a
+                              href="https://www.instagram.com/bsatroop370/"
+                              style="color: #003f87;"
+                            >
+                              Follow us on Instagram
+                            </a>
+                          {/if}
                           <span> • </span>
                           <a href="https://troop370.smugmug.com/" style="color: #003f87;">
                             View Pictures on SmugMug
