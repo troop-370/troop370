@@ -182,6 +182,47 @@ const adminProxyHandler = (async ({ event, resolve }) => {
             }
           </style>`
         );
+
+        // rename fields in the media library
+        if (strapiPathname.startsWith('/poptart/plugins/upload')) {
+          responseBody = responseBody.replace(
+            'Alternative text</label>',
+            'Caption (alternative text)</label>'
+          );
+          responseBody = responseBody.replace('Caption</label>', 'Photo credit</label>');
+          responseBody += `
+            <style>
+              div[role="dialog"] {
+                form[action="#"][novalidate] {
+
+                  /* Caption (alternative text) */
+                  > div > div:nth-child(3) > label {
+                    text-transform: lowercase;
+
+                    &::before {
+                      content: 'Caption (';
+                      text-transform: initial;
+                    }
+                    &::after {
+                      content: ')';
+                    }
+                  }
+
+                  /* Photo credit */
+                  > div > div:nth-child(4) > label {
+                    font-size: 0;
+
+                    &::before {
+                      content: '${'Source/attribution' + '\\A' + 'Instructions at https://troop370atlanta.org/admin/photo-policies'}';
+                      font-size: 1.2rem;
+                      white-space: pre-wrap;
+                    }
+                  }
+                }
+              }
+            </style>
+          `;
+        }
       }
 
       // whenever the strapi app requests a renewal token, we should update that in the session data
