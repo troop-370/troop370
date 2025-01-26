@@ -218,6 +218,17 @@ function filterDataToEditableFields(
       setProperty(docData, field, documents);
     });
 
+  // remove extra properties from media fields
+  deconstructedSchemaDefs
+    .filter(([, def]) => def.type === 'media' && def.writable !== false)
+    .forEach(([field]) => {
+      const data = getProperty(docData, field);
+
+      if (data) {
+        setProperty(docData, field, { id: data.id, documentId: data.documentId });
+      }
+    });
+
   // remove ids from components
   deconstructedSchemaDefs
     .filter(([field, def]) => def.type === 'integer' && !!def.componentId && field.endsWith('.id'))
