@@ -121,7 +121,8 @@ export function convertFileURL(fileUrl: string, siteOrigin = 'https://troop370at
   }
 
   const url = new URL(fileUrl);
-  return siteOrigin + '/filestore' + url.pathname + url.search;
+  const newPathname = url.pathname.startsWith('/filestore') ? url.pathname : ('/filestore' + url.pathname)
+  return siteOrigin + newPathname + url.search;
 }
 
 const folderSchema = z.object({
