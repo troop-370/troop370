@@ -17,6 +17,9 @@
 
   let loading = false;
   function getPhotoDetails(photoId: number) {
+    // do not run again if already loading
+    if (loading) return;
+
     loading = true;
     const isId = isNumber(photoId);
     fetch(`/strapi/upload/files/${photoId}`, {
@@ -34,7 +37,7 @@
         // set the photo url and credit attributes
         if (photo && editor.isEditable) {
           if (photo.url) {
-            const photoUrl = convertFileURL(photo.url, $page.url.origin);
+            const photoUrl = convertFileURL(photo.url, $page.url.origin).split('?')[0];
             if (photoUrl !== node.attrs.photoUrl) {
               updateAttributes({ photoUrl });
             }
