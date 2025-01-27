@@ -115,7 +115,7 @@
             );
           } else {
             openWindow(
-              `/admin/cms/collection/${referenceOpts.targetCollectionUid}/create?childWindow=1`,
+              `/admin/cms/collection/${referenceOpts.targetCollectionUid}/create?childWindow=1&fs=3&props=1`,
               'new-document' + Math.random(),
               'location=no'
             );

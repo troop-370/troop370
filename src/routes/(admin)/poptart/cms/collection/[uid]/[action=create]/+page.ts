@@ -72,7 +72,8 @@ export const load = (async ({ fetch, parent, params, url }) => {
       documentId: url.searchParams.get('from')!,
     })
       .then(async ([baseData]) => {
-        goto(`./${baseData.documentId}`);
+        const search = window.location.search;
+        goto(`./${baseData.documentId}${search}`);
       })
       .finally(() => {
         saving.set(false);

@@ -26,7 +26,7 @@ export function handleOpenReference(_id: string, referenceOpts: GetReferenceOpti
     );
   } else {
     openWindow(
-      `/admin/cms/collection/${referenceOpts?.targetCollectionUid}/${_id}?childWindow=1`,
+      `/admin/cms/collection/${referenceOpts?.targetCollectionUid}/${_id}?childWindow=1&fs=3&props=1`,
       referenceOpts?.targetCollectionUid + _id,
       'location=no'
     );

@@ -22,6 +22,7 @@
   import { expoOut } from 'svelte/easing';
   import { fly } from 'svelte/transition';
   import CollectionTable from './CollectionTable.svelte';
+  import { filterSchemaDefs } from './[documentId]/filterSchemaDefs';
 
   export let data;
   $: ({ collectionDocsData, userPermissions, collectionConfig } = data);
@@ -157,6 +158,15 @@
       }
     };
   });
+
+  $: shouldOpenFullscreen =
+    filterSchemaDefs($collectionConfig.defs, data.permissions, ['read', 'update']).filter(
+      ([key, def]) =>
+        def.type === 'text' &&
+        def.customField === 'plugin::tiptap-editor.tiptap' &&
+        !def.readonly &&
+        !def.noread
+    ).length === 1;
 </script>
 
 <div class="wrapper">
@@ -194,7 +204,11 @@
             if ($strapiEditor || !isModernCollection($collectionConfig.uid)) {
               goto(`/poptart/content-manager/collection-types/${$collectionConfig.uid}/create`);
             } else {
-              goto(`/poptart/cms/collection/${$collectionConfig.uid}/create`);
+              if (shouldOpenFullscreen) {
+                goto(`/poptart/cms/collection/${$collectionConfig.uid}/create?fs=3&props=1`);
+              } else {
+                goto(`/poptart/cms/collection/${$collectionConfig.uid}/create`);
+              }
             }
             // createNewDocDialogCounter++;
             // setTimeout(() => {
