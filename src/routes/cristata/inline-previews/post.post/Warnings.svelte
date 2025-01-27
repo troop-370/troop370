@@ -12,6 +12,16 @@
     Please add them via the <span style="font-weight: 500;">Submitted by</span> field.
   </div>
 {/if}
+{#if data.submitted_by && data.submitted_by.filter(notEmpty).length && data.submitted_by.some((name) => !name
+        .trim()
+        .includes(' '))}
+  <div class="warning light">
+    You have not specified the first and last name of the person who submitted this post. Please
+    specify their full first and last name them via the <span style="font-weight: 500;"
+      >Submitted by</span
+    > field.
+  </div>
+{/if}
 {#if !data.category || data.category.filter(notEmpty).length === 0}
   <div class="warning">
     WARNING! You have not specified a category for this post. Please add one via the
