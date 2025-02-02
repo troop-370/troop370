@@ -45,8 +45,10 @@
             updateAttributes({ photoUrl: '' });
           }
 
-          if (photo.caption && photo.caption !== node.attrs.photoCredit) {
-            updateAttributes({ photoCredit: photo.caption });
+          if (photo.caption) {
+            if (photo.caption !== node.attrs.photoCredit) {
+              updateAttributes({ photoCredit: photo.caption });
+            }
           } else {
             updateAttributes({ photoCredit: '' });
           }
