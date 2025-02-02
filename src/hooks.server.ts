@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { COOKIE_SESSION_SECRET, STRAPI_URL } from '$env/static/private';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -23,6 +24,12 @@ const adminProxyHandler = (async ({ event, resolve }) => {
       if (strapiPathname === '/poptart') {
         return Response.redirect(event.url.origin + '/poptart', 302);
       }
+
+      // if the user is trying to access the strapi login page, redirect them to the login page
+      if (strapiPathname === '/poptart/auth/login' && !dev) {
+        return Response.redirect(event.url.origin + '/poptart/login', 302);
+      }
+      // TODO: handle /strapi/poptart/auth/forgot-password
 
       // An error similar to this one from nextjs was occuring
       // https://github.com/vercel/next.js/issues/48214
