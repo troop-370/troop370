@@ -8,7 +8,6 @@
 
   export let data;
   $: newsletter = data.newsletter;
-  $: console.log(newsletter);
 
   let newsletterElement: HTMLHtmlElement;
 
@@ -157,9 +156,17 @@
     {/if}
   </div>
   {#if new Date(newsletter.shortPublishedAt || newsletter.publishedAt || new Date()) > new Date('2023-01-01')}
-    <EmailNewsletter3 {newsletter} bind:element={newsletterElement} />
+    <EmailNewsletter3
+      {newsletter}
+      bind:element={newsletterElement}
+      authStrings={data.session.authStrings}
+    />
   {:else}
-    <EmailNewsletter2 {newsletter} bind:element={newsletterElement} />
+    <EmailNewsletter2
+      {newsletter}
+      bind:element={newsletterElement}
+      authStrings={data.session.authStrings}
+    />
   {/if}
 {/if}
 

@@ -15,10 +15,15 @@
     NewsletterPostCard,
     Number,
   } from '.';
+  import type { AuthStrings } from '../../routes/(standard)/+layout.server';
   import NavTable from './NavTable.svelte';
 
   export let newsletter: ApiTypes['manualSchemas']['Newsletter'];
   export let element: HTMLHtmlElement | undefined = undefined;
+  export let authStrings: Partial<AuthStrings> | undefined = undefined;
+
+  const password =
+    authStrings?.password_message_when_authenticated?.split?.(': ')?.[1] || '████████';
 
   const blankBody: ProsemirrorDocNode[] = [];
 
@@ -297,7 +302,7 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td>Website password: sheetbend</td>
+                                <td>Website password: {password}</td>
                               </tr>
                               <tr>
                                 <td>

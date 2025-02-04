@@ -15,9 +15,14 @@
     NewsletterPostCard,
     ResourceRow,
   } from '.';
+  import type { AuthStrings } from '../../routes/(standard)/+layout.server';
 
   export let newsletter: ApiTypes['manualSchemas']['Newsletter'];
   export let element: HTMLHtmlElement | undefined = undefined;
+  export let authStrings: Partial<AuthStrings> | undefined = undefined;
+
+  const password =
+    authStrings?.password_message_when_authenticated?.split?.(': ')?.[1] || '████████';
 
   const blankBody: ProsemirrorDocNode[] = [];
 
@@ -218,7 +223,7 @@
                           The Troop 370 website has information about the Troop, useful forms and
                           documents, calendar information, and contact information.
                         </p>
-                        <p>Password: sheetbend</p>
+                        <p>Password: {password}</p>
                         <a href="https://troop370atlanta.org">Visit our website</a>
                       </ResourceRow>
                       <ResourceRow label="Events & Calendar">
