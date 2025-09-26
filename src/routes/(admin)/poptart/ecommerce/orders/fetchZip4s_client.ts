@@ -14,7 +14,7 @@ export async function fetchZip4s_client(fetch: Fetch, csv: string) {
       const zipPlus4 = await fetch(url)
         .then((res) => res.text())
         .then((html) => {
-          const addressLoc = html.indexOf(`<div id="address">`);
+          const addressLoc = html.indexOf(`<address>`);
           const htmlAfterAddress = html.slice(addressLoc);
           const spanTagOpen = `<span style="color:#E60000;">`;
           const spanTagClose = `</span>`;
