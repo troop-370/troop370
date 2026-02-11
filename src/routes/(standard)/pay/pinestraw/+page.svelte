@@ -70,7 +70,11 @@
   }
 
   const hashListener = (ev: HashChangeEvent) => {
-    const { hash } = new URL(ev.newURL);
+    let newURL = ev.newURL;
+    if (ev.newURL.startsWith('#!/')) {
+      newURL = window.location.origin + window.location.pathname + ev.newURL;
+    }
+    const { hash } = new URL(newURL);
     currentHash = hash;
   };
   onMount(() => {
@@ -332,5 +336,9 @@
     font-weight: 700;
     font-size: 14px;
     box-sizing: border-box;
+  }
+
+  :global(html#ecwid_html body#ecwid_body #store-browser .ec-lightspeed-branding-wrapper) {
+    display: none;
   }
 </style>
