@@ -338,7 +338,12 @@
     box-sizing: border-box;
   }
 
-  :global(html#ecwid_html body#ecwid_body #store-browser .ec-lightspeed-branding-wrapper) {
+  :global(
+      html#ecwid_html
+        body#ecwid_body
+        #store-browser
+        :where(.ec-footer__row, .ec-lightspeed-branding-wrapper)
+    ) {
     display: none;
   }
 </style>
