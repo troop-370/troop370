@@ -48,7 +48,7 @@ export function setCustomFields() {
           : '',
       };
     } else {
-      window.ec.order.extraFields.where_stack_pine_straw_bales = undefined;
+      delete window.ec.order.extraFields.where_stack_pine_straw_bales;
     }
 
     if (cartHasPineStrawSpreading) {
@@ -56,7 +56,7 @@ export function setCustomFields() {
         (field) => field.id === 'where_spread_pine_straw'
       );
     } else {
-      window.ec.order.extraFields.where_spread_pine_straw = undefined;
+      delete window.ec.order.extraFields.where_spread_pine_straw;
     }
 
     if (cartHasPineStrawBales || cartHasPineStrawSpreading) {
@@ -64,7 +64,7 @@ export function setCustomFields() {
         (field) => field.id === 'special_instructions'
       );
     } else {
-      window.ec.order.extraFields.special_instructions = undefined;
+      delete window.ec.order.extraFields.special_instructions;
     }
   });
 
