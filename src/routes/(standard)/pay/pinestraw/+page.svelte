@@ -130,7 +130,7 @@
           margin-bottom: -15px;
           position: sticky;
           top: 68px;
-          {$scrollTop > 1320
+          {$scrollTop > 1180
           ? `background: var(--color-neutral-10);
           z-index: 10;
           box-shadow: 0 2px 4px -1px rgb(0 0 0 / 10%), 0 4px 5px 0 rgb(0 0 0 / 7%), 0 1px 10px 0 rgb(0 0 0 / 6%)`
@@ -345,5 +345,23 @@
         :where(.ec-footer__row, .ec-lightspeed-branding-wrapper)
     ) {
     display: none;
+  }
+
+  :global(
+      html#ecwid_html
+        body#ecwid_body
+        #store-browser
+        :where(
+          .grid-product__wrap-inner,
+          .grid-product__image-wrap,
+          .grid-product__bg,
+          .form-control__button,
+          .form-control__button,
+          .form-control__text,
+          .form-control__textarea,
+          .ec-radiogroup__item
+        )
+    ) {
+    border-radius: 0;
   }
 </style>
