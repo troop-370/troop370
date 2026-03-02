@@ -265,7 +265,7 @@ export const discountCouponInfoSchema = z.object({
     .optional(),
   discount: z.number().optional(),
   launchDate: z.string().optional(),
-  expirationDate: z.string(),
+  expirationDate: z.string().optional(),
   usesLimit: z.string().optional(),
   applicationLimit: z.string().optional(),
   creationDate: z.string().optional(),

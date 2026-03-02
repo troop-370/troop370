@@ -34,7 +34,13 @@ export async function fetchOrders_server(fetch: Fetch, url: URL) {
     .then((data) => {
       try {
         return ordersSchema.parse(data);
-      } catch {
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
+          console.error(error.stack);
+        } else {
+          console.error(JSON.stringify(error, null, 2));
+        }
         return { total: 0, count: 0, offset: 0, limit: 100, items: [], error: data };
       }
     });
@@ -108,9 +114,8 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
 
           return {
             '': '',
-            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
-              spreadItem ? spreadItem?.quantity || 0 : ''
-            }`,
+            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${spreadItem ? spreadItem?.quantity || 0 : ''
+              }`,
             'Full Address': isShipping
               ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
               : 'PICK UP',
@@ -132,9 +137,8 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
             'Bales Cost': pinestrawItem?.productPrice
               ? `$ ${pinestrawItem.productPrice.toFixed(2)}`
               : '',
-            'Pine Straw Cost': `${
-              (pinestrawItem?.quantity || 0) * (pinestrawItem?.productPrice || 0)
-            }`,
+            'Pine Straw Cost': `${(pinestrawItem?.quantity || 0) * (pinestrawItem?.productPrice || 0)
+              }`,
             'Paypal Cost': paymentProcessorFees ? `$ (${paymentProcessorFees})` : '',
             'Delivery Fee': rest.shippingOption?.shippingRate
               ? `$ ${(rest.shippingOption.shippingRate || 0).toFixed(2)}`
