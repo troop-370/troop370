@@ -1,5 +1,5 @@
 import { ECWID_SECRET_TOKEN, ECWID_STORE_ID } from '$env/static/private';
-import { formatISODate, unflatten } from '$utils';
+import { unflatten } from '$utils';
 import { toCsv } from '@iwsio/json-csv-core';
 import { flatten } from 'flatten-anything';
 import type { z } from 'zod';
@@ -102,8 +102,16 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
           const isShipping = rest.shippingOption?.fulfillmentType === 'SHIPPING';
           const { street, city, stateOrProvinceCode, postalCode } = rest.shippingPerson || {};
 
-          const postOfficeLookup = `https://www.zip-codes.com/search.asp?fld-address=${street}&fld-address2=&fld-city=${city}&fld-state=${stateOrProvinceCode}&fld-zip=${postalCode}&srch-type=address&selectTab=1&Submit=Find+ZIP+Code+of+this+U.S.+Address`;
           const addressLookup = `https://www.google.com/maps/dir/St+James+United+Methodist+Church,+4400+Peachtree+Dunwoody+Rd+NE,+Atlanta,+GA+30342/${street}+${city}+${stateOrProvinceCode}+${postalCode}`;
+
+          let geocoderResult: URL | null = null;
+          if (street && city && stateOrProvinceCode && postalCode) {
+            geocoderResult = new URL('/poptart/geocoder/address', url.origin);
+            geocoderResult.searchParams.set('street', street || '');
+            geocoderResult.searchParams.set('city', city || '');
+            geocoderResult.searchParams.set('state', stateOrProvinceCode || '');
+            geocoderResult.searchParams.set('zip', postalCode || '');
+          }
 
           const total = rest.usdTotal || 0;
           const paymentProcessorFees =
@@ -114,8 +122,9 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
 
           return {
             '': '',
-            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${spreadItem ? spreadItem?.quantity || 0 : ''
-              }`,
+            'Delivery code': `P-${pinestrawItem?.quantity || 0}${spreadItem ? '-SPREAD-' : ''}${
+              spreadItem ? spreadItem?.quantity || 0 : ''
+            }`,
             'Full Address': isShipping
               ? street + ', ' + city + ', ' + stateOrProvinceCode + ', ' + postalCode
               : 'PICK UP',
@@ -128,8 +137,10 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
             email: rest.email || '',
             Address: street || '',
             Zip: postalCode?.slice(0, 5) || '',
-            'Lookup postoffice': postOfficeLookup,
-            'Zip plus 4 Search': `=HYPERLINK("${postOfficeLookup}", "postoffice")`,
+            'Lookup postoffice': geocoderResult || '',
+            'Zip plus 4 Search': geocoderResult
+              ? `=HYPERLINK("${geocoderResult}", "postoffice")`
+              : '',
             'Zip plus 4': '',
             Lookup: addressLookup,
             'Map link': `=HYPERLINK("${addressLookup}", "lookup")`,
@@ -137,8 +148,9 @@ export async function fetchAllOrders_server(fetch: Fetch, url: URL, as: 'array' 
             'Bales Cost': pinestrawItem?.productPrice
               ? `$ ${pinestrawItem.productPrice.toFixed(2)}`
               : '',
-            'Pine Straw Cost': `${(pinestrawItem?.quantity || 0) * (pinestrawItem?.productPrice || 0)
-              }`,
+            'Pine Straw Cost': `${
+              (pinestrawItem?.quantity || 0) * (pinestrawItem?.productPrice || 0)
+            }`,
             'Paypal Cost': paymentProcessorFees ? `$ (${paymentProcessorFees})` : '',
             'Delivery Fee': rest.shippingOption?.shippingRate
               ? `$ ${(rest.shippingOption.shippingRate || 0).toFixed(2)}`

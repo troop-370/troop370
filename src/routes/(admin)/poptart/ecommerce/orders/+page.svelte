@@ -128,6 +128,37 @@
         loading: false,
       };
   }
+
+  let exportAbortController: AbortController | null = null;
+  function exportOrders() {
+    exporting = true;
+    const searchParams = new URLSearchParams(data.url.search);
+    searchParams.set('all', 'true');
+    searchParams.set('as', 'csv');
+    searchParams.set('zip4', exportDialogZip4 ? '1' : '0');
+
+    exportAbortController = new AbortController();
+
+    fetch(`?${searchParams}`, {
+      signal: exportAbortController.signal,
+    })
+      .then((res) => res.text())
+      .then(async (csv) => {
+        const fullCsv = exportDialogZip4
+          ? await fetchZip4s_client(fetch, csv, exportAbortController!.signal)
+          : csv;
+
+        const hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(fullCsv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = `orders_${new Date().toISOString()}.csv`;
+        hiddenElement.click();
+      })
+      .finally(() => {
+        exportDialogOpen = false;
+        exporting = false;
+      });
+  }
 </script>
 
 <div class="wrapper">
@@ -216,7 +247,7 @@
     <FieldWrapper
       label="ZIP+4"
       forId="zip4"
-      description="This feature only allows around 200 checks for ZIP+4s within every 2 hours."
+      description="Collected by the City of Sandy Springs in 2017."
     >
       <Checkbox id="zip4" bind:checked={exportDialogZip4}>
         Download ZIP+4 for each order (may take a while)
@@ -225,40 +256,22 @@
   {/if}
 
   <svelte:fragment slot="footer">
-    <Button
-      slot="footer"
-      variant="accent"
-      on:click={() => {
-        exporting = true;
-        const searchParams = new URLSearchParams(data.url.search);
-        searchParams.set('all', 'true');
-        searchParams.set('as', 'csv');
-        searchParams.set('zip4', exportDialogZip4 ? '1' : '0');
-        fetch(`?${searchParams}`)
-          .then((res) => res.text())
-          .then(async (csv) => {
-            const fullCsv = exportDialogZip4 ? await fetchZip4s_client(fetch, csv) : csv;
-
-            const hiddenElement = document.createElement('a');
-            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(fullCsv);
-            hiddenElement.target = '_blank';
-            hiddenElement.download = `orders_${new Date().toISOString()}.csv`;
-            hiddenElement.click();
-          })
-          .finally(() => {
-            exportDialogOpen = false;
-            exporting = false;
-          });
-      }}
-      disabled={loading}
-    >
+    <Button slot="footer" variant="accent" on:click={exportOrders} disabled={loading}>
       {#if exporting}
         <ProgressRing style="--fds-accent-default: currentColor;" size={16} />
       {:else}
         Export to csv
       {/if}
     </Button>
-    <Button slot="footer" on:click={() => (exportDialogOpen = false)} disabled={loading}>
+    <Button
+      slot="footer"
+      on:click={() => {
+        exportDialogOpen = false;
+        exportAbortController?.abort();
+        exportAbortController = null;
+      }}
+      disabled={loading}
+    >
       Cancel
     </Button>
   </svelte:fragment>

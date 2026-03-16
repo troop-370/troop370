@@ -71,3 +71,8 @@ interface BeforeInstallPromptEvent extends Event {
    */
   prompt(): Promise<void>;
 }
+
+declare module 'csv-to-js-parser' {
+  export function csvToObj(csv: string): Record<string, string>[];
+  export function objToCsv(obj: Record<string, string>[]): string;
+}
