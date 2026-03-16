@@ -1,7 +1,12 @@
+import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { fetchAllOrders_server, fetchOrders_server } from './fetchOrders_server';
 
-export const GET: RequestHandler = async ({ url, request }) => {
+export const GET: RequestHandler = async ({ locals, url, request }) => {
+  if (!locals.session.data.adminToken) {
+    error(401);
+  }
+
   if (url.searchParams.get('all') === 'true') {
     const asCsv = url.searchParams.get('as') === 'csv';
     return fetchAllOrders_server(fetch, url, asCsv ? 'csv' : 'array').then((data) => {

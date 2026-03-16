@@ -1,6 +1,12 @@
+import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({ url, request }) => {
+export const GET: RequestHandler = async ({ locals, url, request }) => {
+  const session = locals.session.data;
+  if (!session.adminToken) {
+    redirect(302, `/poptart/login?from=${encodeURIComponent(url.href)}`);
+  }
+
   const searchParams = url.searchParams;
   const accepts = request.headers.get('accept') || '';
   if (!accepts.includes('application/json') && !accepts.includes('text/html')) {
