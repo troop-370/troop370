@@ -14,16 +14,20 @@ export const actions = {
       const formData = await request.formData();
 
       // get the payload from the form data
-      const encodedPayload = formData.get('data');
+      const encryptedPayload = formData.get('enc_data');
+      const encodedPayload = encryptedPayload ?? formData.get('data');
 
       // if there is no payload, assume it means that the user
       // is submitting the fact that they have completed the payment
-      if (!encodedPayload) {
+      if (encodedPayload === null) {
         return handleSubmit(event);
       }
 
       // decode the payload
-      const payload = await decodeEcwidRequest(encodedPayload.toString());
+      const payload = await decodeEcwidRequest(
+        encodedPayload.toString(),
+        encryptedPayload !== null ? 'AES-GCM' : 'AES-CBC'
+      );
 
       // send the payload info back to the page
       locals.session.update((session) => {
